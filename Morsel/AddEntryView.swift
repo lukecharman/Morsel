@@ -1,4 +1,5 @@
 import SwiftUI
+import WatchConnectivity
 import WidgetKit
 
 struct AddEntryView: View {
@@ -8,6 +9,8 @@ struct AddEntryView: View {
   @FocusState private var isTextFieldFocused: Bool
 
   @State private var foodName = ""
+
+  var onSave: (() -> Void)?
 
   var body: some View {
     NavigationView {
@@ -47,10 +50,25 @@ struct AddEntryView: View {
     print("✅ Saved new food entry: \(newEntry.name)")
 
     dismiss()
+    onSave?()
+    notifyWatchOfNewMeal(entry: newEntry)
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       WidgetCenter.shared.reloadAllTimelines()
       print("🔄 Widget reload triggered")
+    }
+  }
+
+  func notifyWatchOfNewMeal(entry: FoodEntry) {
+    if WCSession.default.isPaired && WCSession.default.isWatchAppInstalled {
+      let message = [
+        "newMealName": entry.name,
+        "newMealID": entry.id.uuidString,
+        "origin": "phone"
+      ]
+      WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
+        print("💥 Failed to send meal to Watch: \(error)")
+      })
     }
   }
 }

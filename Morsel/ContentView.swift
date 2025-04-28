@@ -69,7 +69,9 @@ struct ContentView: View {
       WidgetCenter.shared.reloadAllTimelines()
     }
     .sheet(isPresented: $showingAddEntry) {
-      AddEntryView()
+      AddEntryView {
+        loadEntries()
+      }
     }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
   }

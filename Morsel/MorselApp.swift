@@ -6,6 +6,8 @@ import SwiftData
 struct MorselApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+  @StateObject private var sessionManager = PhoneSessionManager()
+
   @State private var navigationTarget: NavigationTarget?
   @State private var modelContainer: ModelContainer
 
