@@ -97,7 +97,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
   @MainActor
   private func fetchTodayFoodEntries() async -> [FoodEntrySnapshot] {
     do {
-      let container = try ModelContainer.sharedContainer()
+      let container: ModelContainer = .sharedContainer
       let context = container.mainContext
 
       let calendar = Calendar.current

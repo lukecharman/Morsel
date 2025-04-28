@@ -57,10 +57,13 @@ enum NavigationTarget: Identifiable {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+  @preconcurrency
   func application(
     _ application: UIApplication,
     didReceiveRemoteNotification userInfo: [AnyHashable : Any]
   ) async -> UIBackgroundFetchResult {
+    // Swift 6 Warning: Non-Sendable 'userInfo' crossing actor boundary
+    // Known issue with UIKit delegate methods. Safe because we isolate handling manually.
     await MainActor.run {
       if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
          notification.notificationType == .database {
