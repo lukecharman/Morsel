@@ -67,7 +67,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A35D3DC12DBFDCC000C4C166 /* Exceptions for "MorselVision" folder in "Morsel (visionOS)" target */ = {
+		A35D3DC12DBFDCC000C4C166 /* Exceptions for "visionOS" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -106,21 +106,21 @@
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
-		A35D3DD62DBFFCE600C4C166 /* Exceptions for "Morsel" folder in "Morsel (visionOS)" target */ = {
+		A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				MealRow.swift,
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
-		A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel (iOS)" target */ = {
+		A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
-		A3CD69642DBF752D00AB946D /* Exceptions for "MorselWidget" folder in "Morsel iOS Widgets" target */ = {
+		A3CD69642DBF752D00AB946D /* Exceptions for "Widgets" folder in "Morsel iOS Widgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -130,22 +130,22 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A35D3CD72DBFB0B100C4C166 /* MorselWatch */ = {
+		A35D3CD72DBFB0B100C4C166 /* watchOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MorselWatch;
+			path = watchOS;
 			sourceTree = "<group>";
 		};
-		A35D3D7A2DBFD06B00C4C166 /* MorselMac */ = {
+		A35D3D7A2DBFD06B00C4C166 /* macOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MorselMac;
+			path = macOS;
 			sourceTree = "<group>";
 		};
-		A35D3DAB2DBFDCBE00C4C166 /* MorselVision */ = {
+		A35D3DAB2DBFDCBE00C4C166 /* visionOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A35D3DC12DBFDCC000C4C166 /* Exceptions for "MorselVision" folder in "Morsel (visionOS)" target */,
+				A35D3DC12DBFDCC000C4C166 /* Exceptions for "visionOS" folder in "Morsel (visionOS)" target */,
 			);
-			path = MorselVision;
+			path = visionOS;
 			sourceTree = "<group>";
 		};
 		A35D3DCB2DBFDDC300C4C166 /* Core */ = {
@@ -159,21 +159,21 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		A3CD69062DBF745E00AB946D /* Morsel */ = {
+		A3CD69062DBF745E00AB946D /* iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel (iOS)" target */,
-				A35D3DD62DBFFCE600C4C166 /* Exceptions for "Morsel" folder in "Morsel (visionOS)" target */,
+				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
+				A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */,
 			);
-			path = Morsel;
+			path = iOS;
 			sourceTree = "<group>";
 		};
-		A3CD69522DBF752B00AB946D /* MorselWidget */ = {
+		A3CD69522DBF752B00AB946D /* Widgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A3CD69642DBF752D00AB946D /* Exceptions for "MorselWidget" folder in "Morsel iOS Widgets" target */,
+				A3CD69642DBF752D00AB946D /* Exceptions for "Widgets" folder in "Morsel iOS Widgets" target */,
 			);
-			path = MorselWidget;
+			path = Widgets;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -231,11 +231,11 @@
 			isa = PBXGroup;
 			children = (
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
-				A3CD69062DBF745E00AB946D /* Morsel */,
-				A3CD69522DBF752B00AB946D /* MorselWidget */,
-				A35D3CD72DBFB0B100C4C166 /* MorselWatch */,
-				A35D3D7A2DBFD06B00C4C166 /* MorselMac */,
-				A35D3DAB2DBFDCBE00C4C166 /* MorselVision */,
+				A3CD69062DBF745E00AB946D /* iOS */,
+				A3CD69522DBF752B00AB946D /* Widgets */,
+				A35D3CD72DBFB0B100C4C166 /* watchOS */,
+				A35D3D7A2DBFD06B00C4C166 /* macOS */,
+				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A35D3DAC2DBFDCBE00C4C166 /* Packages */,
 				A3CD69052DBF745E00AB946D /* Products */,
@@ -279,7 +279,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3CD72DBFB0B100C4C166 /* MorselWatch */,
+				A35D3CD72DBFB0B100C4C166 /* watchOS */,
 			);
 			name = "Morsel (watchOS)";
 			packageProductDependencies = (
@@ -301,7 +301,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3D7A2DBFD06B00C4C166 /* MorselMac */,
+				A35D3D7A2DBFD06B00C4C166 /* macOS */,
 			);
 			name = "Morsel (macOS)";
 			packageProductDependencies = (
@@ -323,7 +323,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3DAB2DBFDCBE00C4C166 /* MorselVision */,
+				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
 			);
 			name = "Morsel (visionOS)";
 			packageProductDependencies = (
@@ -350,7 +350,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
-				A3CD69062DBF745E00AB946D /* Morsel */,
+				A3CD69062DBF745E00AB946D /* iOS */,
 			);
 			name = "Morsel (iOS)";
 			packageProductDependencies = (
@@ -372,7 +372,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A3CD69522DBF752B00AB946D /* MorselWidget */,
+				A3CD69522DBF752B00AB946D /* Widgets */,
 			);
 			name = "Morsel iOS Widgets";
 			packageProductDependencies = (
@@ -526,7 +526,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselWatch/MorselWatch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = watchOS/MorselWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -557,7 +557,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselWatch/MorselWatch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = watchOS/MorselWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -588,7 +588,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselMac/MorselMac.entitlements;
+				CODE_SIGN_ENTITLEMENTS = macOS/MorselMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -618,7 +618,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselMac/MorselMac.entitlements;
+				CODE_SIGN_ENTITLEMENTS = macOS/MorselMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -648,13 +648,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselVision/MorselVision.entitlements;
+				CODE_SIGN_ENTITLEMENTS = visionOS;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MorselVision/Info.plist;
+				INFOPLIST_FILE = visionOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -676,13 +676,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MorselVision/MorselVision.entitlements;
+				CODE_SIGN_ENTITLEMENTS = visionOS;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MorselVision/Info.plist;
+				INFOPLIST_FILE = visionOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -704,13 +704,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Morsel/Morsel.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOS/Morsel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Morsel/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -739,13 +739,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Morsel/Morsel.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOS/Morsel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Morsel/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -897,12 +897,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = MorselWidget/MorselWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Widgets/MorselWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MorselWidget/Info.plist;
+				INFOPLIST_FILE = Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -925,12 +925,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = MorselWidget/MorselWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Widgets/MorselWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MorselWidget/Info.plist;
+				INFOPLIST_FILE = Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
