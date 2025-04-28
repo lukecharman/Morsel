@@ -17,8 +17,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A3CD694B2DBF752B00AB946D"
-               BuildableName = "FoodEntryWidgetExtension.appex"
-               BlueprintName = "FoodEntryWidgetExtension"
+               BuildableName = "Morsel iOS Widgets.appex"
+               BlueprintName = "Morsel iOS Widgets"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -31,8 +31,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-               BuildableName = "Morsel.app"
-               BlueprintName = "Morsel"
+               BuildableName = "Morsel (iOS).app"
+               BlueprintName = "Morsel (iOS)"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -86,8 +86,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel.app"
-            BlueprintName = "Morsel"
+            BuildableName = "Morsel (iOS).app"
+            BlueprintName = "Morsel (iOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -122,8 +122,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel.app"
-            BlueprintName = "Morsel"
+            BuildableName = "Morsel (iOS).app"
+            BlueprintName = "Morsel (iOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
