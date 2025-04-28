@@ -59,7 +59,6 @@
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (macOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (visionOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A35D3DAD2DBFDCBE00C4C166 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel iOS Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -77,6 +76,7 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel iOS Widgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -85,6 +85,7 @@
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -93,6 +94,7 @@
 		A35D3DCE2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (macOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -101,6 +103,7 @@
 		A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -219,25 +222,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A35D3DAC2DBFDCBE00C4C166 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				A35D3DAD2DBFDCBE00C4C166 /* RealityKitContent */,
-			);
-			path = Packages;
-			sourceTree = "<group>";
-		};
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* iOS */,
-				A3CD69522DBF752B00AB946D /* Widgets */,
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
 				A35D3D7A2DBFD06B00C4C166 /* macOS */,
 				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
+				A3CD69522DBF752B00AB946D /* Widgets */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
-				A35D3DAC2DBFDCBE00C4C166 /* Packages */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -535,13 +529,13 @@
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsel;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsels;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -566,13 +560,13 @@
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsel;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsels;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -604,7 +598,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.mac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
@@ -634,7 +628,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.mac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
@@ -660,7 +654,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.vision;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.vision;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = xros;
 				SUPPORTED_PLATFORMS = "xros xrsimulator";
@@ -688,7 +682,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.vision;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.vision;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = xros;
 				SUPPORTED_PLATFORMS = "xros xrsimulator";
@@ -722,7 +716,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -757,7 +751,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -911,7 +905,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -939,7 +933,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

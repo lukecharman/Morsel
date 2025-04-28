@@ -13,7 +13,9 @@ extension ModelContainer {
   static func throwingSharedContainer() throws -> ModelContainer {
     let schema = Schema([FoodEntry.self])
 
-    guard let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel") else {
+    guard let appGroupURL = FileManager.default.containerURL(
+      forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel"
+    ) else {
       fatalError("💥 Failed to find App Group container.")
     }
 
