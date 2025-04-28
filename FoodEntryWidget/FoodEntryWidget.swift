@@ -78,8 +78,19 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
     Task {
       let entries = await fetchTodayFoodEntries()
       let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries)
-      let timeline = Timeline(entries: [timelineEntry], policy: .after(Date().addingTimeInterval(900)))
-      completion(timeline)
+
+      let nextRefresh: Date
+
+      if entries.isEmpty {
+        // If no meals today, refresh less aggressively
+        nextRefresh = Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
+      } else {
+        // If meals exist, refresh more often
+        nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+      }
+
+      let timeline = Timeline(entries: [timelineEntry], policy: .after(nextRefresh))
+      return timeline
     }
   }
 

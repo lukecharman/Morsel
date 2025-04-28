@@ -53,6 +53,7 @@ struct ContentView: View {
         object: nil,
         queue: OperationQueue.main) { _ in
           self.loadEntries()
+          WidgetCenter.shared.reloadAllTimelines()
         }
     }
     .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -61,9 +62,11 @@ struct ContentView: View {
     .onReceive(NotificationCenter.default.publisher(for: .cloudKitDataChanged)) { _ in
       print("🔄 CloudKit change detected — refreshing entries")
       loadEntries()
+      WidgetCenter.shared.reloadAllTimelines()
     }
     .onChange(of: modelContextRefreshTrigger) { _, _ in
       loadEntries()
+      WidgetCenter.shared.reloadAllTimelines()
     }
     .sheet(isPresented: $showingAddEntry) {
       AddEntryView()
