@@ -1,8 +1,11 @@
+import CloudKit
 import SwiftUI
 import SwiftData
 
 @main
 struct MorselApp: App {
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
   @State private var navigationTarget: NavigationTarget?
   @State private var modelContainer: ModelContainer
 
@@ -55,5 +58,19 @@ enum NavigationTarget: Identifiable {
     case .addEntry:
       return "addEntry"
     }
+  }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(
+    _ application: UIApplication,
+    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
+  ) async -> UIBackgroundFetchResult {
+    if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
+       notification.notificationType == .database {
+      print("📡 CloudKit database notification received")
+      NotificationCenter.default.post(name: .cloudKitDataChanged, object: nil)
+    }
+    return .newData
   }
 }

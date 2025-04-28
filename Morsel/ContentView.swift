@@ -1,12 +1,15 @@
+import CoreData
+import CloudKit
 import SwiftUI
 import SwiftData
 import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \FoodEntry.timestamp, order: .reverse) private var entries: [FoodEntry]
 
+  @State private var entries: [FoodEntry] = []
   @State private var showingAddEntry = false
+  @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
 
   var body: some View {
@@ -39,10 +42,44 @@ struct ContentView: View {
           }
       }
     }
+    .onAppear {
+      loadEntries()
+      if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel") {
+        print("📂 iPhone app is saving to: \(appGroupURL.path)")
+      }
+
+      NotificationCenter.default.addObserver(
+        forName: NSPersistentCloudKitContainer.eventChangedNotification,
+        object: nil,
+        queue: OperationQueue.main) { _ in
+          self.loadEntries()
+        }
+    }
+    .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+      modelContextRefreshTrigger = UUID()
+    }
+    .onReceive(NotificationCenter.default.publisher(for: .cloudKitDataChanged)) { _ in
+      print("🔄 CloudKit change detected — refreshing entries")
+      loadEntries()
+    }
+    .onChange(of: modelContextRefreshTrigger) { _, _ in
+      loadEntries()
+    }
     .sheet(isPresented: $showingAddEntry) {
       AddEntryView()
     }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
+  }
+
+
+  private func loadEntries() {
+    do {
+      let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+      entries = try modelContext.fetch(descriptor)
+      print("✅ Reloaded entries: \(entries.count)")
+    } catch {
+      print("💥 Failed to load entries: \(error)")
+    }
   }
 
   var emptyStateView: some View {
@@ -160,6 +197,10 @@ struct ContentView: View {
       }
     }
   }
+}
+
+extension Notification.Name {
+  static let cloudKitDataChanged = Notification.Name("cloudKitDataChanged")
 }
 
 #Preview {

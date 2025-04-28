@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1630"
-   wasCreatedForAppExtension = "YES"
-   version = "2.0">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
@@ -16,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD694B2DBF752B00AB946D"
-               BuildableName = "FoodEntryWidgetExtension.appex"
-               BlueprintName = "FoodEntryWidgetExtension"
+               BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
+               BuildableName = "WristMorsel Watch App.app"
+               BlueprintName = "WristMorsel Watch App"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -50,9 +49,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD69142DBF745F00AB946D"
-               BuildableName = "MorselTests.xctest"
-               BlueprintName = "MorselTests"
+               BlueprintIdentifier = "A35D3CE12DBFB0B300C4C166"
+               BuildableName = "WristMorsel Watch AppTests.xctest"
+               BlueprintName = "WristMorsel Watch AppTests"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -61,9 +60,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD691E2DBF745F00AB946D"
-               BuildableName = "MorselUITests.xctest"
-               BlueprintName = "MorselUITests"
+               BlueprintIdentifier = "A35D3CEB2DBFB0B300C4C166"
+               BuildableName = "WristMorsel Watch AppUITests.xctest"
+               BlueprintName = "WristMorsel Watch AppUITests"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -71,59 +70,38 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "2">
+      allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel.app"
-            BlueprintName = "Morsel"
+            BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
+            BuildableName = "WristMorsel Watch App.app"
+            BlueprintName = "WristMorsel Watch App"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "_XCWidgetKind"
-            value = ""
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "_XCWidgetDefaultView"
-            value = "timeline"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "_XCWidgetFamily"
-            value = "systemMedium"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
-      launchAutomaticallySubstyle = "2">
+      debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel.app"
-            BlueprintName = "Morsel"
+            BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
+            BuildableName = "WristMorsel Watch App.app"
+            BlueprintName = "WristMorsel Watch App"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

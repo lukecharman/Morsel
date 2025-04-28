@@ -3,12 +3,12 @@ import SwiftData
 
 @Model
 final class FoodEntry {
-  var id: UUID
-  var name: String
-  var timestamp: Date
+  var id: UUID = UUID()
+  var name: String = ""
+  var timestamp: Date = Date()
 
-  init(name: String, timestamp: Date = .now) {
-    self.id = UUID()
+  init(id: UUID = UUID(), name: String, timestamp: Date = Date()) {
+    self.id = id
     self.name = name
     self.timestamp = timestamp
   }

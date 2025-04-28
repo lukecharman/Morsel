@@ -19,35 +19,42 @@ struct FoodEntryWidgetView: View {
   var entry: FoodEntryTimelineEntry
 
   var body: some View {
-    VStack(alignment: .leading) {
+    VStack(alignment: .leading, spacing: 8) {
+      Text("Today’s Meals")
+        .font(.headline)
+        .foregroundStyle(.primary)
+        .padding(.vertical, 4)
+
       if entry.foodEntries.isEmpty {
-        Text("No entries yet.")
+        Text("No meals yet.")
           .font(.caption)
-          .foregroundColor(.secondary)
+          .foregroundStyle(.secondary)
       } else {
-        ForEach(entry.foodEntries.prefix(3)) { foodEntry in
-          Text(foodEntry.name)
-            .font(.footnote)
-            .lineLimit(1)
+        ForEach(entry.foodEntries.prefix(3), id: \.id) { foodEntry in
+          HStack(spacing: 8) {
+            Image(systemName: "fork.knife")
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+            Text(foodEntry.name)
+              .font(.subheadline)
+              .lineLimit(1)
+              .foregroundStyle(.primary)
+          }
         }
       }
 
       Spacer()
 
-      Text("+ Add Entry")
-        .font(.caption2)
-        .foregroundColor(.blue)
-        .widgetURL(URL(string: "morsel://add")!)
+      HStack {
+        Spacer()
+        Text("+ Add Entry")
+          .font(.caption2)
+          .fontWeight(.medium)
+          .foregroundColor(.blue)
+      }
+      .widgetURL(URL(string: "morsel://add")!)
     }
-    .padding()
-    .containerBackground(
-      RadialGradient(
-        colors: [Color(.systemBackground), Color(.secondarySystemBackground)],
-        center: .center,
-        startRadius: 20,
-        endRadius: 300
-      ),
-      for: .widget)
+    .containerBackground(.fill.tertiary, for: .widget)
   }
 }
 

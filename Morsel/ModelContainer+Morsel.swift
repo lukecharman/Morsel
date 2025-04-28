@@ -9,7 +9,7 @@ extension ModelContainer {
       fatalError("💥 Failed to find App Group container.")
     }
 
-    let databaseURL = appGroupURL.appendingPathComponent("FoodTracker.sqlite")
+    let databaseURL = appGroupURL.appendingPathComponent("Morsel.sqlite")
     let config = ModelConfiguration(
       schema: schema,
       url: databaseURL,
