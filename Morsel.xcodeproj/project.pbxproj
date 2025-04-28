@@ -105,13 +105,6 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* WristMorsel Watch App */;
 		};
-		A35D3D062DBFBE7B00C4C166 /* Exceptions for "WristMorsel Watch App" folder in "WristMorsel Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"WristMorsel-Watch-App-Info.plist",
-			);
-			target = A35D3CD52DBFB0B100C4C166 /* WristMorsel Watch App */;
-		};
 		A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -139,9 +132,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A35D3CD72DBFB0B100C4C166 /* WristMorsel Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A35D3D062DBFBE7B00C4C166 /* Exceptions for "WristMorsel Watch App" folder in "WristMorsel Watch App" target */,
-			);
 			path = "WristMorsel Watch App";
 			sourceTree = "<group>";
 		};
@@ -656,7 +646,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WristMorsel;
+				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.Morsel;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -687,7 +677,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WristMorsel;
+				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.Morsel;
 				LD_RUNPATH_SEARCH_PATHS = (
