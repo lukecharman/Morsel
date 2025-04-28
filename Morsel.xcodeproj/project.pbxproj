@@ -35,6 +35,20 @@
 			remoteGlobalIDString = A35D3CD52DBFB0B100C4C166;
 			remoteInfo = "WristMorsel Watch App";
 		};
+		A35D3D892DBFD06D00C4C166 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A35D3D782DBFD06B00C4C166;
+			remoteInfo = MacMorsel;
+		};
+		A35D3D932DBFD06D00C4C166 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A35D3D782DBFD06B00C4C166;
+			remoteInfo = MacMorsel;
+		};
 		A3CD69162DBF745F00AB946D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
@@ -87,6 +101,9 @@
 		A35D3CD62DBFB0B100C4C166 /* WristMorsel Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WristMorsel Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3CE22DBFB0B300C4C166 /* WristMorsel Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WristMorsel Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3CEC2DBFB0B300C4C166 /* WristMorsel Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WristMorsel Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A35D3D792DBFD06B00C4C166 /* MacMorsel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMorsel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A35D3D882DBFD06D00C4C166 /* MacMorselTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMorselTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A35D3D922DBFD06D00C4C166 /* MacMorselUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMorselUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69042DBF745E00AB946D /* Morsel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Morsel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69152DBF745F00AB946D /* MorselTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MorselTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD691F2DBF745F00AB946D /* MorselUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MorselUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +121,14 @@
 				"ModelContainer+Morsel.swift",
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* WristMorsel Watch App */;
+		};
+		A35D3DA42DBFD0B800C4C166 /* Exceptions for "Morsel" folder in "MacMorsel" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FoodEntry.swift,
+				"ModelContainer+Morsel.swift",
+			);
+			target = A35D3D782DBFD06B00C4C166 /* MacMorsel */;
 		};
 		A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -145,12 +170,28 @@
 			path = "WristMorsel Watch AppUITests";
 			sourceTree = "<group>";
 		};
+		A35D3D7A2DBFD06B00C4C166 /* MacMorsel */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MacMorsel;
+			sourceTree = "<group>";
+		};
+		A35D3D8B2DBFD06D00C4C166 /* MacMorselTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MacMorselTests;
+			sourceTree = "<group>";
+		};
+		A35D3D952DBFD06D00C4C166 /* MacMorselUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MacMorselUITests;
+			sourceTree = "<group>";
+		};
 		A3CD69062DBF745E00AB946D /* Morsel */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel" target */,
 				A3CD69672DBF767300AB946D /* Exceptions for "Morsel" folder in "FoodEntryWidgetExtension" target */,
 				A35D3D022DBFB10C00C4C166 /* Exceptions for "Morsel" folder in "WristMorsel Watch App" target */,
+				A35D3DA42DBFD0B800C4C166 /* Exceptions for "Morsel" folder in "MacMorsel" target */,
 			);
 			path = Morsel;
 			sourceTree = "<group>";
@@ -191,6 +232,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A35D3CE92DBFB0B300C4C166 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D762DBFD06B00C4C166 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D852DBFD06D00C4C166 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D8F2DBFD06D00C4C166 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -241,6 +303,9 @@
 				A35D3CD72DBFB0B100C4C166 /* WristMorsel Watch App */,
 				A35D3CE52DBFB0B300C4C166 /* WristMorsel Watch AppTests */,
 				A35D3CEF2DBFB0B300C4C166 /* WristMorsel Watch AppUITests */,
+				A35D3D7A2DBFD06B00C4C166 /* MacMorsel */,
+				A35D3D8B2DBFD06D00C4C166 /* MacMorselTests */,
+				A35D3D952DBFD06D00C4C166 /* MacMorselUITests */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
@@ -256,6 +321,9 @@
 				A35D3CD62DBFB0B100C4C166 /* WristMorsel Watch App.app */,
 				A35D3CE22DBFB0B300C4C166 /* WristMorsel Watch AppTests.xctest */,
 				A35D3CEC2DBFB0B300C4C166 /* WristMorsel Watch AppUITests.xctest */,
+				A35D3D792DBFD06B00C4C166 /* MacMorsel.app */,
+				A35D3D882DBFD06D00C4C166 /* MacMorselTests.xctest */,
+				A35D3D922DBFD06D00C4C166 /* MacMorselUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -338,6 +406,74 @@
 			);
 			productName = "WristMorsel Watch AppUITests";
 			productReference = A35D3CEC2DBFB0B300C4C166 /* WristMorsel Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A35D3D782DBFD06B00C4C166 /* MacMorsel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A35D3D9A2DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorsel" */;
+			buildPhases = (
+				A35D3D752DBFD06B00C4C166 /* Sources */,
+				A35D3D762DBFD06B00C4C166 /* Frameworks */,
+				A35D3D772DBFD06B00C4C166 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A35D3D7A2DBFD06B00C4C166 /* MacMorsel */,
+			);
+			name = MacMorsel;
+			packageProductDependencies = (
+			);
+			productName = MacMorsel;
+			productReference = A35D3D792DBFD06B00C4C166 /* MacMorsel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A35D3D872DBFD06D00C4C166 /* MacMorselTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A35D3D9D2DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorselTests" */;
+			buildPhases = (
+				A35D3D842DBFD06D00C4C166 /* Sources */,
+				A35D3D852DBFD06D00C4C166 /* Frameworks */,
+				A35D3D862DBFD06D00C4C166 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A35D3D8A2DBFD06D00C4C166 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A35D3D8B2DBFD06D00C4C166 /* MacMorselTests */,
+			);
+			name = MacMorselTests;
+			packageProductDependencies = (
+			);
+			productName = MacMorselTests;
+			productReference = A35D3D882DBFD06D00C4C166 /* MacMorselTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A35D3D912DBFD06D00C4C166 /* MacMorselUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A35D3DA02DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorselUITests" */;
+			buildPhases = (
+				A35D3D8E2DBFD06D00C4C166 /* Sources */,
+				A35D3D8F2DBFD06D00C4C166 /* Frameworks */,
+				A35D3D902DBFD06D00C4C166 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A35D3D942DBFD06D00C4C166 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A35D3D952DBFD06D00C4C166 /* MacMorselUITests */,
+			);
+			name = MacMorselUITests;
+			packageProductDependencies = (
+			);
+			productName = MacMorselUITests;
+			productReference = A35D3D922DBFD06D00C4C166 /* MacMorselUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		A3CD69032DBF745E00AB946D /* Morsel */ = {
@@ -455,6 +591,17 @@
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = A35D3CD52DBFB0B100C4C166;
 					};
+					A35D3D782DBFD06B00C4C166 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					A35D3D872DBFD06D00C4C166 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = A35D3D782DBFD06B00C4C166;
+					};
+					A35D3D912DBFD06D00C4C166 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = A35D3D782DBFD06B00C4C166;
+					};
 					A3CD69032DBF745E00AB946D = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -492,6 +639,9 @@
 				A35D3CD52DBFB0B100C4C166 /* WristMorsel Watch App */,
 				A35D3CE12DBFB0B300C4C166 /* WristMorsel Watch AppTests */,
 				A35D3CEB2DBFB0B300C4C166 /* WristMorsel Watch AppUITests */,
+				A35D3D782DBFD06B00C4C166 /* MacMorsel */,
+				A35D3D872DBFD06D00C4C166 /* MacMorselTests */,
+				A35D3D912DBFD06D00C4C166 /* MacMorselUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -512,6 +662,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A35D3CEA2DBFB0B300C4C166 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D772DBFD06B00C4C166 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D862DBFD06D00C4C166 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D902DBFD06D00C4C166 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -570,6 +741,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A35D3D752DBFD06B00C4C166 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D842DBFD06D00C4C166 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A35D3D8E2DBFD06D00C4C166 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3CD69002DBF745E00AB946D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -615,6 +807,16 @@
 			isa = PBXTargetDependency;
 			target = A35D3CD52DBFB0B100C4C166 /* WristMorsel Watch App */;
 			targetProxy = A35D3CF42DBFB0B300C4C166 /* PBXContainerItemProxy */;
+		};
+		A35D3D8A2DBFD06D00C4C166 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A35D3D782DBFD06B00C4C166 /* MacMorsel */;
+			targetProxy = A35D3D892DBFD06D00C4C166 /* PBXContainerItemProxy */;
+		};
+		A35D3D942DBFD06D00C4C166 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A35D3D782DBFD06B00C4C166 /* MacMorsel */;
+			targetProxy = A35D3D932DBFD06D00C4C166 /* PBXContainerItemProxy */;
 		};
 		A3CD69172DBF745F00AB946D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -771,6 +973,138 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				TEST_TARGET_NAME = "WristMorsel Watch App";
 				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
+		A35D3D9B2DBFD06D00C4C166 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacMorsel/MacMorsel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorsel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A35D3D9C2DBFD06D00C4C166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MacMorsel/MacMorsel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorsel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A35D3D9E2DBFD06D00C4C166 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorselTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMorsel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MacMorsel";
+			};
+			name = Debug;
+		};
+		A35D3D9F2DBFD06D00C4C166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorselTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMorsel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MacMorsel";
+			};
+			name = Release;
+		};
+		A35D3DA12DBFD06D00C4C166 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorselUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = MacMorsel;
+			};
+			name = Debug;
+		};
+		A35D3DA22DBFD06D00C4C166 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MacMorselUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = MacMorsel;
 			};
 			name = Release;
 		};
@@ -1109,6 +1443,33 @@
 			buildConfigurations = (
 				A35D3CFC2DBFB0B300C4C166 /* Debug */,
 				A35D3CFD2DBFB0B300C4C166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A35D3D9A2DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorsel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A35D3D9B2DBFD06D00C4C166 /* Debug */,
+				A35D3D9C2DBFD06D00C4C166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A35D3D9D2DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorselTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A35D3D9E2DBFD06D00C4C166 /* Debug */,
+				A35D3D9F2DBFD06D00C4C166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A35D3DA02DBFD06D00C4C166 /* Build configuration list for PBXNativeTarget "MacMorselUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A35D3DA12DBFD06D00C4C166 /* Debug */,
+				A35D3DA22DBFD06D00C4C166 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
