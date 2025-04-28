@@ -61,9 +61,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didReceiveRemoteNotification userInfo: [AnyHashable : Any]
   ) async -> UIBackgroundFetchResult {
-    if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
-       notification.notificationType == .database {
-      NotificationCenter.default.post(name: .cloudKitDataChanged, object: nil)
+    await MainActor.run {
+      if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
+         notification.notificationType == .database {
+        NotificationCenter.default.post(name: .cloudKitDataChanged, object: nil)
+      }
     }
     return .newData
   }

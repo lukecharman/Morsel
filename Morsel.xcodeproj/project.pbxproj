@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A35D3DAF2DBFDCBE00C4C166 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = A35D3DAE2DBFDCBE00C4C166 /* RealityKitContent */; };
 		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
 		A3CD69602DBF752D00AB946D /* Morsel iOS Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -61,6 +60,7 @@
 		A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (macOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (visionOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3DAD2DBFDCBE00C4C166 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
+		A35D3DD02DBFDF9C00C4C166 /* Morsel (visionOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Morsel (visionOS).entitlements"; sourceTree = "<group>"; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel iOS Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -190,7 +190,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A35D3DAF2DBFDCBE00C4C166 /* RealityKitContent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +223,7 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
+				A35D3DD02DBFDF9C00C4C166 /* Morsel (visionOS).entitlements */,
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* Morsel */,
 				A3CD69522DBF752B00AB946D /* MorselWidget */,
@@ -321,7 +321,6 @@
 			);
 			name = "Morsel (visionOS)";
 			packageProductDependencies = (
-				A35D3DAE2DBFDCBE00C4C166 /* RealityKitContent */,
 			);
 			productName = "Morsel (visionOS)";
 			productReference = A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */;
@@ -643,6 +642,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Morsel (visionOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -670,6 +670,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Morsel (visionOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -997,13 +998,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A35D3DAE2DBFDCBE00C4C166 /* RealityKitContent */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RealityKitContent;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A3CD68FC2DBF745E00AB946D /* Project object */;
 }

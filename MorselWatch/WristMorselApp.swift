@@ -41,7 +41,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   @MainActor
   private func saveMealLocally(name: String, id: UUID, origin: String) async {
     do {
-      let container = try ModelContainer.sharedContainer()
+      let container: ModelContainer = .sharedContainer
       let context = container.mainContext
 
       let existingFetch = FetchDescriptor<FoodEntry>(
