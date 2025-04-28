@@ -10,8 +10,13 @@ extension ModelContainer {
     }
 
     let databaseURL = appGroupURL.appendingPathComponent("FoodTracker.sqlite")
+    let config = ModelConfiguration(
+      schema: schema,
+      url: databaseURL,
+      allowsSave: true,
+      cloudKitDatabase: .automatic
+    )
 
-    let config = ModelConfiguration(for: FoodEntry.self)
     return try ModelContainer(for: schema, configurations: [config])
   }
 }

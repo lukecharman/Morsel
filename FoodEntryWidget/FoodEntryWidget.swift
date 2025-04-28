@@ -40,6 +40,14 @@ struct FoodEntryWidgetView: View {
         .widgetURL(URL(string: "morsel://add")!)
     }
     .padding()
+    .containerBackground(
+      RadialGradient(
+        colors: [Color(.systemBackground), Color(.secondarySystemBackground)],
+        center: .center,
+        startRadius: 20,
+        endRadius: 300
+      ),
+      for: .widget)
   }
 }
 
@@ -63,7 +71,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
     Task {
       let entries = await fetchTodayFoodEntries()
       let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries)
-      let timeline = Timeline(entries: [timelineEntry], policy: .after(Date().addingTimeInterval(900))) // refresh every 15 min
+      let timeline = Timeline(entries: [timelineEntry], policy: .after(Date().addingTimeInterval(900)))
       completion(timeline)
     }
   }
