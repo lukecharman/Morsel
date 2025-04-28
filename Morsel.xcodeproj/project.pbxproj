@@ -68,22 +68,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A35D3D022DBFB10C00C4C166 /* Exceptions for "Morsel" folder in "Morsel (watchOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				FoodEntry.swift,
-				"ModelContainer+Morsel.swift",
-			);
-			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
-		};
-		A35D3DA42DBFD0B800C4C166 /* Exceptions for "Morsel" folder in "Morsel (macOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				FoodEntry.swift,
-				"ModelContainer+Morsel.swift",
-			);
-			target = A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */;
-		};
 		A35D3DC12DBFDCC000C4C166 /* Exceptions for "MorselVision" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -91,7 +75,31 @@
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
-		A35D3DC92DBFDD4500C4C166 /* Exceptions for "Morsel" folder in "Morsel (visionOS)" target */ = {
+		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel iOS Widgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FoodEntry.swift,
+				"ModelContainer+Morsel.swift",
+			);
+			target = A3CD694B2DBF752B00AB946D /* Morsel iOS Widgets */;
+		};
+		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FoodEntry.swift,
+				"ModelContainer+Morsel.swift",
+			);
+			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
+		};
+		A35D3DCE2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FoodEntry.swift,
+				"ModelContainer+Morsel.swift",
+			);
+			target = A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */;
+		};
+		A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				FoodEntry.swift,
@@ -110,14 +118,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-			);
-			target = A3CD694B2DBF752B00AB946D /* Morsel iOS Widgets */;
-		};
-		A3CD69672DBF767300AB946D /* Exceptions for "Morsel" folder in "Morsel iOS Widgets" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				FoodEntry.swift,
-				"ModelContainer+Morsel.swift",
 			);
 			target = A3CD694B2DBF752B00AB946D /* Morsel iOS Widgets */;
 		};
@@ -142,14 +142,21 @@
 			path = MorselVision;
 			sourceTree = "<group>";
 		};
+		A35D3DCB2DBFDDC300C4C166 /* Core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel iOS Widgets" target */,
+				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */,
+				A35D3DCE2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (macOS)" target */,
+				A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		A3CD69062DBF745E00AB946D /* Morsel */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel (iOS)" target */,
-				A3CD69672DBF767300AB946D /* Exceptions for "Morsel" folder in "Morsel iOS Widgets" target */,
-				A35D3D022DBFB10C00C4C166 /* Exceptions for "Morsel" folder in "Morsel (watchOS)" target */,
-				A35D3DA42DBFD0B800C4C166 /* Exceptions for "Morsel" folder in "Morsel (macOS)" target */,
-				A35D3DC92DBFDD4500C4C166 /* Exceptions for "Morsel" folder in "Morsel (visionOS)" target */,
 			);
 			path = Morsel;
 			sourceTree = "<group>";
@@ -217,6 +224,7 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
+				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* Morsel */,
 				A3CD69522DBF752B00AB946D /* MorselWidget */,
 				A35D3CD72DBFB0B100C4C166 /* MorselWatch */,
@@ -336,6 +344,7 @@
 				A35D3CF52DBFB0B300C4C166 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* Morsel */,
 			);
 			name = "Morsel (iOS)";

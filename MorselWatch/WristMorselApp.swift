@@ -8,16 +8,9 @@ struct WristMorsel_Watch_AppApp: App {
 
   var body: some Scene {
     WindowGroup {
-      WatchContentView().modelContainer(sharedContainer)
+      WatchContentView()
     }
-  }
-
-  var sharedContainer: ModelContainer {
-    do {
-      return try ModelContainer.sharedContainer()
-    } catch {
-      fatalError("💥 Failed to load shared SwiftData container for Watch: \(error)")
-    }
+    .modelContainer(.sharedContainer)
   }
 }
 

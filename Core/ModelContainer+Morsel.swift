@@ -2,7 +2,15 @@ import SwiftData
 import Foundation
 
 extension ModelContainer {
-  static func sharedContainer() throws -> ModelContainer {
+  static var sharedContainer: ModelContainer {
+    do {
+      return try ModelContainer.throwingSharedContainer()
+    } catch {
+      fatalError("💥 Failed to load shared SwiftData container for Watch: \(error)")
+    }
+  }
+
+  static func throwingSharedContainer() throws -> ModelContainer {
     let schema = Schema([FoodEntry.self])
 
     guard let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel") else {

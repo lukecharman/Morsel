@@ -9,20 +9,13 @@ struct MorselApp: App {
   @StateObject private var sessionManager = PhoneSessionManager()
 
   @State private var navigationTarget: NavigationTarget?
-  @State private var modelContainer: ModelContainer
 
-  init() {
-    do {
-      _modelContainer = try State(wrappedValue: ModelContainer.sharedContainer())
-    } catch {
-      fatalError("💥 Failed to load shared ModelContainer: \(error)")
-    }
-  }
+  init() {}
 
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .modelContainer(modelContainer)
+        .modelContainer(.sharedContainer)
         .onOpenURL { url in
           handleIncomingURL(url)
         }
@@ -31,7 +24,7 @@ struct MorselApp: App {
           case .addEntry:
             NavigationStack {
               AddEntryView()
-                .modelContext(modelContainer.mainContext)
+                .modelContainer(.sharedContainer)
             }
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
@@ -70,7 +63,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   ) async -> UIBackgroundFetchResult {
     if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
        notification.notificationType == .database {
-      print("📡 CloudKit database notification received")
       NotificationCenter.default.post(name: .cloudKitDataChanged, object: nil)
     }
     return .newData
