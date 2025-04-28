@@ -5,6 +5,8 @@ struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Query(sort: \FoodEntry.timestamp, order: .reverse) private var entries: [FoodEntry]
 
+  @State private var showingAddSheet = false
+
   var body: some View {
     NavigationStack {
       List {
@@ -22,6 +24,18 @@ struct ContentView: View {
       }
       .navigationTitle("Morsel")
       .glassBackgroundEffect()
+      .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button(action: {
+            showingAddSheet = true
+          }) {
+            Label("Add Meal", systemImage: "plus")
+          }
+        }
+      }
+    }
+    .sheet(isPresented: $showingAddSheet) {
+      AddMealSheet()
     }
   }
 }

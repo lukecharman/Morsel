@@ -115,15 +115,7 @@ struct ContentView: View {
         ForEach(groupedEntries, id: \.date) { group in
           Section(header: Text(dateString(for: group.date, entryCount: group.entries.count))) {
             ForEach(group.entries) { entry in
-              VStack(alignment: .leading) {
-                Text(entry.name)
-                  .font(.body)
-                  .foregroundColor(colourForEntry(date: entry.timestamp))
-                Text(entry.timestamp, format: .dateTime.hour().minute())
-                  .font(.caption)
-                  .foregroundColor(.secondary)
-              }
-              .padding(.vertical, 4)
+              MealRow(entry: entry)
             }
           }
           .id(group.date)
@@ -195,6 +187,9 @@ struct ContentView: View {
       for index in offsets {
         modelContext.delete(entries[index])
       }
+
+      try? modelContext.save()
+      loadEntries()
 
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         WidgetCenter.shared.reloadAllTimelines()
