@@ -62,7 +62,6 @@
 		A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel iOS Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A3CD69502DBF752B00AB946D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		A3CD697B2DBF7D6E00AB946D /* FoodEntryWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FoodEntryWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -89,7 +88,7 @@
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
-		A3CD69642DBF752D00AB946D /* Exceptions for "FoodEntryWidget" folder in "Morsel iOS Widgets" target */ = {
+		A3CD69642DBF752D00AB946D /* Exceptions for "MorselWidget" folder in "Morsel iOS Widgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -107,34 +106,14 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A35D3CD72DBFB0B100C4C166 /* WristMorsel Watch App */ = {
+		A35D3CD72DBFB0B100C4C166 /* MorselWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "WristMorsel Watch App";
+			path = MorselWatch;
 			sourceTree = "<group>";
 		};
-		A35D3CE52DBFB0B300C4C166 /* WristMorsel Watch AppTests */ = {
+		A35D3D7A2DBFD06B00C4C166 /* MorselMac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "WristMorsel Watch AppTests";
-			sourceTree = "<group>";
-		};
-		A35D3CEF2DBFB0B300C4C166 /* WristMorsel Watch AppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "WristMorsel Watch AppUITests";
-			sourceTree = "<group>";
-		};
-		A35D3D7A2DBFD06B00C4C166 /* MacMorsel */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MacMorsel;
-			sourceTree = "<group>";
-		};
-		A35D3D8B2DBFD06D00C4C166 /* MacMorselTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MacMorselTests;
-			sourceTree = "<group>";
-		};
-		A35D3D952DBFD06D00C4C166 /* MacMorselUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MacMorselUITests;
+			path = MorselMac;
 			sourceTree = "<group>";
 		};
 		A3CD69062DBF745E00AB946D /* Morsel */ = {
@@ -148,22 +127,12 @@
 			path = Morsel;
 			sourceTree = "<group>";
 		};
-		A3CD69182DBF745F00AB946D /* MorselTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MorselTests;
-			sourceTree = "<group>";
-		};
-		A3CD69222DBF745F00AB946D /* MorselUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MorselUITests;
-			sourceTree = "<group>";
-		};
-		A3CD69522DBF752B00AB946D /* FoodEntryWidget */ = {
+		A3CD69522DBF752B00AB946D /* MorselWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A3CD69642DBF752D00AB946D /* Exceptions for "FoodEntryWidget" folder in "Morsel iOS Widgets" target */,
+				A3CD69642DBF752D00AB946D /* Exceptions for "MorselWidget" folder in "Morsel iOS Widgets" target */,
 			);
-			path = FoodEntryWidget;
+			path = MorselWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -205,17 +174,10 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
-				A3CD697B2DBF7D6E00AB946D /* FoodEntryWidgetExtension.entitlements */,
 				A3CD69062DBF745E00AB946D /* Morsel */,
-				A3CD69182DBF745F00AB946D /* MorselTests */,
-				A3CD69222DBF745F00AB946D /* MorselUITests */,
-				A3CD69522DBF752B00AB946D /* FoodEntryWidget */,
-				A35D3CD72DBFB0B100C4C166 /* WristMorsel Watch App */,
-				A35D3CE52DBFB0B300C4C166 /* WristMorsel Watch AppTests */,
-				A35D3CEF2DBFB0B300C4C166 /* WristMorsel Watch AppUITests */,
-				A35D3D7A2DBFD06B00C4C166 /* MacMorsel */,
-				A35D3D8B2DBFD06D00C4C166 /* MacMorselTests */,
-				A35D3D952DBFD06D00C4C166 /* MacMorselUITests */,
+				A3CD69522DBF752B00AB946D /* MorselWidget */,
+				A35D3CD72DBFB0B100C4C166 /* MorselWatch */,
+				A35D3D7A2DBFD06B00C4C166 /* MorselMac */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
@@ -257,7 +219,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3CD72DBFB0B100C4C166 /* WristMorsel Watch App */,
+				A35D3CD72DBFB0B100C4C166 /* MorselWatch */,
 			);
 			name = "Morsel (watchOS)";
 			packageProductDependencies = (
@@ -279,7 +241,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3D7A2DBFD06B00C4C166 /* MacMorsel */,
+				A35D3D7A2DBFD06B00C4C166 /* MorselMac */,
 			);
 			name = "Morsel (macOS)";
 			packageProductDependencies = (
@@ -327,7 +289,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A3CD69522DBF752B00AB946D /* FoodEntryWidget */,
+				A3CD69522DBF752B00AB946D /* MorselWidget */,
 			);
 			name = "Morsel iOS Widgets";
 			packageProductDependencies = (
@@ -463,7 +425,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "WristMorsel Watch App/WristMorsel Watch App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MorselWatch/MorselWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -494,7 +456,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "WristMorsel Watch App/WristMorsel Watch App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = MorselWatch/MorselWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
@@ -525,7 +487,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MacMorsel/MacMorsel.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MorselMac/MorselMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -555,7 +517,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MacMorsel/MacMorsel.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MorselMac/MorselMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -768,12 +730,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = FoodEntryWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MorselWidget/MorselWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
+				INFOPLIST_FILE = MorselWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -796,12 +758,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = FoodEntryWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MorselWidget/MorselWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
+				INFOPLIST_FILE = MorselWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
