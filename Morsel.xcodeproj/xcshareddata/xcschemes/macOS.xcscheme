@@ -15,23 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-               BuildableName = "Morsel (iOS).app"
-               BlueprintName = "Morsel (iOS)"
-               ReferencedContainer = "container:Morsel.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
-               BuildableName = "Morsel (watchOS).app"
-               BlueprintName = "Morsel (watchOS)"
+               BlueprintIdentifier = "A35D3D782DBFD06B00C4C166"
+               BuildableName = "Morsel (macOS).app"
+               BlueprintName = "Morsel (macOS)"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,6 +29,30 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A35D3D872DBFD06D00C4C166"
+               BuildableName = "MacMorselTests.xctest"
+               BlueprintName = "MacMorselTests"
+               ReferencedContainer = "container:Morsel.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A35D3D912DBFD06D00C4C166"
+               BuildableName = "MacMorselUITests.xctest"
+               BlueprintName = "MacMorselUITests"
+               ReferencedContainer = "container:Morsel.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -58,9 +68,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel (iOS).app"
-            BlueprintName = "Morsel (iOS)"
+            BlueprintIdentifier = "A35D3D782DBFD06B00C4C166"
+            BuildableName = "Morsel (macOS).app"
+            BlueprintName = "Morsel (macOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,9 +85,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel (iOS).app"
-            BlueprintName = "Morsel (iOS)"
+            BlueprintIdentifier = "A35D3D782DBFD06B00C4C166"
+            BuildableName = "Morsel (macOS).app"
+            BlueprintName = "Morsel (macOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

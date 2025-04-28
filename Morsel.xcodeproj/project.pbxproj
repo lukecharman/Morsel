@@ -472,7 +472,7 @@
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.Morsel;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsel;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -503,7 +503,7 @@
 				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.Morsel;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsel;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -600,7 +600,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.phone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -630,7 +630,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.phone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -770,7 +770,7 @@
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoodEntryWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -778,7 +778,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.phone.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -798,7 +798,7 @@
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoodEntryWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -806,7 +806,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.phone.widgets;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsel.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
