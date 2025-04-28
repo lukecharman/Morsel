@@ -1,0 +1,769 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
+		A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
+		A3CD69602DBF752D00AB946D /* FoodEntryWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* FoodEntryWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A3CD69162DBF745F00AB946D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3CD69032DBF745E00AB946D;
+			remoteInfo = Morsel;
+		};
+		A3CD69202DBF745F00AB946D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3CD69032DBF745E00AB946D;
+			remoteInfo = Morsel;
+		};
+		A3CD695E2DBF752D00AB946D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3CD694B2DBF752B00AB946D;
+			remoteInfo = FoodEntryWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A3CD69652DBF752D00AB946D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A3CD69602DBF752D00AB946D /* FoodEntryWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A3CD69042DBF745E00AB946D /* Morsel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Morsel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3CD69152DBF745F00AB946D /* MorselTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MorselTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3CD691F2DBF745F00AB946D /* MorselUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MorselUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3CD694C2DBF752B00AB946D /* FoodEntryWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FoodEntryWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		A3CD69502DBF752B00AB946D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A3CD697B2DBF7D6E00AB946D /* FoodEntryWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FoodEntryWidgetExtension.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A3CD69032DBF745E00AB946D /* Morsel */;
+		};
+		A3CD69642DBF752D00AB946D /* Exceptions for "FoodEntryWidget" folder in "FoodEntryWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A3CD694B2DBF752B00AB946D /* FoodEntryWidgetExtension */;
+		};
+		A3CD69672DBF767300AB946D /* Exceptions for "Morsel" folder in "FoodEntryWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FoodEntry.swift,
+				"ModelContainer+Morsel.swift",
+			);
+			target = A3CD694B2DBF752B00AB946D /* FoodEntryWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A3CD69062DBF745E00AB946D /* Morsel */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3CD69272DBF745F00AB946D /* Exceptions for "Morsel" folder in "Morsel" target */,
+				A3CD69672DBF767300AB946D /* Exceptions for "Morsel" folder in "FoodEntryWidgetExtension" target */,
+			);
+			path = Morsel;
+			sourceTree = "<group>";
+		};
+		A3CD69182DBF745F00AB946D /* MorselTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MorselTests;
+			sourceTree = "<group>";
+		};
+		A3CD69222DBF745F00AB946D /* MorselUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MorselUITests;
+			sourceTree = "<group>";
+		};
+		A3CD69522DBF752B00AB946D /* FoodEntryWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3CD69642DBF752D00AB946D /* Exceptions for "FoodEntryWidget" folder in "FoodEntryWidgetExtension" target */,
+			);
+			path = FoodEntryWidget;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A3CD69012DBF745E00AB946D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD69122DBF745F00AB946D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD691C2DBF745F00AB946D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD69492DBF752B00AB946D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */,
+				A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A3CD68FB2DBF745E00AB946D = {
+			isa = PBXGroup;
+			children = (
+				A3CD697B2DBF7D6E00AB946D /* FoodEntryWidgetExtension.entitlements */,
+				A3CD69062DBF745E00AB946D /* Morsel */,
+				A3CD69182DBF745F00AB946D /* MorselTests */,
+				A3CD69222DBF745F00AB946D /* MorselUITests */,
+				A3CD69522DBF752B00AB946D /* FoodEntryWidget */,
+				A3CD694D2DBF752B00AB946D /* Frameworks */,
+				A3CD69052DBF745E00AB946D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A3CD69052DBF745E00AB946D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A3CD69042DBF745E00AB946D /* Morsel.app */,
+				A3CD69152DBF745F00AB946D /* MorselTests.xctest */,
+				A3CD691F2DBF745F00AB946D /* MorselUITests.xctest */,
+				A3CD694C2DBF752B00AB946D /* FoodEntryWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A3CD694D2DBF752B00AB946D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A3CD694E2DBF752B00AB946D /* WidgetKit.framework */,
+				A3CD69502DBF752B00AB946D /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A3CD69032DBF745E00AB946D /* Morsel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3CD69282DBF745F00AB946D /* Build configuration list for PBXNativeTarget "Morsel" */;
+			buildPhases = (
+				A3CD69002DBF745E00AB946D /* Sources */,
+				A3CD69012DBF745E00AB946D /* Frameworks */,
+				A3CD69022DBF745E00AB946D /* Resources */,
+				A3CD69652DBF752D00AB946D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3CD695F2DBF752D00AB946D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A3CD69062DBF745E00AB946D /* Morsel */,
+			);
+			name = Morsel;
+			packageProductDependencies = (
+			);
+			productName = Morsel;
+			productReference = A3CD69042DBF745E00AB946D /* Morsel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A3CD69142DBF745F00AB946D /* MorselTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3CD692D2DBF745F00AB946D /* Build configuration list for PBXNativeTarget "MorselTests" */;
+			buildPhases = (
+				A3CD69112DBF745F00AB946D /* Sources */,
+				A3CD69122DBF745F00AB946D /* Frameworks */,
+				A3CD69132DBF745F00AB946D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3CD69172DBF745F00AB946D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A3CD69182DBF745F00AB946D /* MorselTests */,
+			);
+			name = MorselTests;
+			packageProductDependencies = (
+			);
+			productName = MorselTests;
+			productReference = A3CD69152DBF745F00AB946D /* MorselTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A3CD691E2DBF745F00AB946D /* MorselUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3CD69302DBF745F00AB946D /* Build configuration list for PBXNativeTarget "MorselUITests" */;
+			buildPhases = (
+				A3CD691B2DBF745F00AB946D /* Sources */,
+				A3CD691C2DBF745F00AB946D /* Frameworks */,
+				A3CD691D2DBF745F00AB946D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3CD69212DBF745F00AB946D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A3CD69222DBF745F00AB946D /* MorselUITests */,
+			);
+			name = MorselUITests;
+			packageProductDependencies = (
+			);
+			productName = MorselUITests;
+			productReference = A3CD691F2DBF745F00AB946D /* MorselUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A3CD694B2DBF752B00AB946D /* FoodEntryWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "FoodEntryWidgetExtension" */;
+			buildPhases = (
+				A3CD69482DBF752B00AB946D /* Sources */,
+				A3CD69492DBF752B00AB946D /* Frameworks */,
+				A3CD694A2DBF752B00AB946D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A3CD69522DBF752B00AB946D /* FoodEntryWidget */,
+			);
+			name = FoodEntryWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = FoodEntryWidgetExtension;
+			productReference = A3CD694C2DBF752B00AB946D /* FoodEntryWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A3CD68FC2DBF745E00AB946D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					A3CD69032DBF745E00AB946D = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					A3CD69142DBF745F00AB946D = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = A3CD69032DBF745E00AB946D;
+					};
+					A3CD691E2DBF745F00AB946D = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = A3CD69032DBF745E00AB946D;
+					};
+					A3CD694B2DBF752B00AB946D = {
+						CreatedOnToolsVersion = 16.3;
+					};
+				};
+			};
+			buildConfigurationList = A3CD68FF2DBF745E00AB946D /* Build configuration list for PBXProject "Morsel" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A3CD68FB2DBF745E00AB946D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A3CD69052DBF745E00AB946D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A3CD69032DBF745E00AB946D /* Morsel */,
+				A3CD69142DBF745F00AB946D /* MorselTests */,
+				A3CD691E2DBF745F00AB946D /* MorselUITests */,
+				A3CD694B2DBF752B00AB946D /* FoodEntryWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A3CD69022DBF745E00AB946D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD69132DBF745F00AB946D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD691D2DBF745F00AB946D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD694A2DBF752B00AB946D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A3CD69002DBF745E00AB946D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD69112DBF745F00AB946D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD691B2DBF745F00AB946D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3CD69482DBF752B00AB946D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A3CD69172DBF745F00AB946D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3CD69032DBF745E00AB946D /* Morsel */;
+			targetProxy = A3CD69162DBF745F00AB946D /* PBXContainerItemProxy */;
+		};
+		A3CD69212DBF745F00AB946D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3CD69032DBF745E00AB946D /* Morsel */;
+			targetProxy = A3CD69202DBF745F00AB946D /* PBXContainerItemProxy */;
+		};
+		A3CD695F2DBF752D00AB946D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3CD694B2DBF752B00AB946D /* FoodEntryWidgetExtension */;
+			targetProxy = A3CD695E2DBF752D00AB946D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A3CD69292DBF745F00AB946D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Morsel/Morsel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Morsel/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.Morsel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A3CD692A2DBF745F00AB946D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Morsel/Morsel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Morsel/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.Morsel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A3CD692B2DBF745F00AB946D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A3CD692C2DBF745F00AB946D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A3CD692E2DBF745F00AB946D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MorselTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Morsel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Morsel";
+			};
+			name = Debug;
+		};
+		A3CD692F2DBF745F00AB946D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MorselTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Morsel.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Morsel";
+			};
+			name = Release;
+		};
+		A3CD69312DBF745F00AB946D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MorselUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Morsel;
+			};
+			name = Debug;
+		};
+		A3CD69322DBF745F00AB946D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.MorselUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Morsel;
+			};
+			name = Release;
+		};
+		A3CD69622DBF752D00AB946D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FoodEntryWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FoodEntryWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.Morsel.FoodEntryWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A3CD69632DBF752D00AB946D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FoodEntryWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FoodEntryWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FoodEntryWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.Morsel.FoodEntryWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A3CD68FF2DBF745E00AB946D /* Build configuration list for PBXProject "Morsel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3CD692B2DBF745F00AB946D /* Debug */,
+				A3CD692C2DBF745F00AB946D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3CD69282DBF745F00AB946D /* Build configuration list for PBXNativeTarget "Morsel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3CD69292DBF745F00AB946D /* Debug */,
+				A3CD692A2DBF745F00AB946D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3CD692D2DBF745F00AB946D /* Build configuration list for PBXNativeTarget "MorselTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3CD692E2DBF745F00AB946D /* Debug */,
+				A3CD692F2DBF745F00AB946D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3CD69302DBF745F00AB946D /* Build configuration list for PBXNativeTarget "MorselUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3CD69312DBF745F00AB946D /* Debug */,
+				A3CD69322DBF745F00AB946D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "FoodEntryWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3CD69622DBF752D00AB946D /* Debug */,
+				A3CD69632DBF752D00AB946D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A3CD68FC2DBF745E00AB946D /* Project object */;
+}
