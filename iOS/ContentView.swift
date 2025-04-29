@@ -6,40 +6,27 @@ import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.colorScheme) private var colorScheme
+  @Environment(\.editMode) private var editMode
 
   @State private var entries: [FoodEntry] = []
   @State private var showingAddEntry = false
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
+  @GestureState private var addIsPressed = false
 
   var body: some View {
     NavigationStack {
       if entries.isEmpty {
         emptyStateView
-          .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-              Button(action: {
-                showingAddEntry = true
-              }) {
-                Label("Add Entry", systemImage: "plus")
-              }
-            }
-          }
       } else {
         filledView
           .navigationTitle("What I've Eaten")
-          .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-              EditButton()
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-              Button(action: {
-                showingAddEntry = true
-              }) {
-                Label("Add Entry", systemImage: "plus")
-              }
-            }
-          }
+      }
+    }
+    .overlay(alignment: .bottom) {
+      FAB(systemImage: "plus") {
+        showingAddEntry = true
       }
     }
     .onAppear {
@@ -88,45 +75,97 @@ struct ContentView: View {
   }
 
   var emptyStateView: some View {
-    VStack(spacing: 16) {
+    VStack(spacing: 24) {
       Image(systemName: "fork.knife.circle")
         .resizable()
         .scaledToFit()
         .frame(width: 80, height: 80)
-        .foregroundColor(.secondary)
+        .foregroundColor(.accentColor)
+        .opacity(0.4)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
-      Text("No meals logged yet")
-        .font(.title3)
-        .fontWeight(.medium)
+      (
+        Text("Still waiting on your ")
+          .font(.title3)
+          .fontWeight(.medium)
+      +
+        Text("first bite")
+          .font(.title3)
+          .fontWeight(.bold)
+      +
+        Text("...")
+          .font(.title3)
+          .fontWeight(.medium)
+      )
+      .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
-      Text("Tap the + button to add your first meal.")
+      Text("The first snack is the hardest.\nTap + to begin.")
         .font(.body)
         .foregroundColor(.secondary)
         .multilineTextAlignment(.center)
         .padding(.horizontal)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
     }
     .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(LinearGradient(colors: gradientColors, startPoint: .top, endPoint: .bottom)
+    )
   }
 
   var filledView: some View {
-    ScrollViewReader { proxy in
+    ZStack {
+      LinearGradient(
+        colors: gradientColors,
+        startPoint: .top,
+        endPoint: .bottom
+      )
+      .ignoresSafeArea()
       List {
         ForEach(groupedEntries, id: \.date) { group in
           Section(header: Text(dateString(for: group.date, entryCount: group.entries.count))) {
             ForEach(group.entries) { entry in
               MealRow(entry: entry)
+                .listRowBackground(Color.clear)
             }
+            .onDelete(perform: deleteEntries)
           }
-          .id(group.date)
         }
-        .onDelete(perform: deleteEntries)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
       }
-      .onAppear {
-        if let todayGroup = groupedEntries.first(where: { Calendar.current.isDateInToday($0.date) }) {
-          proxy.scrollTo(todayGroup.date, anchor: .top)
+      .padding(.top, 24)
+      .scrollContentBackground(.hidden)
+    }
+    .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        EditButton()
+      }
+      ToolbarItem(placement: .topBarTrailing) {
+        Button(action: {
+          addFakeEntry(daysAgo: 1, name: "Cheese")
+          addFakeEntry(daysAgo: 2, name: "Huge bits of meat on a spit")
+          addFakeEntry(daysAgo: 4, name: "A load of bats in a blender")
+          loadEntries()
+        }) {
+          Label("Fake", systemImage: "plus")
         }
       }
+    }
+  }
+
+  var gradientColors: [Color] {
+    if colorScheme == .dark {
+      return [
+        Color.purple.opacity(0.2),
+        Color.indigo.opacity(0.15),
+        Color(.systemBackground)
+      ]
+    } else {
+      return [
+        Color.cyan.opacity(0.25),
+        Color.yellow.opacity(0.1),
+        Color(.systemBackground)
+      ]
     }
   }
 

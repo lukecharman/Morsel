@@ -76,7 +76,6 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel iOS Widgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -85,7 +84,6 @@
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -94,7 +92,6 @@
 		A35D3DCE2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (macOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
@@ -103,7 +100,6 @@
 		A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AddEntryIntent.swift,
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
 			);
