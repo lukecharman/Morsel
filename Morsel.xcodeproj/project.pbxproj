@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
+		A3AE569C2DC2731800608E0D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
+		A3AE56A72DC2731A00608E0D /* WatchWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3AE569A2DC2731800608E0D /* WatchWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
 		A3CD69602DBF752D00AB946D /* Morsel iOS Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -20,6 +23,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A35D3CD52DBFB0B100C4C166;
 			remoteInfo = "WristMorsel Watch App";
+		};
+		A3AE56A52DC2731A00608E0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3CD68FC2DBF745E00AB946D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3AE56992DC2731800608E0D;
+			remoteInfo = WatchWidgetsExtension;
 		};
 		A3CD695E2DBF752D00AB946D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -42,6 +52,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A3AE56AC2DC2731A00608E0D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A3AE56A72DC2731A00608E0D /* WatchWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3CD69652DBF752D00AB946D /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,6 +80,7 @@
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (macOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (visionOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3AE569A2DC2731800608E0D /* WatchWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WatchWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Morsel iOS Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel iOS Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -116,6 +138,13 @@
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
+		A3AE56AB2DC2731A00608E0D /* Exceptions for "WatchWidgets" folder in "WatchWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A3AE56992DC2731800608E0D /* WatchWidgetsExtension */;
+		};
 		A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -162,6 +191,14 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		A3AE569D2DC2731800608E0D /* WatchWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3AE56AB2DC2731A00608E0D /* Exceptions for "WatchWidgets" folder in "WatchWidgetsExtension" target */,
+			);
+			path = WatchWidgets;
+			sourceTree = "<group>";
+		};
 		A3CD69062DBF745E00AB946D /* iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -203,6 +240,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A3AE56972DC2731800608E0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3AE569C2DC2731800608E0D /* SwiftUI.framework in Frameworks */,
+				A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3CD69012DBF745E00AB946D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -231,6 +277,7 @@
 				A35D3D7A2DBFD06B00C4C166 /* macOS */,
 				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
 				A3CD69522DBF752B00AB946D /* Widgets */,
+				A3AE569D2DC2731800608E0D /* WatchWidgets */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
@@ -244,6 +291,7 @@
 				A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */,
 				A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */,
 				A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */,
+				A3AE569A2DC2731800608E0D /* WatchWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -267,10 +315,12 @@
 				A35D3CD22DBFB0B100C4C166 /* Sources */,
 				A35D3CD32DBFB0B100C4C166 /* Frameworks */,
 				A35D3CD42DBFB0B100C4C166 /* Resources */,
+				A3AE56AC2DC2731A00608E0D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A3AE56A62DC2731A00608E0D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
@@ -325,6 +375,28 @@
 			productName = "Morsel (visionOS)";
 			productReference = A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */;
 			productType = "com.apple.product-type.application";
+		};
+		A3AE56992DC2731800608E0D /* WatchWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "WatchWidgetsExtension" */;
+			buildPhases = (
+				A3AE56962DC2731800608E0D /* Sources */,
+				A3AE56972DC2731800608E0D /* Frameworks */,
+				A3AE56982DC2731800608E0D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A3AE569D2DC2731800608E0D /* WatchWidgets */,
+			);
+			name = WatchWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = WatchWidgetsExtension;
+			productReference = A3AE569A2DC2731800608E0D /* WatchWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		A3CD69032DBF745E00AB946D /* Morsel (iOS) */ = {
 			isa = PBXNativeTarget;
@@ -394,6 +466,9 @@
 					A35D3DA92DBFDCBE00C4C166 = {
 						CreatedOnToolsVersion = 16.3;
 					};
+					A3AE56992DC2731800608E0D = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					A3CD69032DBF745E00AB946D = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -421,6 +496,7 @@
 				A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */,
 				A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */,
 				A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */,
+				A3AE56992DC2731800608E0D /* WatchWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -441,6 +517,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A35D3DA82DBFDCBE00C4C166 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3AE56982DC2731800608E0D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -485,6 +568,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A3AE56962DC2731800608E0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A3CD69002DBF745E00AB946D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -506,6 +596,11 @@
 			isa = PBXTargetDependency;
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 			targetProxy = A35D3CF42DBFB0B300C4C166 /* PBXContainerItemProxy */;
+		};
+		A3AE56A62DC2731A00608E0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3AE56992DC2731800608E0D /* WatchWidgetsExtension */;
+			targetProxy = A3AE56A52DC2731A00608E0D /* PBXContainerItemProxy */;
 		};
 		A3CD695F2DBF752D00AB946D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -690,6 +785,66 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 7;
 				XROS_DEPLOYMENT_TARGET = 2.4;
+			};
+			name = Release;
+		};
+		A3AE56A92DC2731A00608E0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.watch.WatchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		A3AE56AA2DC2731A00608E0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 82DGSFCWSX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.watch.WatchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
 			};
 			name = Release;
 		};
@@ -968,6 +1123,15 @@
 			buildConfigurations = (
 				A35D3DC32DBFDCC000C4C166 /* Debug */,
 				A35D3DC42DBFDCC000C4C166 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "WatchWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3AE56A92DC2731A00608E0D /* Debug */,
+				A3AE56AA2DC2731A00608E0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
