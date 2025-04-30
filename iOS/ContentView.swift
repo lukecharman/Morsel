@@ -92,12 +92,18 @@ struct ContentView: View {
           .fontWeight(.medium)
       )
       .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+      .multilineTextAlignment(.center)
 
-      Text("The first snack is the hardest.\nTap + to begin.")
+      Text("The first snack is the hardest.\nGive Morsel a tap to begin.")
         .font(.body)
         .foregroundColor(.secondary)
         .multilineTextAlignment(.center)
         .padding(.horizontal)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+
+      Text("↓")
+        .font(.title3)
+        .fontWeight(.medium)
         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
     }
     .padding()
@@ -127,7 +133,7 @@ struct ContentView: View {
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
       }
-      .padding(.top, 24)
+      .scrollDismissesKeyboard(.immediately)
       .scrollContentBackground(.hidden)
     }
     .toolbar {

@@ -63,7 +63,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     didReceiveRemoteNotification userInfo: [AnyHashable : Any]
   ) async -> UIBackgroundFetchResult {
     // Swift 6 Warning: Non-Sendable 'userInfo' crossing actor boundary
-    // Known issue with UIKit delegate methods. Safe because we isolate handling manually.
+    // Known issue with UIKit delegate methods. Safe because I isolate handling manually.
     await MainActor.run {
       if let notification = CKNotification(fromRemoteNotificationDictionary: userInfo),
          notification.notificationType == .database {
