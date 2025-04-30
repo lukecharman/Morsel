@@ -2,15 +2,14 @@ import CoreData
 import CloudKit
 import SwiftUI
 import SwiftData
+import WatchConnectivity
 import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.colorScheme) private var colorScheme
-  @Environment(\.editMode) private var editMode
 
   @State private var entries: [FoodEntry] = []
-  @State private var showingAddEntry = false
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
   @GestureState private var addIsPressed = false
@@ -25,8 +24,8 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .bottom) {
-      FAB(systemImage: "plus") {
-        showingAddEntry = true
+      MouthAddButton { entry in
+        add(entry)
       }
     }
     .onAppear {
@@ -54,11 +53,6 @@ struct ContentView: View {
     .onChange(of: modelContextRefreshTrigger) { _, _ in
       loadEntries()
       WidgetCenter.shared.reloadAllTimelines()
-    }
-    .sheet(isPresented: $showingAddEntry) {
-      AddEntryView {
-        loadEntries()
-      }
     }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
   }
@@ -137,9 +131,6 @@ struct ContentView: View {
       .scrollContentBackground(.hidden)
     }
     .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        EditButton()
-      }
       ToolbarItem(placement: .topBarTrailing) {
         Button(action: {
           addFakeEntry(daysAgo: 1, name: "Cheese")
@@ -234,6 +225,32 @@ struct ContentView: View {
         WidgetCenter.shared.reloadAllTimelines()
         print("🗑️ Widget reload after deletion")
       }
+    }
+  }
+
+  func add(_ entry: String) {
+    let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty else { return }
+
+    withAnimation {
+      modelContext.insert(FoodEntry(name: trimmed))
+      try? modelContext.save()
+      loadEntries()
+    }
+
+    WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  func notifyWatchOfNewMeal(entry: FoodEntry) {
+    if WCSession.default.isPaired && WCSession.default.isWatchAppInstalled {
+      let message = [
+        "newMealName": entry.name,
+        "newMealID": entry.id.uuidString,
+        "origin": "phone"
+      ]
+      WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
+        print("💥 Failed to send meal to Watch: \(error)")
+      })
     }
   }
 }

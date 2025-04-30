@@ -23,8 +23,8 @@ struct MorselApp: App {
           switch target {
           case .addEntry:
             NavigationStack {
-              AddEntryView()
-                .modelContainer(.sharedContainer)
+//              AddEntryView()
+//                .modelContainer(.sharedContainer)
             }
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
