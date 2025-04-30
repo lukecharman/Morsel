@@ -5,55 +5,24 @@ import SwiftData
 @main
 struct MorselApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
   @StateObject private var sessionManager = PhoneSessionManager()
-
-  @State private var navigationTarget: NavigationTarget?
+  @State private var shouldOpenMouth = false
 
   init() {}
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentView(shouldOpenMouth: $shouldOpenMouth)
         .modelContainer(.sharedContainer)
         .onOpenURL { url in
-          handleIncomingURL(url)
+          shouldOpenMouth = true
         }
-        .sheet(item: $navigationTarget) { target in
-          switch target {
-          case .addEntry:
-            NavigationStack {
-//              AddEntryView()
-//                .modelContainer(.sharedContainer)
-            }
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
-          }
-        }
-    }
-  }
-
-  private func handleIncomingURL(_ url: URL) {
-    guard url.scheme == "morsel" else { return }
-
-    switch url.host {
-    case "add":
-      navigationTarget = .addEntry
-    default:
-      break
     }
   }
 }
 
-enum NavigationTarget: Identifiable {
-  case addEntry
-
-  var id: String {
-    switch self {
-    case .addEntry:
-      return "addEntry"
-    }
-  }
+class AppState: ObservableObject {
+  @Published var shouldOpenMouth: Bool = false
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {

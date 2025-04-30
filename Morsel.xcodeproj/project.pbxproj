@@ -78,6 +78,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				StaticMorsel.swift,
 			);
 			target = A3CD694B2DBF752B00AB946D /* Morsel iOS Widgets */;
 		};
@@ -86,6 +87,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				StaticMorsel.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
@@ -94,6 +96,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				StaticMorsel.swift,
 			);
 			target = A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */;
 		};
@@ -102,6 +105,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				StaticMorsel.swift,
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};

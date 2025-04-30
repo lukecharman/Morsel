@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MouthAddButton: View {
+  @Binding var shouldOpen: Bool
+
   @State private var isOpen = false
   @State private var isSwallowing = false
   @State private var isBlinking = false
@@ -10,6 +12,8 @@ struct MouthAddButton: View {
   @State private var idleLookaroundOffset: CGFloat = .zero
 
   @FocusState private var isFocused: Bool
+
+  @EnvironmentObject var appState: AppState
 
   var onAdd: (String) -> Void
 
@@ -61,6 +65,13 @@ struct MouthAddButton: View {
     .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
       if isOpen {
         close()
+      }
+    }
+    .onChange(of: shouldOpen) { oldValue, newValue in
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        if oldValue == false && newValue == true {
+          open()
+        }
       }
     }
   }
@@ -216,6 +227,6 @@ struct MouthAddButton: View {
 }
 
 #Preview {
-  MouthAddButton { _ in }
+  MouthAddButton(shouldOpen: .constant(false)) { _ in }
     .background(Color(.systemBackground))
 }

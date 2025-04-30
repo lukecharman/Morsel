@@ -14,6 +14,8 @@ struct ContentView: View {
   @State private var widgetReloadWorkItem: DispatchWorkItem?
   @GestureState private var addIsPressed = false
 
+  @Binding var shouldOpenMouth: Bool
+
   var body: some View {
     NavigationStack {
       if entries.isEmpty {
@@ -24,7 +26,7 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .bottom) {
-      MouthAddButton { entry in
+      MouthAddButton(shouldOpen: _shouldOpenMouth) { entry in
         add(entry)
       }
     }
@@ -46,15 +48,14 @@ struct ContentView: View {
       modelContextRefreshTrigger = UUID()
     }
     .onReceive(NotificationCenter.default.publisher(for: .cloudKitDataChanged)) { _ in
-      print("🔄 CloudKit change detected — refreshing entries")
       loadEntries()
-      WidgetCenter.shared.reloadAllTimelines()
     }
     .onChange(of: modelContextRefreshTrigger) { _, _ in
       loadEntries()
-      WidgetCenter.shared.reloadAllTimelines()
     }
-    .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
+    .onChange(of: entries.count) { _, new in
+      updateWidget(newCount: new)
+    }
   }
 
 
@@ -66,6 +67,8 @@ struct ContentView: View {
     } catch {
       print("💥 Failed to load entries: \(error)")
     }
+
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   var emptyStateView: some View {
@@ -135,18 +138,6 @@ struct ContentView: View {
       }
       .scrollDismissesKeyboard(.immediately)
       .scrollContentBackground(.hidden)
-    }
-    .toolbar {
-      ToolbarItem(placement: .topBarTrailing) {
-        Button(action: {
-          addFakeEntry(daysAgo: 1, name: "Cheese")
-          addFakeEntry(daysAgo: 2, name: "Huge bits of meat on a spit")
-          addFakeEntry(daysAgo: 4, name: "A load of bats in a blender")
-          loadEntries()
-        }) {
-          Label("Fake", systemImage: "plus")
-        }
-      }
     }
   }
 
@@ -266,6 +257,6 @@ extension Notification.Name {
 }
 
 #Preview {
-  ContentView()
+  ContentView(shouldOpenMouth: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }

@@ -47,10 +47,14 @@ struct FoodEntryWidgetView: View {
 
       HStack {
         Spacer()
-        Text("+ Add Entry")
-          .font(.caption2)
-          .fontWeight(.medium)
-          .foregroundColor(.blue)
+        HStack {
+          Spacer()
+          VStack {
+            Spacer()
+            StaticMorsel()
+          }
+        }
+        .frame(height: 40)
       }
       .widgetURL(URL(string: "morsel://add")!)
     }
@@ -79,18 +83,11 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       let entries = await fetchTodayFoodEntries()
       let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries)
 
-      let nextRefresh: Date
+      let nextRefresh: Date = entries.isEmpty
+        ? Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
+        : Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
 
-      if entries.isEmpty {
-        // If no meals today, refresh less aggressively
-        nextRefresh = Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
-      } else {
-        // If meals exist, refresh more often
-        nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
-      }
-
-      let timeline = Timeline(entries: [timelineEntry], policy: .after(nextRefresh))
-      return timeline
+      completion(Timeline(entries: [timelineEntry], policy: .after(nextRefresh)))
     }
   }
 
