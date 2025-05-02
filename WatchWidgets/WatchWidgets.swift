@@ -3,15 +3,15 @@ import SwiftUI
 
 struct QuickLogProvider: TimelineProvider {
   func placeholder(in context: Context) -> QuickLogEntry {
-    QuickLogEntry(date: Date())
+    QuickLogEntry(date: Date(), mealCount: 0)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (QuickLogEntry) -> Void) {
-    completion(QuickLogEntry(date: Date()))
+    completion(QuickLogEntry(date: Date(), mealCount: 0))
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<QuickLogEntry>) -> Void) {
-    let entry = QuickLogEntry(date: Date())
+    let entry = QuickLogEntry(date: Date(), mealCount: 0)
     let timeline = Timeline(entries: [entry], policy: .never)
     completion(timeline)
   }
@@ -19,6 +19,7 @@ struct QuickLogProvider: TimelineProvider {
 
 struct QuickLogEntry: TimelineEntry {
   let date: Date
+  let mealCount: Int
 }
 
 struct QuickLogView: View {
@@ -33,6 +34,8 @@ struct QuickLogView: View {
       QuickLogCircularView(entry: entry)
     case .accessoryRectangular:
       QuickLogRectangularView(entry: entry)
+    case .accessoryInline:
+      QuickLogInlineView(entry: entry)
     default:
       QuickLogCornerView(entry: entry)
     }
@@ -74,6 +77,15 @@ struct QuickLogRectangularView: View {
     }
     .padding(.horizontal)
     .widgetURL(URL(string: "morsel://add")!)
+  }
+}
+
+struct QuickLogInlineView: View {
+  var entry: QuickLogEntry
+
+  var body: some View {
+    Text("🍴 \(entry.mealCount)")
+      .widgetURL(URL(string: "morsel://add")!)
   }
 }
 
