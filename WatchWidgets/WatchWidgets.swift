@@ -23,12 +23,57 @@ struct QuickLogEntry: TimelineEntry {
 
 struct QuickLogView: View {
   var entry: QuickLogEntry
+  @Environment(\.widgetFamily) var family
+
+  var body: some View {
+    switch family {
+    case .accessoryCorner:
+      QuickLogCornerView(entry: entry)
+    case .accessoryCircular:
+      QuickLogCircularView(entry: entry)
+    case .accessoryRectangular:
+      QuickLogRectangularView(entry: entry)
+    default:
+      QuickLogCornerView(entry: entry)
+    }
+  }
+}
+
+struct QuickLogCornerView: View {
+  var entry: QuickLogEntry
 
   var body: some View {
     Text("+")
       .widgetCurvesContent()
       .widgetLabel("Morsels")
       .widgetURL(URL(string: "morsel://add")!)
+  }
+}
+
+struct QuickLogCircularView: View {
+  var entry: QuickLogEntry
+
+  var body: some View {
+    ZStack {
+      Circle().fill(.white.opacity(0.1))
+      Image(systemName: "plus")
+        .font(.system(size: 14, weight: .bold))
+        .foregroundColor(.white)
+    }
+    .widgetURL(URL(string: "morsel://add")!)
+  }
+}
+
+struct QuickLogRectangularView: View {
+  var entry: QuickLogEntry
+
+  var body: some View {
+    HStack {
+      Image(systemName: "plus")
+      Text("Log Meal")
+    }
+    .padding(.horizontal)
+    .widgetURL(URL(string: "morsel://add")!)
   }
 }
 
@@ -42,6 +87,9 @@ struct WatchWidgets: Widget {
     }
     .supportedFamilies([
       .accessoryCorner,
+      .accessoryCircular,
+      .accessoryRectangular,
+      .accessoryInline
     ])
     .configurationDisplayName("Quick Log")
     .description("Quickly add a meal from your watch.")
