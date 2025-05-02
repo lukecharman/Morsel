@@ -138,6 +138,10 @@ struct ContentView: View {
       }
       .scrollDismissesKeyboard(.immediately)
       .scrollContentBackground(.hidden)
+      .scrollIndicators(.hidden)
+      .safeAreaInset(edge: .bottom) {
+        Spacer().frame(height: 160)
+      }
     }
   }
 

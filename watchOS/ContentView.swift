@@ -24,55 +24,45 @@ struct WatchContentView: View {
   }
 
   var body: some View {
-    NavigationStack {
-      List {
-        Section {
-          if saving {
-            ProgressView()
-              .progressViewStyle(.circular)
-              .scaleEffect(1.5)
-              .padding()
-          } else {
-            Button(action: {
-              showingMealPrompt = true
-            }) {
-              VStack {
-                Image(systemName: "plus.circle.fill")
-                  .font(.system(size: 30))
-                Text("Log Meal")
-                  .font(.body)
-              }
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+    ScrollView {
+      if saving {
+        ProgressView()
+          .progressViewStyle(.circular)
+          .scaleEffect(1.5)
+          .padding()
+      } else {
+        MouthAddButton(shouldOpen: $showingMealPrompt, onAdd: { _ in })
+          .onTapGesture {
+            showingMealPrompt = true
           }
-        }
+      }
 
-        Section(header: Text("Today’s Meals")) {
-          if todayEntries.isEmpty {
-            Text("No meals logged today")
-              .font(.caption)
+      Text("Today’s Meals")
+        .font(.title3)
+        .bold()
+        .padding(.bottom, 4)
+      if todayEntries.isEmpty {
+        Text("The first snack is the hardest...")
+          .font(.caption)
+          .foregroundColor(.secondary)
+          .multilineTextAlignment(.center)
+      } else {
+        ForEach(todayEntries) { meal in
+          HStack {
+            Text(meal.name)
+              .font(.body)
+              .lineLimit(1)
+              .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(meal.timestamp, format: .dateTime.hour().minute())
+              .font(.caption2)
               .foregroundColor(.secondary)
-          } else {
-            ForEach(todayEntries) { meal in
-              HStack {
-                Text(meal.name)
-                  .font(.body)
-                  .lineLimit(1)
-                  .frame(maxWidth: .infinity, alignment: .leading)
-
-                Text(meal.timestamp, format: .dateTime.hour().minute())
-                  .font(.caption2)
-                  .foregroundColor(.secondary)
-              }
-            }
           }
         }
       }
-      .navigationTitle("Morsel")
-      .sheet(isPresented: $showingMealPrompt) {
-        mealEntrySheet
-      }
+    }
+    .sheet(isPresented: $showingMealPrompt) {
+      mealEntrySheet
     }
   }
 
@@ -127,4 +117,9 @@ struct WatchContentView: View {
       WKInterfaceDevice.current().play(.success)
     }
   }
+}
+
+#Preview {
+  WatchContentView()
+    .modelContainer(for: FoodEntry.self, inMemory: true)
 }

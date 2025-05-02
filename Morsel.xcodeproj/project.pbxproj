@@ -164,8 +164,16 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				StaticMorsel.swift,
 			);
 			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
+		};
+		A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MorselTextButton.swift,
+			);
+			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -212,6 +220,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
+				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
 				A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */,
 			);
 			path = iOS;

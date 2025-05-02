@@ -142,9 +142,7 @@ struct QuickLogNoCountCircularView: View {
     ZStack {
       Circle().fill(.white.opacity(0.1))
       VStack {
-        Image(systemName: "fork.knife.circle.fill")
-          .font(.system(size: 18, weight: .semibold))
-          .foregroundColor(.white)
+        StaticMorsel()
         Text("Log")
           .font(.footnote)
           .widgetCurvesContent()

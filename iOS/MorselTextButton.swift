@@ -13,8 +13,6 @@ struct MouthAddButton: View {
 
   @FocusState private var isFocused: Bool
 
-  @EnvironmentObject var appState: AppState
-
   var onAdd: (String) -> Void
 
   var body: some View {
@@ -62,11 +60,13 @@ struct MouthAddButton: View {
       startBlinking()
       startIdleWiggle()
     }
+#if os(iOS)
     .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
       if isOpen {
         close()
       }
     }
+#endif
     .onChange(of: shouldOpen) { oldValue, newValue in
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
         if oldValue == false && newValue == true {
@@ -86,7 +86,7 @@ struct MouthAddButton: View {
       ),
       style: .continuous
     )
-    .fill(Color.accentColor)
+    .fill(Color.blue)
     .frame(
       width: isOpen ? 240 : 86,
       height: isOpen ? 120 : 64
@@ -228,5 +228,7 @@ struct MouthAddButton: View {
 
 #Preview {
   MouthAddButton(shouldOpen: .constant(false)) { _ in }
+#if os(iOS)
     .background(Color(.systemBackground))
+#endif
 }
