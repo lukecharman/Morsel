@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1630"
-   wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD694B2DBF752B00AB946D"
-               BuildableName = "Morsel iOS Widgets.appex"
-               BlueprintName = "Morsel iOS Widgets"
+               BlueprintIdentifier = "A3AE56992DC2731800608E0D"
+               BuildableName = "Morse Widgets (watchOS).appex"
+               BlueprintName = "Morse Widgets (watchOS)"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -36,6 +35,20 @@
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
+               BuildableName = "Morsel (watchOS).app"
+               BlueprintName = "Morsel (watchOS)"
+               ReferencedContainer = "container:Morsel.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -44,30 +57,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD69142DBF745F00AB946D"
-               BuildableName = "MorselTests.xctest"
-               BlueprintName = "MorselTests"
-               ReferencedContainer = "container:Morsel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A3CD691E2DBF745F00AB946D"
-               BuildableName = "MorselUITests.xctest"
-               BlueprintName = "MorselUITests"
-               ReferencedContainer = "container:Morsel.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -85,12 +74,21 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel (iOS).app"
-            BlueprintName = "Morsel (iOS)"
+            BlueprintIdentifier = "A3AE56992DC2731800608E0D"
+            BuildableName = "Morse Widgets (watchOS).appex"
+            BlueprintName = "Morse Widgets (watchOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "A35D3CD52DBFB0B100C4C166"
+            BuildableName = "Morsel (watchOS).app"
+            BlueprintName = "Morsel (watchOS)"
+            ReferencedContainer = "container:Morsel.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCWidgetKind"
@@ -114,16 +112,14 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
-      launchAutomaticallySubstyle = "2">
+      debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A3CD69032DBF745E00AB946D"
-            BuildableName = "Morsel (iOS).app"
-            BlueprintName = "Morsel (iOS)"
+            BlueprintIdentifier = "A3AE56992DC2731800608E0D"
+            BuildableName = "Morse Widgets (watchOS).appex"
+            BlueprintName = "Morse Widgets (watchOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
