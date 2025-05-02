@@ -25,15 +25,10 @@ struct QuickLogView: View {
   var entry: QuickLogEntry
 
   var body: some View {
-    Link(destination: URL(string: "morsel://add")!) {
-      ZStack {
-        Circle().fill(.tint)
-        Image(systemName: "xmark")
-          .font(.system(size: 14, weight: .bold))
-          .foregroundColor(.white)
-      }
-    }
-    .widgetURL(URL(string: "morsel://add")!)
+    Text("+")
+      .widgetCurvesContent()
+      .widgetLabel("Morsels")
+      .widgetURL(URL(string: "morsel://add")!)
   }
 }
 
@@ -46,8 +41,6 @@ struct WatchWidgets: Widget {
       QuickLogView(entry: entry)
     }
     .supportedFamilies([
-      .accessoryCircular,
-      .accessoryInline,
       .accessoryCorner,
     ])
     .configurationDisplayName("Quick Log")
