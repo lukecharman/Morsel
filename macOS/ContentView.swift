@@ -14,33 +14,36 @@ struct ContentView: View {
   var body: some View {
     NavigationStack {
       List {
-        ForEach(entries) { entry in
-          VStack(alignment: .leading) {
-            Text(entry.name)
-              .font(.headline)
-            Text(entry.timestamp, format: .dateTime.hour().minute())
-              .font(.caption)
-              .foregroundColor(.secondary)
+        ForEach(groupedEntries, id: \.date) { group in
+          Section(header: Text(dateString(for: group.date, entryCount: group.entries.count))) {
+            ForEach(group.entries) { entry in
+              MealRow(entry: entry)
+                .listRowBackground(Color.clear)
+            }
+            .onDelete(perform: deleteEntries)
           }
         }
-        .onDelete(perform: deleteEntries)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
+      }
+      .scrollIndicators(.hidden)
+      .safeAreaInset(edge: .bottom) {
+        Spacer().frame(height: 160)
       }
       .overlay(alignment: .bottom) {
-//        StaticMorsel()
         MouthAddButton(shouldOpen: _shouldOpenMouth) { entry in
           add(entry)
         }
       }
-      .navigationTitle("Morsel")
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          Button {
-            showingAddMeal.toggle()
-          } label: {
-            Label("Add Meal", systemImage: "plus")
-          }
-        }
+      .onAppear {
+        addFakeEntry(daysAgo: 1, name: "Cheese")
+        addFakeEntry(daysAgo: 1, name: "Ham")
+        addFakeEntry(daysAgo: 1, name: "Eggs")
+        addFakeEntry(daysAgo: 2, name: "Sausages")
+
+        loadEntries()
       }
+      .navigationTitle("What I've Eaten")
     }
   }
 
@@ -55,6 +58,29 @@ struct ContentView: View {
     }
 
     WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  private var groupedEntries: [(date: Date, entries: [FoodEntry])] {
+    Dictionary(grouping: entries) { entry in
+      Calendar.current.startOfDay(for: entry.timestamp)
+    }
+    .map { (key, value) in
+      (date: key, entries: value)
+    }
+    .sorted { $0.date > $1.date }
+  }
+
+  private func dateString(for date: Date, entryCount: Int) -> String {
+    let dayString: String
+    if Calendar.current.isDateInToday(date) {
+      dayString = "Today"
+    } else if Calendar.current.isDateInYesterday(date) {
+      dayString = "Yesterday"
+    } else {
+      dayString = date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
+    }
+
+    return "\(dayString) (\(entryCount))"
   }
 
   private func deleteEntries(offsets: IndexSet) {
@@ -73,6 +99,14 @@ struct ContentView: View {
     }
 
     WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  private func addFakeEntry(daysAgo: Int, name: String) {
+    let calendar = Calendar.current
+    guard let fakeDate = calendar.date(byAdding: .day, value: -daysAgo, to: Date()) else { return }
+
+    let fakeEntry = FoodEntry(name: name, timestamp: fakeDate)
+    modelContext.insert(fakeEntry)
   }
 }
 

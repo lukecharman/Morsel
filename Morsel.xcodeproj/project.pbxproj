@@ -117,6 +117,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				FoodEntry.swift,
+				MealRow.swift,
 				"ModelContainer+Morsel.swift",
 				StaticMorsel.swift,
 			);
@@ -126,15 +127,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				FoodEntry.swift,
+				MealRow.swift,
 				"ModelContainer+Morsel.swift",
 				StaticMorsel.swift,
-			);
-			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
-		};
-		A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MealRow.swift,
 			);
 			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
@@ -229,7 +224,6 @@
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
 				A3F3F33A2DC4EC3A0088E1CB /* Exceptions for "iOS" folder in "Morsel (macOS)" target */,
-				A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */,
 			);
 			path = iOS;
 			sourceTree = "<group>";

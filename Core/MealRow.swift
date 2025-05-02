@@ -21,6 +21,5 @@ struct MealRow: View {
 #Preview {
   MealRow(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now))
     .padding()
-    .background(Color(.systemBackground))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
