@@ -175,6 +175,13 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
+		A3F3F33A2DC4EC3A0088E1CB /* Exceptions for "iOS" folder in "Morsel (macOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MorselTextButton.swift,
+			);
+			target = A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -221,6 +228,7 @@
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
+				A3F3F33A2DC4EC3A0088E1CB /* Exceptions for "iOS" folder in "Morsel (macOS)" target */,
 				A35D3DD62DBFFCE600C4C166 /* Exceptions for "iOS" folder in "Morsel (visionOS)" target */,
 			);
 			path = iOS;

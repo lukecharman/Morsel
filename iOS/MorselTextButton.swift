@@ -117,12 +117,20 @@ struct MouthAddButton: View {
   var eyes: some View {
     HStack(spacing: isOpen ? 24 : 12) {
       Circle()
+#if os(iOS)
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#elseif os(macOS)
+        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#endif
         .frame(width: 10, height: 10)
         .scaleEffect(y: (isSwallowing || isBlinking) ? 0.25 : 1)
         .shadow(radius: 4)
       Circle()
+#if os(iOS)
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#elseif os(macOS)
+        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#endif
         .frame(width: 10, height: 10)
         .scaleEffect(y: (isSwallowing || isBlinking) ? 0.25 : 1)
         .shadow(radius: 4)
@@ -141,7 +149,11 @@ struct MouthAddButton: View {
         ),
         style: .continuous
       )
-      .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#if os(iOS)
+        .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#elseif os(macOS)
+        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+#endif
       .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
       .offset(y: isOpen ? 16 : 24)
       .shadow(radius: 10)
@@ -163,7 +175,10 @@ struct MouthAddButton: View {
       .frame(width: 160, height: isOpen ? 72 : 0)
       .multilineTextAlignment(.center)
       .backgroundStyle(Color.black.opacity(0.5))
+      .textFieldStyle(.plain)
+#if os(iOS)
       .scaleEffect(isOpen ? CGSize(width: 1, height: 1) : .zero)
+#endif
       .offset(y: isOpen ? 14 : 32)
   }
 

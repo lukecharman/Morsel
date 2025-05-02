@@ -1,10 +1,13 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \FoodEntry.timestamp, order: .reverse) private var entries: [FoodEntry]
 
+  @Binding var shouldOpenMouth: Bool
+
+  @State private var entries: [FoodEntry] = []
   @State private var showingAddMeal = false
   @State private var newMealName = ""
 
@@ -22,6 +25,12 @@ struct ContentView: View {
         }
         .onDelete(perform: deleteEntries)
       }
+      .overlay(alignment: .bottom) {
+//        StaticMorsel()
+        MouthAddButton(shouldOpen: _shouldOpenMouth) { entry in
+          add(entry)
+        }
+      }
       .navigationTitle("Morsel")
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
@@ -32,31 +41,20 @@ struct ContentView: View {
           }
         }
       }
-      .sheet(isPresented: $showingAddMeal) {
-        VStack {
-          TextField("Meal name", text: $newMealName)
-            .textFieldStyle(.roundedBorder)
-            .padding()
-
-          Button("Save") {
-            addMeal()
-          }
-          .disabled(newMealName.trimmingCharacters(in: .whitespaces).isEmpty)
-          .padding()
-
-          Spacer()
-        }
-        .padding()
-        .frame(width: 300, height: 200)
-      }
     }
   }
 
-  private func addMeal() {
-    let newEntry = FoodEntry(name: newMealName)
-    modelContext.insert(newEntry)
-    newMealName = ""
-    showingAddMeal = false
+  func add(_ entry: String) {
+    let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty else { return }
+
+    withAnimation {
+      modelContext.insert(FoodEntry(name: trimmed))
+      try? modelContext.save()
+      loadEntries()
+    }
+
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   private func deleteEntries(offsets: IndexSet) {
@@ -64,9 +62,21 @@ struct ContentView: View {
       modelContext.delete(entries[index])
     }
   }
+
+  private func loadEntries() {
+    do {
+      let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+      entries = try modelContext.fetch(descriptor)
+      print("✅ Reloaded entries: \(entries.count)")
+    } catch {
+      print("💥 Failed to load entries: \(error)")
+    }
+
+    WidgetCenter.shared.reloadAllTimelines()
+  }
 }
 
 #Preview {
-  ContentView()
+  ContentView(shouldOpenMouth: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
