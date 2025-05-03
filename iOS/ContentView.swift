@@ -22,7 +22,13 @@ struct ContentView: View {
         emptyStateView
       } else {
         filledView
-          .navigationTitle("What I've Eaten")
+          .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+              Text("What I've Eaten")
+                .font(MorselFont.title)
+              }
+          }
+          .navigationBarTitleDisplayMode(.inline)
       }
     }
     .overlay(alignment: .bottom) {

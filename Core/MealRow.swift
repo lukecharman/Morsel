@@ -7,7 +7,7 @@ struct MealRow: View {
   var body: some View {
     HStack(spacing: 4) {
       Text(entry.name)
-        .font(MorselFont.title)
+        .font(MorselFont.heading)
         .foregroundColor(.primary)
       Spacer()
       Text(entry.timestamp, format: .dateTime.hour().minute())

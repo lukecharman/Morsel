@@ -148,9 +148,10 @@ struct MouthAddButton: View {
         onAdd(text)
         close()
       }
-      .tint(.white)
+      .font(MorselFont.body)
+      .tint(.blue)
       .focused($isFocused)
-      .foregroundStyle(Color.white)
+      .foregroundStyle(.white)
       .allowsHitTesting(isOpen)
       .opacity(isOpen ? 1 : 0)
       .submitLabel(.done)
