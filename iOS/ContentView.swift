@@ -140,11 +140,12 @@ struct ContentView: View {
                 .font(MorselFont.title)
                 .padding()
               ForEach(group.entries) { entry in
-//                DeletableRow {
-//                  delete(entry: entry)
-//                } content: {
+                DeletableRow {
+                  delete(entry: entry)
+                } content: {
                   MealRow(entry: entry)
-//                }
+                }
+                .contentShape(Rectangle())
               }
             }
           }
@@ -431,10 +432,15 @@ struct DeletableRow<Content: View>: View {
     ZStack {
       content()
         .offset(x: offset)
-        .gesture(
+        .simultaneousGesture(
           DragGesture()
-            .updating($isDragging) { _, state, _ in state = true }
             .onChanged { value in
+              let horizontal = abs(value.translation.width)
+              let vertical = abs(value.translation.height)
+
+              // Only respond if it's mostly horizontal
+              guard horizontal > vertical else { return }
+
               offset = min(0, value.translation.width)
 
               let hasCrossed = offset < deleteThreshold
