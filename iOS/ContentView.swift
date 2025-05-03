@@ -160,14 +160,7 @@ struct ContentView: View {
       }
       ZStack {
         Rectangle()
-          .fill(.white)
-          .frame(height: 200)
-          .mask {
-            LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.5))
-          }
-        Rectangle()
-          .fill(Color.blue)
-          .opacity(0.4)
+          .fill(Color(.systemBackground))
           .frame(height: 200)
           .mask {
             LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.5))
@@ -196,8 +189,8 @@ struct ContentView: View {
       ]
     } else {
       return [
-        Color.cyan.opacity(0.25),
-        Color.yellow.opacity(0.1),
+        Color.blue.opacity(0.1),
+        Color.cyan.opacity(0.1),
         Color(.systemBackground)
       ]
     }
