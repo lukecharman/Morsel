@@ -156,12 +156,16 @@ struct ContentView: View {
         .safeAreaInset(edge: .bottom) {
           Spacer().frame(height: 160)
         }
+        .safeAreaInset(edge: .top) {
+          Spacer().frame(height: 24)
+        }
       }
+      .scrollIndicators(.hidden)
       .mask(
         LinearGradient(
           gradient: Gradient(stops: [
             .init(color: .clear, location: 0),
-            .init(color: .black, location: 0.05),
+            .init(color: .black, location: 0.04),
             .init(color: .black, location: 0.83),
             .init(color: .clear, location: 0.88),
             .init(color: .clear, location: 1)
