@@ -83,29 +83,29 @@ struct ContentView: View {
 
       (
         Text("Still waiting on your ")
-          .font(.title3)
+          .font(MorselFont.title)
           .fontWeight(.medium)
       +
         Text("first bite")
-          .font(.title3)
+          .font(MorselFont.title)
           .fontWeight(.bold)
       +
         Text("...")
-          .font(.title3)
+          .font(MorselFont.title)
           .fontWeight(.medium)
       )
       .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
       .multilineTextAlignment(.center)
 
       Text("The first snack is the hardest.\nGive Morsel a tap to begin.")
-        .font(.body)
+        .font(MorselFont.body)
         .foregroundColor(.secondary)
         .multilineTextAlignment(.center)
         .padding(.horizontal)
         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
       Text("↓")
-        .font(.title3)
+        .font(MorselFont.title)
         .fontWeight(.medium)
         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
     }
