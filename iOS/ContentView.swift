@@ -12,9 +12,7 @@ struct ContentView: View {
   @State private var entries: [FoodEntry] = []
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
-
   @State private var scrollOffset: CGFloat = 0
-
   @State private var showStats = false
   @State private var showExtras = false
 
@@ -40,9 +38,6 @@ struct ContentView: View {
     }
     .onAppear {
       loadEntries()
-      if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel") {
-      }
-
       NotificationCenter.default.addObserver(
         forName: NSPersistentCloudKitContainer.eventChangedNotification,
         object: nil,
@@ -69,7 +64,6 @@ struct ContentView: View {
     do {
       let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
       entries = try modelContext.fetch(descriptor)
-      print("✅ Reloaded entries: \(entries.count)")
     } catch {
       print("💥 Failed to load entries: \(error)")
     }
@@ -146,7 +140,11 @@ struct ContentView: View {
                 .font(MorselFont.title)
                 .padding()
               ForEach(group.entries) { entry in
-                MealRow(entry: entry)
+//                DeletableRow {
+//                  delete(entry: entry)
+//                } content: {
+                  MealRow(entry: entry)
+//                }
               }
             }
           }
@@ -158,16 +156,19 @@ struct ContentView: View {
           Spacer().frame(height: 160)
         }
       }
-      ZStack {
-        Rectangle()
-          .fill(Color(.systemBackground))
-          .frame(height: 200)
-          .mask {
-            LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.5))
-          }
-      }
-      .ignoresSafeArea()
-      .allowsHitTesting(false)
+      .mask(
+        LinearGradient(
+          gradient: Gradient(stops: [
+            .init(color: .clear, location: 0),
+            .init(color: .black, location: 0.05),
+            .init(color: .black, location: 0.83),
+            .init(color: .clear, location: 0.88),
+            .init(color: .clear, location: 1)
+          ]),
+          startPoint: .top,
+          endPoint: .bottom
+        )
+      )
 
       if showStats {
         //
@@ -248,18 +249,15 @@ struct ContentView: View {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
   }
 
-  private func deleteEntries(offsets: IndexSet) {
+  private func delete(entry: FoodEntry) {
     withAnimation {
-      for index in offsets {
-        modelContext.delete(entries[index])
-      }
+      modelContext.delete(entry)
 
       try? modelContext.save()
       loadEntries()
 
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         WidgetCenter.shared.reloadAllTimelines()
-        print("🗑️ Widget reload after deletion")
       }
     }
   }
@@ -415,5 +413,78 @@ struct BottomOverlayBar: View {
     }
     .frame(height: 100)
     .padding(.bottom, 16)
+  }
+}
+
+struct DeletableRow<Content: View>: View {
+  let onDelete: () -> Void
+  @ViewBuilder let content: () -> Content
+
+  @State private var offset: CGFloat = 0
+  @GestureState private var isDragging = false
+  @State private var crossedThreshold = false
+  @State private var animatePulse = false
+
+  private let deleteThreshold: CGFloat = -80
+
+  var body: some View {
+    ZStack {
+      content()
+        .offset(x: offset)
+        .gesture(
+          DragGesture()
+            .updating($isDragging) { _, state, _ in state = true }
+            .onChanged { value in
+              offset = min(0, value.translation.width)
+
+              let hasCrossed = offset < deleteThreshold
+              if hasCrossed && !crossedThreshold {
+                crossedThreshold = true
+                triggerPulse()
+              } else if !hasCrossed && crossedThreshold {
+                crossedThreshold = false
+              }
+            }
+            .onEnded { value in
+              if offset < deleteThreshold {
+                withAnimation(.easeInOut) {
+                  onDelete()
+                }
+              } else {
+                withAnimation(.spring()) {
+                  offset = 0
+                }
+              }
+            }
+        )
+
+      // Trash icon
+      HStack {
+        Spacer()
+        Image(systemName: "trash")
+          .foregroundColor(.red)
+          .padding(.trailing, 16)
+          .scaleEffect(animatePulse ? 1.4 : 1.0)
+          .opacity(trashIconOpacity)
+          .offset(x: trashIconOffset)
+          .animation(.easeOut(duration: 0.2), value: offset)
+      }
+    }
+  }
+
+  private func triggerPulse() {
+    animatePulse = true
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+      animatePulse = false
+    }
+  }
+
+  private var trashIconOpacity: Double {
+    let threshold: CGFloat = -20
+    return offset < threshold ? Double(min(abs(offset + threshold) / 40, 1)) : 0
+  }
+
+  private var trashIconOffset: CGFloat {
+    return max(0, 40 + offset * 0.5)
   }
 }
