@@ -79,7 +79,6 @@
 /* Begin PBXFileReference section */
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (macOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (visionOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morse Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel Widgets (iOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,13 +87,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A35D3DC12DBFDCC000C4C166 /* Exceptions for "visionOS" folder in "Morsel (visionOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
-		};
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -122,16 +114,6 @@
 				StaticMorsel.swift,
 			);
 			target = A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */;
-		};
-		A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				FoodEntry.swift,
-				MealRow.swift,
-				"ModelContainer+Morsel.swift",
-				StaticMorsel.swift,
-			);
-			target = A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */;
 		};
 		A3AE56AB2DC2731A00608E0D /* Exceptions for "Watch Widgets" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -190,20 +172,11 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
-		A35D3DAB2DBFDCBE00C4C166 /* visionOS */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A35D3DC12DBFDCC000C4C166 /* Exceptions for "visionOS" folder in "Morsel (visionOS)" target */,
-			);
-			path = visionOS;
-			sourceTree = "<group>";
-		};
 		A35D3DCB2DBFDDC300C4C166 /* Core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */,
 				A35D3DCE2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (macOS)" target */,
-				A35D3DCF2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (visionOS)" target */,
 				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */,
 				A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */,
 			);
@@ -253,13 +226,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A35D3DA72DBFDCBE00C4C166 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A3AE56972DC2731800608E0D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,7 +261,6 @@
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
 				A35D3D7A2DBFD06B00C4C166 /* macOS */,
-				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
 				A3CD69522DBF752B00AB946D /* iOS Widgets */,
 				A3AE569D2DC2731800608E0D /* Watch Widgets */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
@@ -310,7 +275,6 @@
 				A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */,
 				A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */,
 				A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */,
-				A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */,
 				A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */,
 			);
 			name = Products;
@@ -372,28 +336,6 @@
 			);
 			productName = MacMorsel;
 			productReference = A35D3D792DBFD06B00C4C166 /* Morsel (macOS).app */;
-			productType = "com.apple.product-type.application";
-		};
-		A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A35D3DC22DBFDCC000C4C166 /* Build configuration list for PBXNativeTarget "Morsel (visionOS)" */;
-			buildPhases = (
-				A35D3DA62DBFDCBE00C4C166 /* Sources */,
-				A35D3DA72DBFDCBE00C4C166 /* Frameworks */,
-				A35D3DA82DBFDCBE00C4C166 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				A35D3DAB2DBFDCBE00C4C166 /* visionOS */,
-			);
-			name = "Morsel (visionOS)";
-			packageProductDependencies = (
-			);
-			productName = "Morsel (visionOS)";
-			productReference = A35D3DAA2DBFDCBE00C4C166 /* Morsel (visionOS).app */;
 			productType = "com.apple.product-type.application";
 		};
 		A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */ = {
@@ -483,9 +425,6 @@
 					A35D3D782DBFD06B00C4C166 = {
 						CreatedOnToolsVersion = 16.3;
 					};
-					A35D3DA92DBFDCBE00C4C166 = {
-						CreatedOnToolsVersion = 16.3;
-					};
 					A3AE56992DC2731800608E0D = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -514,7 +453,6 @@
 				A3CD69032DBF745E00AB946D /* Morsel (iOS) */,
 				A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */,
 				A35D3D782DBFD06B00C4C166 /* Morsel (macOS) */,
-				A35D3DA92DBFDCBE00C4C166 /* Morsel (visionOS) */,
 				A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */,
 				A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */,
 			);
@@ -530,13 +468,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A35D3D772DBFD06B00C4C166 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A35D3DA82DBFDCBE00C4C166 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -575,13 +506,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A35D3D752DBFD06B00C4C166 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A35D3DA62DBFDCBE00C4C166 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -752,64 +676,6 @@
 			};
 			name = Release;
 		};
-		A35D3DC32DBFDCC000C4C166 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = visionOS/MorselVision.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 82DGSFCWSX;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = visionOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.vision;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = xros;
-				SUPPORTED_PLATFORMS = "xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 7;
-				XROS_DEPLOYMENT_TARGET = 2.4;
-			};
-			name = Debug;
-		};
-		A35D3DC42DBFDCC000C4C166 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = visionOS/MorselVision.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 82DGSFCWSX;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = visionOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.morsels.vision;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = xros;
-				SUPPORTED_PLATFORMS = "xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 7;
-				XROS_DEPLOYMENT_TARGET = 2.4;
-			};
-			name = Release;
-		};
 		A3AE56A92DC2731A00608E0D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -900,7 +766,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -935,7 +801,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1138,15 +1004,6 @@
 			buildConfigurations = (
 				A35D3D9B2DBFD06D00C4C166 /* Debug */,
 				A35D3D9C2DBFD06D00C4C166 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A35D3DC22DBFDCC000C4C166 /* Build configuration list for PBXNativeTarget "Morsel (visionOS)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A35D3DC32DBFDCC000C4C166 /* Debug */,
-				A35D3DC42DBFDCC000C4C166 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
