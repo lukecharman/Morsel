@@ -91,19 +91,17 @@ struct ContentView: View {
       .ignoresSafeArea()
       ScrollViewWithOffset(onScroll: handleScroll) {
         LazyVStack(alignment: .leading) {
-          Section {
-            ForEach(groupedEntries, id: \.date) { group in
-              Text(dateString(for: group.date, entryCount: group.entries.count))
-                .font(MorselFont.title)
-                .padding()
-              ForEach(group.entries) { entry in
-                DeletableRow {
-                  delete(entry: entry)
-                } content: {
-                  MealRow(entry: entry)
-                }
-                .contentShape(Rectangle())
+          ForEach(groupedEntries, id: \.date) { group in
+            Text(dateString(for: group.date, entryCount: group.entries.count))
+              .font(MorselFont.title)
+              .padding()
+            ForEach(group.entries) { entry in
+              DeletableRow {
+                delete(entry: entry)
+              } content: {
+                MealRow(entry: entry)
               }
+              .contentShape(Rectangle())
             }
           }
         }
@@ -142,8 +140,6 @@ struct ContentView: View {
     }
     .ignoresSafeArea(edges: .bottom)
   }
-
-  
 
   private func dateString(for date: Date, entryCount: Int) -> String {
     let dayString: String
