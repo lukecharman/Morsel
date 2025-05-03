@@ -51,7 +51,7 @@ struct BottomOverlayBar: View {
       .disabled(isMouthOpen)
     }
     .frame(height: 100)
-    .padding(.bottom, 16)
+    .padding(.bottom, isMouthOpen ? 32 : 16)
   }
 }
 
