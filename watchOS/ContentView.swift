@@ -104,7 +104,6 @@ struct WatchContentView: View {
 
       do {
         try modelContext.save()
-        print("✅ Meal saved from Watch: \(newEntry.name)")
       } catch {
         print("💥 Failed to save meal from Watch: \(error)")
       }

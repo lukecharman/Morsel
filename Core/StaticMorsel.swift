@@ -38,19 +38,11 @@ struct StaticMorsel: View {
   var eyes: some View {
     HStack(spacing: 12) {
       Circle()
-#if os(iOS)
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#elseif os(macOS)
-        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#endif
         .frame(width: 10, height: 10)
         .shadow(radius: 4)
       Circle()
-#if os(iOS)
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#elseif os(macOS)
-        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#endif
         .frame(width: 10, height: 10)
         .shadow(radius: 4)
     }
@@ -68,11 +60,7 @@ struct StaticMorsel: View {
         ),
         style: .continuous
       )
-#if os(iOS)
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#elseif os(macOS)
-        .fill(Color(nsColor: NSColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-#endif
       .frame(width: 24, height: 8)
       .offset(y: 24)
       .shadow(radius: 10)

@@ -114,7 +114,6 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
         FoodEntrySnapshot(id: entry.id, name: entry.name, timestamp: entry.timestamp)
       }
     } catch {
-      print("⚠️ Error fetching food entries for widget: \(error)")
       return []
     }
   }

@@ -31,8 +31,6 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
       return
     }
 
-    print("🍽️ Watch received meal '\(mealName)' from \(origin)")
-
     Task {
       await saveMealLocally(name: mealName, id: mealID, origin: origin)
     }
@@ -51,14 +49,12 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
       let existing = try context.fetch(existingFetch)
 
       if !existing.isEmpty {
-        print("⚠️ Meal already exists, skipping save")
         return
       }
 
       let newEntry = FoodEntry(id: id, name: name)
       context.insert(newEntry)
       try context.save()
-      print("✅ Saved new meal locally")
 
       if origin == "watch" {
         notifyPhoneOfNewMeal(name: name, id: id)

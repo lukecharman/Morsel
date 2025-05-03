@@ -20,7 +20,6 @@ extension PhoneSessionManager: WCSessionDelegate {
     if let mealName = message["newMealName"] as? String,
        let mealIDString = message["newMealID"] as? String,
        let mealID = UUID(uuidString: mealIDString) {
-      print("🍽️ Phone received new meal from Watch: \(mealName)")
 
       Task {
         await saveMealLocally(name: mealName, id: mealID)
@@ -41,14 +40,12 @@ extension PhoneSessionManager: WCSessionDelegate {
       let existing = try context.fetch(existingFetch)
 
       if !existing.isEmpty {
-        print("⚠️ Phone already has this meal, skipping save")
         return
       }
 
       let newEntry = FoodEntry(id: id, name: name, timestamp: Date())
       context.insert(newEntry)
       try context.save()
-      print("✅ Phone saved new meal from Watch")
     } catch {
       print("💥 Phone failed to save new meal: \(error)")
     }

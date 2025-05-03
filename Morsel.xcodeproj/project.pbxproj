@@ -91,6 +91,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				"Notification+CloudKit.swift",
 				StaticMorsel.swift,
 				Style.swift,
 			);
@@ -106,6 +107,7 @@
 				"Fonts/Quicksand-SemiBold.ttf",
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				"Notification+CloudKit.swift",
 				StaticMorsel.swift,
 				Style.swift,
 			);
@@ -151,6 +153,7 @@
 			membershipExceptions = (
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				"Notification+CloudKit.swift",
 				StaticMorsel.swift,
 				Style.swift,
 			);
