@@ -26,11 +26,11 @@ struct BottomOverlayBar: View {
             .shadow(radius: 8)
           Button(action: onStatsTap) {
             Image(systemName: "chart.bar.xaxis")
-              .padding(64)
           }
         }
         Spacer()
       }
+      .padding(.leading, 72)
       .opacity(isMouthOpen ? 0 : 1)
       .disabled(isMouthOpen)
 
@@ -43,10 +43,10 @@ struct BottomOverlayBar: View {
             .shadow(radius: 8)
           Button(action: onExtrasTap) {
             Image(systemName: "ellipsis.circle")
-              .padding(64)
           }
         }
       }
+      .padding(.trailing, 72)
       .opacity(isMouthOpen ? 0 : 1)
       .disabled(isMouthOpen)
     }

@@ -23,7 +23,7 @@ struct DeletableRow<Content: View>: View {
               let horizontal = abs(value.translation.width)
               let vertical = abs(value.translation.height)
 
-              if horizontal > vertical && horizontal > 10 {
+              if horizontal > vertical && horizontal > 20 {
                 isDraggingHorizontally = true
               } else if vertical > horizontal && vertical > 10 {
                 isDraggingHorizontally = false
