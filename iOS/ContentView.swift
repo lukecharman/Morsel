@@ -15,6 +15,9 @@ struct ContentView: View {
 
   @State private var scrollOffset: CGFloat = 0
 
+  @State private var showStats = false
+  @State private var showExtras = false
+
   @GestureState private var addIsPressed = false
 
   @Binding var shouldOpenMouth: Bool
@@ -28,14 +31,16 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .bottom) {
-      MouthAddButton(shouldOpen: _shouldOpenMouth) { entry in
-        add(entry)
-      }
+      BottomOverlayBar(
+        onStatsTap: { showStats = true },
+        onExtrasTap: { showExtras = true },
+        onAdd: add,
+        shouldOpenMouth: _shouldOpenMouth
+      )
     }
     .onAppear {
       loadEntries()
       if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel") {
-        print("📂 iPhone app is saving to: \(appGroupURL.path)")
       }
 
       NotificationCenter.default.addObserver(
@@ -59,7 +64,6 @@ struct ContentView: View {
       updateWidget(newCount: new)
     }
   }
-
 
   private func loadEntries() {
     do {
@@ -113,8 +117,7 @@ struct ContentView: View {
     }
     .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(LinearGradient(colors: gradientColors, startPoint: .top, endPoint: .bottom)
-    )
+    .background(LinearGradient(colors: gradientColors, startPoint: .top, endPoint: .bottom))
   }
 
   func handleScroll(_ offset: CGPoint) {
@@ -128,7 +131,7 @@ struct ContentView: View {
   }
 
   var filledView: some View {
-    ZStack {
+    ZStack(alignment: .bottom) {
       LinearGradient(
         colors: gradientColors,
         startPoint: .top,
@@ -136,22 +139,8 @@ struct ContentView: View {
       )
       .ignoresSafeArea()
       ScrollViewWithOffset(onScroll: handleScroll) {
-        LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
-          Section(
-            header:
-              ZStack {
-                Rectangle()
-                  .fill(Color.white)
-                  .opacity(fadeAmount)
-                  .ignoresSafeArea()
-                VStack(spacing: 0) {
-                  Color.clear
-                    .frame(height: 64)
-                  MorselHeaderCard(mealCount: groupedEntries.first?.entries.count ?? 0)
-                    .padding(.bottom, 16)
-                }
-              }
-          ) {
+        LazyVStack(alignment: .leading) {
+          Section {
             ForEach(groupedEntries, id: \.date) { group in
               Text(dateString(for: group.date, entryCount: group.entries.count))
                 .font(MorselFont.title)
@@ -169,15 +158,33 @@ struct ContentView: View {
           Spacer().frame(height: 160)
         }
       }
-      .ignoresSafeArea(edges: .top)
-      LinearGradient(
-        colors: [.clear, .clear, .clear, Color(.systemBackground)],
-        startPoint: .top,
-        endPoint: .bottom
-      )
-        .allowsHitTesting(false)
-        .ignoresSafeArea()
+      ZStack {
+        Rectangle()
+          .fill(.white)
+          .frame(height: 200)
+          .mask {
+            LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.5))
+          }
+        Rectangle()
+          .fill(Color.blue)
+          .opacity(0.4)
+          .frame(height: 200)
+          .mask {
+            LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.5))
+          }
+      }
+      .ignoresSafeArea()
+      .allowsHitTesting(false)
+
+      if showStats {
+        //
+      }
+
+      if showExtras {
+        //
+      }
     }
+    .ignoresSafeArea(edges: .bottom)
   }
 
   var gradientColors: [Color] {
@@ -360,5 +367,60 @@ struct ScrollViewWithOffset<Content: View>: View {
         content()
       }
     }.withOffsetTracking(action: onScroll)
+  }
+}
+
+struct BottomOverlayBar: View {
+  var onStatsTap: () -> Void
+  var onExtrasTap: () -> Void
+  var onAdd: (String) -> Void
+
+  @Binding var shouldOpenMouth: Bool
+
+  @State private var isMouthOpen = false
+
+  var body: some View {
+    ZStack {
+      // Morsel in the centre
+      MouthAddButton(
+        shouldOpen: $shouldOpenMouth,
+        isOpen: $isMouthOpen,
+        onAdd: onAdd
+      )
+
+      HStack {
+        ZStack {
+          Circle()
+            .foregroundStyle(Material.bar)
+            .frame(width: 44, height: 44)
+            .shadow(radius: 8)
+          Button(action: onStatsTap) {
+            Image(systemName: "chart.bar.xaxis")
+              .padding(64)
+          }
+        }
+        Spacer()
+      }
+      .opacity(isMouthOpen ? 0 : 1)
+      .disabled(isMouthOpen)
+
+      HStack {
+        Spacer()
+        ZStack {
+          Circle()
+            .foregroundStyle(Material.bar)
+            .frame(width: 44, height: 44)
+            .shadow(radius: 8)
+          Button(action: onExtrasTap) {
+            Image(systemName: "ellipsis.circle")
+              .padding(64)
+          }
+        }
+      }
+      .opacity(isMouthOpen ? 0 : 1)
+      .disabled(isMouthOpen)
+    }
+    .frame(height: 100)
+    .padding(.bottom, 16)
   }
 }

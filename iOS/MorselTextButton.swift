@@ -2,8 +2,8 @@ import SwiftUI
 
 struct MouthAddButton: View {
   @Binding var shouldOpen: Bool
+  @Binding var isOpen: Bool
 
-  @State private var isOpen = false
   @State private var isSwallowing = false
   @State private var isBlinking = false
   @State private var isBeingTouched = false
@@ -223,7 +223,7 @@ struct MouthAddButton: View {
 }
 
 #Preview {
-  MouthAddButton(shouldOpen: .constant(false)) { _ in }
+  MouthAddButton(shouldOpen: .constant(false), isOpen: .constant(false)) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif
