@@ -9,6 +9,7 @@ struct MealRow: View {
       Text(entry.name)
         .font(MorselFont.heading)
         .foregroundColor(.primary)
+        .layoutPriority(1)
       Rectangle()
         .foregroundStyle(
           LinearGradient(
@@ -21,6 +22,7 @@ struct MealRow: View {
       Text(entry.timestamp, format: .dateTime.hour().minute())
         .font(MorselFont.small)
         .foregroundColor(.secondary)
+        .layoutPriority(1)
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
