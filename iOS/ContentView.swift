@@ -15,6 +15,7 @@ struct ContentView: View {
   @State private var scrollOffset: CGFloat = 0
   @State private var showStats = false
   @State private var showExtras = false
+  @State private var isDraggingHorizontally = false
 
   @GestureState private var addIsPressed = false
 
@@ -96,7 +97,7 @@ struct ContentView: View {
               .font(MorselFont.title)
               .padding()
             ForEach(group.entries) { entry in
-              DeletableRow {
+              DeletableRow(isDraggingHorizontally: $isDraggingHorizontally) {
                 delete(entry: entry)
               } content: {
                 MealRow(entry: entry)
@@ -115,6 +116,7 @@ struct ContentView: View {
           Spacer().frame(height: 24)
         }
       }
+      .scrollDisabled(isDraggingHorizontally)
       .scrollIndicators(.hidden)
       .mask(
         LinearGradient(

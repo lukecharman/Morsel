@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct DeletableRow<Content: View>: View {
+  @Binding var isDraggingHorizontally: Bool
+
   let onDelete: () -> Void
   @ViewBuilder let content: () -> Content
 
   @State private var offset: CGFloat = 0
   @GestureState private var isDragging = false
   @State private var crossedThreshold = false
-  @State private var animatePulse = false
 
   private let deleteThreshold: CGFloat = -80
 
@@ -15,11 +16,18 @@ struct DeletableRow<Content: View>: View {
     ZStack {
       content()
         .offset(x: offset)
+        .background(Color.clear)
         .simultaneousGesture(
           DragGesture()
             .onChanged { value in
               let horizontal = abs(value.translation.width)
               let vertical = abs(value.translation.height)
+
+              if horizontal > vertical && horizontal > 10 {
+                isDraggingHorizontally = true
+              } else if vertical > horizontal && vertical > 10 {
+                isDraggingHorizontally = false
+              }
 
               // Only respond if it's mostly horizontal
               guard horizontal > vertical else { return }
@@ -29,7 +37,6 @@ struct DeletableRow<Content: View>: View {
               let hasCrossed = offset < deleteThreshold
               if hasCrossed && !crossedThreshold {
                 crossedThreshold = true
-                triggerPulse()
               } else if !hasCrossed && crossedThreshold {
                 crossedThreshold = false
               }
@@ -50,21 +57,15 @@ struct DeletableRow<Content: View>: View {
       // Trash icon
       HStack {
         Spacer()
-        Image(systemName: "trash")
+        Image(systemName: crossedThreshold ? "trash.fill" : "trash")
+          .scaleEffect(crossedThreshold ? 1.3 : 1.0)
+          .animation(.spring(response: 0.3, dampingFraction: 0.5), value: crossedThreshold)
           .foregroundColor(.red)
           .padding(.trailing, 16)
-          .scaleEffect(animatePulse ? 1.4 : 1.0)
           .opacity(trashIconOpacity)
           .offset(x: trashIconOffset)
           .animation(.easeOut(duration: 0.2), value: offset)
       }
-    }
-  }
-
-  private func triggerPulse() {
-    animatePulse = true
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-      animatePulse = false
     }
   }
 
