@@ -13,6 +13,8 @@ struct ContentView: View {
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
 
+  @State private var scrollOffset: CGFloat = 0
+
   @GestureState private var addIsPressed = false
 
   @Binding var shouldOpenMouth: Bool
@@ -115,6 +117,16 @@ struct ContentView: View {
     )
   }
 
+  func handleScroll(_ offset: CGPoint) {
+    scrollOffset = offset.y
+  }
+
+  private var fadeAmount: Double {
+    let offset = min(0, scrollOffset)
+    let clamped = max(0, min(1, abs(offset) / 24))
+    return clamped
+  }
+
   var filledView: some View {
     ZStack {
       LinearGradient(
@@ -123,17 +135,30 @@ struct ContentView: View {
         endPoint: .bottom
       )
       .ignoresSafeArea()
-      ScrollView {
-        LazyVStack(alignment: .leading) {
-          Section {
-            MorselHeaderCard(mealCount: groupedEntries.first?.entries.count ?? 0)
-          }
-          ForEach(groupedEntries, id: \.date) { group in
-            Text(dateString(for: group.date, entryCount: group.entries.count))
-              .font(MorselFont.title)
-              .padding()
-            ForEach(group.entries) { entry in
-              MealRow(entry: entry)
+      ScrollViewWithOffset(onScroll: handleScroll) {
+        LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
+          Section(
+            header:
+              ZStack {
+                Rectangle()
+                  .fill(Color.white)
+                  .opacity(fadeAmount)
+                  .ignoresSafeArea()
+                VStack(spacing: 0) {
+                  Color.clear
+                    .frame(height: 64)
+                  MorselHeaderCard(mealCount: groupedEntries.first?.entries.count ?? 0)
+                    .padding(.bottom, 16)
+                }
+              }
+          ) {
+            ForEach(groupedEntries, id: \.date) { group in
+              Text(dateString(for: group.date, entryCount: group.entries.count))
+                .font(MorselFont.title)
+                .padding()
+              ForEach(group.entries) { entry in
+                MealRow(entry: entry)
+              }
             }
           }
         }
@@ -144,7 +169,12 @@ struct ContentView: View {
           Spacer().frame(height: 160)
         }
       }
-      LinearGradient(colors: [.clear, .clear, .clear, .white], startPoint: .top, endPoint: .bottom)
+      .ignoresSafeArea(edges: .top)
+      LinearGradient(
+        colors: [.clear, .clear, .clear, Color(.systemBackground)],
+        startPoint: .top,
+        endPoint: .bottom
+      )
         .allowsHitTesting(false)
         .ignoresSafeArea()
     }
@@ -270,3 +300,65 @@ extension Notification.Name {
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
 
+enum ScrollOffsetNamespace {
+  static let namespace = "scrollView"
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+  static var defaultValue: CGPoint = .zero
+  static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {}
+}
+
+struct ScrollViewOffsetTracker: View {
+  var body: some View {
+    GeometryReader { geo in
+      Color.clear
+        .preference(
+          key: ScrollOffsetPreferenceKey.self,
+          value: geo
+            .frame(in: .named(ScrollOffsetNamespace.namespace))
+            .origin
+        )
+    }
+    .frame(height: 0)
+  }
+}
+
+private extension ScrollView {
+  func withOffsetTracking(
+    action: @escaping (_ offset: CGPoint) -> Void
+  ) -> some View {
+    self.coordinateSpace(name: ScrollOffsetNamespace.namespace)
+      .onPreferenceChange(ScrollOffsetPreferenceKey.self, perform: action)
+  }
+}
+
+struct ScrollViewWithOffset<Content: View>: View {
+  public init(
+    _ axes: Axis.Set = .vertical,
+    showsIndicators: Bool = true,
+    onScroll: ScrollAction? = nil,
+    @ViewBuilder content: @escaping () -> Content
+  ) {
+    self.axes = axes
+    self.showsIndicators = showsIndicators
+    self.onScroll = onScroll ?? { _ in }
+    self.content = content
+  }
+
+  private let axes: Axis.Set
+  private let showsIndicators: Bool
+  private let onScroll: ScrollAction
+  private let content: () -> Content
+
+  public typealias ScrollAction = (_ offset: CGPoint) -> Void
+
+  public var body: some View {
+    ScrollView(axes, showsIndicators: showsIndicators) {
+      ZStack(alignment: .top) {
+        ScrollViewOffsetTracker()
+        content()
+      }
+    }.withOffsetTracking(action: onScroll)
+  }
+}
