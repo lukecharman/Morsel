@@ -23,7 +23,7 @@ struct ContentView: View {
   var body: some View {
     NavigationStack {
       if entries.isEmpty {
-        emptyStateView
+        EmptyStateView()
       } else {
         filledView
       }
@@ -65,53 +65,10 @@ struct ContentView: View {
       let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
       entries = try modelContext.fetch(descriptor)
     } catch {
-      print("💥 Failed to load entries: \(error)")
+      print("Failed to load entries: \(error)")
     }
 
     WidgetCenter.shared.reloadAllTimelines()
-  }
-
-  var emptyStateView: some View {
-    VStack(spacing: 24) {
-      Image(systemName: "fork.knife.circle")
-        .resizable()
-        .scaledToFit()
-        .frame(width: 80, height: 80)
-        .foregroundColor(.accentColor)
-        .opacity(0.4)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-
-      (
-        Text("Still waiting on your ")
-          .font(MorselFont.title)
-          .fontWeight(.medium)
-      +
-        Text("first bite")
-          .font(MorselFont.title)
-          .fontWeight(.bold)
-      +
-        Text("...")
-          .font(MorselFont.title)
-          .fontWeight(.medium)
-      )
-      .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-      .multilineTextAlignment(.center)
-
-      Text("The first snack is the hardest.\nGive Morsel a tap to begin.")
-        .font(MorselFont.body)
-        .foregroundColor(.secondary)
-        .multilineTextAlignment(.center)
-        .padding(.horizontal)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-
-      Text("↓")
-        .font(MorselFont.title)
-        .fontWeight(.medium)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-    }
-    .padding()
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(LinearGradient(colors: gradientColors, startPoint: .top, endPoint: .bottom))
   }
 
   func handleScroll(_ offset: CGPoint) {
@@ -127,7 +84,7 @@ struct ContentView: View {
   var filledView: some View {
     ZStack(alignment: .bottom) {
       LinearGradient(
-        colors: gradientColors,
+        colors: GradientColors.gradientColors(colorScheme: colorScheme),
         startPoint: .top,
         endPoint: .bottom
       )
@@ -186,21 +143,7 @@ struct ContentView: View {
     .ignoresSafeArea(edges: .bottom)
   }
 
-  var gradientColors: [Color] {
-    if colorScheme == .dark {
-      return [
-        Color.purple.opacity(0.2),
-        Color.indigo.opacity(0.15),
-        Color(.systemBackground)
-      ]
-    } else {
-      return [
-        Color.blue.opacity(0.1),
-        Color.cyan.opacity(0.1),
-        Color(.systemBackground)
-      ]
-    }
-  }
+  
 
   private func dateString(for date: Date, entryCount: Int) -> String {
     let dayString: String
@@ -288,7 +231,7 @@ struct ContentView: View {
         "origin": "phone"
       ]
       WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
-        print("💥 Failed to send meal to Watch: \(error)")
+        print("Failed to send meal to Watch: \(error)")
       })
     }
   }

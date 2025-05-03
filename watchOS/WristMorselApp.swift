@@ -60,7 +60,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
         notifyPhoneOfNewMeal(name: name, id: id)
       }
     } catch {
-      print("💥 Failed to save meal: \(error)")
+      print("Failed to save meal: \(error)")
     }
   }
 
@@ -72,7 +72,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
         "origin": "watch"
       ]
       WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
-        print("💥 Failed to send meal to Phone: \(error)")
+        print("Failed to send meal to Phone: \(error)")
       })
     }
   }

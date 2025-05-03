@@ -105,7 +105,7 @@ struct WatchContentView: View {
       do {
         try modelContext.save()
       } catch {
-        print("💥 Failed to save meal from Watch: \(error)")
+        print("Failed to save meal from Watch: \(error)")
       }
 
       WidgetCenter.shared.reloadAllTimelines()

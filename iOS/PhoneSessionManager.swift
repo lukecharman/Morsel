@@ -47,7 +47,7 @@ extension PhoneSessionManager: WCSessionDelegate {
       context.insert(newEntry)
       try context.save()
     } catch {
-      print("💥 Phone failed to save new meal: \(error)")
+      print("Phone failed to save new meal: \(error)")
     }
   }
 }
