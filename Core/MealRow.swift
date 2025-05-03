@@ -5,15 +5,24 @@ struct MealRow: View {
   var entry: FoodEntry
 
   var body: some View {
-    HStack(spacing: 4) {
+    HStack(spacing: 16) {
       Text(entry.name)
         .font(MorselFont.heading)
         .foregroundColor(.primary)
-      Spacer()
+      Rectangle()
+        .foregroundStyle(
+          LinearGradient(
+            colors: [.clear, .primary.opacity(0.18)],
+            startPoint: .leading,
+            endPoint: .trailing
+          )
+        )
+        .frame(height: 1)
       Text(entry.timestamp, format: .dateTime.hour().minute())
         .font(MorselFont.small)
         .foregroundColor(.secondary)
     }
+    .padding(.horizontal, 16)
     .padding(.vertical, 8)
   }
 }

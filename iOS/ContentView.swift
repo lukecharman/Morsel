@@ -12,6 +12,7 @@ struct ContentView: View {
   @State private var entries: [FoodEntry] = []
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
+
   @GestureState private var addIsPressed = false
 
   @Binding var shouldOpenMouth: Bool
@@ -22,13 +23,6 @@ struct ContentView: View {
         emptyStateView
       } else {
         filledView
-          .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-              Text("What I've Eaten")
-                .font(MorselFont.title)
-              }
-          }
-          .navigationBarTitleDisplayMode(.inline)
       }
     }
     .overlay(alignment: .bottom) {
@@ -129,25 +123,30 @@ struct ContentView: View {
         endPoint: .bottom
       )
       .ignoresSafeArea()
-      List {
-        ForEach(groupedEntries, id: \.date) { group in
-          Section(header: Text(dateString(for: group.date, entryCount: group.entries.count))) {
+      ScrollView {
+        LazyVStack(alignment: .leading) {
+          Section {
+            MorselHeaderCard(mealCount: groupedEntries.first?.entries.count ?? 0)
+          }
+          ForEach(groupedEntries, id: \.date) { group in
+            Text(dateString(for: group.date, entryCount: group.entries.count))
+              .font(MorselFont.title)
+              .padding()
             ForEach(group.entries) { entry in
               MealRow(entry: entry)
-                .listRowBackground(Color.clear)
             }
-            .onDelete(perform: deleteEntries)
           }
         }
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets())
+        .scrollDismissesKeyboard(.immediately)
+        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
+        .safeAreaInset(edge: .bottom) {
+          Spacer().frame(height: 160)
+        }
       }
-      .scrollDismissesKeyboard(.immediately)
-      .scrollContentBackground(.hidden)
-      .scrollIndicators(.hidden)
-      .safeAreaInset(edge: .bottom) {
-        Spacer().frame(height: 160)
-      }
+      LinearGradient(colors: [.clear, .clear, .clear, .white], startPoint: .top, endPoint: .bottom)
+        .allowsHitTesting(false)
+        .ignoresSafeArea()
     }
   }
 
@@ -270,3 +269,4 @@ extension Notification.Name {
   ContentView(shouldOpenMouth: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
+

@@ -111,6 +111,20 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
+		A378287D2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HeaderCard.swift,
+			);
+			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
+		};
+		A378287E2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morse Widgets (watchOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HeaderCard.swift,
+			);
+			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
+		};
 		A3AE56AB2DC2731A00608E0D /* Exceptions for "Watch Widgets" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -145,6 +159,7 @@
 		A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				HeaderCard.swift,
 				MorselTextButton.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
@@ -180,6 +195,8 @@
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
+				A378287D2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */,
+				A378287E2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morse Widgets (watchOS)" target */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
