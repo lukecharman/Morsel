@@ -8,7 +8,8 @@ struct MealRow: View {
     HStack(spacing: 16) {
       Text(entry.name)
         .font(MorselFont.heading)
-        .foregroundColor(.primary)
+        .foregroundColor(entry.isForMorsel ? .primary.opacity(0.5) : .primary)
+        .blur(radius: entry.isForMorsel ? 1 : 0)
         .layoutPriority(1)
       Rectangle()
         .foregroundStyle(
