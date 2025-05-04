@@ -162,6 +162,9 @@ struct ContentView: View {
     .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .ignoresSafeArea(edges: .bottom)
+    .onShake {
+      // TODO: Add undo here!
+    }
   }
 
   private func dateString(for date: Date, entryCount: Int) -> String {

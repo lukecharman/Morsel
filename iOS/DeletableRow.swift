@@ -10,39 +10,56 @@ struct DeletableRow<Content: View>: View {
   @GestureState private var isDragging = false
   @State private var crossedThreshold = false
 
+  @State private var hasLockedDirection = false
+  @State private var isHorizontalGesture = false
+
+  let trashImpact = UIImpactFeedbackGenerator(style: .medium)
+  let trashConfirm = UINotificationFeedbackGenerator()
+
   private let deleteThreshold: CGFloat = -80
 
   var body: some View {
     ZStack {
       content()
+        .onAppear {
+          trashImpact.prepare()
+          trashConfirm.prepare()
+        }
         .offset(x: offset)
         .background(Color.clear)
         .simultaneousGesture(
           DragGesture()
             .onChanged { value in
-              let horizontal = abs(value.translation.width)
-              let vertical = abs(value.translation.height)
+              let dx = value.translation.width
+              let dy = value.translation.height
+              let angle = abs(atan2(dy, dx)) * 180 / .pi
 
-              if horizontal > vertical && horizontal > 20 {
-                isDraggingHorizontally = true
-              } else if vertical > horizontal && vertical > 10 {
-                isDraggingHorizontally = false
+              // Lock gesture direction once
+              if !hasLockedDirection {
+                hasLockedDirection = true
+                isHorizontalGesture = (angle < 30 || angle > 150)
+                isDraggingHorizontally = isHorizontalGesture
               }
 
-              // Only respond if it's mostly horizontal
-              guard horizontal > vertical else { return }
+              // Only handle swipe if it was determined to be horizontal
+              guard isHorizontalGesture else { return }
 
-              offset = min(0, value.translation.width)
+              offset = min(0, dx)
 
               let hasCrossed = offset < deleteThreshold
               if hasCrossed && !crossedThreshold {
                 crossedThreshold = true
+                trashImpact.impactOccurred()
               } else if !hasCrossed && crossedThreshold {
                 crossedThreshold = false
               }
             }
             .onEnded { value in
+              hasLockedDirection = false
+              isHorizontalGesture = false
+
               if offset < deleteThreshold {
+                trashConfirm.notificationOccurred(.success)
                 withAnimation(.easeInOut) {
                   onDelete()
                 }
