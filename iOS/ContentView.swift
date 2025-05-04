@@ -146,7 +146,7 @@ struct ContentView: View {
       )
       if isChoosingDestination {
         DestinationPicker(
-          onSelect: { isForMorsel in
+          onPick: { isForMorsel in
             add(entryText, isForMorsel: isForMorsel)
             entryText = ""
             isChoosingDestination = false
