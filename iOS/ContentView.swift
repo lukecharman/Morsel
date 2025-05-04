@@ -13,10 +13,10 @@ struct ContentView: View {
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
   @State private var scrollOffset: CGFloat = 0
-  @State private var showStats = false
-  @State private var showExtras = false
   @State private var isDraggingHorizontally = false
   @State private var isKeyboardVisible = false
+  @State private var entryText: String = ""
+  @State private var isChoosingDestination = false
 
   @StateObject private var keyboard = KeyboardObserver()
 
@@ -33,12 +33,10 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .bottom) {
-      BottomOverlayBar(
-        onStatsTap: { showStats = true },
-        onExtrasTap: { showExtras = true },
-        onAdd: add,
-        shouldOpenMouth: _shouldOpenMouth
-      )
+      MouthAddButton(shouldOpen: _shouldOpenMouth) { text in
+        entryText = text
+        isChoosingDestination = true
+      }
     }
     .onAppear {
       loadEntries()
@@ -146,13 +144,57 @@ struct ContentView: View {
           endPoint: .bottom
         )
       )
+      if isChoosingDestination {
+        VStack(spacing: 24) {
+          Text("Who was the snack for?")
+            .font(MorselFont.title)
+            .multilineTextAlignment(.center)
 
-      if showStats {
-        //
-      }
+          HStack(spacing: 32) {
+            Button {
+              add(entryText, isForMorsel: false)
+              entryText = ""
+              isChoosingDestination = false
+            } label: {
+              VStack {
+                Image(systemName: "person.fill")
+                  .font(.largeTitle)
+                Text("Me")
+                  .font(MorselFont.body)
+              }
+              .padding()
+              .background(Color.accentColor.opacity(0.1))
+              .cornerRadius(12)
+            }
 
-      if showExtras {
-        //
+            Button {
+              add(entryText, isForMorsel: true)
+              entryText = ""
+              isChoosingDestination = false
+            } label: {
+              VStack {
+                Image(systemName: "face.smiling.fill")
+                  .font(.largeTitle)
+                Text("Morsel")
+                  .font(MorselFont.body)
+              }
+              .padding()
+              .background(Color.accentColor.opacity(0.1))
+              .cornerRadius(12)
+            }
+          }
+
+          Button("Cancel") {
+            entryText = ""
+            isChoosingDestination = false
+          }
+          .foregroundColor(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.opacity(0.4).ignoresSafeArea())
+        .transition(.opacity)
+        .animation(.easeInOut, value: isChoosingDestination)
       }
     }
     .scrollDisabled(isKeyboardVisible)
@@ -225,12 +267,12 @@ struct ContentView: View {
     }
   }
 
-  func add(_ entry: String) {
+  func add(_ entry: String, isForMorsel: Bool) {
     let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { return }
 
     withAnimation {
-      modelContext.insert(FoodEntry(name: trimmed))
+      modelContext.insert(FoodEntry(name: trimmed, isForMorsel: isForMorsel))
       try? modelContext.save()
       loadEntries()
     }

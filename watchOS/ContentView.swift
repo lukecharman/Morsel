@@ -31,7 +31,7 @@ struct WatchContentView: View {
           .scaleEffect(1.5)
           .padding()
       } else {
-        MouthAddButton(shouldOpen: $showingMealPrompt, isOpen: .constant(false), onAdd: { _ in })
+        MouthAddButton(shouldOpen: $showingMealPrompt, onAdd: { _ in })
           .onTapGesture {
             showingMealPrompt = true
           }
