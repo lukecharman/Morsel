@@ -70,7 +70,7 @@ struct ContentView: View {
     .onChange(of: entries.count) { _, new in
       updateWidget(newCount: new)
     }
-    .statusBarHidden(isKeyboardVisible)
+    .statusBarHidden(isKeyboardVisible || isChoosingDestination)
   }
 
   private func loadEntries() {
@@ -118,7 +118,7 @@ struct ContentView: View {
             }
           }
         }
-        .blur(radius: isKeyboardVisible ? 12 : 0)
+        .blur(radius: isKeyboardVisible || isChoosingDestination ? 12 : 0)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -145,60 +145,22 @@ struct ContentView: View {
         )
       )
       if isChoosingDestination {
-        VStack(spacing: 24) {
-          Text("Who was the snack for?")
-            .font(MorselFont.title)
-            .multilineTextAlignment(.center)
-
-          HStack(spacing: 32) {
-            Button {
-              add(entryText, isForMorsel: false)
-              entryText = ""
-              isChoosingDestination = false
-            } label: {
-              VStack {
-                Image(systemName: "person.fill")
-                  .font(.largeTitle)
-                Text("Me")
-                  .font(MorselFont.body)
-              }
-              .padding()
-              .background(Color.accentColor.opacity(0.1))
-              .cornerRadius(12)
-            }
-
-            Button {
-              add(entryText, isForMorsel: true)
-              entryText = ""
-              isChoosingDestination = false
-            } label: {
-              VStack {
-                Image(systemName: "face.smiling.fill")
-                  .font(.largeTitle)
-                Text("Morsel")
-                  .font(MorselFont.body)
-              }
-              .padding()
-              .background(Color.accentColor.opacity(0.1))
-              .cornerRadius(12)
-            }
-          }
-
-          Button("Cancel") {
+        DestinationPicker(
+          onSelect: { isForMorsel in
+            add(entryText, isForMorsel: isForMorsel)
+            entryText = ""
+            isChoosingDestination = false
+          },
+          onCancel: {
             entryText = ""
             isChoosingDestination = false
           }
-          .foregroundColor(.secondary)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.opacity(0.4).ignoresSafeArea())
-        .transition(.opacity)
-        .animation(.easeInOut, value: isChoosingDestination)
+        )
       }
     }
-    .scrollDisabled(isKeyboardVisible)
+    .scrollDisabled(isKeyboardVisible || isChoosingDestination)
     .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
+    .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .ignoresSafeArea(edges: .bottom)
   }
 
