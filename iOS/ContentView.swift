@@ -16,6 +16,9 @@ struct ContentView: View {
   @State private var showStats = false
   @State private var showExtras = false
   @State private var isDraggingHorizontally = false
+  @State private var isKeyboardVisible = false
+
+  @StateObject private var keyboard = KeyboardObserver()
 
   @GestureState private var addIsPressed = false
 
@@ -47,6 +50,16 @@ struct ContentView: View {
           WidgetCenter.shared.reloadAllTimelines()
         }
     }
+    .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+      withAnimation {
+        isKeyboardVisible = true
+      }
+    }
+    .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+      withAnimation {
+        isKeyboardVisible = false
+      }
+    }
     .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
       modelContextRefreshTrigger = UUID()
     }
@@ -59,6 +72,7 @@ struct ContentView: View {
     .onChange(of: entries.count) { _, new in
       updateWidget(newCount: new)
     }
+    .statusBarHidden(isKeyboardVisible)
   }
 
   private func loadEntries() {
@@ -106,6 +120,7 @@ struct ContentView: View {
             }
           }
         }
+        .blur(radius: isKeyboardVisible ? 12 : 0)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -140,6 +155,8 @@ struct ContentView: View {
         //
       }
     }
+    .scrollDisabled(isKeyboardVisible)
+    .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
     .ignoresSafeArea(edges: .bottom)
   }
 
@@ -238,4 +255,19 @@ struct ContentView: View {
 #Preview {
   ContentView(shouldOpenMouth: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
+}
+
+final class KeyboardObserver: ObservableObject {
+  @Published var keyboardHeight: CGFloat = 0
+
+  init() {
+    NotificationCenter.default.addObserver(
+      forName: UIResponder.keyboardWillChangeFrameNotification,
+      object: nil,
+      queue: .main
+    ) { notification in
+      guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+      self.keyboardHeight = frame.height
+    }
+  }
 }
