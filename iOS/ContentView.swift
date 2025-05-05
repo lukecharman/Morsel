@@ -113,6 +113,7 @@ struct ContentView: View {
                 delete(entry: entry)
               } content: {
                 MealRow(entry: entry)
+                  .frame(minHeight: 44)
               }
               .contentShape(Rectangle())
             }

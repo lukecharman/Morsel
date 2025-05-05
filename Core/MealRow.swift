@@ -20,13 +20,17 @@ struct MealRow: View {
           )
         )
         .frame(height: 1)
+        .allowsTightening(true)
+        .allowsHitTesting(false)
       Text(entry.timestamp, format: .dateTime.hour().minute())
         .font(MorselFont.small)
         .foregroundColor(.secondary)
         .layoutPriority(1)
     }
+    .frame(maxWidth: .infinity)
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
+    .contentShape(Rectangle())
   }
 }
 

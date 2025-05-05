@@ -20,28 +20,25 @@ struct DeletableRow<Content: View>: View {
 
   var body: some View {
     ZStack {
+      Rectangle()
+        .foregroundColor(.clear)
+        .contentShape(Rectangle())
+
       content()
-        .onAppear {
-          trashImpact.prepare()
-          trashConfirm.prepare()
-        }
         .offset(x: offset)
-        .background(Color.clear)
         .simultaneousGesture(
           DragGesture()
             .onChanged { value in
               let dx = value.translation.width
               let dy = value.translation.height
-              let angle = abs(atan2(dy, dx)) * 180 / .pi
 
-              // Lock gesture direction once
               if !hasLockedDirection {
+                let angle = abs(atan2(dy, dx)) * 180 / .pi
+                isHorizontalGesture = angle < 30 || angle > 150
                 hasLockedDirection = true
-                isHorizontalGesture = (angle < 30 || angle > 150)
                 isDraggingHorizontally = isHorizontalGesture
               }
 
-              // Only handle swipe if it was determined to be horizontal
               guard isHorizontalGesture else { return }
 
               offset = min(0, dx)
@@ -55,8 +52,12 @@ struct DeletableRow<Content: View>: View {
               }
             }
             .onEnded { value in
-              hasLockedDirection = false
-              isHorizontalGesture = false
+              defer {
+                hasLockedDirection = false
+                isHorizontalGesture = false
+              }
+
+              guard isHorizontalGesture else { return }
 
               if offset < deleteThreshold {
                 trashConfirm.notificationOccurred(.success)
