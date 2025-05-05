@@ -37,6 +37,30 @@ struct ContentView: View {
         filledView
       }
     }
+    .overlay(alignment: .bottom) {
+      if showStats {
+        VStack {
+          Spacer()
+          StatsView()
+            .zIndex(1)
+            .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
+            .background(.ultraThinMaterial)
+            .clipShape(
+              UnevenRoundedRectangle(
+                cornerRadii: RectangleCornerRadii(
+                  topLeading: 24,
+                  bottomLeading: 0,
+                  bottomTrailing: 0,
+                  topTrailing: 24
+                )
+              )
+            )
+            .shadow(radius: 10)
+        }
+        .transition(.move(edge: .bottom).combined(with: .blurReplace))
+      }
+    }
+    .ignoresSafeArea(edges: .bottom)
     .overlay(alignment: .top) {
       if !isKeyboardVisible {
         GeometryReader { geo in
@@ -44,7 +68,9 @@ struct ContentView: View {
             Spacer()
             HStack(spacing: 48) {
               Button {
-                showStats = true
+                withAnimation {
+                  showStats.toggle()
+                }
               } label: {
                 Image(systemName: "chart.bar")
                   .font(.title2)
@@ -120,7 +146,7 @@ struct ContentView: View {
     .onChange(of: entries.count) { _, new in
       updateWidget(newCount: new)
     }
-    .statusBarHidden(isKeyboardVisible || isChoosingDestination)
+    .statusBarHidden(isKeyboardVisible || isChoosingDestination || showStats)
   }
 
   private func loadEntries() {
@@ -169,7 +195,7 @@ struct ContentView: View {
             }
           }
         }
-        .blur(radius: isKeyboardVisible || isChoosingDestination ? 12 : 0)
+        .blur(radius: isKeyboardVisible || isChoosingDestination || showStats ? 12 : 0)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -209,7 +235,7 @@ struct ContentView: View {
         )
       }
     }
-    .scrollDisabled(isKeyboardVisible || isChoosingDestination)
+    .scrollDisabled(isKeyboardVisible || isChoosingDestination || showStats)
     .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .ignoresSafeArea(edges: .bottom)
