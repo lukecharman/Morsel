@@ -4,7 +4,10 @@ import Foundation
 extension ModelContainer {
   static var sharedContainer: ModelContainer {
     do {
-      return try ModelContainer.throwingSharedContainer()
+      let container = try ModelContainer.throwingSharedContainer()
+      let context = ModelContext(container)
+      _ = try? context.fetch(FetchDescriptor<FoodEntry>())
+      return container
     } catch {
       fatalError("💥 Failed to load shared SwiftData container for Watch: \(error)")
     }
