@@ -13,6 +13,7 @@ struct MouthAddButton: View {
 
   @FocusState private var isFocused: Bool
 
+  var onTap: (() -> Void)? = nil
   var onAdd: (String) -> Void
 
   var body: some View {
@@ -46,6 +47,9 @@ struct MouthAddButton: View {
               withAnimation {
                 isBeingTouched = false
               }
+
+              onTap?()
+
               if isOpen {
                 close()
               } else {
