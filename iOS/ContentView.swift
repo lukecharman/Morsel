@@ -60,6 +60,30 @@ struct ContentView: View {
         .transition(.move(edge: .bottom).combined(with: .blurReplace))
       }
     }
+    .overlay(alignment: .bottom) {
+      if showExtras {
+        VStack {
+          Spacer()
+          ExtrasView()
+            .zIndex(1)
+            .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
+            .background(.ultraThinMaterial)
+            .clipShape(
+              UnevenRoundedRectangle(
+                cornerRadii: RectangleCornerRadii(
+                  topLeading: 24,
+                  bottomLeading: 0,
+                  bottomTrailing: 0,
+                  topTrailing: 24
+                )
+              )
+            )
+            .shadow(radius: 10)
+        }
+        .transition(.move(edge: .bottom).combined(with: .blurReplace))
+        .ignoresSafeArea(edges: .bottom)
+      }
+    }
     .ignoresSafeArea(edges: .bottom)
     .overlay(alignment: .top) {
       if !isKeyboardVisible {
@@ -67,33 +91,43 @@ struct ContentView: View {
           VStack {
             Spacer()
             HStack(spacing: 48) {
-              Button {
-                withAnimation {
-                  showStats.toggle()
+              if !showExtras {
+                Button {
+                  withAnimation {
+                    showStats.toggle()
+                  }
+                } label: {
+                  Image(systemName: showStats ? "xmark" : "chart.bar")
+                    .font(.title2)
+                    .padding(12)
+                    .frame(width: 44, height: 44)
+                    .background(.thinMaterial)
+                    .clipShape(Circle())
                 }
-              } label: {
-                Image(systemName: "chart.bar")
-                  .font(.title2)
-                  .padding(12)
-                  .frame(width: 44, height: 44)
-                  .background(.thinMaterial)
-                  .clipShape(Circle())
+                .padding(.leading, 24)
+                .transition(.blurReplace)
+                .animation(.easeInOut(duration: 0.25), value: showStats)
               }
-              .padding(.leading, 24)
 
               Spacer()
 
-              Button {
-                showExtras = true
-              } label: {
-                Image(systemName: "ellipsis")
-                  .font(.title2)
-                  .padding(12)
-                  .frame(width: 44, height: 44)
-                  .background(.thinMaterial)
-                  .clipShape(Circle())
+              if !showStats {
+                Button {
+                  withAnimation {
+                    showExtras.toggle()
+                  }
+                } label: {
+                  Image(systemName: showExtras ? "xmark" : "ellipsis")
+                    .font(.title2)
+                    .padding(12)
+                    .frame(width: 44, height: 44)
+                    .background(.thinMaterial)
+                    .clipShape(Circle())
+                }
+                .padding(.trailing, 24)
+                .transition(.blurReplace)
+                .animation(.easeInOut(duration: 0.25), value: showExtras)
               }
-              .padding(.trailing, 24)
             }
             .frame(maxWidth: .infinity)
             .padding(.bottom, geo.safeAreaInsets.bottom + 60)
@@ -106,7 +140,21 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .bottom) {
-      MouthAddButton(shouldOpen: _shouldOpenMouth) { text in
+      MouthAddButton(
+        shouldOpen: _shouldOpenMouth,
+        onTap: {
+          if showStats {
+            withAnimation {
+              showStats = false
+            }
+          }
+          if showExtras {
+            withAnimation {
+              showExtras = false
+            }
+          }
+        }
+      ) { text in
         entryText = text
         isChoosingDestination = true
       }
