@@ -23,11 +23,23 @@ struct ContentView: View {
   @State private var showStats = false
   @State private var showExtras = false
 
-  @StateObject private var keyboard = KeyboardObserver()
-
-  @GestureState private var addIsPressed = false
-
   @Binding var shouldOpenMouth: Bool
+
+  var keyboardWillShowNotification = NotificationCenter.default.publisher(
+    for: UIResponder.keyboardWillShowNotification
+  )
+
+  var keyboardWillHideNotification = NotificationCenter.default.publisher(
+    for: UIResponder.keyboardWillHideNotification
+  )
+
+  var applicationDidBecomeActiveNotification = NotificationCenter.default.publisher(
+    for: UIApplication.didBecomeActiveNotification
+  )
+
+  var cloudKitDataChanged = NotificationCenter.default.publisher(
+    for: .cloudKitDataChanged
+  )
 
   var body: some View {
     NavigationStack {
@@ -39,162 +51,29 @@ struct ContentView: View {
     }
     .overlay(alignment: .bottom) {
       if showStats {
-        VStack {
-          Spacer()
-          StatsView()
-            .zIndex(1)
-            .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
-            .background(.ultraThinMaterial)
-            .clipShape(
-              UnevenRoundedRectangle(
-                cornerRadii: RectangleCornerRadii(
-                  topLeading: 24,
-                  bottomLeading: 0,
-                  bottomTrailing: 0,
-                  topTrailing: 24
-                )
-              )
-            )
-            .shadow(radius: 10)
-        }
-        .transition(.move(edge: .bottom).combined(with: .blurReplace))
+        statsOverlay
       }
     }
     .overlay(alignment: .bottom) {
       if showExtras {
-        VStack {
-          Spacer()
-          ExtrasView()
-            .zIndex(1)
-            .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
-            .background(.ultraThinMaterial)
-            .clipShape(
-              UnevenRoundedRectangle(
-                cornerRadii: RectangleCornerRadii(
-                  topLeading: 24,
-                  bottomLeading: 0,
-                  bottomTrailing: 0,
-                  topTrailing: 24
-                )
-              )
-            )
-            .shadow(radius: 10)
-        }
-        .transition(.move(edge: .bottom).combined(with: .blurReplace))
-        .ignoresSafeArea(edges: .bottom)
+        extrasOverlay
       }
     }
     .ignoresSafeArea(edges: .bottom)
     .overlay(alignment: .top) {
       if !isKeyboardVisible {
-        GeometryReader { geo in
-          VStack {
-            Spacer()
-            HStack(spacing: 48) {
-              if !showExtras {
-                Button {
-                  withAnimation {
-                    showStats.toggle()
-                  }
-                } label: {
-                  Image(systemName: showStats ? "xmark" : "chart.bar")
-                    .font(.title2)
-                    .padding(12)
-                    .frame(width: 44, height: 44)
-                    .background(.thinMaterial)
-                    .clipShape(Circle())
-                }
-                .padding(.leading, 24)
-                .transition(.blurReplace)
-                .animation(.easeInOut(duration: 0.25), value: showStats)
-              }
-
-              Spacer()
-
-              if !showStats {
-                Button {
-                  withAnimation {
-                    showExtras.toggle()
-                  }
-                } label: {
-                  Image(systemName: showExtras ? "xmark" : "ellipsis")
-                    .font(.title2)
-                    .padding(12)
-                    .frame(width: 44, height: 44)
-                    .background(.thinMaterial)
-                    .clipShape(Circle())
-                }
-                .padding(.trailing, 24)
-                .transition(.blurReplace)
-                .animation(.easeInOut(duration: 0.25), value: showExtras)
-              }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.bottom, geo.safeAreaInsets.bottom + 60)
-            .transition(.opacity.combined(with: .scale))
-            .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
-          }
-          .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-        }
-        .ignoresSafeArea()
+        bottomBar
       }
     }
-    .overlay(alignment: .bottom) {
-      MouthAddButton(
-        shouldOpen: _shouldOpenMouth,
-        onTap: {
-          if showStats {
-            withAnimation {
-              showStats = false
-            }
-          }
-          if showExtras {
-            withAnimation {
-              showExtras = false
-            }
-          }
-        }
-      ) { text in
-        entryText = text
-        isChoosingDestination = true
-      }
-    }
-    .onAppear {
-      if shouldGenerateFakeData {
-        generateFakeEntries()
-      }
-      loadEntries()
-      NotificationCenter.default.addObserver(
-        forName: NSPersistentCloudKitContainer.eventChangedNotification,
-        object: nil,
-        queue: OperationQueue.main) { _ in
-          self.loadEntries()
-          WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
-    .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-      withAnimation {
-        isKeyboardVisible = true
-      }
-    }
-    .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-      withAnimation {
-        isKeyboardVisible = false
-      }
-    }
-    .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-      modelContextRefreshTrigger = UUID()
-    }
-    .onReceive(NotificationCenter.default.publisher(for: .cloudKitDataChanged)) { _ in
-      loadEntries()
-    }
-    .onChange(of: modelContextRefreshTrigger) { _, _ in
-      loadEntries()
-    }
-    .onChange(of: entries.count) { _, new in
-      updateWidget(newCount: new)
-    }
-    .statusBarHidden(isKeyboardVisible || isChoosingDestination || showStats || showExtras)
+    .overlay(alignment: .bottom) { morsel }
+    .onAppear { onAppear() }
+    .onReceive(keyboardWillShowNotification) { _ in keyboardWillShow() }
+    .onReceive(keyboardWillHideNotification) { _ in keyboardWillHide() }
+    .onReceive(applicationDidBecomeActiveNotification) { _ in modelContextRefreshTrigger = UUID() }
+    .onReceive(cloudKitDataChanged) { _ in loadEntries() }
+    .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
+    .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
+    .statusBarHidden(shouldBlurBackground)
   }
 
   private func loadEntries() {
@@ -208,7 +87,7 @@ struct ContentView: View {
     WidgetCenter.shared.reloadAllTimelines()
   }
 
-  func handleScroll(_ offset: CGPoint) {
+  private func handleScroll(_ offset: CGPoint) {
     scrollOffset = offset.y
   }
 
@@ -218,7 +97,7 @@ struct ContentView: View {
     return clamped
   }
 
-  var filledView: some View {
+  private var filledView: some View {
     ZStack(alignment: .bottom) {
       LinearGradient(
         colors: GradientColors.gradientColors(colorScheme: colorScheme),
@@ -243,7 +122,6 @@ struct ContentView: View {
             }
           }
         }
-        .blur(radius: isKeyboardVisible || isChoosingDestination || showStats || showExtras ? 12 : 0)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -283,12 +161,146 @@ struct ContentView: View {
         )
       }
     }
-    .scrollDisabled(isKeyboardVisible || isChoosingDestination || showStats || showExtras)
+    .scrollDisabled(shouldBlurBackground)
     .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .ignoresSafeArea(edges: .bottom)
     .onShake {
       // TODO: Add undo here!
+    }
+  }
+
+  var morsel: some View {
+    MouthAddButton(
+      shouldOpen: _shouldOpenMouth,
+      onTap: {
+        if showStats {
+          withAnimation {
+            showStats = false
+          }
+        }
+        if showExtras {
+          withAnimation {
+            showExtras = false
+          }
+        }
+      }
+    ) { text in
+      entryText = text
+      isChoosingDestination = true
+    }
+  }
+
+  var bottomBar: some View {
+    GeometryReader { geo in
+      VStack {
+        Spacer()
+        HStack(spacing: 48) {
+          if !showExtras {
+            Button {
+              withAnimation {
+                showStats.toggle()
+              }
+            } label: {
+              Image(systemName: showStats ? "xmark" : "chart.bar")
+                .font(.title2)
+                .padding(12)
+                .frame(width: 44, height: 44)
+                .background(.thinMaterial)
+                .clipShape(Circle())
+            }
+            .padding(.leading, 24)
+            .transition(.blurReplace)
+            .animation(.easeInOut(duration: 0.25), value: showStats)
+          }
+
+          Spacer()
+
+          if !showStats {
+            Button {
+              withAnimation {
+                showExtras.toggle()
+              }
+            } label: {
+              Image(systemName: showExtras ? "xmark" : "ellipsis")
+                .font(.title2)
+                .padding(12)
+                .frame(width: 44, height: 44)
+                .background(.thinMaterial)
+                .clipShape(Circle())
+            }
+            .padding(.trailing, 24)
+            .transition(.blurReplace)
+            .animation(.easeInOut(duration: 0.25), value: showExtras)
+          }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, geo.safeAreaInsets.bottom + 60)
+        .transition(.opacity.combined(with: .scale))
+        .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
+      }
+      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+    }
+    .ignoresSafeArea()
+  }
+
+  var statsOverlay: some View {
+    VStack {
+      Spacer()
+      StatsView()
+        .zIndex(1)
+        .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
+        .background(.ultraThinMaterial)
+        .clipShape(
+          UnevenRoundedRectangle(
+            cornerRadii: RectangleCornerRadii(
+              topLeading: 24,
+              bottomLeading: 0,
+              bottomTrailing: 0,
+              topTrailing: 24
+            )
+          )
+        )
+        .shadow(radius: 10)
+    }
+    .transition(.move(edge: .bottom).combined(with: .blurReplace))
+  }
+
+  var extrasOverlay: some View {
+    VStack {
+      Spacer()
+      ExtrasView()
+        .zIndex(1)
+        .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
+        .background(.ultraThinMaterial)
+        .clipShape(
+          UnevenRoundedRectangle(
+            cornerRadii: RectangleCornerRadii(
+              topLeading: 24,
+              bottomLeading: 0,
+              bottomTrailing: 0,
+              topTrailing: 24
+            )
+          )
+        )
+        .shadow(radius: 10)
+    }
+    .transition(.move(edge: .bottom).combined(with: .blurReplace))
+    .ignoresSafeArea(edges: .bottom)
+  }
+
+  private func onAppear() {
+    if shouldGenerateFakeData {
+      generateFakeEntries()
+    }
+    loadEntries()
+    NotificationCenter.default.addObserver(
+      forName: NSPersistentCloudKitContainer.eventChangedNotification,
+      object: nil,
+      queue: OperationQueue.main
+    ) { _ in
+      self.loadEntries()
+      WidgetCenter.shared.reloadAllTimelines()
     }
   }
 
@@ -405,6 +417,22 @@ struct ContentView: View {
       })
     }
   }
+
+  private func keyboardWillShow() {
+    withAnimation {
+      isKeyboardVisible = true
+    }
+  }
+
+  private func keyboardWillHide() {
+    withAnimation {
+      isKeyboardVisible = false
+    }
+  }
+
+  private var shouldBlurBackground: Bool {
+    isKeyboardVisible || isChoosingDestination || showStats || showExtras
+  }
 }
 
 #Preview {
@@ -412,17 +440,3 @@ struct ContentView: View {
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
 
-final class KeyboardObserver: ObservableObject {
-  @Published var keyboardHeight: CGFloat = 0
-
-  init() {
-    NotificationCenter.default.addObserver(
-      forName: UIResponder.keyboardWillChangeFrameNotification,
-      object: nil,
-      queue: .main
-    ) { notification in
-      guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-      self.keyboardHeight = frame.height
-    }
-  }
-}

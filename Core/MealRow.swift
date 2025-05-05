@@ -9,7 +9,7 @@ struct MealRow: View {
       Text(entry.name)
         .font(MorselFont.heading)
         .foregroundColor(entry.isForMorsel ? .primary.opacity(0.5) : .primary)
-        .blur(radius: entry.isForMorsel ? 1 : 0)
+        .opacity(entry.isForMorsel ? 0.5 : 1)
         .layoutPriority(1)
       Rectangle()
         .foregroundStyle(
