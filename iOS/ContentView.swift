@@ -49,17 +49,24 @@ struct ContentView: View {
         filledView
       }
     }
+    .overlay {
+      if shouldBlurBackground {
+        Color(.black).opacity(0.75)
+          .ignoresSafeArea()
+      }
+    }
     .overlay(alignment: .bottom) {
       if showStats {
         statsOverlay
       }
     }
+    .ignoresSafeArea()
     .overlay(alignment: .bottom) {
       if showExtras {
         extrasOverlay
       }
     }
-    .ignoresSafeArea(edges: .bottom)
+    .ignoresSafeArea()
     .overlay(alignment: .top) {
       if !isKeyboardVisible {
         bottomBar
@@ -73,7 +80,7 @@ struct ContentView: View {
     .onReceive(cloudKitDataChanged) { _ in loadEntries() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
-//    .statusBarHidden(shouldBlurBackground)
+    .statusBarHidden(shouldBlurBackground)
   }
 
   private func loadEntries() {
@@ -250,7 +257,16 @@ struct ContentView: View {
       StatsView()
         .zIndex(1)
         .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
-        .background(.ultraThinMaterial)
+        .background(
+          ZStack {
+            Color(.systemBackground)
+            LinearGradient(
+              colors: GradientColors.gradientColors(colorScheme: colorScheme),
+              startPoint: .top,
+              endPoint: .bottom
+            )
+          }
+        )
         .clipShape(
           UnevenRoundedRectangle(
             cornerRadii: RectangleCornerRadii(
