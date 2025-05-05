@@ -73,7 +73,7 @@ struct ContentView: View {
     .onReceive(cloudKitDataChanged) { _ in loadEntries() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
-    .statusBarHidden(shouldBlurBackground)
+//    .statusBarHidden(shouldBlurBackground)
   }
 
   private func loadEntries() {
