@@ -6,6 +6,8 @@ import WatchConnectivity
 import WidgetKit
 
 struct ContentView: View {
+  let shouldGenerateFakeData = false
+
   @Environment(\.modelContext) private var modelContext
   @Environment(\.colorScheme) private var colorScheme
 
@@ -17,6 +19,9 @@ struct ContentView: View {
   @State private var isKeyboardVisible = false
   @State private var entryText: String = ""
   @State private var isChoosingDestination = false
+
+  @State private var showStats = false
+  @State private var showExtras = false
 
   @StateObject private var keyboard = KeyboardObserver()
 
@@ -32,6 +37,48 @@ struct ContentView: View {
         filledView
       }
     }
+    .overlay(alignment: .top) {
+      if !isKeyboardVisible {
+        GeometryReader { geo in
+          VStack {
+            Spacer()
+            HStack(spacing: 48) {
+              Button {
+                showStats = true
+              } label: {
+                Image(systemName: "chart.bar")
+                  .font(.title2)
+                  .padding(12)
+                  .frame(width: 44, height: 44)
+                  .background(.thinMaterial)
+                  .clipShape(Circle())
+              }
+              .padding(.leading, 24)
+
+              Spacer()
+
+              Button {
+                showExtras = true
+              } label: {
+                Image(systemName: "ellipsis")
+                  .font(.title2)
+                  .padding(12)
+                  .frame(width: 44, height: 44)
+                  .background(.thinMaterial)
+                  .clipShape(Circle())
+              }
+              .padding(.trailing, 24)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, geo.safeAreaInsets.bottom + 60)
+            .transition(.opacity.combined(with: .scale))
+            .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
+          }
+          .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+        }
+        .ignoresSafeArea()
+      }
+    }
     .overlay(alignment: .bottom) {
       MouthAddButton(shouldOpen: _shouldOpenMouth) { text in
         entryText = text
@@ -39,6 +86,9 @@ struct ContentView: View {
       }
     }
     .onAppear {
+      if shouldGenerateFakeData {
+        generateFakeEntries()
+      }
       loadEntries()
       NotificationCenter.default.addObserver(
         forName: NSPersistentCloudKitContainer.eventChangedNotification,
@@ -201,12 +251,35 @@ struct ContentView: View {
     .sorted { $0.date > $1.date }
   }
 
-  private func addFakeEntry(daysAgo: Int, name: String) {
+  func generateFakeEntries() {
     let calendar = Calendar.current
-    guard let fakeDate = calendar.date(byAdding: .day, value: -daysAgo, to: Date()) else { return }
+    let mealNames = [
+      "Crisps", "Banana", "Pizza", "Toast", "Yoghurt", "Protein Bar", "Chocolate",
+      "Smoothie", "Biscuits", "Apple", "Ice Cream", "Salad", "Burger", "Chips", "Granola", "Cake"
+    ]
 
-    let fakeEntry = FoodEntry(name: name, timestamp: fakeDate)
-    modelContext.insert(fakeEntry)
+    for dayOffset in 0..<30 {
+      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
+      let mealsToday = Int.random(in: 3...10)
+
+      for _ in 0..<mealsToday {
+        let hour = Int.random(in: 6...22)
+        let minute = Int.random(in: 0..<60)
+        var components = calendar.dateComponents([.year, .month, .day], from: date)
+        components.hour = hour
+        components.minute = minute
+        guard let mealDate = calendar.date(from: components) else { continue }
+
+        let entry = FoodEntry(
+          name: mealNames.randomElement()!,
+          timestamp: mealDate,
+          isForMorsel: Bool.random()
+        )
+        modelContext.insert(entry)
+      }
+    }
+
+    try? modelContext.save()
   }
 
   private func updateWidget(newCount: Int) {
