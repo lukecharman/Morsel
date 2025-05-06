@@ -91,77 +91,18 @@ struct ContentView: View {
   }
 
   private var filledView: some View {
-    ZStack(alignment: .bottom) {
-      LinearGradient(
-        colors: GradientColors.gradientColors(colorScheme: colorScheme),
-        startPoint: .top,
-        endPoint: .bottom
-      )
-      .ignoresSafeArea()
-      ScrollViewWithOffset(onScroll: handleScroll) {
-        LazyVStack(alignment: .leading) {
-          ForEach(groupedEntries, id: \.date) { group in
-            Text(dateString(for: group.date, entryCount: group.entries.count))
-              .font(MorselFont.title)
-              .padding()
-            ForEach(group.entries) { entry in
-              DeletableRow(isDraggingHorizontally: $isDraggingHorizontally) {
-                delete(entry: entry)
-              } content: {
-                MealRow(entry: entry)
-                  .frame(minHeight: 44)
-              }
-              .contentShape(Rectangle())
-            }
-          }
-        }
-        .opacity(shouldBlurBackground ? 0 : 1)
-        .scrollDismissesKeyboard(.immediately)
-        .scrollContentBackground(.hidden)
-        .scrollIndicators(.hidden)
-        .safeAreaInset(edge: .bottom) {
-          Spacer().frame(height: 160)
-        }
-        .safeAreaInset(edge: .top) {
-          Spacer().frame(height: 24)
-        }
-      }
-      .scrollDisabled(isDraggingHorizontally)
-      .scrollIndicators(.hidden)
-      .mask(
-        LinearGradient(
-          gradient: Gradient(stops: [
-            .init(color: .clear, location: 0),
-            .init(color: .black, location: 0.04),
-            .init(color: .black, location: 0.83),
-            .init(color: .clear, location: 0.895),
-            .init(color: .clear, location: 1)
-          ]),
-          startPoint: .top,
-          endPoint: .bottom
-        )
-      )
-      if isChoosingDestination {
-        DestinationPicker(
-          onPick: { isForMorsel in
-            add(entryText, isForMorsel: isForMorsel)
-            entryText = ""
-            isChoosingDestination = false
-          },
-          onCancel: {
-            entryText = ""
-            isChoosingDestination = false
-          }
-        )
-      }
-    }
-    .scrollDisabled(shouldBlurBackground)
-    .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
-    .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
-    .ignoresSafeArea(edges: .bottom)
-    .onShake {
-      // TODO: Add undo here!
-    }
+    FilledEntriesView(
+      entries: entries,
+      shouldBlurBackground: shouldBlurBackground,
+      colorScheme: colorScheme,
+      scrollOffset: $scrollOffset,
+      isDraggingHorizontally: $isDraggingHorizontally,
+      isChoosingDestination: $isChoosingDestination,
+      entryText: $entryText,
+      onScroll: handleScroll,
+      onAdd: add,
+      onDelete: delete
+    )
   }
 
   var morsel: some View {
