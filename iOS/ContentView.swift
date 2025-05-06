@@ -89,57 +89,12 @@ struct ContentView: View {
     }
   }
 
-  var bottomBar: some View {
-    GeometryReader { geo in
-      VStack {
-        Spacer()
-        HStack(spacing: 48) {
-          if !showExtras {
-            Button {
-              withAnimation {
-                showStats.toggle()
-              }
-            } label: {
-              Image(systemName: showStats ? "xmark" : "chart.bar")
-                .font(.title2)
-                .padding(12)
-                .frame(width: 44, height: 44)
-                .background(.thinMaterial)
-                .clipShape(Circle())
-            }
-            .padding(.leading, 24)
-            .transition(.blurReplace)
-            .animation(.easeInOut(duration: 0.25), value: showStats)
-          }
-
-          Spacer()
-
-          if !showStats {
-            Button {
-              withAnimation {
-                showExtras.toggle()
-              }
-            } label: {
-              Image(systemName: showExtras ? "xmark" : "ellipsis")
-                .font(.title2)
-                .padding(12)
-                .frame(width: 44, height: 44)
-                .background(.thinMaterial)
-                .clipShape(Circle())
-            }
-            .padding(.trailing, 24)
-            .transition(.blurReplace)
-            .animation(.easeInOut(duration: 0.25), value: showExtras)
-          }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.bottom, geo.safeAreaInsets.bottom + 60)
-        .transition(.opacity.combined(with: .scale))
-        .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
-      }
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-    }
-    .ignoresSafeArea()
+  private var bottomBar: some View {
+    BottomBar(
+      showStats: $showStats,
+      showExtras: $showExtras,
+      isKeyboardVisible: isKeyboardVisible
+    )
   }
 
   var fadeAmount: Double {
