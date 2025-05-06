@@ -4,7 +4,8 @@ import SwiftUI
 struct FilledEntriesView: View {
   let entries: [FoodEntry]
   let shouldBlurBackground: Bool
-  let colorScheme: ColorScheme
+
+  @Environment(\.colorScheme) private var colorScheme
 
   @Binding var scrollOffset: CGFloat
   @Binding var isDraggingHorizontally: Bool

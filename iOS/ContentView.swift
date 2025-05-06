@@ -9,7 +9,6 @@ struct ContentView: View {
   let shouldGenerateFakeData = false
 
   @Environment(\.modelContext) private var modelContext
-  @Environment(\.colorScheme) private var colorScheme
 
   @State private var entries: [FoodEntry] = []
   @State private var modelContextRefreshTrigger = UUID()
@@ -67,42 +66,6 @@ struct ContentView: View {
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
     .statusBarHidden(shouldBlurBackground)
-  }
-
-  private func loadEntries() {
-    do {
-      let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
-      entries = try modelContext.fetch(descriptor)
-    } catch {
-      print("Failed to load entries: \(error)")
-    }
-
-    WidgetCenter.shared.reloadAllTimelines()
-  }
-
-  private func handleScroll(_ offset: CGPoint) {
-    scrollOffset = offset.y
-  }
-
-  private var fadeAmount: Double {
-    let offset = min(0, scrollOffset)
-    let clamped = max(0, min(1, abs(offset) / 24))
-    return clamped
-  }
-
-  private var filledView: some View {
-    FilledEntriesView(
-      entries: entries,
-      shouldBlurBackground: shouldBlurBackground,
-      colorScheme: colorScheme,
-      scrollOffset: $scrollOffset,
-      isDraggingHorizontally: $isDraggingHorizontally,
-      isChoosingDestination: $isChoosingDestination,
-      entryText: $entryText,
-      onScroll: handleScroll,
-      onAdd: add,
-      onDelete: delete
-    )
   }
 
   var morsel: some View {
@@ -179,7 +142,56 @@ struct ContentView: View {
     .ignoresSafeArea()
   }
 
-  private func onAppear() {
+  var fadeAmount: Double {
+    let offset = min(0, scrollOffset)
+    let clamped = max(0, min(1, abs(offset) / 24))
+    return clamped
+  }
+
+  var filledView: some View {
+    FilledEntriesView(
+      entries: entries,
+      shouldBlurBackground: shouldBlurBackground,
+      scrollOffset: $scrollOffset,
+      isDraggingHorizontally: $isDraggingHorizontally,
+      isChoosingDestination: $isChoosingDestination,
+      entryText: $entryText,
+      onScroll: handleScroll,
+      onAdd: add,
+      onDelete: delete
+    )
+  }
+
+  var groupedEntries: [(date: Date, entries: [FoodEntry])] {
+    Dictionary(grouping: entries) { entry in
+      Calendar.current.startOfDay(for: entry.timestamp)
+    }
+    .map { (key, value) in
+      (date: key, entries: value)
+    }
+    .sorted { $0.date > $1.date }
+  }
+
+  var shouldBlurBackground: Bool {
+    isKeyboardVisible || isChoosingDestination || showStats || showExtras
+  }
+
+  func loadEntries() {
+    do {
+      let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
+      entries = try modelContext.fetch(descriptor)
+    } catch {
+      print("Failed to load entries: \(error)")
+    }
+
+    WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  func handleScroll(_ offset: CGPoint) {
+    scrollOffset = offset.y
+  }
+
+  func onAppear() {
     if shouldGenerateFakeData {
       generateFakeEntries()
     }
@@ -194,7 +206,7 @@ struct ContentView: View {
     }
   }
 
-  private func dateString(for date: Date, entryCount: Int) -> String {
+  func dateString(for date: Date, entryCount: Int) -> String {
     let dayString: String
     if Calendar.current.isDateInToday(date) {
       dayString = "Today"
@@ -207,7 +219,7 @@ struct ContentView: View {
     return "\(dayString) (\(entryCount))"
   }
 
-  private func colourForEntry(date: Date) -> Color {
+  func colourForEntry(date: Date) -> Color {
     if Calendar.current.isDateInToday(date) {
       return .primary
     } else if Calendar.current.isDateInYesterday(date) {
@@ -215,16 +227,6 @@ struct ContentView: View {
     } else {
       return .gray
     }
-  }
-
-  private var groupedEntries: [(date: Date, entries: [FoodEntry])] {
-    Dictionary(grouping: entries) { entry in
-      Calendar.current.startOfDay(for: entry.timestamp)
-    }
-    .map { (key, value) in
-      (date: key, entries: value)
-    }
-    .sorted { $0.date > $1.date }
   }
 
   func generateFakeEntries() {
@@ -258,7 +260,7 @@ struct ContentView: View {
     try? modelContext.save()
   }
 
-  private func updateWidget(newCount: Int) {
+  func updateWidget(newCount: Int) {
     widgetReloadWorkItem?.cancel()
 
     let workItem = DispatchWorkItem {
@@ -269,7 +271,7 @@ struct ContentView: View {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
   }
 
-  private func delete(entry: FoodEntry) {
+  func delete(entry: FoodEntry) {
     withAnimation {
       modelContext.delete(entry)
 
@@ -308,20 +310,16 @@ struct ContentView: View {
     }
   }
 
-  private func keyboardWillShow() {
+  func keyboardWillShow() {
     withAnimation {
       isKeyboardVisible = true
     }
   }
 
-  private func keyboardWillHide() {
+  func keyboardWillHide() {
     withAnimation {
       isKeyboardVisible = false
     }
-  }
-
-  private var shouldBlurBackground: Bool {
-    isKeyboardVisible || isChoosingDestination || showStats || showExtras
   }
 
   @ViewBuilder
