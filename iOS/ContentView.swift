@@ -402,7 +402,7 @@ struct ContentView: View {
       ZStack(alignment: alignment) {
         if isVisible {
           Color.black.opacity(0.4)
-            .ignoresSafeArea(edges: [.leading, .trailing])
+            .ignoresSafeArea()
             .onTapGesture {
               withAnimation {
                 showStats = false
