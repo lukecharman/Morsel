@@ -31,7 +31,7 @@ struct ContentView: View {
         filledView
       }
     }
-    .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView() } }
+    .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
     .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() } }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
