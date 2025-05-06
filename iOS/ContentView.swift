@@ -50,23 +50,9 @@ struct ContentView: View {
       }
     }
     .overlay {
-      if shouldBlurBackground {
-        Color(.black).opacity(0.75)
-          .ignoresSafeArea()
-      }
+      sidePanelView(alignment: .leading, isVisible: showStats) { StatsView() }
+      sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() }
     }
-    .overlay(alignment: .bottom) {
-      if showStats {
-        statsOverlay
-      }
-    }
-    .ignoresSafeArea()
-    .overlay(alignment: .bottom) {
-      if showExtras {
-        extrasOverlay
-      }
-    }
-    .ignoresSafeArea()
     .overlay(alignment: .top) {
       if !isKeyboardVisible {
         bottomBar
@@ -129,6 +115,7 @@ struct ContentView: View {
             }
           }
         }
+        .opacity(shouldBlurBackground ? 0 : 1)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -249,60 +236,6 @@ struct ContentView: View {
       .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
     }
     .ignoresSafeArea()
-  }
-
-  var statsOverlay: some View {
-    VStack {
-      Spacer()
-      StatsView()
-        .zIndex(1)
-        .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
-        .background(
-          ZStack {
-            Color(.systemBackground)
-            LinearGradient(
-              colors: GradientColors.gradientColors(colorScheme: colorScheme),
-              startPoint: .top,
-              endPoint: .bottom
-            )
-          }
-        )
-        .clipShape(
-          UnevenRoundedRectangle(
-            cornerRadii: RectangleCornerRadii(
-              topLeading: 24,
-              bottomLeading: 0,
-              bottomTrailing: 0,
-              topTrailing: 24
-            )
-          )
-        )
-        .shadow(radius: 10)
-    }
-    .transition(.move(edge: .bottom).combined(with: .blurReplace))
-  }
-
-  var extrasOverlay: some View {
-    VStack {
-      Spacer()
-      ExtrasView()
-        .zIndex(1)
-        .frame(maxHeight: UIScreen.main.bounds.height * 0.8)
-        .background(.ultraThinMaterial)
-        .clipShape(
-          UnevenRoundedRectangle(
-            cornerRadii: RectangleCornerRadii(
-              topLeading: 24,
-              bottomLeading: 0,
-              bottomTrailing: 0,
-              topTrailing: 24
-            )
-          )
-        )
-        .shadow(radius: 10)
-    }
-    .transition(.move(edge: .bottom).combined(with: .blurReplace))
-    .ignoresSafeArea(edges: .bottom)
   }
 
   private func onAppear() {
@@ -449,10 +382,82 @@ struct ContentView: View {
   private var shouldBlurBackground: Bool {
     isKeyboardVisible || isChoosingDestination || showStats || showExtras
   }
+
+  @ViewBuilder
+  func sidePanelView<Content: View>(
+    alignment: Alignment,
+    isVisible: Bool,
+    @ViewBuilder content: @escaping () -> Content
+  ) -> some View {
+    GeometryReader { geo in
+      let panelWidth = geo.size.width * 0.98
+      let offsetX: CGFloat = {
+        switch alignment {
+        case .leading: return isVisible ? -10 : -panelWidth
+        case .trailing: return isVisible ? 10 : panelWidth
+        default: return 0
+        }
+      }()
+
+      ZStack(alignment: alignment) {
+        if isVisible {
+          Color.black.opacity(0.4)
+            .ignoresSafeArea(edges: [.leading, .trailing])
+            .onTapGesture {
+              withAnimation {
+                showStats = false
+                showExtras = false
+              }
+            }
+        }
+
+        HStack {
+          if alignment == .leading {
+            content()
+              .frame(width: panelWidth)
+              .frame(maxHeight: .infinity)
+              .background(.ultraThinMaterial)
+              .clipShape(
+                UnevenRoundedRectangle(
+                  cornerRadii: RectangleCornerRadii(
+                    topLeading: alignment == .trailing ? 24 : 0,
+                    bottomLeading: alignment == .trailing ? 24 : 0,
+                    bottomTrailing: alignment == .trailing ? 0 : 24,
+                    topTrailing: alignment == .trailing ? 0 : 24
+                  )
+                )
+              )
+              .shadow(radius: 8)
+              .offset(x: offsetX)
+              .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
+            Spacer()
+          } else if alignment == .trailing {
+            Spacer()
+            content()
+              .frame(width: panelWidth)
+              .frame(maxHeight: .infinity)
+              .background(.ultraThinMaterial)
+              .clipShape(
+                UnevenRoundedRectangle(
+                  cornerRadii: RectangleCornerRadii(
+                    topLeading: alignment == .trailing ? 24 : 0,
+                    bottomLeading: alignment == .trailing ? 24 : 0,
+                    bottomTrailing: alignment == .trailing ? 0 : 24,
+                    topTrailing: alignment == .trailing ? 0 : 24
+                  )
+                )
+              )
+              .shadow(radius: 8)
+              .offset(x: offsetX)
+              .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
+          }
+        }
+      }
+    }
+  }
 }
 
 #Preview {
   ContentView(shouldOpenMouth: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
-
