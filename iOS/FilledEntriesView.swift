@@ -61,9 +61,9 @@ struct FilledEntriesView: View {
         LinearGradient(
           gradient: Gradient(stops: [
             .init(color: .clear, location: 0),
-            .init(color: .black, location: 0.04),
-            .init(color: .black, location: 0.83),
-            .init(color: .clear, location: 0.895),
+            .init(color: .black, location: 0.03),
+            .init(color: .black, location: 0.92),
+            .init(color: .clear, location: 0.95),
             .init(color: .clear, location: 1)
           ]),
           startPoint: .top,

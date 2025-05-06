@@ -10,20 +10,24 @@ struct StatsView: View {
         GridItem(.flexible(), spacing: 16)
       ], spacing: 16) {
         StatCard(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife")
-        StatCard(title: "For Morsel", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling")
-        StatCard(title: "For Me", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill")
+        StatCard(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling")
+        StatCard(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill")
         StatCard(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill")
         StatCard(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill")
+        StatCard(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent")
       }
-      .padding()
+      .safeAreaInset(edge: .top) {
+        Spacer().frame(height: 16)
+      }
+      .padding(.horizontal, 16)
     }
     .mask(
       LinearGradient(
         gradient: Gradient(stops: [
           .init(color: .clear, location: 0),
           .init(color: .black, location: 0.01),
-          .init(color: .black, location: 0.98),
-          .init(color: .clear, location: 1)
+          .init(color: .black, location: 0.925),
+          .init(color: .clear, location: 0.955),
         ]),
         startPoint: .top,
         endPoint: .bottom
@@ -38,7 +42,7 @@ struct StatCard: View {
   let icon: String
 
   var body: some View {
-    VStack(spacing: 12) {
+    VStack(spacing: 16) {
       Image(systemName: icon)
         .font(.largeTitle)
         .foregroundColor(.accentColor)
@@ -46,11 +50,13 @@ struct StatCard: View {
         .background(.ultraThinMaterial, in: Circle())
 
       Text(value)
-        .font(.title.bold())
+        .font(MorselFont.title)
 
       Text(title)
-        .font(.caption)
+        .font(MorselFont.body)
         .foregroundColor(.secondary)
+        .lineLimit(2, reservesSpace: true)
+        .multilineTextAlignment(.center)
     }
     .frame(maxWidth: .infinity)
     .padding()
@@ -61,8 +67,6 @@ struct StatCard: View {
     .shadow(radius: 4, y: 2)
   }
 }
-
-
 
 #Preview {
   StatsView(statsModel: StatsModel(modelContainer: .sharedContainer))

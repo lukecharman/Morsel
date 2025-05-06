@@ -29,6 +29,29 @@ struct StatsModel {
     let days = uniqueEntryDays()
     return streaks(from: days).current
   }
+
+  var averageMorselPercentagePerDay: Int {
+    let descriptor = FetchDescriptor<FoodEntry>()
+    guard let entries = try? modelContainer.mainContext.fetch(descriptor), !entries.isEmpty else { return 0 }
+
+    let calendar = Calendar.current
+
+    // 1. Group entries by day
+    let grouped = Dictionary(grouping: entries) {
+      calendar.startOfDay(for: $0.timestamp)
+    }
+
+    // 2. Calculate daily percentages
+    let dailyPercentages: [Double] = grouped.values.map { dayEntries in
+      guard !dayEntries.isEmpty else { return 0 }
+      let morselCount = dayEntries.filter { $0.isForMorsel }.count
+      return Double(morselCount) / Double(dayEntries.count)
+    }
+
+    // 3. Average
+    let total = dailyPercentages.reduce(0, +)
+    return Int((total / Double(dailyPercentages.count)) * 100)
+  }
 }
 
 private extension StatsModel {
