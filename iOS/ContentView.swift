@@ -18,56 +18,35 @@ struct ContentView: View {
   @State private var isKeyboardVisible = false
   @State private var entryText: String = ""
   @State private var isChoosingDestination = false
-
   @State private var showStats = false
   @State private var showExtras = false
 
   @Binding var shouldOpenMouth: Bool
 
-  var keyboardWillShowNotification = NotificationCenter.default.publisher(
-    for: UIResponder.keyboardWillShowNotification
-  )
-
-  var keyboardWillHideNotification = NotificationCenter.default.publisher(
-    for: UIResponder.keyboardWillHideNotification
-  )
-
-  var applicationDidBecomeActiveNotification = NotificationCenter.default.publisher(
-    for: UIApplication.didBecomeActiveNotification
-  )
-
-  var cloudKitDataChanged = NotificationCenter.default.publisher(
-    for: .cloudKitDataChanged
-  )
-
   var body: some View {
     NavigationStack {
       if entries.isEmpty {
-        EmptyStateView()
+        emptyStateView
       } else {
         filledView
       }
     }
-    .overlay {
-      sidePanelView(alignment: .leading, isVisible: showStats) { StatsView() }
-      sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() }
-    }
-    .overlay(alignment: .top) {
-      if !isKeyboardVisible {
-        bottomBar
-      }
-    }
+    .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView() } }
+    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() } }
+    .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
-    .onReceive(keyboardWillShowNotification) { _ in keyboardWillShow() }
-    .onReceive(keyboardWillHideNotification) { _ in keyboardWillHide() }
-    .onReceive(applicationDidBecomeActiveNotification) { _ in modelContextRefreshTrigger = UUID() }
-    .onReceive(cloudKitDataChanged) { _ in loadEntries() }
+    .onReceive(NotificationPublishers.keyboardWillShow) { _ in keyboardWillShow() }
+    .onReceive(NotificationPublishers.keyboardWillHide) { _ in keyboardWillHide() }
+    .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
+    .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
     .statusBarHidden(shouldBlurBackground)
   }
+}
 
+private extension ContentView {
   var morsel: some View {
     MouthAddButton(
       shouldOpen: _shouldOpenMouth,
@@ -89,18 +68,19 @@ struct ContentView: View {
     }
   }
 
-  private var bottomBar: some View {
-    BottomBar(
-      showStats: $showStats,
-      showExtras: $showExtras,
-      isKeyboardVisible: isKeyboardVisible
-    )
+  @ViewBuilder
+  var bottomBar: some View {
+    if !isKeyboardVisible {
+      BottomBar(
+        showStats: $showStats,
+        showExtras: $showExtras,
+        isKeyboardVisible: isKeyboardVisible
+      )
+    }
   }
 
-  var fadeAmount: Double {
-    let offset = min(0, scrollOffset)
-    let clamped = max(0, min(1, abs(offset) / 24))
-    return clamped
+  var emptyStateView: some View {
+    EmptyStateView()
   }
 
   var filledView: some View {
@@ -130,7 +110,9 @@ struct ContentView: View {
   var shouldBlurBackground: Bool {
     isKeyboardVisible || isChoosingDestination || showStats || showExtras
   }
+}
 
+private extension ContentView {
   func loadEntries() {
     do {
       let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
@@ -182,37 +164,6 @@ struct ContentView: View {
     } else {
       return .gray
     }
-  }
-
-  func generateFakeEntries() {
-    let calendar = Calendar.current
-    let mealNames = [
-      "Crisps", "Banana", "Pizza", "Toast", "Yoghurt", "Protein Bar", "Chocolate",
-      "Smoothie", "Biscuits", "Apple", "Ice Cream", "Salad", "Burger", "Chips", "Granola", "Cake"
-    ]
-
-    for dayOffset in 0..<30 {
-      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-      let mealsToday = Int.random(in: 3...10)
-
-      for _ in 0..<mealsToday {
-        let hour = Int.random(in: 6...22)
-        let minute = Int.random(in: 0..<60)
-        var components = calendar.dateComponents([.year, .month, .day], from: date)
-        components.hour = hour
-        components.minute = minute
-        guard let mealDate = calendar.date(from: components) else { continue }
-
-        let entry = FoodEntry(
-          name: mealNames.randomElement()!,
-          timestamp: mealDate,
-          isForMorsel: Bool.random()
-        )
-        modelContext.insert(entry)
-      }
-    }
-
-    try? modelContext.save()
   }
 
   func updateWidget(newCount: Int) {
@@ -348,6 +299,39 @@ struct ContentView: View {
         }
       }
     }
+  }
+}
+
+private extension ContentView {
+  func generateFakeEntries() {
+    let calendar = Calendar.current
+    let mealNames = [
+      "Crisps", "Banana", "Pizza", "Toast", "Yoghurt", "Protein Bar", "Chocolate",
+      "Smoothie", "Biscuits", "Apple", "Ice Cream", "Salad", "Burger", "Chips", "Granola", "Cake"
+    ]
+
+    for dayOffset in 0..<30 {
+      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
+      let mealsToday = Int.random(in: 3...10)
+
+      for _ in 0..<mealsToday {
+        let hour = Int.random(in: 6...22)
+        let minute = Int.random(in: 0..<60)
+        var components = calendar.dateComponents([.year, .month, .day], from: date)
+        components.hour = hour
+        components.minute = minute
+        guard let mealDate = calendar.date(from: components) else { continue }
+
+        let entry = FoodEntry(
+          name: mealNames.randomElement()!,
+          timestamp: mealDate,
+          isForMorsel: Bool.random()
+        )
+        modelContext.insert(entry)
+      }
+    }
+
+    try? modelContext.save()
   }
 }
 
