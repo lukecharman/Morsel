@@ -2,7 +2,11 @@ import SwiftUI
 
 struct StatsView: View {
   var body: some View {
-    Text("Stats view incoming...")
+    VStack {
+      Text("Stats view incoming...")
+        .padding(.top, 48)
+      Spacer()
+    }
   }
 }
 

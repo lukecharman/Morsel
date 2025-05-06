@@ -235,18 +235,18 @@ private extension ContentView {
     @ViewBuilder content: @escaping () -> Content
   ) -> some View {
     GeometryReader { geo in
-      let panelWidth = geo.size.width * 0.98
+      let panelWidth = geo.size.width
       let offsetX: CGFloat = {
         switch alignment {
-        case .leading: return isVisible ? -10 : -panelWidth
-        case .trailing: return isVisible ? 10 : panelWidth
+        case .leading: return isVisible ? 0 : -panelWidth
+        case .trailing: return isVisible ? 0 : panelWidth
         default: return 0
         }
       }()
 
       ZStack(alignment: alignment) {
         if isVisible {
-          Color.black.opacity(0.4)
+          Color.black.opacity(0.25)
             .ignoresSafeArea()
             .onTapGesture {
               withAnimation {
@@ -261,18 +261,6 @@ private extension ContentView {
             content()
               .frame(width: panelWidth)
               .frame(maxHeight: .infinity)
-              .background(.ultraThinMaterial)
-              .clipShape(
-                UnevenRoundedRectangle(
-                  cornerRadii: RectangleCornerRadii(
-                    topLeading: alignment == .trailing ? 24 : 0,
-                    bottomLeading: alignment == .trailing ? 24 : 0,
-                    bottomTrailing: alignment == .trailing ? 0 : 24,
-                    topTrailing: alignment == .trailing ? 0 : 24
-                  )
-                )
-              )
-              .shadow(radius: 8)
               .offset(x: offsetX)
               .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
             Spacer()
@@ -281,18 +269,6 @@ private extension ContentView {
             content()
               .frame(width: panelWidth)
               .frame(maxHeight: .infinity)
-              .background(.ultraThinMaterial)
-              .clipShape(
-                UnevenRoundedRectangle(
-                  cornerRadii: RectangleCornerRadii(
-                    topLeading: alignment == .trailing ? 24 : 0,
-                    bottomLeading: alignment == .trailing ? 24 : 0,
-                    bottomTrailing: alignment == .trailing ? 0 : 24,
-                    topTrailing: alignment == .trailing ? 0 : 24
-                  )
-                )
-              )
-              .shadow(radius: 8)
               .offset(x: offsetX)
               .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
           }

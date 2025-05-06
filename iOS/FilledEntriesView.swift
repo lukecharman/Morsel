@@ -43,7 +43,8 @@ struct FilledEntriesView: View {
             }
           }
         }
-        .opacity(shouldBlurBackground ? 0 : 1)
+        .opacity(shouldBlurBackground ? 0.06 : 1)
+        .scaleEffect(shouldBlurBackground ? CGSize(width: 0.97, height: 0.97) : CGSize(width: 1.0, height: 1.0))
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
