@@ -9,12 +9,12 @@ struct StatsView: View {
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
       ], spacing: 16) {
-        StatCard(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife")
-        StatCard(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling")
-        StatCard(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill")
-        StatCard(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill")
-        StatCard(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill")
-        StatCard(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent")
+        CardView(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife")
+        CardView(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling")
+        CardView(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill")
+        CardView(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill")
+        CardView(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill")
+        CardView(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent")
       }
       .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)
@@ -33,38 +33,6 @@ struct StatsView: View {
         endPoint: .bottom
       )
     )
-  }
-}
-
-struct StatCard: View {
-  let title: String
-  let value: String
-  let icon: String
-
-  var body: some View {
-    VStack(spacing: 16) {
-      Image(systemName: icon)
-        .font(.largeTitle)
-        .foregroundColor(.accentColor)
-        .padding(8)
-        .background(.ultraThinMaterial, in: Circle())
-
-      Text(value)
-        .font(MorselFont.title)
-
-      Text(title)
-        .font(MorselFont.body)
-        .foregroundColor(.secondary)
-        .lineLimit(2, reservesSpace: true)
-        .multilineTextAlignment(.center)
-    }
-    .frame(maxWidth: .infinity)
-    .padding()
-    .background(
-      RoundedRectangle(cornerRadius: 16, style: .continuous)
-        .fill(Color(.secondarySystemBackground))
-    )
-    .shadow(radius: 4, y: 2)
   }
 }
 

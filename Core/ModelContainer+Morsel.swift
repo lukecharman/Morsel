@@ -33,3 +33,19 @@ extension ModelContainer {
     return try ModelContainer(for: schema, configurations: [config])
   }
 }
+
+extension ModelContext {
+  @MainActor
+  func deleteAll<T: PersistentModel>(_ type: T.Type) -> Bool {
+    let descriptor = FetchDescriptor<T>()
+    do {
+      for item in try self.fetch(descriptor) {
+        self.delete(item)
+      }
+      try self.save()
+      return true
+    } catch {
+      return false
+    }
+  }
+}

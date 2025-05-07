@@ -32,7 +32,7 @@ struct ContentView: View {
       }
     }
     .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
-    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() } }
+    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() { loadEntries() } } }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
