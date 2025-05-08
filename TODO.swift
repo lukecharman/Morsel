@@ -2,7 +2,6 @@
 
  MUST
  ----
- * Fill the extras screen, including remove all.
  * Verify that the widgets look and work well.
  * More Analytics events.
  * Clean up watch's UI.

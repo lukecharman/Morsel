@@ -18,47 +18,87 @@ struct FoodEntryWidget: Widget {
 struct FoodEntryWidgetView: View {
   var entry: FoodEntryTimelineEntry
 
+  @Environment(\.colorScheme) private var colorScheme
+  @Environment(\.widgetFamily) private var widgetFamily
+
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Text("Today’s Meals")
-        .font(.headline)
-        .foregroundStyle(.primary)
-        .padding(.vertical, 4)
-
-      if entry.foodEntries.isEmpty {
-        Text("No meals yet.")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      } else {
-        ForEach(entry.foodEntries.prefix(3), id: \.id) { foodEntry in
-          HStack(spacing: 8) {
-            Image(systemName: "fork.knife")
-              .font(.caption2)
-              .foregroundStyle(.secondary)
-            Text(foodEntry.name)
-              .font(.subheadline)
-              .lineLimit(1)
-              .foregroundStyle(.primary)
-          }
-        }
-      }
-
-      Spacer()
-
+    ZStack {
       HStack {
-        Spacer()
-        HStack {
-          Spacer()
-          VStack {
-            Spacer()
-            StaticMorsel()
+        VStack(alignment: .leading, spacing: 4) {
+          Text("Morsels Today (\(entry.foodEntries.count))")
+            .font(MorselFont.widgetTitle)
+            .foregroundStyle(.primary)
+            .padding(.bottom, 8)
+
+          if entry.foodEntries.isEmpty {
+            Text("Nothin' yet.")
+              .font(MorselFont.body)
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          } else {
+            switch widgetFamily {
+            case .systemSmall:
+              column(for: Array(entry.foodEntries.prefix(3)))
+
+            case .systemMedium:
+              let entries = Array(entry.foodEntries.prefix(6))
+              let firstColumnEntries = entries.indices
+                .filter { $0 % 2 == 0 }
+                .map { entries[$0] }
+
+              let secondColumnEntries = entries.indices
+                .filter { $0 % 2 != 0 }
+                .map { entries[$0] }
+
+              HStack(alignment: .top, spacing: 16) {
+                column(for: firstColumnEntries)
+                  .frame(maxWidth: .infinity, alignment: .leading)
+
+                column(for: secondColumnEntries)
+                  .frame(maxWidth: .infinity, alignment: .leading)
+              }
+
+            default:
+              EmptyView()
+            }
           }
+          Spacer()
         }
-        .frame(height: 40)
+        Spacer()
       }
-      .widgetURL(URL(string: "morsel://add")!)
+      GeometryReader { geo in
+        StaticMorsel()
+          .scaleEffect(CGSize(width: 0.5, height: 0.5))
+          .position(x: geo.size.width - 22, y: geo.size.height - 18)
+      }
+      .allowsHitTesting(false)
     }
-    .containerBackground(.fill.tertiary, for: .widget)
+    .ignoresSafeArea()
+    .widgetURL(URL(string: "morsel://add")!)
+    .containerBackground(for: .widget) {
+      LinearGradient(
+        colors: GradientColors.gradientColors(colorScheme: colorScheme),
+        startPoint: .top,
+        endPoint: .bottom
+      )
+    }
+  }
+
+  func column(for entries: [FoodEntrySnapshot]) -> some View {
+    VStack(alignment: .leading, spacing: 4) {
+      ForEach(entries, id: \.id) { foodEntry in
+        HStack(spacing: 8) {
+          Image(systemName: foodEntry.isForMorsel ? "face.smiling.fill" : "person.fill")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+          Text(foodEntry.name)
+            .font(MorselFont.widgetBody)
+            .lineLimit(1)
+            .opacity(foodEntry.isForMorsel ? 0.5 : 1)
+            .foregroundStyle(.primary)
+        }
+      }
+    }
   }
 }
 
@@ -84,8 +124,8 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries)
 
       let nextRefresh: Date = entries.isEmpty
-        ? Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
-        : Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+      ? Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
+      : Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
 
       completion(Timeline(entries: [timelineEntry], policy: .after(nextRefresh)))
     }
@@ -111,7 +151,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       let entries = try context.fetch(descriptor)
 
       return entries.map { entry in
-        FoodEntrySnapshot(id: entry.id, name: entry.name, timestamp: entry.timestamp)
+        FoodEntrySnapshot(id: entry.id, name: entry.name, timestamp: entry.timestamp, isForMorsel: entry.isForMorsel)
       }
     } catch {
       return []
@@ -120,13 +160,28 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
 }
 
 struct FoodEntrySnapshot: Identifiable, Codable {
-  var id: UUID
+  var id: UUID = UUID()
   var name: String
-  var timestamp: Date
+  var timestamp: Date = Date()
+  var isForMorsel: Bool = false
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium, widget: {
   FoodEntryWidget()
-} timeline: {
-  FoodEntryTimelineEntry(date: .now, foodEntries: [])
-}
+}, timeline: {
+  FoodEntryTimelineEntry(date: .now, foodEntries: [
+    FoodEntrySnapshot(name: "Toast")
+  ])
+  FoodEntryTimelineEntry(date: .now, foodEntries: [
+    FoodEntrySnapshot(name: "Toast"),
+    FoodEntrySnapshot(name: "Chocolate Bar", isForMorsel: true)
+  ])
+  FoodEntryTimelineEntry(date: .now, foodEntries: [
+    FoodEntrySnapshot(name: "Toast"),
+    FoodEntrySnapshot(name: "Chocolate Bar", isForMorsel: true),
+    FoodEntrySnapshot(name: "Egg Sandwich"),
+    FoodEntrySnapshot(name: "Tomatoes", isForMorsel: true),
+    FoodEntrySnapshot(name: "Haribo"),
+    FoodEntrySnapshot(name: "Pistachios")
+  ])
+})

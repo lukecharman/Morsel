@@ -7,6 +7,9 @@ struct MorselFont {
   static let subheadline = Font.custom("Quicksand-Regular", size: 13, relativeTo: .subheadline)
   static let caption = Font.custom("Quicksand-Regular", size: 11, relativeTo: .caption)
   static let small = Font.custom("Quicksand-Regular", size: 9, relativeTo: .footnote)
+
+  static let widgetTitle = Font.custom("Quicksand-Bold", size: 16, relativeTo: .title)
+  static let widgetBody = Font.custom("Quicksand-Regular", size: 13, relativeTo: .body)
 }
 
 extension Font {
