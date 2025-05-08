@@ -7,6 +7,8 @@ struct ExtrasView: View {
   @State private var showClearAlert = false
   @State private var showClearFailedAlert = false
 
+  @State private var showFeedbackAlert = false
+
   var onClearAll: () -> Void
 
   var body: some View {
@@ -16,11 +18,7 @@ struct ExtrasView: View {
         GridItem(.flexible(), spacing: 16)
       ], spacing: 16) {
         CardView(title: "Clear all your data", value: "Reset", icon: "trash") { showClearAlert = true }
-        CardView(title: "Cravings Crushed", value: "B", icon: "face.smiling")
-        CardView(title: "Mindful Munchies", value: "C", icon: "person.fill")
-        CardView(title: "Current Streak", value: "D", icon: "flame.fill")
-        CardView(title: "Longest Streak", value: "E", icon: "trophy.fill")
-        CardView(title: "% For Morsel", value: "F", icon: "percent")
+        CardView(title: "Got feedback?", value: "Feedback", icon: "ellipsis.message") { showFeedbackAlert = true }
       }
       .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)
@@ -51,6 +49,9 @@ struct ExtrasView: View {
       Button("Okay", role: .cancel) { }
     } message: {
       Text("There was a problem clearing your data. Please try again later.")
+    }
+    .sheet(isPresented: $showFeedbackAlert) {
+      FeedbackView()
     }
   }
 

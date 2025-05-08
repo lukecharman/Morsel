@@ -3,9 +3,10 @@
  MUST
  ----
  * Fill the extras screen, including remove all.
- * Add more expression to Morsel.
  * Verify that the widgets look and work well.
+ * More Analytics events.
  * Clean up watch's UI.
+ * Add more expression to Morsel.
 
  SHOULD
  ------
