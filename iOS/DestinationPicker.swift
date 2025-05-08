@@ -10,30 +10,28 @@ struct DestinationPicker: View {
 
   var body: some View {
     GeometryReader { geo in
-      let width = geo.size.width
       let dragX = dragOffset.width
       let draggedFarEnoughLeft = dragX < -threshold
       let draggedFarEnoughRight = dragX > threshold
 
       ZStack {
-        // Background fade
-        Color.black.opacity(0.5)
+        Color.clear
           .ignoresSafeArea()
           .onTapGesture { onCancel() }
 
         VStack(spacing: 48) {
           Text("Who was the snack for?")
             .font(MorselFont.title)
-            .foregroundColor(.white)
+            .foregroundColor(.primary)
 
           ZStack {
             // Me icon on the left
             VStack(spacing: 8) {
               Image(systemName: "person.fill")
                 .font(.largeTitle)
-                .foregroundColor(draggedFarEnoughLeft ? .accentColor : .white.opacity(0.6))
+                .foregroundColor(draggedFarEnoughLeft ? .accentColor : .primary.opacity(0.6))
               Text("Me")
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 40)
@@ -42,9 +40,9 @@ struct DestinationPicker: View {
             VStack(spacing: 8) {
               Image(systemName: "face.smiling.fill")
                 .font(.largeTitle)
-                .foregroundColor(draggedFarEnoughRight ? .accentColor : .white.opacity(0.6))
+                .foregroundColor(draggedFarEnoughRight ? .accentColor : .primary.opacity(0.6))
               Text("Morsel")
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.trailing, 40)
@@ -77,10 +75,12 @@ struct DestinationPicker: View {
           Button("Cancel") {
             onCancel()
           }
-          .foregroundColor(.white.opacity(0.6))
+          .foregroundColor(.primary.opacity(0.6))
         }
         .padding()
       }
+      .frame(width: geo.size.width, height: geo.size.height)
+      .ignoresSafeArea()
     }
   }
 }

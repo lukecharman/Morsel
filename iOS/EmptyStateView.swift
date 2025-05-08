@@ -3,6 +3,8 @@ import SwiftUI
 struct EmptyStateView: View {
   @Environment(\.colorScheme) private var colorScheme
 
+  let shouldBlurBackground: Bool
+
   var body: some View {
     VStack(spacing: 24) {
       Image(systemName: "fork.knife.circle")
@@ -50,6 +52,8 @@ struct EmptyStateView: View {
         endPoint: .bottom
       )
     )
+    .opacity(shouldBlurBackground ? 0.06 : 1)
+    .scaleEffect(shouldBlurBackground ? CGSize(width: 0.97, height: 0.97) : CGSize(width: 1.0, height: 1.0))
   }
 }
 

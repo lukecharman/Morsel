@@ -24,28 +24,42 @@ struct ContentView: View {
   @Binding var shouldOpenMouth: Bool
 
   var body: some View {
-    NavigationStack {
-      if entries.isEmpty {
-        emptyStateView
-      } else {
-        filledView
+    ZStack {
+      NavigationStack {
+        if entries.isEmpty {
+          emptyStateView
+        } else {
+          filledView
+        }
       }
+
       if isChoosingDestination {
         DestinationPicker(
           onPick: { isForMorsel in
             add(entryText, isForMorsel: isForMorsel)
             entryText = ""
-            isChoosingDestination = false
+            withAnimation {
+              isChoosingDestination = false
+            }
           },
           onCancel: {
             entryText = ""
-            isChoosingDestination = false
+            withAnimation {
+              isChoosingDestination = false
+            }
           }
         )
+        .frame(maxHeight: .infinity)
+        .ignoresSafeArea()
       }
     }
     .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
-    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() { loadEntries() } } }
+    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() {
+      withAnimation {
+        showExtras = false
+        loadEntries()
+      }
+    } } }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
@@ -76,7 +90,9 @@ private extension ContentView {
         }
       }, onAdd: { text in
         entryText = text
-        isChoosingDestination = true
+        withAnimation {
+          isChoosingDestination = true
+        }
       }
     )
   }
@@ -93,7 +109,9 @@ private extension ContentView {
   }
 
   var emptyStateView: some View {
-    EmptyStateView()
+    EmptyStateView(
+      shouldBlurBackground: shouldBlurBackground
+    )
   }
 
   var filledView: some View {

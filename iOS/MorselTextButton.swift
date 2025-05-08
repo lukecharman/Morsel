@@ -99,11 +99,23 @@ struct MouthAddButton: View {
           anchor: .center,
           perspective: 0.5
         )
+        .rotation3DEffect(
+          .degrees(isOpen ? 0 : idleLookaroundOffset),
+          axis: (x: 0, y: 1, z: 0),
+          anchor: .center,
+          perspective: 0.5
+        )
       mouth
         .scaleEffect(y: isSwallowing ? 0.8 : 1)
         .rotation3DEffect(
           .degrees(isSwallowing ? -8 : 0),
           axis: (x: 1, y: 0, z: 0),
+          anchor: .center,
+          perspective: 0.5
+        )
+        .rotation3DEffect(
+          .degrees(isOpen ? 0 : idleLookaroundOffset),
+          axis: (x: 0, y: 1, z: 0),
           anchor: .center,
           perspective: 0.5
         )
@@ -138,7 +150,7 @@ struct MouthAddButton: View {
         ),
         style: .continuous
       )
-        .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+      .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
       .offset(y: isOpen ? 16 : 24)
       .shadow(radius: 10)
@@ -214,11 +226,19 @@ struct MouthAddButton: View {
       let offsetY = CGFloat(Int.random(in: -4...4))
       withAnimation(.easeInOut(duration: 1)) {
         idleOffset = CGSize(width: 0, height: offsetY)
-        idleLookaroundOffset = CGFloat.random(in: -20...20)
       }
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         withAnimation(.easeInOut(duration: 0.3)) {
           idleOffset = .zero
+        }
+      }
+    }
+    Timer.scheduledTimer(withTimeInterval: Double.random(in: 3...8), repeats: true) { _ in
+      withAnimation(.easeInOut(duration: 1)) {
+        idleLookaroundOffset = CGFloat.random(in: -5...5)
+      }
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        withAnimation(.easeInOut(duration: 0.5)) {
           idleLookaroundOffset = 0
         }
       }
