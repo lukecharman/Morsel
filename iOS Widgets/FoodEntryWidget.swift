@@ -30,9 +30,10 @@ struct FoodEntryWidgetView: View {
               ? "Today (\(entry.foodEntries.count))"
               : "Today's Morsels (\(entry.foodEntries.count))"
           )
-            .font(MorselFont.widgetTitle)
+          .font(widgetFamily == .systemSmall ?  MorselFont.widgetTitle : MorselFont.title)
             .foregroundStyle(.primary)
             .padding(.bottom, 8)
+            .contentTransition(.numericText())
 
           if entry.foodEntries.isEmpty {
             Text("Nothin' yet.")
@@ -79,11 +80,12 @@ struct FoodEntryWidgetView: View {
             x: geo.size.width - (widgetFamily == .systemSmall ? 22 : 36),
             y: geo.size.height - (widgetFamily == .systemSmall ? 18 : 26)
           )
+          .widgetURL(URL(string: "morsel://add")!)
       }
       .allowsHitTesting(false)
     }
     .ignoresSafeArea()
-    .widgetURL(URL(string: "morsel://add")!)
+    .widgetURL(URL(string: "morsel://list")!)
     .containerBackground(for: .widget) {
       LinearGradient(
         colors: GradientColors.gradientColors(colorScheme: colorScheme),
@@ -101,7 +103,7 @@ struct FoodEntryWidgetView: View {
             .font(.caption2)
             .foregroundStyle(.secondary)
           Text(foodEntry.name)
-            .font(MorselFont.widgetBody)
+            .font(widgetFamily == .systemSmall ?  MorselFont.widgetBody : MorselFont.body)
             .lineLimit(1)
             .opacity(foodEntry.isForMorsel ? 0.5 : 1)
             .foregroundStyle(.primary)

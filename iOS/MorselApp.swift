@@ -15,7 +15,11 @@ struct MorselApp: App {
       ContentView(shouldOpenMouth: $shouldOpenMouth)
         .modelContainer(.sharedContainer)
         .onOpenURL { url in
-          shouldOpenMouth = true
+          if url.absoluteString == "morsel://add" {
+            shouldOpenMouth = true
+          } else if url.absoluteString == "morsel://list" {
+            shouldOpenMouth = false
+          }
         }
         .onAppear {
           Analytics.setUp()
