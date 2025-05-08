@@ -6,7 +6,6 @@ struct ExtrasView: View {
 
   @State private var showClearAlert = false
   @State private var showClearFailedAlert = false
-
   @State private var showFeedbackAlert = false
 
   var onClearAll: () -> Void
