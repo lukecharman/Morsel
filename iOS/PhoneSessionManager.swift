@@ -1,5 +1,6 @@
 import SwiftData
 import WatchConnectivity
+import WidgetKit
 
 class PhoneSessionManager: NSObject, ObservableObject {
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {}
@@ -19,10 +20,13 @@ extension PhoneSessionManager: WCSessionDelegate {
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
     if let mealName = message["newMealName"] as? String,
        let mealIDString = message["newMealID"] as? String,
-       let mealID = UUID(uuidString: mealIDString) {
-
+       let mealID = UUID(uuidString: mealIDString),
+       let mealOrigin = message["origin"] as? String {
       Task {
-        await saveMealLocally(name: mealName, id: mealID)
+        if mealOrigin == "watch" {
+          await saveMealLocally(name: mealName, id: mealID)
+          WidgetCenter.shared.reloadAllTimelines()
+        }
       }
     }
   }

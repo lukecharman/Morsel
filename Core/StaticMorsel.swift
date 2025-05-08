@@ -20,7 +20,7 @@ struct StaticMorsel: View {
       ),
       style: .continuous
     )
-    .fill(Color.accentColor)
+    .fill(Color.blue)
     .frame(
       width: 86,
       height: 64

@@ -28,34 +28,33 @@ struct WatchContentView: View {
       if saving {
         ProgressView()
           .progressViewStyle(.circular)
-          .scaleEffect(1.5)
           .padding()
       } else {
-        MouthAddButton(shouldOpen: $showingMealPrompt, onAdd: { _ in })
+        StaticMorsel()
           .onTapGesture {
             showingMealPrompt = true
           }
       }
 
-      Text("Today’s Meals")
-        .font(.title3)
+      Text("Today’s Morsels")
+        .font(MorselFont.widgetTitle)
         .bold()
         .padding(.bottom, 4)
       if todayEntries.isEmpty {
         Text("The first snack is the hardest...")
-          .font(.caption)
+          .font(MorselFont.widgetBody)
           .foregroundColor(.secondary)
           .multilineTextAlignment(.center)
       } else {
         ForEach(todayEntries) { meal in
           HStack {
             Text(meal.name)
-              .font(.body)
+              .font(MorselFont.widgetBody)
               .lineLimit(1)
               .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(meal.timestamp, format: .dateTime.hour().minute())
-              .font(.caption2)
+              .font(MorselFont.caption)
               .foregroundColor(.secondary)
           }
         }
@@ -71,14 +70,12 @@ struct WatchContentView: View {
       Text("What did you eat?")
         .font(.headline)
         .padding()
-
       TextField("Meal name", text: $mealName)
         .padding()
         .submitLabel(.done)
         .onSubmit {
           saveMeal()
         }
-
       Button("Save") {
         saveMeal()
       }
@@ -99,14 +96,11 @@ struct WatchContentView: View {
     showingMealPrompt = false
 
     Task {
-      let newEntry = FoodEntry(name: trimmedName, timestamp: Date())
-      modelContext.insert(newEntry)
-
-      do {
-        try modelContext.save()
-      } catch {
-        print("Failed to save meal from Watch: \(error)")
-      }
+      await WatchSessionManager.shared.saveMealLocally(
+        name: trimmedName,
+        id: UUID(),
+        origin: "watch"
+      )
 
       WidgetCenter.shared.reloadAllTimelines()
 

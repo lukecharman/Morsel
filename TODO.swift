@@ -5,6 +5,9 @@
  * Connect tapping Morsel to add entry via an App Intent.
  * Reuse that in Shortcuts / Siri / Control Center.
  * More Analytics events.
+ * Watch has a bug with the WCSession link to phone.
+ * Try to get iOS widget updated immediately when watch app adds entry and vice versa.
+ * Watch needs its own DestinationPicker, and some way to separate Me vs. Morsel in the list.
  * Clean up watch's UI and widgets.
  * Clean up Morsel vs. keyboard height once and for all.
     * Maybe he disappears, keyboard opens, then he slides down from the top with a little rope?
@@ -12,10 +15,11 @@
     * Gradual smile / sad while you're deciding who a morsel is for.
  * Clean up the DestinationPicker's UI a little, fonts, etc.
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
+ * Add an Onboarding of some kind.
 
  SHOULD
  ------
- * Add an Onboarding of some kind.
+ ...
 
  COULD
  -----
