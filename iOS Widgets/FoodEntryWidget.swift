@@ -25,7 +25,11 @@ struct FoodEntryWidgetView: View {
     ZStack {
       HStack {
         VStack(alignment: .leading, spacing: 4) {
-          Text("Morsels Today (\(entry.foodEntries.count))")
+          Text(
+            widgetFamily == .systemSmall
+              ? "Today (\(entry.foodEntries.count))"
+              : "Today's Morsels (\(entry.foodEntries.count))"
+          )
             .font(MorselFont.widgetTitle)
             .foregroundStyle(.primary)
             .padding(.bottom, 8)
@@ -40,7 +44,7 @@ struct FoodEntryWidgetView: View {
             case .systemSmall:
               column(for: Array(entry.foodEntries.prefix(3)))
 
-            case .systemMedium:
+            default:
               let entries = Array(entry.foodEntries.prefix(6))
               let firstColumnEntries = entries.indices
                 .filter { $0 % 2 == 0 }
@@ -57,9 +61,6 @@ struct FoodEntryWidgetView: View {
                 column(for: secondColumnEntries)
                   .frame(maxWidth: .infinity, alignment: .leading)
               }
-
-            default:
-              EmptyView()
             }
           }
           Spacer()
@@ -68,8 +69,16 @@ struct FoodEntryWidgetView: View {
       }
       GeometryReader { geo in
         StaticMorsel()
-          .scaleEffect(CGSize(width: 0.5, height: 0.5))
-          .position(x: geo.size.width - 22, y: geo.size.height - 18)
+          .scaleEffect(
+            CGSize(
+              width: widgetFamily == .systemSmall ? 0.5 : 0.8,
+              height: widgetFamily == .systemSmall ? 0.5 : 0.8
+            )
+          )
+          .position(
+            x: geo.size.width - (widgetFamily == .systemSmall ? 22 : 36),
+            y: geo.size.height - (widgetFamily == .systemSmall ? 18 : 26)
+          )
       }
       .allowsHitTesting(false)
     }
