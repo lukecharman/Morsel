@@ -19,7 +19,7 @@
 
  SHOULD
  ------
- ...
+ * More haptics / sound effects (with a toggle in Extras).
 
  COULD
  -----
