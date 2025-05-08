@@ -13,7 +13,6 @@ struct FilledEntriesView: View {
   @Binding var entryText: String
 
   let onScroll: (CGPoint) -> Void
-  let onAdd: (String, Bool) -> Void
   let onDelete: (FoodEntry) -> Void
 
   var body: some View {
@@ -70,20 +69,6 @@ struct FilledEntriesView: View {
           endPoint: .bottom
         )
       )
-
-      if isChoosingDestination {
-        DestinationPicker(
-          onPick: { isForMorsel in
-            onAdd(entryText, isForMorsel)
-            entryText = ""
-            isChoosingDestination = false
-          },
-          onCancel: {
-            entryText = ""
-            isChoosingDestination = false
-          }
-        )
-      }
     }
     .scrollDisabled(shouldBlurBackground)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)

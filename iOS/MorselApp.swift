@@ -17,6 +17,9 @@ struct MorselApp: App {
         .onOpenURL { url in
           shouldOpenMouth = true
         }
+        .onAppear {
+          Analytics.setUp()
+        }
     }
   }
 }

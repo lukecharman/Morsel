@@ -30,6 +30,19 @@ struct ContentView: View {
       } else {
         filledView
       }
+      if isChoosingDestination {
+        DestinationPicker(
+          onPick: { isForMorsel in
+            add(entryText, isForMorsel: isForMorsel)
+            entryText = ""
+            isChoosingDestination = false
+          },
+          onCancel: {
+            entryText = ""
+            isChoosingDestination = false
+          }
+        )
+      }
     }
     .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
     .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() { loadEntries() } } }
@@ -61,11 +74,11 @@ private extension ContentView {
             showExtras = false
           }
         }
+      }, onAdd: { text in
+        entryText = text
+        isChoosingDestination = true
       }
-    ) { text in
-      entryText = text
-      isChoosingDestination = true
-    }
+    )
   }
 
   @ViewBuilder
@@ -92,7 +105,6 @@ private extension ContentView {
       isChoosingDestination: $isChoosingDestination,
       entryText: $entryText,
       onScroll: handleScroll,
-      onAdd: add,
       onDelete: delete
     )
   }
@@ -195,8 +207,10 @@ private extension ContentView {
     guard !trimmed.isEmpty else { return }
 
     withAnimation {
-      modelContext.insert(FoodEntry(name: trimmed, isForMorsel: isForMorsel))
+      let entry = FoodEntry(name: trimmed, isForMorsel: isForMorsel)
+      modelContext.insert(entry)
       try? modelContext.save()
+      Analytics.track(CreateEntryEvent(entry: entry))
       loadEntries()
     }
 
