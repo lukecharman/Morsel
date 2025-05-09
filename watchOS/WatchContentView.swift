@@ -99,6 +99,7 @@ struct WatchContentView: View {
       await WatchSessionManager.shared.saveMealLocally(
         name: trimmedName,
         id: UUID(),
+        isForMorsel: false,
         origin: "watch"
       )
 

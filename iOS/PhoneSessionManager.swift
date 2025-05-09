@@ -2,10 +2,8 @@ import SwiftData
 import WatchConnectivity
 import WidgetKit
 
-class PhoneSessionManager: NSObject, ObservableObject {
-  func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {}
-  func sessionDidBecomeInactive(_ session: WCSession) {}
-  func sessionDidDeactivate(_ session: WCSession) {}
+class PhoneSessionManager: NSObject, WCSessionDelegate, ObservableObject {
+  static var shared = PhoneSessionManager()
   
   override init() {
     super.init()
@@ -14,44 +12,53 @@ class PhoneSessionManager: NSObject, ObservableObject {
       WCSession.default.activate()
     }
   }
-}
-
-extension PhoneSessionManager: WCSessionDelegate {
+  
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-    if let mealName = message["newMealName"] as? String,
-       let mealIDString = message["newMealID"] as? String,
-       let mealID = UUID(uuidString: mealIDString),
-       let mealOrigin = message["origin"] as? String {
-      Task {
-        if mealOrigin == "watch" {
-          await saveMealLocally(name: mealName, id: mealID)
-          WidgetCenter.shared.reloadAllTimelines()
-        }
-      }
+    guard let name = message["name"] as? String else { return }
+    guard let idString = message["idString"] as? String else { return }
+    guard let id = UUID(uuidString: idString) else { return }
+    guard let isForMorselString = message["forMorsel"] as? String else { return }
+    guard let isForMorsel = Bool(isForMorselString) else { return }
+    guard let origin = message["origin"] as? String else { return }
+    
+    // We don't want to save an entry that came from the phone if it's bounced to watch and back.
+    guard origin != "phone" else { return }
+    
+    Task {
+      await saveMealLocally(name: name, id: id, isForMorsel: isForMorsel, origin: origin)
     }
   }
-
+  
   @MainActor
-  private func saveMealLocally(name: String, id: UUID) async {
+  func saveMealLocally(name: String, id: UUID, isForMorsel: Bool, origin: String) async {
     do {
       let container: ModelContainer = .sharedContainer
       let context = container.mainContext
+      let existingFetch = FetchDescriptor<FoodEntry>(predicate: #Predicate { $0.id == id })
 
-      let existingFetch = FetchDescriptor<FoodEntry>(
-        predicate: #Predicate { $0.id == id }
-      )
-
-      let existing = try context.fetch(existingFetch)
-
-      if !existing.isEmpty {
-        return
-      }
-
-      let newEntry = FoodEntry(id: id, name: name, timestamp: Date())
-      context.insert(newEntry)
-      try context.save()
+      guard try context.fetch(existingFetch).isEmpty else { return }
+      
+      try await Adder.add(id: id, name: name, isForMorsel: isForMorsel, context: .phoneFromWatch)
     } catch {
       print("Phone failed to save new meal: \(error)")
     }
   }
+
+  func notifyWatchOfNewMeal(name: String, id: UUID, isForMorsel: Bool) {
+    if WCSession.default.isReachable {
+      let message = [
+        "name": name,
+        "idString": id.uuidString,
+        "forMorsel": isForMorsel.description,
+        "origin": "phone"
+      ]
+      WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
+        print("Failed to send meal to Watch: \(error)")
+      })
+    }
+  }
+
+  func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {}
+  func sessionDidBecomeInactive(_ session: WCSession) {}
+  func sessionDidDeactivate(_ session: WCSession) {}
 }

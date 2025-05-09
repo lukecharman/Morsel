@@ -224,12 +224,11 @@ private extension ContentView {
     let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { return }
 
-    withAnimation {
-      let entry = FoodEntry(name: trimmed, isForMorsel: isForMorsel)
-      modelContext.insert(entry)
-      try? modelContext.save()
-      Analytics.track(CreateEntryEvent(entry: entry))
-      loadEntries()
+    _ = withAnimation {
+      Task {
+        try await Adder.add(name: trimmed, isForMorsel: isForMorsel, context: .phoneApp)
+        loadEntries()
+      }
     }
 
     WidgetCenter.shared.reloadAllTimelines()

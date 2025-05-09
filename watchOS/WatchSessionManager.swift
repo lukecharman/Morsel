@@ -14,52 +14,42 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   }
 
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-    guard let mealName = message["newMealName"] as? String,
-          let mealIDString = message["newMealID"] as? String,
-          let mealID = UUID(uuidString: mealIDString),
-          let origin = message["origin"] as? String else {
-      return
-    }
+    guard let name = message["name"] as? String else { return }
+    guard let idString = message["idString"] as? String else { return }
+    guard let id = UUID(uuidString: idString) else { return }
+    guard let isForMorselString = message["forMorsel"] as? String else { return }
+    guard let isForMorsel = Bool(isForMorselString) else { return }
+    guard let origin = message["origin"] as? String else { return }
+
+    // We don't want to save an entry that came from the watch if it's bounced to phone and back.
     guard origin != "watch" else { return }
 
     Task {
-      await saveMealLocally(name: mealName, id: mealID, origin: origin)
+      await saveMealLocally(name: name, id: id, isForMorsel: isForMorsel, origin: origin)
     }
   }
 
   @MainActor
-  func saveMealLocally(name: String, id: UUID, origin: String) async {
+  func saveMealLocally(name: String, id: UUID, isForMorsel: Bool, origin: String) async {
     do {
       let container: ModelContainer = .sharedContainer
       let context = container.mainContext
+      let existingFetch = FetchDescriptor<FoodEntry>(predicate: #Predicate { $0.id == id })
 
-      let existingFetch = FetchDescriptor<FoodEntry>(
-        predicate: #Predicate { $0.id == id }
-      )
+      guard try context.fetch(existingFetch).isEmpty else { return }
 
-      let existing = try context.fetch(existingFetch)
-
-      if !existing.isEmpty {
-        return
-      }
-
-      let newEntry = FoodEntry(id: id, name: name)
-      context.insert(newEntry)
-      try context.save()
-
-      if origin == "watch" {
-        notifyPhoneOfNewMeal(name: name, id: id)
-      }
+      try await Adder.add(id: id, name: name, isForMorsel: isForMorsel, context: .watchFromPhone)
     } catch {
-      print("Failed to save meal: \(error)")
+      print("Watch failed to save new meal: \(error)")
     }
   }
 
-  func notifyPhoneOfNewMeal(name: String, id: UUID) {
+  func notifyPhoneOfNewMeal(name: String, id: UUID, isForMorsel: Bool) {
     if WCSession.default.isReachable {
       let message = [
-        "newMealName": name,
-        "newMealID": id.uuidString,
+        "name": name,
+        "idString": id.uuidString,
+        "forMorsel": isForMorsel.description,
         "origin": "watch"
       ]
       WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in

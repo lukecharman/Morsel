@@ -29,10 +29,6 @@ struct MorselApp: App {
   }
 }
 
-class AppState: ObservableObject {
-  @Published var shouldOpenMouth: Bool = false
-}
-
 class AppDelegate: NSObject, UIApplicationDelegate {
   @preconcurrency
   func application(

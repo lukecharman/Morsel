@@ -2,7 +2,6 @@
 
  MUST
  ----
- * Connect tapping Morsel to add entry via an App Intent.
  * Do one that works via adding text, too. "Feed x to Morsel".
  * Reuse that in Shortcuts / Siri / Control Center.
  * More Analytics events.

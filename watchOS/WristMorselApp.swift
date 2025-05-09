@@ -8,7 +8,8 @@ struct WristMorsel_Watch_AppApp: App {
   var body: some Scene {
     WindowGroup {
       WatchContentView()
+        .modelContainer(.sharedContainer)
+        .onAppear { Analytics.setUp() }
     }
-    .modelContainer(.sharedContainer)
   }
 }
