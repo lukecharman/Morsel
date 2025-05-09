@@ -10,6 +10,7 @@ struct WatchContentView: View {
   private var todayEntries: [FoodEntry]
 
   @State private var showingMealPrompt = false
+  @State private var showingDestinationPicker = false
   @State private var mealName = ""
   @State private var saving = false
 
@@ -34,51 +35,69 @@ struct WatchContentView: View {
           .onTapGesture {
             showingMealPrompt = true
           }
-      }
-
-      Text("Today’s Morsels")
-        .font(MorselFont.widgetTitle)
-        .bold()
-        .padding(.bottom, 4)
-      if todayEntries.isEmpty {
-        Text("The first snack is the hardest...")
-          .font(MorselFont.widgetBody)
-          .foregroundColor(.secondary)
-          .multilineTextAlignment(.center)
-      } else {
-        ForEach(todayEntries) { meal in
-          HStack {
-            Text(meal.name)
-              .font(MorselFont.widgetBody)
-              .lineLimit(1)
-              .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(meal.timestamp, format: .dateTime.hour().minute())
-              .font(MorselFont.caption)
-              .foregroundColor(.secondary)
+          .offset(y: -12)
+        Text("Today’s Morsels")
+          .font(MorselFont.widgetTitle)
+          .padding(.bottom, 4)
+          .offset(y: -12)
+        if todayEntries.isEmpty {
+          Text("The first snack is the hardest...")
+            .font(MorselFont.widgetBody)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .offset(y: -12)
+        } else {
+          ForEach(todayEntries) { meal in
+            HStack {
+              Image(systemName: meal.isForMorsel ? "face.smiling.fill" : "person.fill")
+                .font(.footnote)
+                .foregroundStyle(.blue)
+                .scaleEffect(CGSize(width: 0.7, height: 0.7))
+              Text(meal.name)
+                .font(MorselFont.widgetBody)
+                .opacity(meal.isForMorsel ? 0.8 : 1)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+              Spacer()
+              Text(meal.timestamp, format: .dateTime.hour().minute())
+                .font(MorselFont.caption)
+                .foregroundColor(.secondary)
+            }
           }
+          .offset(y: -12)
         }
       }
     }
     .sheet(isPresented: $showingMealPrompt) {
       mealEntrySheet
     }
+    .sheet(isPresented: $showingDestinationPicker) {
+      destinationPickerSheet
+    }
   }
 
   var mealEntrySheet: some View {
     VStack {
-      Text("What did you eat?")
-        .font(.headline)
-        .padding()
+      Spacer()
+        .frame(height: 12)
+      Text("What's on the menu?")
+        .font(MorselFont.body)
       TextField("Meal name", text: $mealName)
-        .padding()
         .submitLabel(.done)
+        .font(MorselFont.body)
         .onSubmit {
-          saveMeal()
+          withAnimation {
+            showingMealPrompt = false
+            showingDestinationPicker = true
+          }
         }
       Button("Save") {
-        saveMeal()
+        withAnimation {
+          showingMealPrompt = false
+          showingDestinationPicker = true
+        }
       }
+      .font(MorselFont.body)
       .buttonStyle(.borderedProminent)
       .disabled(mealName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
       .padding()
@@ -88,18 +107,38 @@ struct WatchContentView: View {
     .padding()
   }
 
-  private func saveMeal() {
+  var destinationPickerSheet: some View {
+    VStack {
+      Text("Who was it for?")
+        .font(MorselFont.body)
+        .padding()
+      Button("For me") {
+        saveMeal(isForMorsel: false)
+      }
+      .font(MorselFont.body)
+      .buttonStyle(.bordered)
+      Button("For Morsel") {
+        saveMeal(isForMorsel: true)
+      }
+      .font(MorselFont.body)
+      .buttonStyle(.bordered)
+
+      Spacer()
+    }
+    .padding()
+  }
+
+  private func saveMeal(isForMorsel: Bool) {
     let trimmedName = mealName.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmedName.isEmpty else { return }
 
     saving = true
-    showingMealPrompt = false
 
     Task {
       await WatchSessionManager.shared.saveMealLocally(
         name: trimmedName,
         id: UUID(),
-        isForMorsel: false,
+        isForMorsel: isForMorsel,
         origin: "watch"
       )
 
@@ -107,6 +146,11 @@ struct WatchContentView: View {
 
       mealName = ""
       saving = false
+
+      withAnimation {
+        showingMealPrompt = false
+        showingDestinationPicker = false
+      }
 
       WKInterfaceDevice.current().play(.success)
     }
