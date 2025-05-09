@@ -14,16 +14,17 @@ struct MorselApp: App {
     WindowGroup {
       ContentView(shouldOpenMouth: $shouldOpenMouth)
         .modelContainer(.sharedContainer)
-        .onOpenURL { url in
-          if url.absoluteString == "morsel://add" {
-            shouldOpenMouth = true
-          } else if url.absoluteString == "morsel://list" {
-            shouldOpenMouth = false
-          }
-        }
-        .onAppear {
-          Analytics.setUp()
-        }
+        .onOpenURL { handleDeepLink($0) }
+        .onAppear { Analytics.setUp() }
+    }
+  }
+
+  func handleDeepLink(_ url: URL) {
+    switch url.host() {
+    case "add":
+      shouldOpenMouth = true
+    default:
+      shouldOpenMouth = false
     }
   }
 }

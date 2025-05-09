@@ -69,12 +69,8 @@ struct FoodEntryWidgetView: View {
         Spacer()
       }
       GeometryReader { geo in
-        Button(intent: AddEntryIntent()) {
+        Link(destination: URL(string: "morsel://add")!) {
           StaticMorsel()
-            .frame(
-              width: widgetFamily == .systemSmall ? 40 : 40,
-              height: widgetFamily == .systemSmall ? 40 : 40
-            )
         }
         .frame(
           width: widgetFamily == .systemSmall ? 40 : 40,
