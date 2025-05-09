@@ -93,8 +93,6 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				FeedMeIntent.swift,
-				FeedMorselIntent.swift,
 				"Fonts/Quicksand-Bold.ttf",
 				"Fonts/Quicksand-Light.ttf",
 				"Fonts/Quicksand-Medium.ttf",
@@ -116,7 +114,7 @@
 				Analytics/Analytics.swift,
 				Analytics/Event.swift,
 				Analytics/Events/CreateEntryEvent.swift,
-				FeedMeIntent.swift,
+				FeedMorselIntent.swift,
 				"Fonts/Quicksand-Bold.ttf",
 				"Fonts/Quicksand-Light.ttf",
 				"Fonts/Quicksand-Medium.ttf",
@@ -124,6 +122,7 @@
 				"Fonts/Quicksand-SemiBold.ttf",
 				FoodEntry.swift,
 				"ModelContainer+Morsel.swift",
+				MorselShortcuts.swift,
 				"Notification+Morsel.swift",
 				StaticMorsel.swift,
 				Style.swift,
@@ -168,7 +167,6 @@
 		A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				FeedMeIntent.swift,
 				"Fonts/Quicksand-Bold.ttf",
 				"Fonts/Quicksand-Light.ttf",
 				"Fonts/Quicksand-Medium.ttf",
