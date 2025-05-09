@@ -14,7 +14,11 @@ struct BottomBar: View {
             ToggleButton(
               isActive: showStats,
               systemImage: "chart.bar",
-              action: { withAnimation { showStats.toggle() } }
+              action: {
+                withAnimation {
+                  toggleStats()
+                }
+              }
             )
             .padding(.leading, 24)
             .transition(.blurReplace)
@@ -26,7 +30,11 @@ struct BottomBar: View {
             ToggleButton(
               isActive: showExtras,
               systemImage: "ellipsis",
-              action: { withAnimation { showExtras.toggle() } }
+              action: {
+                withAnimation {
+                  toggleExtras()
+                }
+              }
             )
             .padding(.trailing, 24)
             .transition(.blurReplace)
@@ -40,5 +48,19 @@ struct BottomBar: View {
       .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
     }
     .ignoresSafeArea()
+  }
+
+  private func toggleStats() {
+    showStats.toggle()
+    if showStats {
+      showExtras = false
+    }
+  }
+
+  private func toggleExtras() {
+    showExtras.toggle()
+    if showExtras {
+      showStats = false
+    }
   }
 }

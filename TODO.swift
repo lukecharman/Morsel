@@ -5,8 +5,6 @@
  * Finish the AppIntents for Siri, etc.
  * Deep link option in Control Center.
  * More Analytics events.
- * Watch has a bug with the WCSession link to phone.
- * You can tap both extras and stats buttons to trigger them, and you get stuck. One or t'other.
  * Try to get iOS widget updated immediately when watch app adds entry and vice versa.
  * Watch needs its own DestinationPicker, and some way to separate Me vs. Morsel in the list.
  * Clean up watch's UI and widgets.
