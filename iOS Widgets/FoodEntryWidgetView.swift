@@ -62,6 +62,9 @@ struct FoodEntryWidgetView: View {
           width: widgetFamily == .systemSmall ? 40 : 40,
           height: widgetFamily == .systemSmall ? 40 : 40
         )
+        .scaleEffect(
+          widgetFamily == .systemSmall ? CGSize(width: 0.6, height: 0.6) : CGSize(width: 0.7, height: 0.7)
+        )
         .position(
           x: geo.size.width - (widgetFamily == .systemSmall ? 22 : 36),
           y: geo.size.height - (widgetFamily == .systemSmall ? 18 : 26)
