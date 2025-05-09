@@ -69,20 +69,22 @@ struct FoodEntryWidgetView: View {
         Spacer()
       }
       GeometryReader { geo in
-        StaticMorsel()
-          .scaleEffect(
-            CGSize(
-              width: widgetFamily == .systemSmall ? 0.5 : 0.8,
-              height: widgetFamily == .systemSmall ? 0.5 : 0.8
+        Button(intent: AddEntryIntent()) {
+          StaticMorsel()
+            .frame(
+              width: widgetFamily == .systemSmall ? 40 : 40,
+              height: widgetFamily == .systemSmall ? 40 : 40
             )
-          )
-          .position(
-            x: geo.size.width - (widgetFamily == .systemSmall ? 22 : 36),
-            y: geo.size.height - (widgetFamily == .systemSmall ? 18 : 26)
-          )
-          .widgetURL(URL(string: "morsel://add")!)
+        }
+        .frame(
+          width: widgetFamily == .systemSmall ? 40 : 40,
+          height: widgetFamily == .systemSmall ? 40 : 40
+        )
+        .position(
+          x: geo.size.width - (widgetFamily == .systemSmall ? 22 : 36),
+          y: geo.size.height - (widgetFamily == .systemSmall ? 18 : 26)
+        )
       }
-      .allowsHitTesting(false)
     }
     .ignoresSafeArea()
     .widgetURL(URL(string: "morsel://list")!)
