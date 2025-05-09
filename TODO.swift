@@ -2,8 +2,8 @@
 
  MUST
  ----
- * Do one that works via adding text, too. "Feed x to Morsel".
- * Reuse that in Shortcuts / Siri / Control Center.
+ * Finish the AppIntents for Siri, etc.
+ * Deep link option in Control Center.
  * More Analytics events.
  * Watch has a bug with the WCSession link to phone.
  * You can tap both extras and stats buttons to trigger them, and you get stuck. One or t'other.
