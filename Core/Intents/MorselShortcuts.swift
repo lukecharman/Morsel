@@ -20,5 +20,5 @@ struct MorselShortcuts: AppShortcutsProvider {
       systemImageName: "fork.knife"
     )
   }
-  static var shortcutTileColor: ShortcutTileColor = .grayBlue
+  static var shortcutTileColor: ShortcutTileColor = .blue
 }

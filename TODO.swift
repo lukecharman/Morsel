@@ -2,7 +2,6 @@
 
  MUST
  ----
- * Deep link option in Control Center.
  * More Analytics events.
 
  * Clean up Morsel vs. keyboard height once and for all.
