@@ -9,7 +9,6 @@
     * Maybe he disappears, keyboard opens, then he slides down from the top with a little rope?
  * Add more expression to Morsel.
     * Gradual smile / sad while you're deciding who a morsel is for.
- * Clean up the DestinationPicker's UI a little, fonts, etc.
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
  * Add an Onboarding of some kind.
 
