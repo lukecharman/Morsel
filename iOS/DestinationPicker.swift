@@ -31,6 +31,7 @@ struct DestinationPicker: View {
                 .font(.largeTitle)
                 .foregroundColor(draggedFarEnoughLeft ? .accentColor : .primary.opacity(0.6))
               Text("Me")
+                .font(MorselFont.heading)
                 .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,6 +43,7 @@ struct DestinationPicker: View {
                 .font(.largeTitle)
                 .foregroundColor(draggedFarEnoughRight ? .accentColor : .primary.opacity(0.6))
               Text("Morsel")
+                .font(MorselFont.heading)
                 .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -75,7 +77,8 @@ struct DestinationPicker: View {
           Button("Cancel") {
             onCancel()
           }
-          .foregroundColor(.primary.opacity(0.6))
+          .font(MorselFont.body)
+          .foregroundColor(.primary.opacity(0.85))
         }
         .padding()
       }
