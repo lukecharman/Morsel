@@ -80,9 +80,10 @@ struct WatchContentView: View {
     VStack {
       Spacer()
         .frame(height: 12)
-      Text("What's on the menu?")
+      Text("What's cookin'?")
         .font(MorselFont.body)
-      TextField("Meal name", text: $mealName)
+        .lineLimit(2)
+      TextField("...pizza?", text: $mealName)
         .submitLabel(.done)
         .font(MorselFont.body)
         .onSubmit {
@@ -91,14 +92,14 @@ struct WatchContentView: View {
             showingDestinationPicker = true
           }
         }
-      Button("Save") {
+      Button("Next") {
         withAnimation {
           showingMealPrompt = false
           showingDestinationPicker = true
         }
       }
       .font(MorselFont.body)
-      .buttonStyle(.borderedProminent)
+      .buttonStyle(.bordered)
       .disabled(mealName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
       .padding()
 
@@ -109,20 +110,22 @@ struct WatchContentView: View {
 
   var destinationPickerSheet: some View {
     VStack {
+      StaticMorsel()
       Text("Who was it for?")
         .font(MorselFont.body)
         .padding()
-      Button("For me") {
-        saveMeal(isForMorsel: false)
+      HStack {
+        Button("For\nMe") {
+          saveMeal(isForMorsel: false)
+        }
+        .font(MorselFont.body)
+        .buttonStyle(.bordered)
+        Button("For Morsel") {
+          saveMeal(isForMorsel: true)
+        }
+        .font(MorselFont.body)
+        .buttonStyle(.bordered)
       }
-      .font(MorselFont.body)
-      .buttonStyle(.bordered)
-      Button("For Morsel") {
-        saveMeal(isForMorsel: true)
-      }
-      .font(MorselFont.body)
-      .buttonStyle(.bordered)
-
       Spacer()
     }
     .padding()
