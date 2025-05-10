@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import WidgetKit
 
 @MainActor
 struct Adder {
@@ -23,6 +24,8 @@ struct Adder {
     let model = FoodEntry(id: buildUUID(id: id), name: name, timestamp: timestamp, isForMorsel: isForMorsel)
     container.mainContext.insert(model)
     try container.mainContext.save()
+
+    WidgetCenter.shared.reloadAllTimelines()
 
     let event = CreateEntryEvent(entry: model, context: context)
     Analytics.track(event)
