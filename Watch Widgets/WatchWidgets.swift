@@ -86,6 +86,8 @@ struct QuickLogNoCountView: View {
       QuickLogNoCountCornerView()
     case .accessoryCircular:
       QuickLogNoCountCircularView()
+    case .accessoryInline:
+      QuickLogNoCountInlineView()
     default:
       QuickLogNoCountCornerView()
     }
@@ -96,20 +98,23 @@ struct QuickLogCornerView: View {
   var entry: QuickLogWithCountEntry
 
   var body: some View {
-    Text("\(entry.mealCount)")
-      .widgetCurvesContent()
-      .widgetLabel("Morsels")
-      .widgetURL(URL(string: "morsel://add")!)
-      .containerBackground(.fill.tertiary, for: .widget)
+    VStack {
+      Text("\(entry.mealCount)")
+        .widgetCurvesContent()
+        .widgetLabel("Add Morsel")
+        .widgetAccentable()
+        .widgetURL(URL(string: "morsel://add")!)
+        .containerBackground(.fill.tertiary, for: .widget)
+    }
   }
 }
 
 struct QuickLogNoCountCornerView: View {
   var body: some View {
-    Image(systemName: "plus")
-      .font(.system(size: 12, weight: .bold))
-      .widgetCurvesContent()
-      .widgetLabel("Morsels")
+    Image(systemName: "fork.knife")
+      .font(.system(size: 22, weight: .bold))
+      .offset(x: 4, y: 4)
+      .widgetLabel("Feed")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
@@ -123,11 +128,12 @@ struct QuickLogCircularView: View {
       Circle().fill(.white.opacity(0.1))
       VStack {
         Text("\(entry.mealCount)")
-          .font(.system(size: 18, weight: .semibold))
+          .font(.system(size: 24, weight: .semibold))
           .foregroundColor(.white)
-        Text("Log")
-          .font(.footnote)
+          .widgetAccentable()
+        Image(systemName: "fork.knife")
           .widgetCurvesContent()
+          .font(.system(size: 12, weight: .semibold))
       }
     }
     .widgetLabel("Log")
@@ -141,11 +147,7 @@ struct QuickLogNoCountCircularView: View {
     ZStack {
       Circle().fill(.white.opacity(0.1))
       VStack {
-        StaticMorsel()
-          .scaleEffect(CGSize(width: 0.3, height: 0.3), anchor: .center)
-        Text("Log")
-          .font(.footnote)
-          .widgetCurvesContent()
+        Image(systemName: "fork.knife")
       }
     }
     .widgetURL(URL(string: "morsel://add")!)
@@ -157,12 +159,13 @@ struct QuickLogRectangularView: View {
   var entry: QuickLogWithCountEntry
 
   var body: some View {
-    HStack {
-      Image(systemName: "fork.knife.circle.fill")
+    HStack(spacing: 12) {
+      Image(systemName: "fork.knife")
         .foregroundColor(.accentColor)
       VStack(alignment: .leading) {
-        Text("Log Meal")
+        Text("Add Morsel")
           .font(.headline)
+          .widgetAccentable()
         Text("Today: \(entry.mealCount)")
           .font(.caption2)
           .foregroundColor(.secondary)
@@ -177,9 +180,20 @@ struct QuickLogInlineView: View {
   var entry: QuickLogWithCountEntry
 
   var body: some View {
-    Text("Morsels today: \(entry.mealCount)")
+    Text("Morsels: \(entry.mealCount)")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
+  }
+}
+
+struct QuickLogNoCountInlineView: View {
+  var body: some View {
+    HStack(spacing: 24) {
+      Image(systemName: "fork.knife")
+      Text("Add Morsel")
+        .widgetURL(URL(string: "morsel://add")!)
+        .containerBackground(.fill.tertiary, for: .widget)
+    }
   }
 }
 
@@ -225,14 +239,7 @@ struct WatchWidgetBundle: WidgetBundle {
   }
 }
 
-#Preview(as: .accessoryCircular, widget: {
-  QuickLogNoCountWidget()
-}, timeline: {
-  QuickLogNoCountEntry(date: Date())
-  QuickLogNoCountEntry(date: Date())
-})
-
-#Preview(as: .accessoryCircular, widget: {
+#Preview(as: .accessoryRectangular, widget: {
   QuickLogWithCountWidget()
 }, timeline: {
   QuickLogWithCountEntry(date: Date(), mealCount: 0)
