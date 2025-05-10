@@ -5,6 +5,6 @@ import SwiftUI
 struct FoodEntryWidgetBundle: WidgetBundle {
   var body: some Widget {
     FoodEntryWidget()
-    FeedMorselWidget()
+    AddEntryControl()
   }
 }

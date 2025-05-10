@@ -93,6 +93,7 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Intents/LaunchAppIntent.swift,
 				Model/FoodEntry.swift,
 				"Model/ModelContainer+Morsel.swift",
 				"UI/Fonts/Quicksand-Bold.ttf",

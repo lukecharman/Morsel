@@ -2,7 +2,6 @@
 
  MUST
  ----
- * Finish the AppIntents for Siri, etc.
  * Deep link option in Control Center.
  * More Analytics events.
 
@@ -17,6 +16,7 @@
  SHOULD
  ------
  * More haptics / sound effects (with a toggle in Extras).
+ * Figure out this custom AppEntity thing for speaking the item in one term to Siri.
 
  COULD
  -----
