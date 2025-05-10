@@ -34,7 +34,7 @@ struct ContentView: View {
       }
 
       if isChoosingDestination {
-        DestinationPicker(
+        DestinationPickerView(
           onPick: { isForMorsel in
             add(entryText, isForMorsel: isForMorsel)
             entryText = ""
@@ -100,7 +100,7 @@ private extension ContentView {
   @ViewBuilder
   var bottomBar: some View {
     if !isKeyboardVisible {
-      BottomBar(
+      BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,
         isKeyboardVisible: isKeyboardVisible

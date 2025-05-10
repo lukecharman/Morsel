@@ -2,6 +2,10 @@ import CoreData
 import Foundation
 import UIKit
 
+extension Notification.Name {
+  static let cloudKitDataChanged = Notification.Name("cloudKitDataChanged")
+}
+
 struct NotificationPublishers {
   static var keyboardWillShow: NotificationCenter.Publisher {
     NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)

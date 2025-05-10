@@ -93,55 +93,37 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Fonts/Quicksand-Bold.ttf",
-				"Fonts/Quicksand-Light.ttf",
-				"Fonts/Quicksand-Medium.ttf",
-				"Fonts/Quicksand-Regular.ttf",
-				"Fonts/Quicksand-SemiBold.ttf",
-				FoodEntry.swift,
-				GradientColors.swift,
-				"ModelContainer+Morsel.swift",
-				"Notification+Morsel.swift",
-				StaticMorsel.swift,
-				Style.swift,
+				Model/FoodEntry.swift,
+				"Model/ModelContainer+Morsel.swift",
+				"UI/Fonts/Quicksand-Bold.ttf",
+				"UI/Fonts/Quicksand-Light.ttf",
+				"UI/Fonts/Quicksand-Medium.ttf",
+				"UI/Fonts/Quicksand-Regular.ttf",
+				"UI/Fonts/Quicksand-SemiBold.ttf",
+				UI/GradientColors.swift,
+				UI/StaticMorsel.swift,
+				UI/Style.swift,
 			);
 			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
 		};
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Adder.swift,
 				Analytics/Analytics.swift,
 				Analytics/Event.swift,
 				Analytics/Events/CreateEntryEvent.swift,
-				FeedMorselIntent.swift,
-				"Fonts/Quicksand-Bold.ttf",
-				"Fonts/Quicksand-Light.ttf",
-				"Fonts/Quicksand-Medium.ttf",
-				"Fonts/Quicksand-Regular.ttf",
-				"Fonts/Quicksand-SemiBold.ttf",
-				FoodEntry.swift,
-				"ModelContainer+Morsel.swift",
-				MorselShortcuts.swift,
-				"Notification+Morsel.swift",
-				StaticMorsel.swift,
-				Style.swift,
+				Model/Adder.swift,
+				Model/FoodEntry.swift,
+				"Model/ModelContainer+Morsel.swift",
+				"UI/Fonts/Quicksand-Bold.ttf",
+				"UI/Fonts/Quicksand-Light.ttf",
+				"UI/Fonts/Quicksand-Medium.ttf",
+				"UI/Fonts/Quicksand-Regular.ttf",
+				"UI/Fonts/Quicksand-SemiBold.ttf",
+				UI/StaticMorsel.swift,
+				UI/Style.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
-		};
-		A378287D2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				HeaderCard.swift,
-			);
-			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
-		};
-		A378287E2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morse Widgets (watchOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				HeaderCard.swift,
-			);
-			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
 		};
 		A3AE56AB2DC2731A00608E0D /* Exceptions for "Watch Widgets" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -167,24 +149,22 @@
 		A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Fonts/Quicksand-Bold.ttf",
-				"Fonts/Quicksand-Light.ttf",
-				"Fonts/Quicksand-Medium.ttf",
-				"Fonts/Quicksand-Regular.ttf",
-				"Fonts/Quicksand-SemiBold.ttf",
-				FoodEntry.swift,
-				"ModelContainer+Morsel.swift",
-				"Notification+Morsel.swift",
-				StaticMorsel.swift,
-				Style.swift,
+				Model/FoodEntry.swift,
+				"Model/ModelContainer+Morsel.swift",
+				"UI/Fonts/Quicksand-Bold.ttf",
+				"UI/Fonts/Quicksand-Light.ttf",
+				"UI/Fonts/Quicksand-Medium.ttf",
+				"UI/Fonts/Quicksand-Regular.ttf",
+				"UI/Fonts/Quicksand-SemiBold.ttf",
+				UI/StaticMorsel.swift,
+				UI/Style.swift,
 			);
 			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
 		};
 		A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				HeaderCard.swift,
-				MorselTextButton.swift,
+				MouthAddButton.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
@@ -219,8 +199,6 @@
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
-				A378287D2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */,
-				A378287E2DC6059300FDFABA /* Exceptions for "iOS" folder in "Morse Widgets (watchOS)" target */,
 			);
 			path = iOS;
 			sourceTree = "<group>";

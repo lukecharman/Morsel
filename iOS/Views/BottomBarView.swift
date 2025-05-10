@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BottomBar: View {
+struct BottomBarView: View {
   @Binding var showStats: Bool
   @Binding var showExtras: Bool
   let isKeyboardVisible: Bool

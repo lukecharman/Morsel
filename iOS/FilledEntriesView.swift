@@ -32,10 +32,10 @@ struct FilledEntriesView: View {
               .padding()
 
             ForEach(group.entries) { entry in
-              DeletableRow(isDraggingHorizontally: $isDraggingHorizontally) {
+              DeletableRowView(isDraggingHorizontally: $isDraggingHorizontally) {
                 onDelete(entry)
               } content: {
-                MealRow(entry: entry)
+                MealRowView(entry: entry)
                   .frame(minHeight: 44)
               }
               .contentShape(Rectangle())

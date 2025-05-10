@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DestinationPicker: View {
+struct DestinationPickerView: View {
   var onPick: (Bool) -> Void
   var onCancel: () -> Void
 

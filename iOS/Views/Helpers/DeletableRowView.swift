@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DeletableRow<Content: View>: View {
+struct DeletableRowView<Content: View>: View {
   @Binding var isDraggingHorizontally: Bool
 
   let onDelete: () -> Void

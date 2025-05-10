@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct MealRow: View {
+struct MealRowView: View {
   var entry: FoodEntry
 
   var body: some View {
@@ -35,7 +35,7 @@ struct MealRow: View {
 }
 
 #Preview {
-  MealRow(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now))
+  MealRowView(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now))
     .padding()
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
