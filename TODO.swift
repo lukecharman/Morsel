@@ -5,8 +5,7 @@
  * Finish the AppIntents for Siri, etc.
  * Deep link option in Control Center.
  * More Analytics events.
- * Watch needs its own DestinationPicker, and some way to separate Me vs. Morsel in the list.
- * Clean up watch's UI and widgets.
+ * Clean up watch's widgets.
  * Clean up Morsel vs. keyboard height once and for all.
     * Maybe he disappears, keyboard opens, then he slides down from the top with a little rope?
  * Add more expression to Morsel.

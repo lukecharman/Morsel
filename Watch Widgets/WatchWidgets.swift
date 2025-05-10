@@ -97,9 +97,8 @@ struct QuickLogCornerView: View {
 
   var body: some View {
     Text("\(entry.mealCount)")
-      .font(.system(size: 12, weight: .bold))
       .widgetCurvesContent()
-      .widgetLabel("Log Meal")
+      .widgetLabel("Morsels")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
@@ -110,7 +109,7 @@ struct QuickLogNoCountCornerView: View {
     Image(systemName: "plus")
       .font(.system(size: 12, weight: .bold))
       .widgetCurvesContent()
-      .widgetLabel("Log Meal")
+      .widgetLabel("Morsels")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
@@ -143,6 +142,7 @@ struct QuickLogNoCountCircularView: View {
       Circle().fill(.white.opacity(0.1))
       VStack {
         StaticMorsel()
+          .scaleEffect(CGSize(width: 0.3, height: 0.3), anchor: .center)
         Text("Log")
           .font(.footnote)
           .widgetCurvesContent()
@@ -177,7 +177,7 @@ struct QuickLogInlineView: View {
   var entry: QuickLogWithCountEntry
 
   var body: some View {
-    Text("Meals today: \(entry.mealCount)")
+    Text("Morsels today: \(entry.mealCount)")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
@@ -224,3 +224,19 @@ struct WatchWidgetBundle: WidgetBundle {
     QuickLogNoCountWidget()
   }
 }
+
+#Preview(as: .accessoryCircular, widget: {
+  QuickLogNoCountWidget()
+}, timeline: {
+  QuickLogNoCountEntry(date: Date())
+  QuickLogNoCountEntry(date: Date())
+})
+
+#Preview(as: .accessoryCircular, widget: {
+  QuickLogWithCountWidget()
+}, timeline: {
+  QuickLogWithCountEntry(date: Date(), mealCount: 0)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(200), mealCount: 1)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(400), mealCount: 2)
+})
+
