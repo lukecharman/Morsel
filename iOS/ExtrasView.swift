@@ -60,12 +60,12 @@ struct ExtrasView: View {
     .sheet(isPresented: $showColorSheet) {
       VStack {
         Button {
-          AppSettings.shared.morselColor = .orange
+          AppSettings.shared.morselColor = UIColor(Color.orange)
         } label: {
           Text("Orange")
         }
         Button {
-          AppSettings.shared.morselColor = .blue
+          AppSettings.shared.morselColor = UIColor(Color.blue)
         } label: {
           Text("Blue")
         }

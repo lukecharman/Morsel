@@ -2,8 +2,6 @@
 
  MUST
  ----
- * More Analytics events.
-
  * Clean up Morsel vs. keyboard height once and for all.
     * Maybe he disappears, keyboard opens, then he slides down from the top with a little rope?
  * Add more expression to Morsel.
@@ -15,6 +13,7 @@
  * Add an Onboarding of some kind.
  * Decide on subscription vs. one-off. £1.99 a year? £0.99 a year?
  * Implement IAPs.
+ * More Analytics events.
 
  SHOULD
  ------

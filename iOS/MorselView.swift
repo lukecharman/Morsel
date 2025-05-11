@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MouthAddButton: View {
+struct MorselView: View {
   @Binding var shouldOpen: Bool
 
   @State private var isOpen = false
@@ -83,7 +83,11 @@ struct MouthAddButton: View {
       ),
       style: .continuous
     )
-    .fill(Color(uiColor: AppSettings.shared.morselColor))
+    .fill(LinearGradient(
+      colors: [
+        Color(uiColor: AppSettings.shared.morselColor),
+        Color(uiColor: AppSettings.shared.morselColor).opacity(0.9),
+      ], startPoint: .topLeading, endPoint: .bottomTrailing))
     .frame(
       width: isOpen ? 240 : 86,
       height: isOpen ? 120 : 64
@@ -247,7 +251,7 @@ struct MouthAddButton: View {
 }
 
 #Preview {
-  MouthAddButton(shouldOpen: .constant(false)) { _ in }
+  MorselView(shouldOpen: .constant(false)) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif

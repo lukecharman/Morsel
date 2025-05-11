@@ -12,10 +12,10 @@ class AppSettings {
   var morselColor: UIColor {
     get {
       guard let data = defaults.data(forKey: Key.morselColor.rawValue) else {
-        return .blue
+        return UIColor(Color.blue)
       }
       guard let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
-        return .blue
+        return UIColor(Color.blue)
       }
 
       return color

@@ -75,7 +75,7 @@ struct ContentView: View {
 
 private extension ContentView {
   var morsel: some View {
-    MouthAddButton(
+    MorselView(
       shouldOpen: _shouldOpenMouth,
       onTap: {
         if showStats {
