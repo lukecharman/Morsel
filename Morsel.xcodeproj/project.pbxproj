@@ -132,10 +132,32 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
-		A3AE56AB2DC2731A00608E0D /* Exceptions for "Watch Widgets" folder in "Morse Widgets (watchOS)" target */ = {
+		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Widgets/Assets.xcassets,
+				Widgets/FoodEntrySnapshot.swift,
+				Widgets/FoodEntryTimeline.swift,
+				Widgets/FoodEntryWidget.swift,
+				Widgets/FoodEntryWidgetBundle.swift,
+				Widgets/FoodEntryWidgetView.swift,
+			);
+			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
+		};
+		A38415152DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morsel (watchOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Widgets/Assets.xcassets,
+				Widgets/Info.plist,
+				Widgets/WatchWidgets.swift,
+			);
+			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
+		};
+		A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morse Widgets (watchOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Widgets/Assets.xcassets,
+				Widgets/WatchWidgets.swift,
 			);
 			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
 		};
@@ -143,15 +165,15 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Widgets/Assets.xcassets,
+				Widgets/FoodEntrySnapshot.swift,
+				Widgets/FoodEntryTimeline.swift,
+				Widgets/FoodEntryWidget.swift,
+				Widgets/FoodEntryWidgetBundle.swift,
+				Widgets/FoodEntryWidgetView.swift,
+				Widgets/Info.plist,
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
-		};
-		A3CD69642DBF752D00AB946D /* Exceptions for "iOS Widgets" folder in "Morsel Widgets (iOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
 		};
 		A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -180,6 +202,10 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A35D3CD72DBFB0B100C4C166 /* watchOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A38415152DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morsel (watchOS)" target */,
+				A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morse Widgets (watchOS)" target */,
+			);
 			path = watchOS;
 			sourceTree = "<group>";
 		};
@@ -193,29 +219,14 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		A3AE569D2DC2731800608E0D /* Watch Widgets */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A3AE56AB2DC2731A00608E0D /* Exceptions for "Watch Widgets" folder in "Morse Widgets (watchOS)" target */,
-			);
-			path = "Watch Widgets";
-			sourceTree = "<group>";
-		};
 		A3CD69062DBF745E00AB946D /* iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
+				A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */,
 			);
 			path = iOS;
-			sourceTree = "<group>";
-		};
-		A3CD69522DBF752B00AB946D /* iOS Widgets */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A3CD69642DBF752D00AB946D /* Exceptions for "iOS Widgets" folder in "Morsel Widgets (iOS)" target */,
-			);
-			path = "iOS Widgets";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -265,8 +276,6 @@
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
-				A3CD69522DBF752B00AB946D /* iOS Widgets */,
-				A3AE569D2DC2731800608E0D /* Watch Widgets */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
@@ -332,9 +341,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				A3AE569D2DC2731800608E0D /* Watch Widgets */,
-			);
 			name = "Morse Widgets (watchOS)";
 			packageProductDependencies = (
 			);
@@ -381,9 +387,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				A3CD69522DBF752B00AB946D /* iOS Widgets */,
 			);
 			name = "Morsel Widgets (iOS)";
 			packageProductDependencies = (
@@ -590,12 +593,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "Watch Widgets/Morsel watchOS Widgets.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "watchOS/Widgets/Morsel watchOS Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Watch Widgets/Info.plist";
+				INFOPLIST_FILE = watchOS/Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -621,12 +624,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "Watch Widgets/Morsel watchOS Widgets.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "watchOS/Widgets/Morsel watchOS Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Watch Widgets/Info.plist";
+				INFOPLIST_FILE = watchOS/Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -847,12 +850,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "iOS Widgets/Morsel iOS Widgets.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS/Widgets/Morsel iOS Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS Widgets/Info.plist";
+				INFOPLIST_FILE = iOS/Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -875,12 +878,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "iOS Widgets/Morsel iOS Widgets.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "iOS/Widgets/Morsel iOS Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS Widgets/Info.plist";
+				INFOPLIST_FILE = iOS/Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
