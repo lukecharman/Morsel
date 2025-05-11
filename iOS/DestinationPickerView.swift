@@ -85,5 +85,8 @@ struct DestinationPickerView: View {
       .frame(width: geo.size.width, height: geo.size.height)
       .ignoresSafeArea()
     }
+    .onAppear {
+      Analytics.track(ScreenViewDestinationPicker())
+    }
   }
 }

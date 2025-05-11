@@ -51,6 +51,12 @@ struct ExtrasView: View {
     }
     .sheet(isPresented: $showFeedbackAlert) {
       FeedbackView()
+        .onAppear {
+          Analytics.track(ScreenViewFeedback())
+        }
+    }
+    .onAppear {
+      Analytics.track(ScreenViewExtras())
     }
   }
 

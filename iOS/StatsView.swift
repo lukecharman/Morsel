@@ -33,6 +33,9 @@ struct StatsView: View {
         endPoint: .bottom
       )
     )
+    .onAppear {
+      Analytics.track(ScreenViewStats())
+    }
   }
 }
 

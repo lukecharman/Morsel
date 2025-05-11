@@ -72,6 +72,9 @@ struct FilledEntriesView: View {
     }
     .scrollDisabled(shouldBlurBackground)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
+    .onAppear {
+      Analytics.track(ScreenViewFilledEntries(count: entries.count))
+    }
   }
 
   private var groupedEntries: [(date: Date, entries: [FoodEntry])] {
