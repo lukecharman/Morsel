@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A3AE56992DC2731800608E0D"
-               BuildableName = "Morse Widgets (watchOS).appex"
-               BlueprintName = "Morse Widgets (watchOS)"
+               BuildableName = "Widgets (watchOS).appex"
+               BlueprintName = "Widgets (watchOS)"
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A3AE56992DC2731800608E0D"
-            BuildableName = "Morse Widgets (watchOS).appex"
-            BlueprintName = "Morse Widgets (watchOS)"
+            BuildableName = "Widgets (watchOS).appex"
+            BlueprintName = "Widgets (watchOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -118,8 +118,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A3AE56992DC2731800608E0D"
-            BuildableName = "Morse Widgets (watchOS).appex"
-            BlueprintName = "Morse Widgets (watchOS)"
+            BuildableName = "Widgets (watchOS).appex"
+            BlueprintName = "Widgets (watchOS)"
             ReferencedContainer = "container:Morsel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

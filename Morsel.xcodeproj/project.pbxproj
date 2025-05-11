@@ -13,10 +13,10 @@
 		A3647A8B2DCE2BA100A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A3647A8A2DCE2BA100A2F723 /* TelemetryDeck */; };
 		A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3AE569C2DC2731800608E0D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
-		A3AE56A72DC2731A00608E0D /* Morse Widgets (watchOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A3AE56A72DC2731A00608E0D /* Widgets (watchOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
-		A3CD69602DBF752D00AB946D /* Morsel Widgets (iOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A3CD69602DBF752D00AB946D /* Widgets (iOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +61,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A3AE56A72DC2731A00608E0D /* Morse Widgets (watchOS).appex in Embed Foundation Extensions */,
+				A3AE56A72DC2731A00608E0D /* Widgets (watchOS).appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +72,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A3CD69602DBF752D00AB946D /* Morsel Widgets (iOS).appex in Embed Foundation Extensions */,
+				A3CD69602DBF752D00AB946D /* Widgets (iOS).appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,15 +82,15 @@
 /* Begin PBXFileReference section */
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36333E82DC94B7500DD9ADA /* TODO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODO.swift; sourceTree = "<group>"; };
-		A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morse Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Morsel Widgets (iOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (iOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A3CD69502DBF752B00AB946D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */ = {
+		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/FoodEntry.swift,
@@ -104,7 +104,7 @@
 				UI/StaticMorsel.swift,
 				UI/Style.swift,
 			);
-			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
+			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -132,7 +132,7 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
-		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */ = {
+		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Widgets/Assets.xcassets,
@@ -142,7 +142,7 @@
 				Widgets/FoodEntryWidgetBundle.swift,
 				Widgets/FoodEntryWidgetView.swift,
 			);
-			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
+			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
 		A38415152DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -153,13 +153,13 @@
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
-		A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morse Widgets (watchOS)" target */ = {
+		A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Widgets/Assets.xcassets,
 				Widgets/WatchWidgets.swift,
 			);
-			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
+			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
 		};
 		A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -175,7 +175,7 @@
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
-		A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */ = {
+		A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/FoodEntry.swift,
@@ -188,7 +188,7 @@
 				UI/StaticMorsel.swift,
 				UI/Style.swift,
 			);
-			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
+			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
 		};
 		A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -204,7 +204,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A38415152DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morsel (watchOS)" target */,
-				A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Morse Widgets (watchOS)" target */,
+				A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Widgets (watchOS)" target */,
 			);
 			path = watchOS;
 			sourceTree = "<group>";
@@ -213,8 +213,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */,
-				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel Widgets (iOS)" target */,
-				A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Morse Widgets (watchOS)" target */,
+				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */,
+				A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Widgets (watchOS)" target */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -224,7 +224,7 @@
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
 				A3F3F3372DC4D9F00088E1CB /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
-				A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Morsel Widgets (iOS)" target */,
+				A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -285,9 +285,9 @@
 			isa = PBXGroup;
 			children = (
 				A3CD69042DBF745E00AB946D /* Morsel (iOS).app */,
-				A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */,
+				A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */,
 				A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */,
-				A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */,
+				A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -329,9 +329,9 @@
 			productReference = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */;
 			productType = "com.apple.product-type.application";
 		};
-		A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */ = {
+		A3AE56992DC2731800608E0D /* Widgets (watchOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "Morse Widgets (watchOS)" */;
+			buildConfigurationList = A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "Widgets (watchOS)" */;
 			buildPhases = (
 				A3AE56962DC2731800608E0D /* Sources */,
 				A3AE56972DC2731800608E0D /* Frameworks */,
@@ -341,11 +341,11 @@
 			);
 			dependencies = (
 			);
-			name = "Morse Widgets (watchOS)";
+			name = "Widgets (watchOS)";
 			packageProductDependencies = (
 			);
 			productName = WatchWidgetsExtension;
-			productReference = A3AE569A2DC2731800608E0D /* Morse Widgets (watchOS).appex */;
+			productReference = A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		A3CD69032DBF745E00AB946D /* Morsel (iOS) */ = {
@@ -376,9 +376,9 @@
 			productReference = A3CD69042DBF745E00AB946D /* Morsel (iOS).app */;
 			productType = "com.apple.product-type.application";
 		};
-		A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */ = {
+		A3CD694B2DBF752B00AB946D /* Widgets (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "Morsel Widgets (iOS)" */;
+			buildConfigurationList = A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "Widgets (iOS)" */;
 			buildPhases = (
 				A3CD69482DBF752B00AB946D /* Sources */,
 				A3CD69492DBF752B00AB946D /* Frameworks */,
@@ -388,11 +388,11 @@
 			);
 			dependencies = (
 			);
-			name = "Morsel Widgets (iOS)";
+			name = "Widgets (iOS)";
 			packageProductDependencies = (
 			);
 			productName = FoodEntryWidgetExtension;
-			productReference = A3CD694C2DBF752B00AB946D /* Morsel Widgets (iOS).appex */;
+			productReference = A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -438,8 +438,8 @@
 			targets = (
 				A3CD69032DBF745E00AB946D /* Morsel (iOS) */,
 				A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */,
-				A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */,
-				A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */,
+				A3CD694B2DBF752B00AB946D /* Widgets (iOS) */,
+				A3AE56992DC2731800608E0D /* Widgets (watchOS) */,
 			);
 		};
 /* End PBXProject section */
@@ -515,12 +515,12 @@
 		};
 		A3AE56A62DC2731A00608E0D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A3AE56992DC2731800608E0D /* Morse Widgets (watchOS) */;
+			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
 			targetProxy = A3AE56A52DC2731A00608E0D /* PBXContainerItemProxy */;
 		};
 		A3CD695F2DBF752D00AB946D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A3CD694B2DBF752B00AB946D /* Morsel Widgets (iOS) */;
+			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 			targetProxy = A3CD695E2DBF752D00AB946D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -913,7 +913,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "Morse Widgets (watchOS)" */ = {
+		A3AE56A82DC2731A00608E0D /* Build configuration list for PBXNativeTarget "Widgets (watchOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3AE56A92DC2731A00608E0D /* Debug */,
@@ -940,7 +940,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "Morsel Widgets (iOS)" */ = {
+		A3CD69612DBF752D00AB946D /* Build configuration list for PBXNativeTarget "Widgets (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3CD69622DBF752D00AB946D /* Debug */,

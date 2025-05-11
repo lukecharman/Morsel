@@ -46,6 +46,9 @@ struct WatchContentView: View {
             .foregroundColor(.secondary)
             .multilineTextAlignment(.center)
             .offset(y: -12)
+            .onAppear {
+              Analytics.track(ScreenViewEmptyState())
+            }
         } else {
           ForEach(todayEntries) { meal in
             HStack {
@@ -65,6 +68,9 @@ struct WatchContentView: View {
             }
           }
           .offset(y: -12)
+          .onAppear {
+            Analytics.track(ScreenViewFilledEntries(count: todayEntries.count))
+          }
         }
       }
     }
@@ -129,6 +135,9 @@ struct WatchContentView: View {
       Spacer()
     }
     .padding()
+    .onAppear {
+      Analytics.track(ScreenViewDestinationPicker())
+    }
   }
 
   private func saveMeal(isForMorsel: Bool) {
