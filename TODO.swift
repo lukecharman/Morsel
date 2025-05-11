@@ -10,7 +10,11 @@
     * Gradual smile / sad while you're deciding who a morsel is for.
 
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
+    * Toggle for Apple / custom fonts?
+    * Always dark / light mode?
  * Add an Onboarding of some kind.
+ * Decide on subscription vs. one-off. £1.99 a year? £0.99 a year?
+ * Implement IAPs.
 
  SHOULD
  ------

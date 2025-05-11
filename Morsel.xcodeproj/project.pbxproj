@@ -122,6 +122,7 @@
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
 				"Model/ModelContainer+Morsel.swift",
+				Settings/AppSettings.swift,
 				"UI/Fonts/Quicksand-Bold.ttf",
 				"UI/Fonts/Quicksand-Light.ttf",
 				"UI/Fonts/Quicksand-Medium.ttf",

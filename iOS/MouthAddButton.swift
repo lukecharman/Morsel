@@ -83,7 +83,7 @@ struct MouthAddButton: View {
       ),
       style: .continuous
     )
-    .fill(Color.blue)
+    .fill(Color(uiColor: AppSettings.shared.morselColor))
     .frame(
       width: isOpen ? 240 : 86,
       height: isOpen ? 120 : 64
