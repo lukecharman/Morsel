@@ -58,6 +58,9 @@ struct ExtrasView: View {
     .onAppear {
       Analytics.track(ScreenViewExtras())
     }
+    .onDisappear {
+      print("Extras disappearing!!")
+    }
   }
 
   func confirmClearData() {

@@ -112,6 +112,7 @@
 				Analytics/Analytics.swift,
 				Analytics/Event.swift,
 				Analytics/Events/CreateEntryEvent.swift,
+				Analytics/Events/Screens/ScreenViewEvent.swift,
 				Analytics/Events/ScreenViewDestinationPicker.swift,
 				Analytics/Events/ScreenViewEmptyState.swift,
 				Analytics/Events/ScreenViewExtras.swift,
