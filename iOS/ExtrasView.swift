@@ -7,6 +7,7 @@ struct ExtrasView: View {
   @State private var showClearAlert = false
   @State private var showClearFailedAlert = false
   @State private var showFeedbackAlert = false
+  @State private var showColorSheet = false
 
   var onClearAll: () -> Void
 
@@ -16,6 +17,7 @@ struct ExtrasView: View {
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
       ], spacing: 16) {
+        CardView(title: "Style your Morsel", value: "Theme", icon: "theatermask.and.paintbrush.fill") { showColorSheet = true }
         CardView(title: "Clear all your data", value: "Reset", icon: "trash") { showClearAlert = true }
         CardView(title: "Got feedback?", value: "Feedback", icon: "ellipsis.message") { showFeedbackAlert = true }
       }
@@ -54,6 +56,20 @@ struct ExtrasView: View {
         .onAppear {
           Analytics.track(ScreenViewFeedback())
         }
+    }
+    .sheet(isPresented: $showColorSheet) {
+      VStack {
+        Button {
+          AppSettings.shared.morselColor = .orange
+        } label: {
+          Text("Orange")
+        }
+        Button {
+          AppSettings.shared.morselColor = .blue
+        } label: {
+          Text("Blue")
+        }
+      }
     }
     .onAppear {
       Analytics.track(ScreenViewExtras())
