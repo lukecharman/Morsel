@@ -52,7 +52,7 @@ struct MorselView: View {
               }
               if !isChoosingDestination {
                 onTap?()
-                
+
                 if isOpen {
                   close()
                 } else {
@@ -262,13 +262,19 @@ struct MorselView: View {
         }
       }
     }
-    Timer.scheduledTimer(withTimeInterval: Double.random(in: 3...8), repeats: true) { _ in
-      withAnimation(.easeInOut(duration: 1)) {
-        idleLookaroundOffset = CGFloat.random(in: -15...15)
+    Timer.scheduledTimer(withTimeInterval: Double.random(in: 5...10), repeats: true) { _ in
+      let direction: CGFloat = Bool.random() ? 1 : -1
+      withAnimation(.easeInOut(duration: 0.1)) {
+        idleLookaroundOffset = 10 * direction
       }
-      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-        withAnimation(.easeInOut(duration: 0.5)) {
-          idleLookaroundOffset = 0
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+          idleLookaroundOffset = -6 * direction
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          withAnimation(.easeInOut(duration: 0.3)) {
+            idleLookaroundOffset = 0
+          }
         }
       }
     }
