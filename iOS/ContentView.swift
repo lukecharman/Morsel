@@ -79,6 +79,7 @@ private extension ContentView {
     MorselView(
       shouldOpen: _shouldOpenMouth,
       shouldClose: $shouldCloseMouth,
+      isChoosingDestination: $isChoosingDestination,
       onTap: {
         if showStats {
           withAnimation {
@@ -101,7 +102,7 @@ private extension ContentView {
 
   @ViewBuilder
   var bottomBar: some View {
-    if !isKeyboardVisible {
+    if !isKeyboardVisible && !isChoosingDestination {
       BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,

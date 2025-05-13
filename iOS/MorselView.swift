@@ -3,6 +3,7 @@ import SwiftUI
 struct MorselView: View {
   @Binding var shouldOpen: Bool
   @Binding var shouldClose: Bool
+  @Binding var isChoosingDestination: Bool
 
   @State private var isOpen = false
   @State private var isSwallowing = false
@@ -37,7 +38,7 @@ struct MorselView: View {
         .gesture(
           DragGesture(minimumDistance: 0)
             .onChanged { _ in
-              if !isBeingTouched {
+              if !isBeingTouched && !isChoosingDestination {
                 withAnimation {
                   isBeingTouched = true
                 }
@@ -47,13 +48,14 @@ struct MorselView: View {
               withAnimation {
                 isBeingTouched = false
               }
-
-              onTap?()
-
-              if isOpen {
-                close()
-              } else {
-                open()
+              if !isChoosingDestination {
+                onTap?()
+                
+                if isOpen {
+                  close()
+                } else {
+                  open()
+                }
               }
             }
         )
@@ -269,7 +271,7 @@ struct MorselView: View {
 }
 
 #Preview {
-  MorselView(shouldOpen: .constant(false), shouldClose: .constant(false)) { _ in }
+  MorselView(shouldOpen: .constant(false), shouldClose: .constant(false), isChoosingDestination: .constant(false)) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif
