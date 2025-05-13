@@ -2,7 +2,6 @@
 
  MUST
  ----
- * Need to keep the text field up if you enter nothing, or just cancel and close Morsel without popping Dest. Picker.
  * Add more expression to Morsel.
     * Gradual smile / sad while you're deciding who a morsel is for.
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
