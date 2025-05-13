@@ -51,7 +51,9 @@ struct ContentView: View {
             }
           },
           onDrag: { position in
-            destinationProximity = position
+            withAnimation {
+              destinationProximity = position
+            }
           }
         )
         .frame(maxHeight: .infinity)
