@@ -21,6 +21,7 @@ struct ContentView: View {
   @State private var showStats = false
   @State private var showExtras = false
   @State private var shouldCloseMouth: Bool = false
+  @State private var destinationProximity: CGFloat = 0
 
   @Binding var shouldOpenMouth: Bool
 
@@ -48,6 +49,9 @@ struct ContentView: View {
             withAnimation {
               isChoosingDestination = false
             }
+          },
+          onDrag: { position in
+            destinationProximity = position
           }
         )
         .frame(maxHeight: .infinity)
@@ -80,6 +84,7 @@ private extension ContentView {
       shouldOpen: _shouldOpenMouth,
       shouldClose: $shouldCloseMouth,
       isChoosingDestination: $isChoosingDestination,
+      destinationProximity: $destinationProximity,
       onTap: {
         if showStats {
           withAnimation {

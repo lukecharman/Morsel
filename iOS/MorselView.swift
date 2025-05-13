@@ -4,6 +4,7 @@ struct MorselView: View {
   @Binding var shouldOpen: Bool
   @Binding var shouldClose: Bool
   @Binding var isChoosingDestination: Bool
+  @Binding var destinationProximity: CGFloat
 
   @State private var isOpen = false
   @State private var isSwallowing = false
@@ -33,6 +34,7 @@ struct MorselView: View {
           anchor: .center,
           perspective: 0.5
         )
+        .rotationEffect(.degrees(destinationProximity * 10))
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
         .gesture(
@@ -182,17 +184,19 @@ struct MorselView: View {
 
   var textField: some View {
     TextField("", text: $text)
+      .focused($isFocused)
+      .submitLabel(.done)
       .onSubmit {
+        guard text.count > 0 else { return }
+        isFocused = false
         onAdd(text)
         close()
       }
       .font(MorselFont.body)
       .tint(.blue)
-      .focused($isFocused)
       .foregroundStyle(.white)
       .allowsHitTesting(isOpen)
       .opacity(isOpen ? 1 : 0)
-      .submitLabel(.done)
       .frame(width: 160, height: isOpen ? 72 : 0)
       .multilineTextAlignment(.center)
       .backgroundStyle(Color.black.opacity(0.5))
@@ -271,7 +275,12 @@ struct MorselView: View {
 }
 
 #Preview {
-  MorselView(shouldOpen: .constant(false), shouldClose: .constant(false), isChoosingDestination: .constant(false)) { _ in }
+  MorselView(
+    shouldOpen: .constant(false),
+    shouldClose: .constant(false),
+    isChoosingDestination: .constant(false),
+    destinationProximity: .constant(0)
+  ) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif

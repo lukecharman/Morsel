@@ -3,6 +3,7 @@ import SwiftUI
 struct DestinationPickerView: View {
   var onPick: (Bool) -> Void
   var onCancel: () -> Void
+  var onDrag: (CGFloat) -> Void = { _ in }
 
   @GestureState private var dragOffset: CGSize = .zero
 
@@ -62,6 +63,8 @@ struct DestinationPickerView: View {
                 DragGesture()
                   .updating($dragOffset) { value, state, _ in
                     state = value.translation
+                    let normalised = max(-1, min(1, value.translation.width / threshold))
+                    onDrag(normalised)
                   }
                   .onEnded { value in
                     if value.translation.width < -threshold {
@@ -69,6 +72,7 @@ struct DestinationPickerView: View {
                     } else if value.translation.width > threshold {
                       onPick(true) // for morsel
                     }
+                    onDrag(0)
                   }
               )
               .animation(.spring(), value: dragX)
