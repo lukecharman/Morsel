@@ -31,7 +31,6 @@ struct MorselView: View {
           anchor: .center,
           perspective: 0.5
         )
-        .overlay(facialFeatures)
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
         .gesture(
@@ -59,7 +58,7 @@ struct MorselView: View {
         )
         .shadow(radius: 10)
     }
-    .padding()
+    .padding(.bottom, 6)
     .onAppear {
       startBlinking()
       startIdleWiggle()
@@ -74,24 +73,35 @@ struct MorselView: View {
   }
 
   var face: some View {
-    UnevenRoundedRectangle(
-      cornerRadii: .init(
-        topLeading: isOpen ? 120 : 64,
-        bottomLeading: isOpen ? 32 : 32,
-        bottomTrailing: isOpen ? 32 : 32,
-        topTrailing: isOpen ? 120 : 64
-      ),
-      style: .continuous
-    )
-    .fill(LinearGradient(
-      colors: [
-        Color(uiColor: AppSettings.shared.morselColor),
-        Color(uiColor: AppSettings.shared.morselColor).opacity(0.9),
-      ], startPoint: .topLeading, endPoint: .bottomTrailing))
-    .frame(
-      width: isOpen ? 240 : 86,
-      height: isOpen ? 120 : 64
-    )
+    ZStack {
+      Color.clear.frame(width: 240, height: 86)
+      UnevenRoundedRectangle(
+        cornerRadii: .init(
+          topLeading: isOpen ? 120 : 64,
+          bottomLeading: isOpen ? 32 : 32,
+          bottomTrailing: isOpen ? 32 : 32,
+          topTrailing: isOpen ? 120 : 64
+        ),
+        style: .continuous
+      )
+      .fill(
+        LinearGradient(
+          colors: [
+            Color(uiColor: AppSettings.shared.morselColor),
+            Color(uiColor: AppSettings.shared.morselColor).opacity(0.9),
+          ],
+          startPoint: .topLeading,
+          endPoint: .bottomTrailing
+        )
+      )
+      .frame(
+        width: isOpen ? 240 : 86,
+        height: isOpen ? 120 : 64
+      )
+      .overlay(
+        facialFeatures
+      )
+    }
   }
 
   var facialFeatures: some View {
@@ -212,7 +222,7 @@ struct MorselView: View {
   }
 
   func startBlinking() {
-    Timer.scheduledTimer(withTimeInterval: Double.random(in: 5...10), repeats: true) { _ in
+    Timer.scheduledTimer(withTimeInterval: Double.random(in: 4...8), repeats: true) { _ in
       withAnimation {
         isBlinking = true
       }
@@ -227,7 +237,7 @@ struct MorselView: View {
 
   func startIdleWiggle() {
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 4...7), repeats: true) { _ in
-      let offsetY = CGFloat(Int.random(in: -4...4))
+      let offsetY = CGFloat(Int.random(in: -1...8))
       withAnimation(.easeInOut(duration: 1)) {
         idleOffset = CGSize(width: 0, height: offsetY)
       }
@@ -239,7 +249,7 @@ struct MorselView: View {
     }
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 3...8), repeats: true) { _ in
       withAnimation(.easeInOut(duration: 1)) {
-        idleLookaroundOffset = CGFloat.random(in: -5...5)
+        idleLookaroundOffset = CGFloat.random(in: -15...15)
       }
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
         withAnimation(.easeInOut(duration: 0.5)) {
