@@ -112,8 +112,12 @@ private extension ContentView {
 
   var emptyStateView: some View {
     EmptyStateView(
-      shouldBlurBackground: shouldBlurBackground
-    )
+      shouldBlurBackground: shouldBlurBackground) {
+        if shouldBlurBackground {
+          shouldOpenMouth = false
+          shouldCloseMouth = true
+        }
+      }
   }
 
   var filledView: some View {

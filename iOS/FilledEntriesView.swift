@@ -79,13 +79,15 @@ struct FilledEntriesView: View {
     .simultaneousGesture(
       TapGesture()
         .onEnded{ _ in
-          onTap()
+          if shouldBlurBackground {
+            onTap()
+          }
         }
     )
     .simultaneousGesture(
       DragGesture()
         .onChanged { value in
-          if value.translation.height > 0 {
+          if shouldBlurBackground && value.translation.height > 0 {
             onTap()
           }
         }
