@@ -20,6 +20,7 @@ struct ContentView: View {
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
+  @State private var shouldCloseMouth: Bool = false
 
   @Binding var shouldOpenMouth: Bool
 
@@ -77,6 +78,7 @@ private extension ContentView {
   var morsel: some View {
     MorselView(
       shouldOpen: _shouldOpenMouth,
+      shouldClose: $shouldCloseMouth,
       onTap: {
         if showStats {
           withAnimation {
@@ -122,6 +124,12 @@ private extension ContentView {
       isDraggingHorizontally: $isDraggingHorizontally,
       isChoosingDestination: $isChoosingDestination,
       entryText: $entryText,
+      onTap: {
+        if shouldBlurBackground {
+          shouldOpenMouth = false
+          shouldCloseMouth = true
+        }
+      },
       onScroll: handleScroll,
       onDelete: delete
     )

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MorselView: View {
   @Binding var shouldOpen: Bool
+  @Binding var shouldClose: Bool
 
   @State private var isOpen = false
   @State private var isSwallowing = false
@@ -68,6 +69,11 @@ struct MorselView: View {
         if oldValue == false && newValue == true {
           open()
         }
+      }
+    }
+    .onChange(of: shouldClose) { oldValue, newValue in
+      if oldValue == false && newValue == true {
+        close()
       }
     }
   }
@@ -196,6 +202,7 @@ struct MorselView: View {
   func open() {
     withAnimation {
       isOpen = true
+      shouldOpen = false
       isFocused = true
     }
   }
@@ -204,6 +211,7 @@ struct MorselView: View {
     withAnimation {
       text = ""
       isOpen = false
+      shouldClose = false
       isFocused = false
     }
 
@@ -261,7 +269,7 @@ struct MorselView: View {
 }
 
 #Preview {
-  MorselView(shouldOpen: .constant(false)) { _ in }
+  MorselView(shouldOpen: .constant(false), shouldClose: .constant(false)) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif

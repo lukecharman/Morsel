@@ -12,6 +12,7 @@ struct FilledEntriesView: View {
   @Binding var isChoosingDestination: Bool
   @Binding var entryText: String
 
+  let onTap: () -> Void
   let onScroll: (CGPoint) -> Void
   let onDelete: (FoodEntry) -> Void
 
@@ -75,6 +76,20 @@ struct FilledEntriesView: View {
     .onAppear {
       Analytics.track(ScreenViewFilledEntries(count: entries.count))
     }
+    .simultaneousGesture(
+      TapGesture()
+        .onEnded{ _ in
+          onTap()
+        }
+    )
+    .simultaneousGesture(
+      DragGesture()
+        .onChanged { value in
+          if value.translation.height > 0 {
+            onTap()
+          }
+        }
+    )
   }
 
   private var groupedEntries: [(date: Date, entries: [FoodEntry])] {
