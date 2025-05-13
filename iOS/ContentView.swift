@@ -265,45 +265,17 @@ private extension ContentView {
     isVisible: Bool,
     @ViewBuilder content: @escaping () -> Content
   ) -> some View {
-    GeometryReader { geo in
-      let panelWidth = geo.size.width
-      let offsetX: CGFloat = {
-        switch alignment {
-        case .leading: return isVisible ? 0 : -panelWidth
-        case .trailing: return isVisible ? 0 : panelWidth
-        default: return 0
-        }
-      }()
-
-      ZStack(alignment: alignment) {
-        if isVisible {
-          Color.black.opacity(0.25)
-            .ignoresSafeArea()
-            .onTapGesture {
-              withAnimation {
-                showStats = false
-                showExtras = false
-              }
-            }
-        }
-
-        HStack {
-          if alignment == .leading {
-            content()
-              .frame(width: panelWidth)
-              .frame(maxHeight: .infinity)
-              .offset(x: offsetX)
-              .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
-            Spacer()
-          } else if alignment == .trailing {
-            Spacer()
-            content()
-              .frame(width: panelWidth)
-              .frame(maxHeight: .infinity)
-              .offset(x: offsetX)
-              .animation(.spring(Spring(duration: 0.4, bounce: 0.2)), value: isVisible)
+    ZStack {
+      if isVisible {
+        Color.black.opacity(0.25)
+          .ignoresSafeArea()
+          .onTapGesture {
+            withAnimation { showStats = false; showExtras = false }
           }
-        }
+        content()
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+          .transition(.move(edge: alignment == .leading ? .leading : .trailing))
+          .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isVisible)
       }
     }
   }
