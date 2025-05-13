@@ -10,12 +10,11 @@ struct MorselView: View {
   @State private var isSwallowing = false
   @State private var isBlinking = false
   @State private var isBeingTouched = false
-  @State private var isAngryWiggling: Bool = false
+  @State private var text: String = ""
   @State private var idleOffset: CGSize = .zero
   @State private var idleLookaroundOffset: CGFloat = .zero
 
-  @State private var text: String = ""
-  @State private var isFocused: Bool = false
+  @FocusState private var isFocused: Bool
 
   var onTap: (() -> Void)? = nil
   var onAdd: (String) -> Void
@@ -95,7 +94,16 @@ struct MorselView: View {
         ),
         style: .continuous
       )
-      .fill(isAngryWiggling ? .red : Color(uiColor: AppSettings.shared.morselColor))
+      .fill(
+        LinearGradient(
+          colors: [
+            Color(uiColor: AppSettings.shared.morselColor),
+            Color(uiColor: AppSettings.shared.morselColor).opacity(0.9),
+          ],
+          startPoint: .topLeading,
+          endPoint: .bottomTrailing
+        )
+      )
       .frame(
         width: isOpen ? 240 : 86,
         height: isOpen ? 120 : 64
@@ -104,8 +112,6 @@ struct MorselView: View {
         facialFeatures
       )
     }
-    .offset(x: isAngryWiggling ? -24 : 0)
-    .animation(isAngryWiggling ? .easeInOut(duration: 0.1).repeatCount(3, autoreverses: true) : .default, value: isAngryWiggling)
   }
 
   var facialFeatures: some View {
@@ -177,30 +183,26 @@ struct MorselView: View {
   }
 
   var textField: some View {
-#if os(iOS)
-    ControllableTextField(
-      text: $text,
-      isFocused: $isFocused,
-      onValidSubmit: {
+    TextField("", text: $text)
+      .focused($isFocused)
+      .submitLabel(.done)
+      .onSubmit {
+        guard text.count > 0 else { return }
+        isFocused = false
         onAdd(text)
         close()
-      },
-      onInvalidSubmit: {
-        wiggleOnce()
       }
-    )
-    .tint(.blue)
-    .foregroundStyle(.white)
-    .allowsHitTesting(isOpen)
-    .opacity(isOpen ? 1 : 0)
-    .frame(width: 160, height: isOpen ? 72 : 0)
-    .backgroundStyle(Color.black.opacity(0.5))
-    .textFieldStyle(.plain)
-    .scaleEffect(isOpen ? CGSize(width: 1, height: 1) : .zero)
-    .offset(y: isOpen ? 14 : 32)
-#else
-    EmptyView()
-#endif
+      .font(MorselFont.body)
+      .tint(.blue)
+      .foregroundStyle(.white)
+      .allowsHitTesting(isOpen)
+      .opacity(isOpen ? 1 : 0)
+      .frame(width: 160, height: isOpen ? 72 : 0)
+      .multilineTextAlignment(.center)
+      .backgroundStyle(Color.black.opacity(0.5))
+      .textFieldStyle(.plain)
+      .scaleEffect(isOpen ? CGSize(width: 1, height: 1) : .zero)
+      .offset(y: isOpen ? 14 : 32)
   }
 
   func open() {
@@ -244,14 +246,6 @@ struct MorselView: View {
           isBlinking = false
         }
       }
-    }
-  }
-
-  func wiggleOnce() {
-    isAngryWiggling = true
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-      isAngryWiggling = false
     }
   }
 
