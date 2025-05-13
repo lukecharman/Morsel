@@ -187,9 +187,10 @@ struct MorselView: View {
       .focused($isFocused)
       .submitLabel(.done)
       .onSubmit {
-        guard text.count > 0 else { return }
         isFocused = false
-        onAdd(text)
+        if text.count > 0 {
+          onAdd(text)
+        }
         close()
       }
       .font(MorselFont.body)
