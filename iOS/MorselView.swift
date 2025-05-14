@@ -160,19 +160,25 @@ struct MorselView: View {
     ZStack {
       UnevenRoundedRectangle(
         cornerRadii: .init(
-          topLeading: 16,
-          bottomLeading: isOpen ? 48 : 16,
-          bottomTrailing: isOpen ? 48 : 16,
-          topTrailing: 16
+          topLeading: mouthTopCornerRadius,
+          bottomLeading: mouthBottomCornerRadius,
+          bottomTrailing: mouthBottomCornerRadius,
+          topTrailing: mouthTopCornerRadius
         ),
         style: .continuous
       )
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+      .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
       .shadow(radius: 10)
+
       textField
     }
+  }
+
+  var sadnessLevel: CGFloat {
+    min(max(-destinationProximity, 0), 1)
   }
 
   var droopOffset: CGFloat {
@@ -220,6 +226,19 @@ struct MorselView: View {
       return 32 + destinationProximity * 20
     }
   }
+
+  var mouthTopCornerRadius: CGFloat {
+    isOpen ? 16 : 4
+  }
+
+  var mouthBottomCornerRadius: CGFloat {
+    let step: CGFloat = 0.1
+    let baseRadius: CGFloat = isOpen ? 48 : 4
+    let rawRadius = baseRadius - (baseRadius - 2) * sadnessLevel
+
+    return (rawRadius / step).rounded() * step
+  }
+
   func open() {
     withAnimation {
       isOpen = true
@@ -305,4 +324,10 @@ struct MorselView: View {
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif
+}
+
+extension CGFloat {
+  static func lerp(from: CGFloat, to: CGFloat, by amount: CGFloat) -> CGFloat {
+    return from + (to - from) * amount
+  }
 }
