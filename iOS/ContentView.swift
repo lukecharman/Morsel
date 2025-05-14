@@ -16,12 +16,14 @@ struct ContentView: View {
   @State private var scrollOffset: CGFloat = 0
   @State private var isDraggingHorizontally = false
   @State private var isKeyboardVisible = false
+  @State private var keyboardHeight: CGFloat = 0
   @State private var entryText: String = ""
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
+  @State private var destinationPickerHeight: CGFloat = 0
 
   @Binding var shouldOpenMouth: Bool
 
@@ -58,6 +60,11 @@ struct ContentView: View {
         )
         .frame(maxHeight: .infinity)
         .ignoresSafeArea()
+        .background(
+          HeightReader { height in
+            destinationPickerHeight = height
+          }
+        )
       }
     }
     .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
@@ -70,8 +77,20 @@ struct ContentView: View {
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
-    .onReceive(NotificationPublishers.keyboardWillShow) { _ in keyboardWillShow() }
-    .onReceive(NotificationPublishers.keyboardWillHide) { _ in keyboardWillHide() }
+    .onReceive(NotificationPublishers.keyboardWillShow) { notification in
+      if let height = extractKeyboardHeight(from: notification) {
+        withAnimation {
+          keyboardHeight = height
+          isKeyboardVisible = true
+        }
+      }
+    }
+    .onReceive(NotificationPublishers.keyboardWillHide) { _ in
+      withAnimation {
+        keyboardHeight = 0
+        isKeyboardVisible = false
+      }
+    }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
@@ -82,29 +101,36 @@ struct ContentView: View {
 
 private extension ContentView {
   var morsel: some View {
-    MorselView(
-      shouldOpen: _shouldOpenMouth,
-      shouldClose: $shouldCloseMouth,
-      isChoosingDestination: $isChoosingDestination,
-      destinationProximity: $destinationProximity,
-      onTap: {
-        if showStats {
-          withAnimation {
-            showStats = false
-          }
+    GeometryReader { geo in
+      MorselView(
+        shouldOpen: _shouldOpenMouth,
+        shouldClose: $shouldCloseMouth,
+        isChoosingDestination: $isChoosingDestination,
+        destinationProximity: $destinationProximity,
+        onTap: {
+          if showStats { withAnimation { showStats = false } }
+          if showExtras { withAnimation { showExtras = false } }
+        },
+        onAdd: { text in
+          entryText = text
+          withAnimation { isChoosingDestination = true }
         }
-        if showExtras {
-          withAnimation {
-            showExtras = false
-          }
-        }
-      }, onAdd: { text in
-        entryText = text
-        withAnimation {
-          isChoosingDestination = true
-        }
-      }
-    )
+      )
+      .scaleEffect(isChoosingDestination ? 2 : 1)
+      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+      .offset(y: offsetY)
+      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+    }
+  }
+
+  var offsetY: CGFloat {
+    if isChoosingDestination {
+      return -(destinationPickerHeight / 2 + 40)
+    } else if isKeyboardVisible {
+      return -(keyboardHeight / 2)
+    } else {
+      return 0
+    }
   }
 
   @ViewBuilder
@@ -267,16 +293,15 @@ private extension ContentView {
     }
   }
 
-  func keyboardWillShow() {
-    withAnimation {
-      isKeyboardVisible = true
+  func extractKeyboardHeight(from notification: Notification) -> CGFloat? {
+    guard
+      let userInfo = notification.userInfo,
+      let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+    else {
+      return nil
     }
-  }
 
-  func keyboardWillHide() {
-    withAnimation {
-      isKeyboardVisible = false
-    }
+    return frame.height
   }
 
   @ViewBuilder
