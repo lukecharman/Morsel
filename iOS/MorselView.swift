@@ -93,8 +93,8 @@ struct MorselView: View {
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: isOpen ? 120 : 64,
-          bottomLeading: isOpen ? 32 : sadFaceCornerRadius,
-          bottomTrailing: isOpen ? 32 : sadFaceCornerRadius,
+          bottomLeading: isOpen ? 32 : faceBottomCornerRadius,
+          bottomTrailing: isOpen ? 32 : faceBottomCornerRadius,
           topTrailing: isOpen ? 120 : 64
         ),
         style: .continuous
@@ -113,48 +113,31 @@ struct MorselView: View {
         width: isOpen ? 240 : 86,
         height: isOpen ? 120 : 64
       )
-      .animation(.easeInOut(duration: 0.3), value: sadFaceCornerRadius)
+      .animation(.easeInOut(duration: 0.3), value: faceBottomCornerRadius)
       .overlay(
         facialFeatures
       )
     }
   }
 
-  var sadFaceCornerRadius: CGFloat {
-    destinationProximity < 0 ? 32 + destinationProximity * 20 : 32
-  }
-
   var facialFeatures: some View {
     VStack {
       eyes
-        .rotation3DEffect(
-          .degrees(isSwallowing ? -8 : 0),
-          axis: (x: 1, y: 0, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .rotation3DEffect(
-          .degrees(isOpen ? 0 : idleLookaroundOffset),
-          axis: (x: 0, y: 1, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
       mouth
-        .scaleEffect(y: isSwallowing ? 0.8 : 1)
-        .rotation3DEffect(
-          .degrees(isSwallowing ? -8 : 0),
-          axis: (x: 1, y: 0, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .rotation3DEffect(
-          .degrees(isOpen ? 0 : idleLookaroundOffset),
-          axis: (x: 0, y: 1, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
       Spacer()
     }
+    .rotation3DEffect(
+      .degrees(isSwallowing ? -8 : 0),
+      axis: (x: 1, y: 0, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
+    .rotation3DEffect(
+      .degrees(isOpen ? 0 : idleLookaroundOffset),
+      axis: (x: 0, y: 1, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
   }
 
   var eyes: some View {
@@ -178,8 +161,8 @@ struct MorselView: View {
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: 16,
-          bottomLeading: isOpen ? 48 : sadCornerRadius,
-          bottomTrailing: isOpen ? 48 : sadCornerRadius,
+          bottomLeading: isOpen ? 48 : 16,
+          bottomTrailing: isOpen ? 48 : 16,
           topTrailing: 16
         ),
         style: .continuous
@@ -194,10 +177,6 @@ struct MorselView: View {
 
   var droopOffset: CGFloat {
     destinationProximity < 0 ? -destinationProximity * 4 : 0
-  }
-
-  var sadCornerRadius: CGFloat {
-    destinationProximity < 0 ? 4 : 48
   }
 
   var textField: some View {
@@ -228,12 +207,19 @@ struct MorselView: View {
     if isSwallowing || isBlinking {
       return 0.25
     } else if destinationProximity < 0 {
-      return max(0.4, 1 + destinationProximity * 0.6) // from 1.0 down to ~0.4 as it approaches -1
+      return max(0.4, 1 + destinationProximity * 0.04)
     } else {
       return 1
     }
   }
 
+  var faceBottomCornerRadius: CGFloat {
+    if destinationProximity < 0 {
+      return 32 + destinationProximity * 12
+    } else {
+      return 32 + destinationProximity * 20
+    }
+  }
   func open() {
     withAnimation {
       isOpen = true
