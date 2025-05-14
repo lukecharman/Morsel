@@ -34,7 +34,12 @@ struct MorselView: View {
           anchor: .center,
           perspective: 0.5
         )
-        .rotationEffect(.degrees(destinationProximity * 10))
+        .rotation3DEffect(
+          .degrees(destinationProximity < 0 ? destinationProximity * 25 : 0),
+          axis: (x: 1, y: 0, z: 0),
+          anchor: .center,
+          perspective: 0.5
+        )
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
         .gesture(
@@ -88,8 +93,8 @@ struct MorselView: View {
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: isOpen ? 120 : 64,
-          bottomLeading: isOpen ? 32 : 32,
-          bottomTrailing: isOpen ? 32 : 32,
+          bottomLeading: isOpen ? 32 : sadFaceCornerRadius,
+          bottomTrailing: isOpen ? 32 : sadFaceCornerRadius,
           topTrailing: isOpen ? 120 : 64
         ),
         style: .continuous
@@ -108,10 +113,15 @@ struct MorselView: View {
         width: isOpen ? 240 : 86,
         height: isOpen ? 120 : 64
       )
+      .animation(.easeInOut(duration: 0.3), value: sadFaceCornerRadius)
       .overlay(
         facialFeatures
       )
     }
+  }
+
+  var sadFaceCornerRadius: CGFloat {
+    destinationProximity < 0 ? 32 + destinationProximity * 20 : 32
   }
 
   var facialFeatures: some View {
@@ -152,12 +162,12 @@ struct MorselView: View {
       Circle()
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: 10, height: 10)
-        .scaleEffect(y: (isSwallowing || isBlinking) ? 0.25 : 1)
+        .scaleEffect(y: eyeScaleY)
         .shadow(radius: 4)
       Circle()
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: 10, height: 10)
-        .scaleEffect(y: (isSwallowing || isBlinking) ? 0.25 : 1)
+        .scaleEffect(y: eyeScaleY)
         .shadow(radius: 4)
     }
     .offset(y: 16)
@@ -168,18 +178,26 @@ struct MorselView: View {
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: 16,
-          bottomLeading: 48,
-          bottomTrailing: 48,
+          bottomLeading: isOpen ? 48 : sadCornerRadius,
+          bottomTrailing: isOpen ? 48 : sadCornerRadius,
           topTrailing: 16
         ),
         style: .continuous
       )
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
-      .offset(y: isOpen ? 16 : 24)
+      .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
       .shadow(radius: 10)
       textField
     }
+  }
+
+  var droopOffset: CGFloat {
+    destinationProximity < 0 ? -destinationProximity * 4 : 0
+  }
+
+  var sadCornerRadius: CGFloat {
+    destinationProximity < 0 ? 4 : 48
   }
 
   var textField: some View {
@@ -204,6 +222,16 @@ struct MorselView: View {
       .textFieldStyle(.plain)
       .scaleEffect(isOpen ? CGSize(width: 1, height: 1) : .zero)
       .offset(y: isOpen ? 14 : 32)
+  }
+
+  var eyeScaleY: CGFloat {
+    if isSwallowing || isBlinking {
+      return 0.25
+    } else if destinationProximity < 0 {
+      return max(0.4, 1 + destinationProximity * 0.6) // from 1.0 down to ~0.4 as it approaches -1
+    } else {
+      return 1
+    }
   }
 
   func open() {
