@@ -190,6 +190,10 @@ struct MorselView: View {
     min(max(-destinationProximity, 0), 1)
   }
 
+  var happinessLevel: CGFloat {
+    max(destinationProximity, 0)
+  }
+
   var droopOffset: CGFloat {
     destinationProximity < 0 ? -destinationProximity * 4 : 0
   }
@@ -225,6 +229,14 @@ struct MorselView: View {
       return max(0.4, 1 + destinationProximity * 0.04)
     } else {
       return 1
+    }
+  }
+
+  var faceTopCornerRadius: CGFloat {
+    if destinationProximity > 0 {
+      return 32 - destinationProximity * 20
+    } else {
+      return 32
     }
   }
 
