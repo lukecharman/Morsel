@@ -96,10 +96,10 @@ struct MorselView: View {
       Color.clear.frame(width: 240, height: 86)
       UnevenRoundedRectangle(
         cornerRadii: .init(
-          topLeading: isOpen ? 120 : 64,
+          topLeading: isOpen ? 120 : faceTopCornerRadius,
           bottomLeading: isOpen ? 32 : faceBottomCornerRadius,
           bottomTrailing: isOpen ? 32 : faceBottomCornerRadius,
-          topTrailing: isOpen ? 120 : 64
+          topTrailing: isOpen ? 120 : faceTopCornerRadius
         ),
         style: .continuous
       )
@@ -150,12 +150,18 @@ struct MorselView: View {
     let eyeOffset = CGFloat.lerp(from: 16, to: 18, by: sadnessLevel)
 
     return HStack(spacing: isOpen ? 24 : 12) {
-      EyebrowedEyeShape(eyebrowAmount: sadnessLevel, angle: .degrees(160))
+      EyebrowedEyeShape(
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 2 : sadnessLevel,
+        angle: destinationProximity > 0 ? .degrees(20) : .degrees(160)
+      )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(y: eyeScaleY)
         .shadow(radius: 4)
-      EyebrowedEyeShape(eyebrowAmount: sadnessLevel, angle: .degrees(200))
+      EyebrowedEyeShape(
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 2 : sadnessLevel,
+        angle: destinationProximity > 0 ? .degrees(340) : .degrees(200)
+      )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(y: eyeScaleY)
@@ -234,7 +240,7 @@ struct MorselView: View {
 
   var faceTopCornerRadius: CGFloat {
     if destinationProximity > 0 {
-      return 32 - destinationProximity * 20
+      return 32 - destinationProximity * 8
     } else {
       return 32
     }
