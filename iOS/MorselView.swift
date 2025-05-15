@@ -123,7 +123,6 @@ struct MorselView: View {
         facialFeatures
       )
     }
-    .saturation(1 - sadnessLevel * 0.4)
   }
 
   var facialFeatures: some View {
