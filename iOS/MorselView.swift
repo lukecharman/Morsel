@@ -23,11 +23,13 @@ struct MorselView: View {
     ZStack(alignment: .bottom) {
       face
         .rotation3DEffect(
-          .degrees(isSwallowing ? -20 : 0),
+          .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
           axis: (x: 1, y: 0, z: 0),
           anchor: .center,
           perspective: 0.5
         )
+        .scaleEffect(1.0 - 0.05 * sadnessLevel)
+        .shadow(radius: 10 - sadnessLevel * 7)
         .rotation3DEffect(
           .degrees(isOpen ? 0 : idleLookaroundOffset),
           axis: (x: 0, y: 1, z: 0),
@@ -66,7 +68,6 @@ struct MorselView: View {
               }
             }
         )
-        .shadow(radius: 10)
     }
     .padding(.bottom, 6)
     .onAppear {
@@ -88,7 +89,10 @@ struct MorselView: View {
   }
 
   var face: some View {
-    ZStack {
+    let baseColor = AppSettings.shared.morselColor
+    let topColor = desaturatedTopColor(from: baseColor, sadness: sadnessLevel)
+
+    return ZStack {
       Color.clear.frame(width: 240, height: 86)
       UnevenRoundedRectangle(
         cornerRadii: .init(
@@ -102,11 +106,12 @@ struct MorselView: View {
       .fill(
         LinearGradient(
           colors: [
-            Color(uiColor: AppSettings.shared.morselColor),
-            Color(uiColor: AppSettings.shared.morselColor).opacity(0.9),
+            Color(uiColor: topColor),
+            Color(uiColor: baseColor),
+            Color(uiColor: baseColor),
           ],
-          startPoint: .topLeading,
-          endPoint: .bottomTrailing
+          startPoint: .top,
+          endPoint: .bottom
         )
       )
       .frame(
@@ -118,6 +123,7 @@ struct MorselView: View {
         facialFeatures
       )
     }
+    .saturation(1 - sadnessLevel * 0.4)
   }
 
   var facialFeatures: some View {
@@ -141,19 +147,22 @@ struct MorselView: View {
   }
 
   var eyes: some View {
-    HStack(spacing: isOpen ? 24 : 12) {
-      Circle()
+    let eyeSize = CGFloat.lerp(from: 10, to: 8, by: sadnessLevel)
+    let eyeOffset = CGFloat.lerp(from: 16, to: 18, by: sadnessLevel)
+
+    return HStack(spacing: isOpen ? 24 : 12) {
+      EyebrowedEyeShape(eyebrowAmount: sadnessLevel, angle: .degrees(160))
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-        .frame(width: 10, height: 10)
+        .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(y: eyeScaleY)
         .shadow(radius: 4)
-      Circle()
+      EyebrowedEyeShape(eyebrowAmount: sadnessLevel, angle: .degrees(200))
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-        .frame(width: 10, height: 10)
+        .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(y: eyeScaleY)
         .shadow(radius: 4)
     }
-    .offset(y: 16)
+    .offset(y: eyeOffset)
   }
 
   var mouth: some View {
@@ -170,10 +179,11 @@ struct MorselView: View {
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
+      .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
       .shadow(radius: 10)
-
       textField
+
     }
   }
 
@@ -232,11 +242,7 @@ struct MorselView: View {
   }
 
   var mouthBottomCornerRadius: CGFloat {
-    let step: CGFloat = 0.1
-    let baseRadius: CGFloat = isOpen ? 48 : 4
-    let rawRadius = baseRadius - (baseRadius - 2) * sadnessLevel
-
-    return (rawRadius / step).rounded() * step
+    isOpen ? 48 : 4
   }
 
   func open() {
@@ -312,6 +318,20 @@ struct MorselView: View {
       }
     }
   }
+
+  func desaturatedTopColor(from color: UIColor, sadness: CGFloat) -> UIColor {
+    var hue: CGFloat = 0
+    var saturation: CGFloat = 0
+    var brightness: CGFloat = 0
+    var alpha: CGFloat = 0
+
+    guard color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
+      return color
+    }
+
+    let adjustedSaturation = max(min(saturation * (1 - sadness * 0.4), 1), 0)
+    return UIColor(hue: hue, saturation: adjustedSaturation, brightness: brightness, alpha: alpha)
+  }
 }
 
 #Preview {
@@ -329,5 +349,74 @@ struct MorselView: View {
 extension CGFloat {
   static func lerp(from: CGFloat, to: CGFloat, by amount: CGFloat) -> CGFloat {
     return from + (to - from) * amount
+  }
+}
+
+struct AnimatedEyeView: View {
+  @Binding var amount: CGFloat
+  @Binding var angle: Angle
+
+  var body: some View {
+    EyebrowedEyeShape(eyebrowAmount: amount, angle: angle)
+      .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
+      .animation(.easeInOut(duration: 0.3), value: amount)
+  }
+}
+
+struct EyebrowedEyeShape: Shape {
+  var eyebrowAmount: CGFloat // 0 = circle, 1 = flat segment
+  var angle: Angle           // angle of flat segment
+
+  var animatableData: AnimatablePair<CGFloat, CGFloat> {
+    get { AnimatablePair(eyebrowAmount, CGFloat(angle.degrees)) }
+    set {
+      eyebrowAmount = newValue.first
+      angle = .degrees(Double(newValue.second))
+    }
+  }
+
+  func path(in rect: CGRect) -> Path {
+    let clamped = min(max(eyebrowAmount, 0), 1)
+    let radius = min(rect.width, rect.height) / 2
+    let center = CGPoint(x: rect.midX, y: rect.midY)
+
+    var path = Path()
+
+    if clamped == 0 {
+      path.addEllipse(in: CGRect(
+        x: center.x - radius,
+        y: center.y - radius,
+        width: radius * 2,
+        height: radius * 2
+      ))
+      return path
+    }
+
+    let delta = 90.0 * (1 - clamped)
+    let startAngle = angle + .degrees(delta)
+    let endAngle = angle + .degrees(180 - delta)
+
+    path.addArc(
+      center: center,
+      radius: radius,
+      startAngle: startAngle,
+      endAngle: endAngle,
+      clockwise: true
+    )
+
+    // Flat line to close the arc
+    let left = CGPoint(
+      x: center.x + radius * cos(CGFloat(endAngle.radians)),
+      y: center.y + radius * sin(CGFloat(endAngle.radians))
+    )
+    let right = CGPoint(
+      x: center.x + radius * cos(CGFloat(startAngle.radians)),
+      y: center.y + radius * sin(CGFloat(startAngle.radians))
+    )
+    path.addLine(to: right)
+    path.addLine(to: left)
+
+    path.closeSubpath()
+    return path
   }
 }
