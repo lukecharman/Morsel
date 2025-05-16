@@ -42,6 +42,12 @@ struct MorselView: View {
           anchor: .center,
           perspective: 0.5
         )
+        .rotation3DEffect(
+          .degrees(destinationProximity > 0 ? -destinationProximity * -25 : 0),
+          axis: (x: 1, y: 0, z: 0),
+          anchor: .center,
+          perspective: 0.5
+        )
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
         .gesture(
@@ -146,25 +152,25 @@ struct MorselView: View {
   }
 
   var eyes: some View {
-    let eyeSize = CGFloat.lerp(from: 10, to: 8, by: sadnessLevel)
-    let eyeOffset = CGFloat.lerp(from: 16, to: 18, by: sadnessLevel)
+    let eyeSize: CGFloat = .lerp(from: 10, to: 8, by: sadnessLevel)
+    let eyeOffset: CGFloat = .lerp(from: 16, to: 18, by: sadnessLevel)
 
     return HStack(spacing: isOpen ? 24 : 12) {
       EyebrowedEyeShape(
-        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 2 : sadnessLevel,
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 3 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(20) : .degrees(160)
       )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
-        .scaleEffect(y: eyeScaleY)
+        .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
       EyebrowedEyeShape(
-        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 2 : sadnessLevel,
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 3 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(340) : .degrees(200)
       )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
-        .scaleEffect(y: eyeScaleY)
+        .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
     }
     .offset(y: eyeOffset)
@@ -228,11 +234,23 @@ struct MorselView: View {
       .offset(y: isOpen ? 14 : 32)
   }
 
+  var eyeScaleX: CGFloat {
+    if destinationProximity < 0 {
+      return max(0.4, 1 + destinationProximity * 0.04)
+    } else if destinationProximity > 0 {
+      return 1 + destinationProximity * 0.2
+    } else {
+      return 1
+    }
+  }
+
   var eyeScaleY: CGFloat {
     if isSwallowing || isBlinking {
       return 0.25
     } else if destinationProximity < 0 {
       return max(0.4, 1 + destinationProximity * 0.04)
+    } else if destinationProximity > 0 {
+      return 1 + destinationProximity * 0.2
     } else {
       return 1
     }
@@ -240,7 +258,9 @@ struct MorselView: View {
 
   var faceTopCornerRadius: CGFloat {
     if destinationProximity > 0 {
-      return 32 - destinationProximity * 8
+      return 32 - destinationProximity * 2  // 32 → 24 as proximity goes 0 → 1
+    } else if destinationProximity < 0 {
+      return 32 + (-destinationProximity * 16) // 32 → 48 as proximity goes 0 → -1
     } else {
       return 32
     }
