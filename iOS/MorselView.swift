@@ -155,7 +155,7 @@ struct MorselView: View {
     let eyeSize: CGFloat = .lerp(from: 10, to: 8, by: sadnessLevel)
     let eyeOffset: CGFloat = .lerp(from: 16, to: 18, by: sadnessLevel)
 
-    return HStack(spacing: isOpen ? 24 : 12) {
+    return HStack(spacing: isOpen ? 24 : .lerp(from: 12, to: 15, by: happinessLevel)) {
       EyebrowedEyeShape(
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(30) : .degrees(160)
@@ -190,8 +190,8 @@ struct MorselView: View {
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
-        width: isOpen ? 170 : .lerp(from: 24, to: 56, by: happinessLevel),
-        height: isOpen ? 74 : .lerp(from: 8, to: 34, by: happinessLevel)
+        width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
+        height: isOpen ? 74 : .lerp(from: 8, to: 30, by: happinessLevel)
       )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
