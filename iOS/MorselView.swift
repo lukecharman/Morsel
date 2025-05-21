@@ -121,8 +121,8 @@ struct MorselView: View {
         )
       )
       .frame(
-        width: isOpen ? 240 : 86,
-        height: isOpen ? 120 : 64
+        width: isOpen ? 240 : .lerp(from: 86, to: 107, by: happinessLevel),
+        height: isOpen ? 120 : .lerp(from: 64, to: 80, by: happinessLevel)
       )
       .animation(.easeInOut(duration: 0.3), value: faceBottomCornerRadius)
       .overlay(
@@ -189,7 +189,10 @@ struct MorselView: View {
       )
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
-      .frame(width: isOpen ? 170 : 24, height: isOpen ? 74 : 8)
+      .frame(
+        width: isOpen ? 170 : .lerp(from: 24, to: 56, by: happinessLevel),
+        height: isOpen ? 74 : .lerp(from: 8, to: 27, by: happinessLevel)
+      )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
       .shadow(radius: 10)
@@ -257,29 +260,31 @@ struct MorselView: View {
   }
 
   var faceTopCornerRadius: CGFloat {
-    if destinationProximity > 0 {
-      return 32 - destinationProximity * 2  // 32 → 24 as proximity goes 0 → 1
-    } else if destinationProximity < 0 {
-      return 32 + (-destinationProximity * 16) // 32 → 48 as proximity goes 0 → -1
+    if isOpen {
+      return 120
+    } else if destinationProximity > 0 {
+      return .lerp(from: 32, to: 120, by: happinessLevel)
     } else {
-      return 32
+      return 32 + (-destinationProximity * 16)
     }
   }
 
   var faceBottomCornerRadius: CGFloat {
-    if destinationProximity < 0 {
-      return 32 + destinationProximity * 12
+    if isOpen {
+      return 32
+    } else if destinationProximity > 0 {
+      return .lerp(from: 32, to: 32, by: happinessLevel) // stays flat
     } else {
-      return 32 + destinationProximity * 20
+      return 32 + destinationProximity * 12
     }
   }
 
   var mouthTopCornerRadius: CGFloat {
-    isOpen ? 16 : 4
+    isOpen ? 16 : .lerp(from: 4, to: 6, by: happinessLevel)
   }
 
   var mouthBottomCornerRadius: CGFloat {
-    isOpen ? 48 : 4
+    isOpen ? 48 : .lerp(from: 4, to: 48, by: happinessLevel)
   }
 
   func open() {
