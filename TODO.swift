@@ -3,10 +3,8 @@
  MUST
  ----
  * Add more expression to Morsel.
-    * Gradual smile / sad while you're deciding who a morsel is for.
     * Expression for “conflicted” or “uncertain” (when?)
     * Perfect the idle loop, introduce more variety.
-    * Experiment with a slight radial gradient emanating from his centre.
     * Then STOP. That's 1.0.
 
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
