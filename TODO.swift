@@ -2,16 +2,11 @@
 
  MUST
  ----
- * Add more expression to Morsel.
-    * Expression for “conflicted” or “uncertain” (when?)
-    * Perfect the idle loop, introduce more variety.
-    * Then STOP. That's 1.0.
+ * Weekly "Digest"
 
  * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
     * Colour picker (simple palette of 6 colors, not free-form)
     * App icon changer tied to that colour picker
-
- * Weekly "Digest"
 
  * Add an Onboarding of some kind.
     * One screen, super simple, ON the empty state.

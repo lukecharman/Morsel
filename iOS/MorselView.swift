@@ -157,16 +157,16 @@ struct MorselView: View {
 
     return HStack(spacing: isOpen ? 24 : 12) {
       EyebrowedEyeShape(
-        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 3 : sadnessLevel / 2,
-        angle: destinationProximity > 0 ? .degrees(20) : .degrees(160)
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
+        angle: destinationProximity > 0 ? .degrees(30) : .degrees(160)
       )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
       EyebrowedEyeShape(
-        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 3 : sadnessLevel / 2,
-        angle: destinationProximity > 0 ? .degrees(340) : .degrees(200)
+        eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
+        angle: destinationProximity > 0 ? .degrees(330) : .degrees(200)
       )
         .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
         .frame(width: eyeSize, height: eyeSize)
@@ -191,7 +191,7 @@ struct MorselView: View {
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 56, by: happinessLevel),
-        height: isOpen ? 74 : .lerp(from: 8, to: 27, by: happinessLevel)
+        height: isOpen ? 74 : .lerp(from: 8, to: 34, by: happinessLevel)
       )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
