@@ -96,7 +96,7 @@ struct MorselView: View {
 
   var face: some View {
     let baseColor = AppSettings.shared.morselColor
-    let topColor = desaturatedTopColor(from: baseColor, sadness: sadnessLevel)
+    let topColor = adjustedTopColor(from: baseColor, sadness: sadnessLevel, happiness: happinessLevel)
 
     return ZStack {
       Color.clear.frame(width: 240, height: 86)
@@ -197,7 +197,6 @@ struct MorselView: View {
       .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
       .shadow(radius: 10)
       textField
-
     }
   }
 
@@ -361,18 +360,18 @@ struct MorselView: View {
     }
   }
 
-  func desaturatedTopColor(from color: UIColor, sadness: CGFloat) -> UIColor {
+  func adjustedTopColor(from color: UIColor, sadness: CGFloat, happiness: CGFloat) -> UIColor {
     var hue: CGFloat = 0
     var saturation: CGFloat = 0
     var brightness: CGFloat = 0
     var alpha: CGFloat = 0
 
-    guard color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
-      return color
-    }
+    guard color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else { return color }
 
     let adjustedSaturation = max(min(saturation * (1 - sadness * 0.4), 1), 0)
-    return UIColor(hue: hue, saturation: adjustedSaturation, brightness: brightness, alpha: alpha)
+    let adjustedBrightness = max(min(brightness * (1 - happiness * 0.18), 1), 0)
+
+    return UIColor(hue: hue, saturation: adjustedSaturation, brightness: adjustedBrightness, alpha: alpha)
   }
 }
 
