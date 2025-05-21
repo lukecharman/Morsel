@@ -6,6 +6,8 @@ struct MorselView: View {
   @Binding var isChoosingDestination: Bool
   @Binding var destinationProximity: CGFloat
 
+  @EnvironmentObject var appSettings: AppSettings
+
   @State private var isOpen = false
   @State private var isSwallowing = false
   @State private var isBlinking = false
@@ -95,7 +97,7 @@ struct MorselView: View {
   }
 
   var face: some View {
-    let baseColor = AppSettings.shared.morselColor
+    let baseColor = appSettings.morselColor
     let topColor = adjustedTopColor(from: baseColor, sadness: sadnessLevel, happiness: happinessLevel)
 
     return ZStack {

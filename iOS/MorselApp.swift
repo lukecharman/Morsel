@@ -13,6 +13,7 @@ struct MorselApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView(shouldOpenMouth: $shouldOpenMouth)
+        .environmentObject(AppSettings.shared)
         .modelContainer(.sharedContainer)
         .onOpenURL { handleDeepLink($0) }
         .onAppear { Analytics.setUp() }
