@@ -98,7 +98,8 @@ struct MorselView: View {
 
   var face: some View {
     let baseColor = appSettings.morselColor
-    let topColor = adjustedTopColor(from: baseColor, sadness: sadnessLevel, happiness: happinessLevel)
+    let topColor = Color(adjustedTopColor(from: baseColor, sadness: sadnessLevel, happiness: happinessLevel))
+
 
     return ZStack {
       Color.clear.frame(width: 240, height: 86)
@@ -111,12 +112,13 @@ struct MorselView: View {
         ),
         style: .continuous
       )
+      .stroke(topColor.opacity(0.5), lineWidth: 2)
       .fill(
         LinearGradient(
           colors: [
-            Color(uiColor: topColor),
-            Color(uiColor: baseColor),
-            Color(uiColor: baseColor),
+            topColor,
+            Color(baseColor),
+            Color(baseColor),
           ],
           startPoint: .top,
           endPoint: .bottom

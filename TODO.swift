@@ -13,6 +13,7 @@
     * Animated, beautiful. Can Morsel wave?
 
  * Decide on £0.99 a year subscription with RevenueCat etc.
+    * What's in the free tier versus paid? Morsel Members?
     * Fallbacks for missing entitlements / failed purchases
     * Basic crash/error logging (e.g. Firebase or similar)
 

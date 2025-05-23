@@ -3,14 +3,38 @@ import SwiftUI
 struct ColorPickerView: View {
   @EnvironmentObject var appSettings: AppSettings
 
-  @State private var rotation: Double = 0
-  @State private var pendingColor: UIColor?
+  @Environment(\.dismiss) var dismiss
 
-  @State private var particleTrigger = UUID()
-  @State private var currentParticleColor: Color = .clear
+  @State private var blurAmount: CGFloat = 0
+  @State private var pendingColor: UIColor?
+  @State private var scrollTarget: String?
+  @State private var selectedKey: String?
+
+  private let colorSwatches: [(key: String, name: String, color: Color)] = [
+    ("Orange", "Crispy Wotsit", .orange),
+    ("Blue", "Blueberry Glaze", .blue),
+    ("Red", "Ketchup Splash", .red),
+    ("Green", "Mushy Pea", .green),
+    ("Pink", "Fizzy Laces", .pink),
+    ("White", "Marshmallow Puff", .white),
+    ("Mint", "Toothpaste Gelato", .mint),
+    ("Teal", "Minty Yogurt", .teal),
+    ("Yellow", "Custard Spill", .yellow),
+    ("Purple", "Squashed Grape", .purple),
+    ("Cyan", "Bubblegum Ice", .cyan),
+    ("Brown", "Burnt Toast", .brown)
+  ]
 
   var body: some View {
     VStack {
+      HStack {
+        Spacer()
+        ToggleButton(isActive: true, systemImage: "xmark") {
+          dismiss()
+        }
+        .padding([.top, .trailing])
+      }
+
       Spacer()
 
       ZStack {
@@ -22,118 +46,132 @@ struct ColorPickerView: View {
           onAdd: { _ in }
         )
         .scaleEffect(2)
-        .rotation3DEffect(
-          .degrees(rotation),
-          axis: (x: 0, y: 1, z: 0),
-          perspective: 0.5
-        )
-        .animation(.easeInOut(duration: 0.6), value: rotation)
-
-        ParticleView(colour: currentParticleColor)
-          .id(particleTrigger)
+        .blur(radius: blurAmount)
+        .animation(.easeInOut(duration: 0.6), value: blurAmount)
       }
 
       Spacer()
 
-      ScrollView(.horizontal) {
-        HStack(spacing: 42) {
-          colorButton("Orange", .orange)
-          colorButton("Blue", .blue)
-          colorButton("Red", .red)
-          colorButton("Green", .green)
-          colorButton("Pink", .pink)
-          colorButton("White", .white)
+      // Display the name of the currently selected color above the swatches
+      if let currentKey = scrollTarget,
+         let currentName = colorSwatches.first(where: { $0.key == currentKey })?.name {
+        ZStack {
+          Text(currentName)
+            .font(MorselFont.title)
+            .id(currentKey)
+            .transition(.blurReplace)
         }
+        .frame(height: 32)
+        .animation(.easeInOut, value: scrollTarget)
       }
-      .padding(.bottom, 32)
-      .scrollIndicators(.hidden)
-    }
-  }
 
-  @ViewBuilder
-  private func colorButton(_ label: String, _ swiftUIColor: Color) -> some View {
-    Button {
-      let newColor = UIColor(swiftUIColor)
-      if newColor != appSettings.morselColor {
-        pendingColor = newColor
-        withAnimation(.easeInOut(duration: 0.6)) {
-          rotation += 360
+      GeometryReader { proxy in
+        ScrollView(.horizontal, showsIndicators: false) {
+          HStack(spacing: 16) {
+            Spacer()
+              .frame(width: (proxy.size.width - 56) / 2)
+            ForEach(colorSwatches, id: \.key) { swatch in
+              ColorSwatchView(
+                swatch: swatch,
+                isSelected: swatch.key == scrollTarget,
+                onTap: {
+                  withAnimation {
+                    scrollTarget = swatch.key
+                  }
+                  let uiColor = UIColor(swatch.color)
+                  if uiColor != appSettings.morselColor {
+                    pendingColor = uiColor
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                      blurAmount = 80
+                    }
+                    withAnimation(.easeInOut(duration: 0.3).delay(0.3)) {
+                      blurAmount = 0
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                      if let colour = pendingColor {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                          appSettings.morselColor = colour
+                        }
+                      }
+                    }
+                  }
+                }
+              )
+            }
+            Spacer()
+              .frame(width: (proxy.size.width - 56) / 2)
+          }
+          .scrollTargetLayout()
         }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-          if let colour = pendingColor {
-            appSettings.morselColor = colour
-            currentParticleColor = swiftUIColor
-            particleTrigger = UUID()
-            pendingColor = nil
+        .scrollPosition(id: $scrollTarget, anchor: .center)
+        .scrollTargetBehavior(.viewAligned)
+        .frame(height: 100)
+        .onAppear {
+          if let match = colorSwatches.first(where: { UIColor($0.color) == appSettings.morselColor }) {
+            scrollTarget = match.key
+          }
+        }
+        .onChange(of: scrollTarget) { _, newKey in
+          if let newKey,
+             let swatch = colorSwatches.first(where: { $0.key == newKey }) {
+            let uiColor = UIColor(swatch.color)
+            if uiColor != appSettings.morselColor {
+              pendingColor = uiColor
+              withAnimation(.easeInOut(duration: 0.3)) {
+                blurAmount = 80
+              }
+              withAnimation(.easeInOut(duration: 0.3).delay(0.3)) {
+                blurAmount = 0
+              }
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if let colour = pendingColor {
+                  withAnimation(.easeInOut(duration: 0.3)) {
+                    appSettings.morselColor = colour
+                  }
+                }
+              }
+            }
           }
         }
       }
-    } label: {
-      Text(label)
+      .frame(height: 100)
     }
   }
 }
 
-struct Particle: Identifiable {
-  let id = UUID()
-  let xOffset: CGFloat
-  let yOffset: CGFloat
-  let size: CGFloat
-  let colour: Color
-  let lifetime: Double
-}
-
-struct ParticleView: View {
-  let colour: Color
-  @State private var particles: [Particle] = []
-  @State private var animate = false
+private struct ColorSwatchView: View {
+  let swatch: (key: String, name: String, color: Color)
+  let isSelected: Bool
+  let onTap: () -> Void
 
   var body: some View {
     ZStack {
-      ForEach(particles) { particle in
-        Circle()
-          .fill(particle.colour)
-          .frame(width: particle.size, height: particle.size)
-          .offset(
-            x: animate ? particle.xOffset : 0,
-            y: animate ? particle.yOffset : 0
-          )
-          .opacity(animate ? 0 : 1)
-          .scaleEffect(animate ? 1.0 : 0.5)
-          .animation(.easeOut(duration: particle.lifetime), value: animate)
-      }
-    }
-    .onAppear {
-      generateParticles()
-      // Animate on next runloop to allow initial state to render
-      DispatchQueue.main.async {
-        animate = true
-      }
-
-      // Clear them after they're done
-      DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-        particles.removeAll()
-        animate = false
-      }
-    }
-  }
-
-  private func generateParticles() {
-    let count = Int.random(in: 200...300)
-    particles = (0..<count).map { _ in
-      let angle = Double.random(in: 0...2 * .pi)
-      let speed = CGFloat.random(in: 500...600)
-      let size = CGFloat.random(in: 16...24)
-      let lifetime = Double.random(in: 3...5)
-
-      return Particle(
-        xOffset: cos(angle) * speed,
-        yOffset: sin(angle) * speed,
-        size: size,
-        colour: colour.opacity(0.8),
-        lifetime: lifetime
+      UnevenRoundedRectangle(
+        cornerRadii: RectangleCornerRadii(
+          topLeading: 28,
+          bottomLeading: 20,
+          bottomTrailing: 20,
+          topTrailing: 28
+        ),
+        style: .continuous
       )
+      .fill(swatch.color)
+
+      UnevenRoundedRectangle(
+        cornerRadii: RectangleCornerRadii(
+          topLeading: 28,
+          bottomLeading: 20,
+          bottomTrailing: 20,
+          topTrailing: 28
+        ),
+        style: .continuous
+      )
+      .stroke(swatch.color.opacity(0.5), lineWidth: 2)
+    }
+    .frame(width: 56, height: 47)
+    .padding(2)
+    .onTapGesture {
+      onTap()
     }
   }
 }
