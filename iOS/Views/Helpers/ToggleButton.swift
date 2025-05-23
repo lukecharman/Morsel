@@ -5,6 +5,8 @@ struct ToggleButton: View {
   let systemImage: String
   let action: () -> Void
 
+  @EnvironmentObject var appSettings: AppSettings
+
   var body: some View {
     Button(action: action) {
       Image(systemName: isActive ? "xmark" : systemImage)
@@ -13,7 +15,12 @@ struct ToggleButton: View {
         .frame(width: 44, height: 44)
         .background(.thinMaterial)
         .clipShape(Circle())
+        .tint(tintColor)
     }
     .animation(.easeInOut(duration: 0.25), value: isActive)
+  }
+
+  var tintColor: Color {
+    Color(appSettings.morselColor)
   }
 }

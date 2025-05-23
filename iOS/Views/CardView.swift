@@ -7,11 +7,13 @@ struct CardView: View {
 
   var onTap: (() -> Void)?
 
+  @EnvironmentObject var appSettings: AppSettings
+
   var body: some View {
     VStack(spacing: 16) {
       Image(systemName: icon)
         .font(.largeTitle)
-        .foregroundColor(.accentColor)
+        .foregroundStyle(tintColor)
         .padding(8)
         .background(.ultraThinMaterial, in: Circle())
 
@@ -34,5 +36,9 @@ struct CardView: View {
     .onTapGesture {
       onTap?()
     }
+  }
+
+  var tintColor: Color {
+    Color(appSettings.morselColor)
   }
 }
