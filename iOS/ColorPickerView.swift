@@ -26,50 +26,51 @@ struct ColorPickerView: View {
   ]
 
   var body: some View {
-    VStack {
-      HStack {
+    ZStack {
+      PatternBackgroundView()
+      VStack {
+        HStack {
+          Spacer()
+          ToggleButton(isActive: true, systemImage: "xmark") {
+            dismiss()
+          }
+          .padding([.top, .trailing])
+        }
+
         Spacer()
-        ToggleButton(isActive: true, systemImage: "xmark") {
-          dismiss()
-        }
-        .padding([.top, .trailing])
-      }
 
-      Spacer()
-
-      ZStack {
-        MorselView(
-          shouldOpen: .constant(false),
-          shouldClose: .constant(false),
-          isChoosingDestination: .constant(true),
-          destinationProximity: .constant(0.5),
-          onAdd: { _ in }
-        )
-        .scaleEffect(2)
-        .blur(radius: blurAmount)
-        .animation(.easeInOut(duration: 0.6), value: blurAmount)
-      }
-
-      Spacer()
-
-      // Display the name of the currently selected color above the swatches
-      if let currentKey = scrollTarget,
-         let currentName = colorSwatches.first(where: { $0.key == currentKey })?.name {
         ZStack {
-          Text(currentName)
-            .font(MorselFont.title)
-            .id(currentKey)
-            .transition(.blurReplace)
+          MorselView(
+            shouldOpen: .constant(false),
+            shouldClose: .constant(false),
+            isChoosingDestination: .constant(true),
+            destinationProximity: .constant(0.5),
+            onAdd: { _ in }
+          )
+          .scaleEffect(2)
+          .blur(radius: blurAmount)
+          .animation(.easeInOut(duration: 0.6), value: blurAmount)
         }
-        .frame(height: 32)
-        .animation(.easeInOut, value: scrollTarget)
-      }
 
-      GeometryReader { proxy in
+        Spacer()
+
+        // Display the name of the currently selected color above the swatches
+        if let currentKey = scrollTarget,
+           let currentName = colorSwatches.first(where: { $0.key == currentKey })?.name {
+          ZStack {
+            Text(currentName)
+              .font(MorselFont.title)
+              .id(currentKey)
+              .transition(.blurReplace)
+          }
+          .frame(height: 32)
+          .animation(.easeInOut, value: scrollTarget)
+        }
+
         ScrollView(.horizontal, showsIndicators: false) {
           HStack(spacing: 16) {
             Spacer()
-              .frame(width: (proxy.size.width - 56) / 2)
+              .frame(width: (UIScreen.main.bounds.width - 56) / 2)
             ForEach(colorSwatches, id: \.key) { swatch in
               ColorSwatchView(
                 swatch: swatch,
@@ -99,10 +100,11 @@ struct ColorPickerView: View {
               )
             }
             Spacer()
-              .frame(width: (proxy.size.width - 56) / 2)
+              .frame(width: (UIScreen.main.bounds.width - 56) / 2)
           }
           .scrollTargetLayout()
         }
+        .defaultScrollAnchor(.center)
         .scrollPosition(id: $scrollTarget, anchor: .center)
         .scrollTargetBehavior(.viewAligned)
         .frame(height: 100)
@@ -134,7 +136,6 @@ struct ColorPickerView: View {
           }
         }
       }
-      .frame(height: 100)
     }
   }
 }
@@ -156,22 +157,39 @@ private struct ColorSwatchView: View {
         style: .continuous
       )
       .fill(swatch.color)
-
-      UnevenRoundedRectangle(
-        cornerRadii: RectangleCornerRadii(
-          topLeading: 28,
-          bottomLeading: 20,
-          bottomTrailing: 20,
-          topTrailing: 28
-        ),
-        style: .continuous
-      )
-      .stroke(swatch.color.opacity(0.5), lineWidth: 2)
     }
     .frame(width: 56, height: 47)
     .padding(2)
     .onTapGesture {
       onTap()
     }
+  }
+}
+
+struct PatternBackgroundView: View {
+  var body: some View {
+    GeometryReader { geo in
+      let spacing: CGFloat = 40
+      let capsuleSize = CGSize(width: 12, height: 40)
+      let cols = Int(geo.size.width / spacing) + 3
+      let rows = Int(geo.size.height / spacing) + 3
+
+      ZStack {
+        ForEach(0..<cols, id: \.self) { column in
+          ForEach(0..<rows, id: \.self) { row in
+            Capsule()
+              .frame(width: capsuleSize.width, height: capsuleSize.height)
+              .rotationEffect(.degrees(45))
+              .foregroundColor(.gray.opacity(0.05))
+              .position(
+                x: CGFloat(column) * spacing,
+                y: CGFloat(row) * spacing
+              )
+          }
+        }
+      }
+      .frame(width: geo.size.width, height: geo.size.height)
+    }
+    .ignoresSafeArea()
   }
 }

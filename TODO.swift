@@ -4,8 +4,7 @@
  ----
  * Weekly "Digest"
 
- * Decide on final set of options in Stats / Extras. Color for Morsel, with accompanying app icons, etc.?
-    * Colour picker (simple palette of 6 colors, not free-form)
+ * Decide on final set of options in Stats / Extras.
     * App icon changer tied to that colour picker
 
  * Add an Onboarding of some kind.

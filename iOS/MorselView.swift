@@ -112,7 +112,6 @@ struct MorselView: View {
         ),
         style: .continuous
       )
-      .stroke(topColor.opacity(0.5), lineWidth: 2)
       .fill(
         LinearGradient(
           colors: [
@@ -164,7 +163,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(30) : .degrees(160)
       )
-        .fill(Color(mouthColor(from: AppSettings.shared.morselColor)))
+        .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -172,7 +171,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(330) : .degrees(200)
       )
-        .fill(Color(mouthColor(from: AppSettings.shared.morselColor)))
+        .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -191,7 +190,7 @@ struct MorselView: View {
         ),
         style: .continuous
       )
-      .fill(Color(mouthColor(from: AppSettings.shared.morselColor)))
+      .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
@@ -376,20 +375,6 @@ struct MorselView: View {
     let adjustedBrightness = max(min(brightness * (1 - happiness * 0.18), 1), 0)
 
     return UIColor(hue: hue, saturation: adjustedSaturation, brightness: adjustedBrightness, alpha: alpha)
-  }
-
-  func mouthColor(from color: UIColor, percentage: CGFloat = 0.75) -> UIColor {
-    var hue: CGFloat = 0
-    var saturation: CGFloat = 0
-    var brightness: CGFloat = 0
-    var alpha: CGFloat = 0
-
-    guard color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) else {
-      return color
-    }
-
-    let adjustedBrightness = max(brightness * (1 - percentage), 0)
-    return UIColor(hue: hue, saturation: saturation, brightness: adjustedBrightness, alpha: alpha)
   }
 }
 
