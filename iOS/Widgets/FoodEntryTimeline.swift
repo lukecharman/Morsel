@@ -1,19 +1,21 @@
 import Foundation
 import SwiftData
+import SwiftUI
 import WidgetKit
 
 struct FoodEntryTimelineEntry: TimelineEntry {
   let date: Date
   let foodEntries: [FoodEntrySnapshot]
+  let morselColor: Color
 }
 
 struct FoodTimelineProvider: @preconcurrency TimelineProvider {
   func placeholder(in context: Context) -> FoodEntryTimelineEntry {
-    FoodEntryTimelineEntry(date: Date(), foodEntries: [])
+    FoodEntryTimelineEntry(date: Date(), foodEntries: [], morselColor: loadMorselColor())
   }
 
   func getSnapshot(in context: Context, completion: @escaping (FoodEntryTimelineEntry) -> ()) {
-    let entry = FoodEntryTimelineEntry(date: Date(), foodEntries: [])
+    let entry = FoodEntryTimelineEntry(date: Date(), foodEntries: [], morselColor: loadMorselColor())
     completion(entry)
   }
 
@@ -21,7 +23,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
   func getTimeline(in context: Context, completion: @escaping (Timeline<FoodEntryTimelineEntry>) -> ()) {
     Task {
       let entries = await fetchTodayFoodEntries()
-      let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries)
+      let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries, morselColor: loadMorselColor())
 
       let nextRefresh: Date = entries.isEmpty
       ? Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
@@ -55,6 +57,17 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       }
     } catch {
       return []
+    }
+  }
+
+  private func loadMorselColor() -> Color {
+    let defaults = UserDefaults(suiteName: "group.com.lukecharman.morsel")!
+
+    if let data = defaults.data(forKey: Key.morselColor.rawValue),
+       let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
+      return Color(uiColor)
+    } else {
+      return .blue
     }
   }
 }

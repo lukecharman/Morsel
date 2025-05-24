@@ -56,7 +56,7 @@ struct FoodEntryWidgetView: View {
       }
       GeometryReader { geo in
         Link(destination: URL(string: "morsel://add")!) {
-          StaticMorsel()
+          StaticMorsel(color: entry.morselColor)
         }
         .frame(
           width: widgetFamily == .systemSmall ? 40 : 40,
@@ -74,11 +74,7 @@ struct FoodEntryWidgetView: View {
     .ignoresSafeArea()
     .widgetURL(URL(string: "morsel://list")!)
     .containerBackground(for: .widget) {
-      LinearGradient(
-        colors: [.black, .black],
-        startPoint: .top,
-        endPoint: .bottom
-      )
+      BackgroundGradientView()
     }
   }
 
@@ -105,11 +101,11 @@ struct FoodEntryWidgetView: View {
 }, timeline: {
   FoodEntryTimelineEntry(date: .now, foodEntries: [
     FoodEntrySnapshot(name: "Toast")
-  ])
+  ], morselColor: .blue)
   FoodEntryTimelineEntry(date: .now, foodEntries: [
     FoodEntrySnapshot(name: "Toast"),
     FoodEntrySnapshot(name: "Chocolate Bar", isForMorsel: true)
-  ])
+  ], morselColor: .blue)
   FoodEntryTimelineEntry(date: .now, foodEntries: [
     FoodEntrySnapshot(name: "Toast"),
     FoodEntrySnapshot(name: "Chocolate Bar", isForMorsel: true),
@@ -117,5 +113,5 @@ struct FoodEntryWidgetView: View {
     FoodEntrySnapshot(name: "Tomatoes", isForMorsel: true),
     FoodEntrySnapshot(name: "Haribo"),
     FoodEntrySnapshot(name: "Pistachios")
-  ])
+  ], morselColor: .blue)
 })

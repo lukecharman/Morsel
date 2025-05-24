@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct StaticMorsel: View {
+  var color: Color = .blue
+
   var body: some View {
     ZStack(alignment: .bottom) {
       face
@@ -20,7 +22,7 @@ struct StaticMorsel: View {
       ),
       style: .continuous
     )
-    .fill(Color.blue)
+    .fill(color)
     .frame(
       width: 86,
       height: 64
