@@ -5,7 +5,6 @@ struct ColorPickerView: View {
 
   @Environment(\.dismiss) var dismiss
 
-  @State private var blurAmount: CGFloat = 0
   @State private var pendingColor: UIColor?
   @State private var scrollTarget: String?
   @State private var selectedKey: String?
@@ -48,8 +47,6 @@ struct ColorPickerView: View {
             onAdd: { _ in }
           )
           .scaleEffect(2)
-          .blur(radius: blurAmount)
-          .animation(.easeInOut(duration: 0.6), value: blurAmount)
         }
 
         Spacer()
@@ -61,76 +58,66 @@ struct ColorPickerView: View {
             Text(currentName)
               .font(MorselFont.title)
               .id(currentKey)
-              .transition(.blurReplace)
+              .transition(.blurReplace.combined(with: .opacity))
           }
           .frame(height: 32)
           .animation(.easeInOut, value: scrollTarget)
         }
 
-        ScrollView(.horizontal, showsIndicators: false) {
-          HStack(spacing: 16) {
-            Spacer()
-              .frame(width: (UIScreen.main.bounds.width - 56) / 2)
-            ForEach(colorSwatches, id: \.key) { swatch in
-              ColorSwatchView(
-                swatch: swatch,
-                isSelected: swatch.key == scrollTarget,
-                onTap: {
-                  withAnimation {
-                    scrollTarget = swatch.key
-                  }
-                  let uiColor = UIColor(swatch.color)
-                  if uiColor != appSettings.morselColor {
-                    pendingColor = uiColor
+        scrollView
+      }
+    }
+  }
+
+  var scrollView: some View {
+    ScrollView(.horizontal, showsIndicators: false) {
+      HStack(spacing: 16) {
+        Spacer()
+          .frame(width: (UIScreen.main.bounds.width - 56) / 2)
+        ForEach(colorSwatches, id: \.key) { swatch in
+          ColorSwatchView(
+            swatch: swatch,
+            isSelected: swatch.key == scrollTarget,
+            onTap: {
+              withAnimation {
+                scrollTarget = swatch.key
+              }
+              if swatch.color != appSettings.morselColor {
+                pendingColor = UIColor(swatch.color)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  if let colour = pendingColor {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                      blurAmount = 80
-                    }
-                    withAnimation(.easeInOut(duration: 0.3).delay(0.3)) {
-                      blurAmount = 0
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                      if let colour = pendingColor {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                          appSettings.morselColor = colour
-                        }
-                      }
+                      appSettings.morselColor = Color(colour)
                     }
                   }
                 }
-              )
+              }
             }
-            Spacer()
-              .frame(width: (UIScreen.main.bounds.width - 56) / 2)
-          }
-          .scrollTargetLayout()
+          )
         }
-        .defaultScrollAnchor(.center)
-        .scrollPosition(id: $scrollTarget, anchor: .center)
-        .scrollTargetBehavior(.viewAligned)
-        .frame(height: 100)
-        .onAppear {
-          if let match = colorSwatches.first(where: { UIColor($0.color) == appSettings.morselColor }) {
-            scrollTarget = match.key
-          }
-        }
-        .onChange(of: scrollTarget) { _, newKey in
-          if let newKey,
-             let swatch = colorSwatches.first(where: { $0.key == newKey }) {
-            let uiColor = UIColor(swatch.color)
-            if uiColor != appSettings.morselColor {
-              pendingColor = uiColor
+        Spacer()
+          .frame(width: (UIScreen.main.bounds.width - 56) / 2)
+      }
+      .scrollTargetLayout()
+    }
+    .defaultScrollAnchor(.center)
+    .scrollPosition(id: $scrollTarget, anchor: .center)
+    .scrollTargetBehavior(.viewAligned)
+    .frame(height: 100)
+    .onAppear {
+      if let match = colorSwatches.first(where: { $0.color == appSettings.morselColor }) {
+        scrollTarget = match.key
+      }
+    }
+    .onChange(of: scrollTarget) { _, newKey in
+      if let newKey,
+         let swatch = colorSwatches.first(where: { $0.key == newKey }) {
+        if swatch.color != appSettings.morselColor {
+          pendingColor = UIColor(swatch.color)
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            if let colour = pendingColor {
               withAnimation(.easeInOut(duration: 0.3)) {
-                blurAmount = 80
-              }
-              withAnimation(.easeInOut(duration: 0.3).delay(0.3)) {
-                blurAmount = 0
-              }
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                if let colour = pendingColor {
-                  withAnimation(.easeInOut(duration: 0.3)) {
-                    appSettings.morselColor = colour
-                  }
-                }
+                appSettings.morselColor = Color(colour)
               }
             }
           }

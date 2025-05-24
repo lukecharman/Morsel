@@ -75,7 +75,7 @@ struct FoodEntryWidgetView: View {
     .widgetURL(URL(string: "morsel://list")!)
     .containerBackground(for: .widget) {
       LinearGradient(
-        colors: GradientColors.gradientColors(colorScheme: colorScheme),
+        colors: [.black, .black],
         startPoint: .top,
         endPoint: .bottom
       )

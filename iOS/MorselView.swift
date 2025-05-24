@@ -98,7 +98,7 @@ struct MorselView: View {
 
   var face: some View {
     let baseColor = appSettings.morselColor
-    let topColor = Color(adjustedTopColor(from: baseColor, sadness: sadnessLevel, happiness: happinessLevel))
+    let topColor = Color(adjustedTopColor(from: UIColor(baseColor), sadness: sadnessLevel, happiness: happinessLevel))
 
 
     return ZStack {
@@ -163,7 +163,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(30) : .degrees(160)
       )
-        .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
+        .fill(Color.darkened(from: AppSettings.shared.morselColor))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -171,7 +171,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(330) : .degrees(200)
       )
-        .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
+        .fill(Color.darkened(from: AppSettings.shared.morselColor))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -190,7 +190,7 @@ struct MorselView: View {
         ),
         style: .continuous
       )
-      .fill(Color(ColorUtilities.mouthColor(from: AppSettings.shared.morselColor)))
+      .fill(Color.darkened(from: AppSettings.shared.morselColor))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
@@ -363,7 +363,11 @@ struct MorselView: View {
     }
   }
 
-  func adjustedTopColor(from color: UIColor, sadness: CGFloat, happiness: CGFloat) -> UIColor {
+  func adjustedTopColor(
+    from color: UIColor,
+    sadness: CGFloat,
+    happiness: CGFloat
+  ) -> UIColor {
     var hue: CGFloat = 0
     var saturation: CGFloat = 0
     var brightness: CGFloat = 0

@@ -8,12 +8,7 @@ struct EmptyStateView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
-      LinearGradient(
-        colors: GradientColors.gradientColors(colorScheme: colorScheme),
-        startPoint: .top,
-        endPoint: .bottom
-      )
-      .ignoresSafeArea()
+      BackgroundGradientView()
       VStack(spacing: 24) {
         Image(systemName: "fork.knife.circle")
           .resizable()

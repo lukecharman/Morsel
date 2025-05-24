@@ -18,13 +18,7 @@ struct FilledEntriesView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
-      LinearGradient(
-        colors: GradientColors.gradientColors(colorScheme: colorScheme),
-        startPoint: .top,
-        endPoint: .bottom
-      )
-      .ignoresSafeArea()
-
+      BackgroundGradientView()
       ScrollViewWithOffset(onScroll: onScroll) {
         LazyVStack(alignment: .leading) {
           ForEach(groupedEntries, id: \.date) { group in
