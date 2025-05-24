@@ -321,6 +321,16 @@ private extension ContentView {
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
           .transition(.move(edge: alignment == .leading ? .leading : .trailing))
           .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isVisible)
+          .gesture(
+            DragGesture()
+              .onEnded { value in
+                if alignment == .leading && value.translation.width < -40 {
+                  withAnimation { showStats = false }
+                } else if alignment == .trailing && value.translation.width > 40 {
+                  withAnimation { showExtras = false }
+                }
+              }
+          )
       }
     }
   }

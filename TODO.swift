@@ -3,7 +3,6 @@
  MUST
  ----
  * Weekly "Digest"
- * Swipes to dismiss side panels.
 
  * Decide on final set of options in Stats / Extras.
     * App icon changer tied to that colour picker
