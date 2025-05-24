@@ -24,13 +24,8 @@ struct CardView: View {
           .frame(width: 40, height: 40)
 
         (
-          Text(value)
-            .font(MorselFont.title)
-            .bold()
-          +
-          Text(" \(title)")
-            .font(MorselFont.body)
-            .foregroundColor(.secondary)
+          Text(value + " " + title)
+            .font(MorselFont.heading)
         )
         .lineLimit(1)
 

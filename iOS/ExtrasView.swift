@@ -15,21 +15,21 @@ struct ExtrasView: View {
     ScrollView {
       VStack(spacing: 16) {
         CardView(
-          title: "Style your Morsel",
+          title: "",
           value: "Theme",
           icon: "theatermask.and.paintbrush.fill",
           description: "Pick a colour scheme for your Morsel and make it your own.",
           onTap: { showColorSheet = true }
         )
         CardView(
-          title: "Clear all your data",
+          title: "",
           value: "Reset",
           icon: "trash",
           description: "This will permanently delete all your entries and cannot be undone.",
           onTap: { showClearAlert = true }
         )
         CardView(
-          title: "Got feedback?",
+          title: "",
           value: "Feedback",
           icon: "ellipsis.message",
           description: "Let us know how Morsel’s doing or what you'd like to see next.",
