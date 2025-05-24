@@ -5,16 +5,13 @@ struct StatsView: View {
 
   var body: some View {
     ScrollView {
-      LazyVGrid(columns: [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-      ], spacing: 16) {
-        CardView(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife")
-        CardView(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling")
-        CardView(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill")
-        CardView(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill")
-        CardView(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill")
-        CardView(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent")
+      VStack(spacing: 16) {
+        CardView(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife", description: "The total number of meals you've logged.")
+        CardView(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling", description: "How many times you've resisted cravings and fed Morsel instead.")
+        CardView(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill", description: "Meals you’ve logged that you actually ate.")
+        CardView(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill", description: "Your current streak of consecutive days with at least one logged meal.")
+        CardView(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill", description: "The longest streak you’ve maintained without breaking the habit.")
+        CardView(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent", description: "The average daily percentage of meals you fed to Morsel.")
       }
       .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)

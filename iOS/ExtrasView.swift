@@ -13,13 +13,28 @@ struct ExtrasView: View {
 
   var body: some View {
     ScrollView {
-      LazyVGrid(columns: [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-      ], spacing: 16) {
-        CardView(title: "Style your Morsel", value: "Theme", icon: "theatermask.and.paintbrush.fill") { showColorSheet = true }
-        CardView(title: "Clear all your data", value: "Reset", icon: "trash") { showClearAlert = true }
-        CardView(title: "Got feedback?", value: "Feedback", icon: "ellipsis.message") { showFeedbackAlert = true }
+      VStack(spacing: 16) {
+        CardView(
+          title: "Style your Morsel",
+          value: "Theme",
+          icon: "theatermask.and.paintbrush.fill",
+          description: "Pick a colour scheme for your Morsel and make it your own.",
+          onTap: { showColorSheet = true }
+        )
+        CardView(
+          title: "Clear all your data",
+          value: "Reset",
+          icon: "trash",
+          description: "This will permanently delete all your entries and cannot be undone.",
+          onTap: { showClearAlert = true }
+        )
+        CardView(
+          title: "Got feedback?",
+          value: "Feedback",
+          icon: "ellipsis.message",
+          description: "Let us know how Morsel’s doing or what you'd like to see next.",
+          onTap: { showFeedbackAlert = true }
+        )
       }
       .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)
