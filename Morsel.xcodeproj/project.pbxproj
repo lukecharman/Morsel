@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A36333E92DC94B7500DD9ADA /* TODO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.swift */; };
+		A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.txt */; };
 		A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A36479432DCC948200A2F723 /* TelemetryDeck */; };
 		A3647A8B2DCE2BA100A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A3647A8A2DCE2BA100A2F723 /* TelemetryDeck */; };
 		A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
@@ -81,7 +81,7 @@
 
 /* Begin PBXFileReference section */
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A36333E82DC94B7500DD9ADA /* TODO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODO.swift; sourceTree = "<group>"; };
+		A36333E82DC94B7500DD9ADA /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (iOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -268,7 +268,7 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
-				A36333E82DC94B7500DD9ADA /* TODO.swift */,
+				A36333E82DC94B7500DD9ADA /* TODO.txt */,
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
@@ -490,7 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A36333E92DC94B7500DD9ADA /* TODO.swift in Sources */,
+				A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

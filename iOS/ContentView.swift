@@ -100,6 +100,10 @@ struct ContentView: View {
 }
 
 private extension ContentView {
+  var isLookingUp: Bool {
+    showStats || showExtras
+  }
+
   var morsel: some View {
     GeometryReader { geo in
       MorselView(
@@ -107,6 +111,7 @@ private extension ContentView {
         shouldClose: $shouldCloseMouth,
         isChoosingDestination: $isChoosingDestination,
         destinationProximity: $destinationProximity,
+        isLookingUp: .constant(isLookingUp),
         onTap: {
           if showStats { withAnimation { showStats = false } }
           if showExtras { withAnimation { showExtras = false } }

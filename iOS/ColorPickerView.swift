@@ -44,6 +44,7 @@ struct ColorPickerView: View {
             shouldClose: .constant(false),
             isChoosingDestination: .constant(true),
             destinationProximity: .constant(0.5),
+            isLookingUp: .constant(false),
             onAdd: { _ in }
           )
           .scaleEffect(2)

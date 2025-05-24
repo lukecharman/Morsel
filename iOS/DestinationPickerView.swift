@@ -6,6 +6,7 @@ struct DestinationPickerView: View {
   var onDrag: (CGFloat) -> Void = { _ in }
 
   @GestureState private var dragOffset: CGSize = .zero
+  @EnvironmentObject private var appSettings: AppSettings
 
   private let threshold: CGFloat = 80
 
@@ -31,7 +32,7 @@ struct DestinationPickerView: View {
               VStack(spacing: 8) {
                 Image(systemName: "person.fill")
                   .font(.largeTitle)
-                  .foregroundColor(draggedFarEnoughLeft ? .accentColor : .primary.opacity(0.6))
+                  .foregroundColor(draggedFarEnoughLeft ? appSettings.morselColor : .primary.opacity(0.6))
                 Text("Me")
                   .font(MorselFont.heading)
                   .foregroundColor(.primary)
@@ -43,7 +44,7 @@ struct DestinationPickerView: View {
               VStack(spacing: 8) {
                 Image(systemName: "face.smiling.fill")
                   .font(.largeTitle)
-                  .foregroundColor(draggedFarEnoughRight ? .accentColor : .primary.opacity(0.6))
+                  .foregroundColor(draggedFarEnoughRight ? appSettings.morselColor : .primary.opacity(0.6))
                 Text("Morsel")
                   .font(MorselFont.heading)
                   .foregroundColor(.primary)

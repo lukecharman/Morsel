@@ -5,6 +5,7 @@ struct MorselView: View {
   @Binding var shouldClose: Bool
   @Binding var isChoosingDestination: Bool
   @Binding var destinationProximity: CGFloat
+  @Binding var isLookingUp: Bool
 
   @EnvironmentObject var appSettings: AppSettings
 
@@ -45,7 +46,7 @@ struct MorselView: View {
           perspective: 0.5
         )
         .rotation3DEffect(
-          .degrees(destinationProximity > 0 ? -destinationProximity * -25 : 0),
+          .degrees(destinationProximity > 0 ? -destinationProximity * -25 : (isLookingUp ? -20 : 0)),
           axis: (x: 1, y: 0, z: 0),
           anchor: .center,
           perspective: 0.5
@@ -176,7 +177,8 @@ struct MorselView: View {
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
     }
-    .offset(y: eyeOffset)
+    .offset(y: isLookingUp ? eyeOffset - 4 : eyeOffset)
+    .scaleEffect(x: 1, y: isLookingUp ? 0.85 : 1)
   }
 
   var mouth: some View {
@@ -197,7 +199,7 @@ struct MorselView: View {
         height: isOpen ? 74 : .lerp(from: 8, to: 30, by: happinessLevel)
       )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
-      .offset(y: isOpen ? 16 + droopOffset : 24 + droopOffset)
+      .offset(y: (isOpen ? 16 : 24) + droopOffset - (isLookingUp ? 4 : 0))
       .shadow(radius: 10)
       textField
     }
@@ -387,7 +389,8 @@ struct MorselView: View {
     shouldOpen: .constant(false),
     shouldClose: .constant(false),
     isChoosingDestination: .constant(false),
-    destinationProximity: .constant(0)
+    destinationProximity: .constant(0),
+    isLookingUp: .constant(false)
   ) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))

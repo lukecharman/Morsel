@@ -1,20 +1,15 @@
-/*
-
- MUST
- ----
- * Weekly "Digest"
-
- * Decide on final set of options in Stats / Extras.
-    * App icon changer tied to that colour picker
-
- * Add an Onboarding of some kind.
-    * One screen, super simple, ON the empty state.
-    * Animated, beautiful. Can Morsel wave?
-
- * Decide on £0.99 a year subscription with RevenueCat etc.
-    * What's in the free tier versus paid? Morsel Members?
-    * Fallbacks for missing entitlements / failed purchases
-    * Basic crash/error logging (e.g. Firebase or similar)
+1.0
+---
+ * Fix widgets and ensure colours propagate to widgets and watch.
+ * Weekly "Digest" – linked from Stats screen.
+ * Decide on final set of Stats.
+ * App icon changer tied to colour picker.
+ * Icon override in Extras too.
+ * Add crash logging (Sentry?)
+ * Build a system-wide "isSubscriber" and limit "stuff" behind it.
+ * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
+ * Add a super-simple onboarding of some kind.
+ * More haptics, maybe sounds.
 
  * More Analytics events.
     * Ensure all screen views are done.
@@ -31,17 +26,11 @@
     * received_weekly_digest
     * opened_weekly_digest
 
- SHOULD
- ------
- * More haptics / sound effects (with a toggle in Extras).
-    * Tamagotchi gulp when feeding
-
- COULD
- -----
+Post 1.0
+--------
+ * Food ranking system using an open API or a big local JSON.
  * Figure out this custom AppEntity thing for speaking the item in one term to Siri.
  * Add some reminder notifications, NOT NAGS. Maybe with a reminder time? User can select up to 3 times per day?
  * Togglable widget background showing red to green for food for you versus Morsel that day?
  * Daily goal streaks?
  * “Random tip from Morsel” in Extras. Could be serious (“Eat slowly”) or playful (“Ice cream is legal even on Tuesdays”)
-
- */
