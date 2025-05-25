@@ -26,7 +26,7 @@ struct ColorPickerView: View {
 
   var body: some View {
     ZStack {
-      PatternBackgroundView()
+      BackgroundGradientView()
       VStack {
         HStack {
           Spacer()
@@ -68,6 +68,11 @@ struct ColorPickerView: View {
         scrollView
       }
     }
+    .onAppear {
+      if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
+        selectedKey = match.key
+      }
+    }
   }
 
   var scrollView: some View {
@@ -83,7 +88,7 @@ struct ColorPickerView: View {
               withAnimation {
                 scrollTarget = swatch.key
               }
-              if swatch.color != appSettings.morselColor {
+              if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
                 pendingColor = UIColor(swatch.color)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   if let colour = pendingColor {
@@ -106,14 +111,13 @@ struct ColorPickerView: View {
     .scrollTargetBehavior(.viewAligned)
     .frame(height: 100)
     .onAppear {
-      if let match = colorSwatches.first(where: { $0.color == appSettings.morselColor }) {
+      if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
         scrollTarget = match.key
       }
     }
     .onChange(of: scrollTarget) { _, newKey in
-      if let newKey,
-         let swatch = colorSwatches.first(where: { $0.key == newKey }) {
-        if swatch.color != appSettings.morselColor {
+      if let newKey, let swatch = colorSwatches.first(where: { $0.key == newKey }) {
+        if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
           pendingColor = UIColor(swatch.color)
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             if let colour = pendingColor {
@@ -154,30 +158,19 @@ private struct ColorSwatchView: View {
   }
 }
 
-struct PatternBackgroundView: View {
-  var body: some View {
-    GeometryReader { geo in
-      let spacing: CGFloat = 40
-      let capsuleSize = CGSize(width: 12, height: 40)
-      let cols = Int(geo.size.width / spacing) + 3
-      let rows = Int(geo.size.height / spacing) + 3
+private extension UIColor {
+  func isEquivalent(to other: UIColor, tolerance: CGFloat = 0.01) -> Bool {
+    var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+    var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
 
-      ZStack {
-        ForEach(0..<cols, id: \.self) { column in
-          ForEach(0..<rows, id: \.self) { row in
-            Capsule()
-              .frame(width: capsuleSize.width, height: capsuleSize.height)
-              .rotationEffect(.degrees(45))
-              .foregroundColor(.gray.opacity(0.05))
-              .position(
-                x: CGFloat(column) * spacing,
-                y: CGFloat(row) * spacing
-              )
-          }
-        }
-      }
-      .frame(width: geo.size.width, height: geo.size.height)
+    guard self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1),
+          other.getRed(&r2, green: &g2, blue: &b2, alpha: &a2) else {
+      return false
     }
-    .ignoresSafeArea()
+
+    return abs(r1 - r2) < tolerance &&
+           abs(g1 - g2) < tolerance &&
+           abs(b1 - b2) < tolerance &&
+           abs(a1 - a2) < tolerance
   }
 }
