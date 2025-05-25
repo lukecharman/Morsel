@@ -9,6 +9,9 @@ struct ColorPickerView: View {
   @State private var scrollTarget: String?
   @State private var selectedKey: String?
 
+  @GestureState private var dragTranslation: CGFloat = 0
+  @State private var scrollOffset: CGFloat = 0
+
   private let colorSwatches: [(key: String, name: String, color: Color)] = [
     ("Orange", "Crispy Wotsit", .orange),
     ("Blue", "Blueberry Glaze", .blue),
@@ -79,7 +82,7 @@ struct ColorPickerView: View {
     ScrollView(.horizontal, showsIndicators: false) {
       HStack(spacing: 16) {
         Spacer()
-          .frame(width: (UIScreen.main.bounds.width - 56) / 2)
+          .frame(width: UIScreen.main.bounds.width / 2 - 56 / 2 - 16)
         ForEach(colorSwatches, id: \.key) { swatch in
           ColorSwatchView(
             swatch: swatch,
@@ -102,13 +105,42 @@ struct ColorPickerView: View {
           )
         }
         Spacer()
-          .frame(width: (UIScreen.main.bounds.width - 56) / 2)
+          .frame(width: UIScreen.main.bounds.width / 2 - 56 / 2 - 16)
       }
-      .scrollTargetLayout()
+      .offset(x: scrollOffset + dragTranslation)
+      .gesture(
+        DragGesture()
+          .updating($dragTranslation) { value, state, _ in
+            state = value.translation.width
+          }
+          .onEnded { value in
+            let swatchWidth: CGFloat = 56 + 16
+            scrollOffset += value.translation.width
+            let projectedOffset = scrollOffset + (value.predictedEndTranslation.width - value.translation.width)
+            let estimatedIndex = -(projectedOffset / swatchWidth)
+            let clampedIndex = min(max(Int(round(estimatedIndex)), 0), colorSwatches.count - 1)
+            let newOffset = -CGFloat(clampedIndex) * swatchWidth
+            withAnimation(.spring()) {
+              scrollOffset = newOffset
+            }
+
+            let swatch = colorSwatches[clampedIndex]
+            scrollTarget = swatch.key
+            if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
+              pendingColor = UIColor(swatch.color)
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if let colour = pendingColor {
+                  withAnimation(.easeInOut(duration: 0.3)) {
+                    appSettings.morselColor = Color(colour)
+                  }
+                }
+              }
+            }
+          }
+      )
     }
     .defaultScrollAnchor(.center)
     .scrollPosition(id: $scrollTarget, anchor: .center)
-    .scrollTargetBehavior(.viewAligned)
     .frame(height: 100)
     .onAppear {
       if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
@@ -150,7 +182,7 @@ private struct ColorSwatchView: View {
       )
       .fill(swatch.color)
     }
-    .frame(width: 56, height: 47)
+    .frame(width: 56, height: 48)
     .padding(.vertical, 2)
     .onTapGesture {
       onTap()
