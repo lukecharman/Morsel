@@ -1,6 +1,7 @@
 1.0
 ---
  * Fix widgets and ensure colours propagate to widgets and watch.
+ * Color picker UI bugs.
  * Weekly "Digest" – linked from Stats screen.
  * Decide on final set of Stats.
  * App icon changer tied to colour picker.

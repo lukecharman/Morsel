@@ -154,7 +154,7 @@ struct ColorPickerView: View {
           if let colour = pendingColor {
             withAnimation(.easeInOut(duration: 0.3)) {
               appSettings.morselColor = Color(colour)
-            } 
+            }
           }
         }
       }
