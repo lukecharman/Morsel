@@ -151,12 +151,10 @@ struct ColorPickerView: View {
       if let newKey, let swatch = colorSwatches.first(where: { $0.key == newKey }) {
         if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
           pendingColor = UIColor(swatch.color)
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            if let colour = pendingColor {
-              withAnimation(.easeInOut(duration: 0.3)) {
-                appSettings.morselColor = Color(colour)
-              }
-            }
+          if let colour = pendingColor {
+            withAnimation(.easeInOut(duration: 0.3)) {
+              appSettings.morselColor = Color(colour)
+            } 
           }
         }
       }
