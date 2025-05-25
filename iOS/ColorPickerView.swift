@@ -141,17 +141,17 @@ private struct ColorSwatchView: View {
     ZStack {
       UnevenRoundedRectangle(
         cornerRadii: RectangleCornerRadii(
-          topLeading: 28,
+          topLeading: 24,
           bottomLeading: 20,
           bottomTrailing: 20,
-          topTrailing: 28
+          topTrailing: 24
         ),
         style: .continuous
       )
       .fill(swatch.color)
     }
     .frame(width: 56, height: 47)
-    .padding(2)
+    .padding(.vertical, 2)
     .onTapGesture {
       onTap()
     }
