@@ -27,6 +27,7 @@ struct ContentView: View {
   @State private var destinationPickerHeight: CGFloat = 0
 
   @Binding var shouldOpenMouth: Bool
+  @Binding var shouldShowDigest: Bool
 
   var body: some View {
     ZStack {
@@ -103,6 +104,11 @@ struct ContentView: View {
       }
     }
     .sheet(isPresented: $showDigest) {
+      DigestView(meals: entries.map {
+        Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
+      })
+    }
+    .sheet(isPresented: $shouldShowDigest) {
       DigestView(meals: entries.map {
         Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
       })
@@ -391,6 +397,6 @@ private extension ContentView {
 }
 
 #Preview {
-  ContentView(shouldOpenMouth: .constant(false))
+  ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }

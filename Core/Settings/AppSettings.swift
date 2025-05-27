@@ -10,6 +10,8 @@ class AppSettings: ObservableObject {
   static let shared = AppSettings()
   private let defaults = UserDefaults(suiteName: "group.com.lukecharman.morsel")!
 
+  @Published var showDigest = false
+
   @Published var morselColor: Color {
     didSet {
       let data = try? NSKeyedArchiver.archivedData(withRootObject: UIColor(morselColor), requiringSecureCoding: false)

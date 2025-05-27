@@ -68,18 +68,6 @@ struct DigestView: View {
                     Text(digest.tip.rawValue)
                       .font(MorselFont.body)
                   }
-
-                  Button(action: {
-                    // TODO: hook up
-                  }) {
-                    Label("Set a goal for next week", systemImage: "target")
-                      .font(MorselFont.heading)
-                      .frame(maxWidth: .infinity)
-                      .padding()
-                      .background(appSettings.morselColor)
-                      .foregroundColor(.white)
-                      .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                  }
                 }
                 .padding()
                 .blur(radius: isCurrent ? 8 : 0)
