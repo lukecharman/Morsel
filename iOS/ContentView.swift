@@ -21,6 +21,7 @@ struct ContentView: View {
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
+  @State private var showDigest = false
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
   @State private var destinationPickerHeight: CGFloat = 0
@@ -67,13 +68,23 @@ struct ContentView: View {
         )
       }
     }
-    .overlay { sidePanelView(alignment: .leading, isVisible: showStats) { StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) } }
-    .overlay { sidePanelView(alignment: .trailing, isVisible: showExtras) { ExtrasView() {
-      withAnimation {
-        showExtras = false
-        loadEntries()
+    .overlay {
+      sidePanelView(alignment: .leading, isVisible: showStats) {
+        StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) {
+          showDigest = true
+        }
       }
-    } } }
+    }
+    .overlay {
+      sidePanelView(alignment: .trailing, isVisible: showExtras) {
+        ExtrasView() {
+          withAnimation {
+            showExtras = false
+            loadEntries()
+          }
+        }
+      }
+    }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
@@ -91,6 +102,7 @@ struct ContentView: View {
         isKeyboardVisible = false
       }
     }
+    .sheet(isPresented: $showDigest) { DigestView() }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }

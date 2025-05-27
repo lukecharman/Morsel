@@ -1,16 +1,19 @@
 1.0
 ---
- * Fix widgets and ensure colours propagate to widgets and watch.
- * Color picker UI bugs.
  * Weekly "Digest" – linked from Stats screen.
  * Decide on final set of Stats.
+
+ * Fix widgets and ensure colours propagate to widgets and watch.
  * App icon changer tied to colour picker.
  * Icon override in Extras too.
- * Add crash logging (Sentry?)
+ * More haptics, maybe sounds.
+
+ * Add crash logging or see if TelemetryDeck does it out of the box. Sentry if not.
+
+ * Add a super-simple onboarding of some kind.
+
  * Build a system-wide "isSubscriber" and limit "stuff" behind it.
  * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
- * Add a super-simple onboarding of some kind.
- * More haptics, maybe sounds.
 
  * More Analytics events.
     * Ensure all screen views are done.
@@ -26,6 +29,8 @@
     * completed_purchase
     * received_weekly_digest
     * opened_weekly_digest
+
+ * Color picker UI bugs.
 
 Post 1.0
 --------

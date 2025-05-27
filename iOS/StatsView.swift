@@ -2,19 +2,56 @@ import SwiftUI
 
 struct StatsView: View {
   let statsModel: StatsModel
+  let onRequestDigest: () -> Void
 
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        CardView(title: "Total Meals", value: "\(statsModel.totalEntries)", icon: "fork.knife", description: "The total number of meals you've logged.")
-        CardView(title: "Cravings Crushed", value: "\(statsModel.totalEntriesForMorsel)", icon: "face.smiling", description: "How many times you've resisted cravings and fed Morsel instead.")
-        CardView(title: "Mindful Munchies", value: "\(statsModel.totalEntriesForMe)", icon: "person.fill", description: "Meals you’ve logged that you actually ate.")
-        CardView(title: "Current Streak", value: "\(statsModel.currentStreak)", icon: "flame.fill", description: "Your current streak of consecutive days with at least one logged meal.")
-        CardView(title: "Longest Streak", value: "\(statsModel.longestStreak)", icon: "trophy.fill", description: "The longest streak you’ve maintained without breaking the habit.")
-        CardView(title: "% For Morsel", value: "\(statsModel.averageMorselPercentagePerDay)", icon: "percent", description: "The average daily percentage of meals you fed to Morsel.")
-      }
-      .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)
+        CardView(
+          title: "The Digest",
+          value: "",
+          icon: "fork.knife",
+          description: nil
+        ) {
+          onRequestDigest()
+        }
+        CardView(
+          title: "Total Meals",
+          value: "\(statsModel.totalEntries)",
+          icon: "fork.knife",
+          description: "The total number of meals you've logged."
+        )
+        CardView(
+          title: "Cravings Crushed",
+          value: "\(statsModel.totalEntriesForMorsel)",
+          icon: "face.smiling",
+          description: "How many times you've resisted cravings and fed Morsel instead."
+        )
+        CardView(
+          title: "Mindful Munchies",
+          value: "\(statsModel.totalEntriesForMe)",
+          icon: "person.fill",
+          description: "Meals you’ve logged that you actually ate."
+        )
+        CardView(
+          title: "Current Streak",
+          value: "\(statsModel.currentStreak)",
+          icon: "flame.fill",
+          description: "Your current streak of consecutive days with at least one logged meal."
+        )
+        CardView(
+          title: "Longest Streak",
+          value: "\(statsModel.longestStreak)",
+          icon: "trophy.fill",
+          description: "The longest streak you’ve maintained without breaking the habit."
+        )
+        CardView(
+          title: "% For Morsel",
+          value: "\(statsModel.averageMorselPercentagePerDay)",
+          icon: "percent",
+          description: "The average daily percentage of meals you fed to Morsel."
+        )
       }
       .padding(.horizontal, 16)
     }
@@ -37,6 +74,9 @@ struct StatsView: View {
 }
 
 #Preview {
-  StatsView(statsModel: StatsModel(modelContainer: .sharedContainer))
-    .background(Color(.systemGroupedBackground))
+  StatsView(
+    statsModel: StatsModel(modelContainer: .sharedContainer),
+    onRequestDigest: {}
+  )
+  .background(Color(.systemGroupedBackground))
 }

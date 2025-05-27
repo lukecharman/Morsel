@@ -4,7 +4,8 @@ struct CardView: View {
   let title: String
   let value: String
   let icon: String
-  let description: String
+  let description: String?
+
   @State private var isExpanded: Bool = false
 
   var onTap: (() -> Void)?
@@ -31,15 +32,17 @@ struct CardView: View {
 
         Spacer()
 
-        ToggleButton(isActive: isExpanded, systemImage: "chevron.down") {
-          withAnimation {
-            isExpanded.toggle()
+        if description != nil {
+          ToggleButton(isActive: isExpanded, systemImage: "chevron.down") {
+            withAnimation {
+              isExpanded.toggle()
+            }
           }
+          .scaleEffect(0.75)
         }
-        .scaleEffect(0.75)
       }
 
-      if isExpanded {
+      if isExpanded, let description = description {
         Text(description)
           .font(MorselFont.body)
           .foregroundColor(.secondary)
