@@ -115,12 +115,14 @@ struct ColorPickerView: View {
           }
           .onEnded { value in
             let swatchWidth: CGFloat = 56 + 16
-            scrollOffset += value.translation.width
-            let projectedOffset = scrollOffset + (value.predictedEndTranslation.width - value.translation.width)
-            let estimatedIndex = -(projectedOffset / swatchWidth)
+            let velocity = value.velocity.width
+            let offsetWithTranslation = scrollOffset + value.translation.width
+            let predictedOffset = offsetWithTranslation + velocity * 0.2 // a light projection
+            let estimatedIndex = -predictedOffset / swatchWidth
             let clampedIndex = min(max(Int(round(estimatedIndex)), 0), colorSwatches.count - 1)
             let newOffset = -CGFloat(clampedIndex) * swatchWidth
-            withAnimation(.spring()) {
+
+            withAnimation(.interactiveSpring(response: 0.4, dampingFraction: 0.85, blendDuration: 0.25)) {
               scrollOffset = newOffset
             }
 
