@@ -32,54 +32,72 @@ struct DigestView: View {
         TabView(selection: $currentPageIndex) {
           ForEach(availableOffsets, id: \.self) { offset in
             let digest = digest(forOffset: offset)
+            let isCurrent = isCurrentWeek(digest)
 
-            ScrollView {
-              VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("Weekly Digest")
-                    .padding(.top, 16)
-                    .font(MorselFont.title)
+            ZStack {
+              ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                  VStack(alignment: .leading, spacing: 8) {
+                    Text("Weekly Digest")
+                      .padding(.top, 16)
+                      .font(MorselFont.title)
 
-                  Text(formattedRange(for: digest))
-                    .font(MorselFont.body)
-                    .foregroundStyle(.secondary)
+                    Text(formattedRange(for: digest))
+                      .font(MorselFont.body)
+                      .foregroundStyle(.secondary)
+                  }
+
+                  VStack(alignment: .leading, spacing: 12) {
+                    DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
+                    DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
+                    DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
+                    DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
+                    DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
+                  }
+
+                  VStack(alignment: .leading, spacing: 8) {
+                    Text("How you did")
+                      .font(MorselFont.heading)
+                    Text("You absolutely smashed it this week. Morsel is proud. You even said no to chocolate. *Chocolate!*")
+                      .font(MorselFont.body)
+                  }
+
+                  VStack(alignment: .leading, spacing: 8) {
+                    Text("Morsel’s Tip")
+                      .font(MorselFont.heading)
+                    Text(digest.tip.rawValue)
+                      .font(MorselFont.body)
+                  }
+
+                  Button(action: {
+                    // TODO: hook up
+                  }) {
+                    Label("Set a goal for next week", systemImage: "target")
+                      .font(MorselFont.heading)
+                      .frame(maxWidth: .infinity)
+                      .padding()
+                      .background(appSettings.morselColor)
+                      .foregroundColor(.white)
+                      .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                  }
                 }
-
-                VStack(alignment: .leading, spacing: 12) {
-                  DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
-                  DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
-                  DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
-                  DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
-                  DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("How you did")
-                    .font(MorselFont.heading)
-                  Text("You absolutely smashed it this week. Morsel is proud. You even said no to chocolate. *Chocolate!*")
-                    .font(MorselFont.body)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("Morsel’s Tip")
-                    .font(MorselFont.heading)
-                  Text(digest.tip.rawValue)
-                    .font(MorselFont.body)
-                }
-
-                Button(action: {
-                  // TODO: hook up
-                }) {
-                  Label("Set a goal for next week", systemImage: "target")
-                    .font(MorselFont.heading)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(appSettings.morselColor)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                }
+                .padding()
+                .blur(radius: isCurrent ? 8 : 0)
               }
-              .padding()
+              if isCurrent {
+                VStack(spacing: 12) {
+                  Text("This week isn't finished yet!")
+                    .font(MorselFont.heading)
+                  Text("Check back on Friday to see your full digest.")
+                    .font(MorselFont.body)
+                    .multilineTextAlignment(.center)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial)
+                .cornerRadius(12)
+                .padding()
+              }
             }
             .tag(offset)
           }
@@ -354,6 +372,11 @@ private extension DigestView {
     let formatter = DateFormatter()
     formatter.dateFormat = "d MMM"
     return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
+  }
+
+  private func isCurrentWeek(_ digest: DigestModel) -> Bool {
+    let calendar = Calendar.current
+    return calendar.isDate(Date(), equalTo: digest.weekStart, toGranularity: .weekOfYear)
   }
 }
 
