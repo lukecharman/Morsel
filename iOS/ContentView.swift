@@ -10,6 +10,8 @@ struct ContentView: View {
 
   @Environment(\.modelContext) private var modelContext
 
+  @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+
   @State private var entries: [FoodEntry] = []
   @State private var modelContextRefreshTrigger = UUID()
   @State private var widgetReloadWorkItem: DispatchWorkItem?
@@ -172,13 +174,13 @@ private extension ContentView {
   }
 
   var emptyStateView: some View {
-    EmptyStateView(
-      shouldBlurBackground: shouldBlurBackground) {
-        if shouldBlurBackground {
-          shouldOpenMouth = false
-          shouldCloseMouth = true
-        }
+    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: !hasSeenOnboarding) {
+      if shouldBlurBackground {
+        shouldOpenMouth = false
+        shouldCloseMouth = true
       }
+      hasSeenOnboarding = true
+    }
   }
 
   var filledView: some View {

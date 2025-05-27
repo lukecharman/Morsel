@@ -4,13 +4,14 @@ struct EmptyStateView: View {
   @Environment(\.colorScheme) private var colorScheme
 
   let shouldBlurBackground: Bool
+  let isFirstLaunch: Bool
   let onTap: () -> Void
 
   var body: some View {
     ZStack(alignment: .bottom) {
       BackgroundGradientView()
       VStack(spacing: 24) {
-        Image(systemName: "fork.knife.circle")
+        Image(systemName: isFirstLaunch ? "sparkles" : "fork.knife.circle")
           .resizable()
           .scaledToFit()
           .frame(width: 80, height: 80)
@@ -19,11 +20,11 @@ struct EmptyStateView: View {
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
         (
-          Text("Still waiting on your ")
+          Text(isFirstLaunch ? "Welcome to " : "Still waiting on your ")
             .font(MorselFont.title)
             .fontWeight(.medium)
           +
-          Text("first bite")
+          Text(isFirstLaunch ? "Morsel" : "first bite")
             .font(MorselFont.title)
             .fontWeight(.bold)
           +
@@ -34,7 +35,9 @@ struct EmptyStateView: View {
         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
         .multilineTextAlignment(.center)
 
-        Text("The first snack is the hardest.\nGive Morsel a tap to begin.")
+        Text(isFirstLaunch
+          ? "Track what you eat and what you resist.\nGive Morsel a tap to begin."
+          : "The first snack is the hardest.\nGive Morsel a tap to begin.")
           .font(MorselFont.body)
           .foregroundColor(.secondary)
           .multilineTextAlignment(.center)
