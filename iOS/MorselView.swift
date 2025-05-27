@@ -7,6 +7,8 @@ struct MorselView: View {
   @Binding var destinationProximity: CGFloat
   @Binding var isLookingUp: Bool
 
+  var morselColor: Color
+
   @EnvironmentObject var appSettings: AppSettings
 
   @State private var isOpen = false
@@ -98,7 +100,7 @@ struct MorselView: View {
   }
 
   var face: some View {
-    let baseColor = appSettings.morselColor
+    let baseColor = morselColor
     let topColor = Color(adjustedTopColor(from: UIColor(baseColor), sadness: sadnessLevel, happiness: happinessLevel))
 
 
@@ -164,7 +166,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(30) : .degrees(160)
       )
-        .fill(Color.darkened(from: AppSettings.shared.morselColor))
+        .fill(Color.darkened(from: morselColor))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -172,7 +174,7 @@ struct MorselView: View {
         eyebrowAmount: destinationProximity > 0 ? happinessLevel / 4 : sadnessLevel / 2,
         angle: destinationProximity > 0 ? .degrees(330) : .degrees(200)
       )
-        .fill(Color.darkened(from: AppSettings.shared.morselColor))
+        .fill(Color.darkened(from: morselColor))
         .frame(width: eyeSize, height: eyeSize)
         .scaleEffect(x: eyeScaleX, y: eyeScaleY)
         .shadow(radius: 4)
@@ -192,7 +194,7 @@ struct MorselView: View {
         ),
         style: .continuous
       )
-      .fill(Color.darkened(from: AppSettings.shared.morselColor))
+      .fill(Color.darkened(from: morselColor))
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
@@ -390,7 +392,8 @@ struct MorselView: View {
     shouldClose: .constant(false),
     isChoosingDestination: .constant(false),
     destinationProximity: .constant(0),
-    isLookingUp: .constant(false)
+    isLookingUp: .constant(false),
+    morselColor: .blue
   ) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))

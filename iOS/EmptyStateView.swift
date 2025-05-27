@@ -3,6 +3,8 @@ import SwiftUI
 struct EmptyStateView: View {
   @Environment(\.colorScheme) private var colorScheme
 
+  @EnvironmentObject var appSettings: AppSettings
+
   let shouldBlurBackground: Bool
   let isFirstLaunch: Bool
   let onTap: () -> Void
@@ -15,7 +17,7 @@ struct EmptyStateView: View {
           .resizable()
           .scaledToFit()
           .frame(width: 80, height: 80)
-          .foregroundColor(.accentColor)
+          .foregroundColor(appSettings.morselColor)
           .opacity(0.4)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 

@@ -1,7 +1,5 @@
 1.0
 ---
- * Decide on final set of Stats.
-
  * Fix widgets and ensure colours propagate to widgets and watch.
  * App icon changer tied to colour picker.
  * Icon override in Extras too.

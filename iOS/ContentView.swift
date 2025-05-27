@@ -10,6 +10,8 @@ struct ContentView: View {
 
   @Environment(\.modelContext) private var modelContext
 
+  @EnvironmentObject var appSettings: AppSettings
+
   @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
 
   @State private var entries: [FoodEntry] = []
@@ -136,6 +138,7 @@ private extension ContentView {
         isChoosingDestination: $isChoosingDestination,
         destinationProximity: $destinationProximity,
         isLookingUp: .constant(isLookingUp),
+        morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }
           if showExtras { withAnimation { showExtras = false } }

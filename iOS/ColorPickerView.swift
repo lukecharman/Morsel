@@ -8,6 +8,8 @@ struct ColorPickerView: View {
   @State private var pendingColor: UIColor?
   @State private var scrollTarget: String?
   @State private var selectedKey: String?
+  @State private var previewColor: Color?
+  @State private var shouldSyncIcon: Bool = true
 
   @GestureState private var dragTranslation: CGFloat = 0
   @State private var scrollOffset: CGFloat = 0
@@ -20,7 +22,7 @@ struct ColorPickerView: View {
     ("Pink", "Fizzy Laces", .pink),
     ("Mint", "Toothpaste Gelato", .mint),
     ("Yellow", "Custard Spill", .yellow),
-    ("Purple", "Squashed Grape", .purple) 
+    ("Purple", "Squashed Grape", .purple)
   ]
 
   var body: some View {
@@ -30,6 +32,7 @@ struct ColorPickerView: View {
         HStack {
           Spacer()
           ToggleButton(isActive: true, systemImage: "xmark") {
+            previewColor = nil
             dismiss()
           }
           .padding([.top, .trailing])
@@ -44,7 +47,8 @@ struct ColorPickerView: View {
             isChoosingDestination: .constant(true),
             destinationProximity: .constant(0.5),
             isLookingUp: .constant(false),
-            onAdd: { _ in }
+            morselColor: previewColor ?? appSettings.morselColor,
+            onAdd: { _ in },
           )
           .scaleEffect(2)
         }
@@ -65,11 +69,48 @@ struct ColorPickerView: View {
         }
 
         scrollView
+
+        VStack {
+          Toggle(isOn: $shouldSyncIcon) {
+            Text("Sync app icon?")
+              .font(MorselFont.body)
+              .foregroundStyle(.primary)
+          }
+          .tint(previewColor)
+          .padding(.horizontal)
+          .padding(.bottom, 24)
+        }
+
+        Button(action: {
+          if let key = selectedKey,
+             let swatch = colorSwatches.first(where: { $0.key == key }) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+              appSettings.morselColor = swatch.color
+              previewColor = nil
+            }
+            if shouldSyncIcon {
+              changeIcon(to: swatch.key)
+            }
+            dismiss()
+          }
+        }) {
+          Text("Save")
+            .font(MorselFont.title)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+            .padding()
+            .background(previewColor ?? appSettings.morselColor)
+            .clipShape(Capsule(style: .continuous))
+            .padding(.horizontal)
+        }
+        .padding(.bottom, 24)
       }
     }
     .onAppear {
       if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
         selectedKey = match.key
+        previewColor = appSettings.morselColor
       }
     }
   }
@@ -87,16 +128,8 @@ struct ColorPickerView: View {
               withAnimation {
                 scrollTarget = swatch.key
               }
-              if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
-                pendingColor = UIColor(swatch.color)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  if let colour = pendingColor {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                      appSettings.morselColor = Color(colour)
-                    }
-                  }
-                }
-              }
+              selectedKey = swatch.key
+              previewColor = swatch.color
             }
           )
         }
@@ -124,16 +157,8 @@ struct ColorPickerView: View {
 
             let swatch = colorSwatches[clampedIndex]
             scrollTarget = swatch.key
-            if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
-              pendingColor = UIColor(swatch.color)
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                if let colour = pendingColor {
-                  withAnimation(.easeInOut(duration: 0.3)) {
-                    appSettings.morselColor = Color(colour)
-                  }
-                }
-              }
-            }
+            selectedKey = swatch.key
+            previewColor = swatch.color
           }
       )
     }
@@ -145,16 +170,18 @@ struct ColorPickerView: View {
         scrollTarget = match.key
       }
     }
-    .onChange(of: scrollTarget) { _, newKey in
-      if let newKey, let swatch = colorSwatches.first(where: { $0.key == newKey }) {
-        if !UIColor(swatch.color).isEquivalent(to: UIColor(appSettings.morselColor)) {
-          pendingColor = UIColor(swatch.color)
-          if let colour = pendingColor {
-            withAnimation(.easeInOut(duration: 0.3)) {
-              appSettings.morselColor = Color(colour)
-            }
-          }
-        }
+  }
+private func changeIcon(to key: String) {
+    guard UIApplication.shared.supportsAlternateIcons else {
+      print("Alternate icons not supported.")
+      return
+    }
+
+    UIApplication.shared.setAlternateIconName(key) { error in
+      if let error = error {
+        print("Failed to change icon: \(error.localizedDescription)")
+      } else {
+        print("App icon successfully changed to \(key)")
       }
     }
   }
