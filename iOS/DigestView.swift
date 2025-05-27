@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
+  @Environment(\.dismiss) private var dismiss
   let meals: [Meal]
 
   @State private var currentPageIndex: Int = 0
@@ -140,6 +141,12 @@ struct DigestView: View {
         }
         .padding(.horizontal)
         .padding(.bottom, 32)
+      }
+      .overlay(alignment: .topTrailing) {
+        ToggleButton(isActive: true, systemImage: "xmark") {
+          dismiss()
+        }
+        .padding()
       }
     }
   }
@@ -287,8 +294,24 @@ struct DigestModel {
     let counted = Dictionary(grouping: cravingNames, by: { $0 }).mapValues { $0.count }
     self.mostCommonCraving = counted.sorted { $0.value > $1.value }.first?.key ?? "N/A"
 
-    // TODO: Replace with real streak logic
-    self.streakLength = 3
+    // Streak = consecutive non-empty weeks ending with this one
+    func consecutiveNonEmptyWeeks(endingAt weekStart: Date, allMeals: [Meal], calendar: Calendar) -> Int {
+      let maxWeeksBack = 52
+      var streak = 0
+      for i in 0..<maxWeeksBack {
+        guard let checkDate = calendar.date(byAdding: .weekOfYear, value: -i, to: weekStart) else { break }
+        let checkStart = calendar.startOfWeek(for: checkDate)
+        let checkEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: checkStart)!
+        let mealsInWeek = allMeals.filter { $0.date >= checkStart && $0.date <= checkEnd }
+        if mealsInWeek.isEmpty {
+          break
+        } else {
+          streak += 1
+        }
+      }
+      return streak
+    }
+    self.streakLength = consecutiveNonEmptyWeeks(endingAt: weekStart, allMeals: allMeals, calendar: calendar)
 
     // Deterministic tip per week
     let seed = calendar.component(.weekOfYear, from: weekStart) + calendar.component(.year, from: weekStart) * 100
@@ -333,4 +356,4 @@ private extension DigestView {
     return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
   }
 }
-  
+
