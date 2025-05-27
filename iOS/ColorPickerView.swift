@@ -18,13 +18,9 @@ struct ColorPickerView: View {
     ("Red", "Ketchup Splash", .red),
     ("Green", "Mushy Pea", .green),
     ("Pink", "Fizzy Laces", .pink),
-    ("White", "Marshmallow Puff", .white),
     ("Mint", "Toothpaste Gelato", .mint),
-    ("Teal", "Minty Yogurt", .teal),
     ("Yellow", "Custard Spill", .yellow),
-    ("Purple", "Squashed Grape", .purple),
-    ("Cyan", "Bubblegum Ice", .cyan),
-    ("Brown", "Burnt Toast", .brown)
+    ("Purple", "Squashed Grape", .purple) 
   ]
 
   var body: some View {
