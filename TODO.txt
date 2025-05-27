@@ -2,7 +2,6 @@
 ---
  * Fix widgets and ensure colours propagate to widgets and watch.
  * Finalise icons and icon screen.
- * Use Image Playground for a background for Morsel. Morsel's Playground. Tapping him does stuff, etc.
 
  * Add crash logging or see if TelemetryDeck does it out of the box. Sentry if not.
 
@@ -28,6 +27,7 @@
 
 Post 1.0
 --------
+ * Use Image Playground for a background for Morsel. Morsel's Playground. Tapping him does stuff, etc.
  * Food ranking system using an open API or a big local JSON.
  * Figure out this custom AppEntity thing for speaking the item in one term to Siri.
  * Add some reminder notifications, NOT NAGS. Maybe with a reminder time? User can select up to 3 times per day?
