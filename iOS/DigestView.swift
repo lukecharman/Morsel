@@ -83,6 +83,8 @@ struct DigestView: View {
                 }
                 .padding()
                 .blur(radius: isCurrent ? 8 : 0)
+                .allowsHitTesting(!isCurrent)
+                .accessibilityHidden(isCurrent)
               }
               if isCurrent {
                 VStack(spacing: 12) {
