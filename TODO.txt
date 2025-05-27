@@ -1,6 +1,7 @@
 1.0
 ---
- * Weekly "Digest" – linked from Stats screen.
+ * Populate the Digest screen.
+ * Send a weekly local notification for the Digest, Friday morning?
  * Decide on final set of Stats.
 
  * Fix widgets and ensure colours propagate to widgets and watch.
