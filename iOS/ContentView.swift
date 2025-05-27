@@ -102,7 +102,11 @@ struct ContentView: View {
         isKeyboardVisible = false
       }
     }
-    .sheet(isPresented: $showDigest) { DigestView() }
+    .sheet(isPresented: $showDigest) {
+      DigestView(meals: entries.map {
+        Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
+      })
+    }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
