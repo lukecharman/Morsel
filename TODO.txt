@@ -1,9 +1,8 @@
 1.0
 ---
  * Fix widgets and ensure colours propagate to widgets and watch.
- * App icon changer tied to colour picker.
- * Icon override in Extras too.
- * More haptics, maybe sounds.
+ * Finalise icons and icon screen.
+ * Use Image Playground for a background for Morsel. Morsel's Playground. Tapping him does stuff, etc.
 
  * Add crash logging or see if TelemetryDeck does it out of the box. Sentry if not.
 

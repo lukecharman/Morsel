@@ -13,9 +13,6 @@ struct DeletableRowView<Content: View>: View {
   @State private var hasLockedDirection = false
   @State private var isHorizontalGesture = false
 
-  let trashImpact = UIImpactFeedbackGenerator(style: .medium)
-  let trashConfirm = UINotificationFeedbackGenerator()
-
   private let deleteThreshold: CGFloat = -80
 
   var body: some View {
@@ -46,10 +43,12 @@ struct DeletableRowView<Content: View>: View {
               let hasCrossed = offset < deleteThreshold
               if hasCrossed && !crossedThreshold {
                 crossedThreshold = true
-                trashImpact.impactOccurred()
+                Haptics.trigger(.medium)
               } else if !hasCrossed && crossedThreshold {
                 crossedThreshold = false
               }
+
+              Haptics.prepare(.success)
             }
             .onEnded { value in
               defer {
@@ -60,7 +59,7 @@ struct DeletableRowView<Content: View>: View {
               guard isHorizontalGesture else { return }
 
               if offset < deleteThreshold {
-                trashConfirm.notificationOccurred(.success)
+                Haptics.trigger(.success)
                 withAnimation(.easeInOut) {
                   onDelete()
                 }

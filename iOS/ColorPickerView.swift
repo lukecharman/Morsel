@@ -76,6 +76,13 @@ struct ColorPickerView: View {
               .font(MorselFont.body)
               .foregroundStyle(.primary)
           }
+          .onSubmit {
+            if shouldSyncIcon {
+              Haptics.trigger(.selection)
+            } else {
+              Haptics.trigger(.light)
+            }
+          }
           .tint(previewColor)
           .padding(.horizontal)
           .padding(.bottom, 24)
@@ -112,6 +119,9 @@ struct ColorPickerView: View {
         selectedKey = match.key
         previewColor = appSettings.morselColor
       }
+    }
+    .onChange(of: previewColor) { _ in
+      Haptics.trigger(.light)
     }
   }
 

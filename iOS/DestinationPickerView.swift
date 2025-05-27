@@ -7,6 +7,7 @@ struct DestinationPickerView: View {
 
   @GestureState private var dragOffset: CGSize = .zero
   @EnvironmentObject private var appSettings: AppSettings
+  @State private var lastHapticBucket: Int = 0
 
   private let threshold: CGFloat = 80
 
@@ -67,14 +68,25 @@ struct DestinationPickerView: View {
                       state = value.translation
                       let normalised = max(-1, min(1, value.translation.width / threshold))
                       onDrag(normalised)
+
+                      let bucketSize: CGFloat = 6
+                      let bucket = Int(value.translation.width / bucketSize)
+                      if bucket != lastHapticBucket {
+                        lastHapticBucket = bucket
+                        let level = min(5, Int(abs(normalised) * 6))
+                        Haptics.trigger(.level(level))
+                      }
                     }
                     .onEnded { value in
                       if value.translation.width < -threshold {
                         onPick(false) // for me
+                        Haptics.trigger(.success)
                       } else if value.translation.width > threshold {
                         onPick(true) // for morsel
+                        Haptics.trigger(.success)
                       }
                       onDrag(0)
+                      lastHapticBucket = 0
                     }
                 )
                 .animation(.spring(), value: dragX)
