@@ -47,15 +47,16 @@ struct WatchContentView: View {
           showingMealPrompt = true
         }
         .offset(y: -12)
-        Text("Today’s Morsels")
+        Text("Today")
           .font(MorselFont.widgetTitle)
-          .padding(.bottom, 4)
-          .offset(y: -12)
+          .padding(.bottom, 8)
+          .offset(y: -8)
         if todayEntries.isEmpty {
-          Text("The first snack is the hardest...")
+          Text("The first snack\nis the hardest...")
             .font(MorselFont.widgetBody)
             .foregroundColor(.secondary)
             .multilineTextAlignment(.center)
+            .lineLimit(2)
             .offset(y: -12)
             .onAppear {
               Analytics.track(ScreenViewEmptyState())
@@ -63,13 +64,16 @@ struct WatchContentView: View {
         } else {
           ForEach(todayEntries) { meal in
             HStack {
-              Image(systemName: meal.isForMorsel ? "face.smiling.fill" : "person.fill")
-                .font(.footnote)
-                .foregroundStyle(.blue)
-                .scaleEffect(CGSize(width: 0.7, height: 0.7))
+              if meal.isForMorsel {
+                MonochromeMorsel(width: 16, color: appSettings.morselColor)
+              } else {
+                Image(systemName: meal.isForMorsel ? "face.smiling.fill" : "person.fill")
+                  .frame(width: 16)
+                  .font(.footnote)
+                  .foregroundStyle(appSettings.morselColor)
+              }
               Text(meal.name)
-                .font(MorselFont.widgetBody)
-                .opacity(meal.isForMorsel ? 0.8 : 1)
+                .font(MorselFont.body)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
               Spacer()
@@ -77,6 +81,7 @@ struct WatchContentView: View {
                 .font(MorselFont.caption)
                 .foregroundColor(.secondary)
             }
+            .padding(.horizontal, 32)
           }
           .offset(y: -12)
           .onAppear {
@@ -191,5 +196,6 @@ struct WatchContentView: View {
 
 #Preview {
   WatchContentView()
+    .environmentObject(AppSettings.shared)
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }

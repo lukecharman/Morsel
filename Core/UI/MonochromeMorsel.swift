@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MonochromeMorsel: View {
   var width: CGFloat
+  var color: Color = .white
 
   private var height: CGFloat { width * 0.74 }
   private var eyeSize: CGFloat { width * 0.116 }
@@ -39,13 +40,14 @@ struct MonochromeMorsel: View {
       ),
       style: .continuous
     )
-    .fill(isLuminanceReduced ? .white.opacity(0.75) : .white)
+    .fill(
+      isLuminanceReduced ? color.opacity(0.75) : color
+    )
     .frame(
       width: width,
       height: height
     )
   }
-
 
   var facialFeatures: some View {
     VStack(spacing: height * 0.1) {
