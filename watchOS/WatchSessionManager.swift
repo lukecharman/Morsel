@@ -14,6 +14,21 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   }
 
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+    // Handle morselColor sync from phone
+    if let r = message["morselColorRed"] as? Double,
+       let g = message["morselColorGreen"] as? Double,
+       let b = message["morselColorBlue"] as? Double,
+       let a = message["morselColorAlpha"] as? Double,
+       let origin = message["origin"] as? String, origin == "phone" {
+
+      let rgba = [r, g, b, a]
+      UserDefaults(suiteName: "group.com.lukecharman.morsel")?.set(rgba, forKey: "morselColorRGBA")
+      // Notify listeners (e.g., AppSettings) that color was updated
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: .didReceiveMorselColor, object: nil)
+      }
+      return
+    }
     guard let name = message["name"] as? String else { return }
     guard let idString = message["idString"] as? String else { return }
     guard let id = UUID(uuidString: idString) else { return }
@@ -59,4 +74,8 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   }
 
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {}
+}
+
+extension Notification.Name {
+  static let didReceiveMorselColor = Notification.Name("didReceiveMorselColor")
 }

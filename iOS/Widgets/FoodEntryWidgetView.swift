@@ -7,6 +7,8 @@ struct FoodEntryWidgetView: View {
   @Environment(\.colorScheme) private var colorScheme
   @Environment(\.widgetFamily) private var widgetFamily
 
+  @EnvironmentObject var appSettings: AppSettings
+
   var body: some View {
     ZStack {
       HStack {
@@ -75,6 +77,7 @@ struct FoodEntryWidgetView: View {
     .widgetURL(URL(string: "morsel://list")!)
     .containerBackground(for: .widget) {
       BackgroundGradientView()
+        .environmentObject(appSettings)
     }
   }
 

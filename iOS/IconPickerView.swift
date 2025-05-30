@@ -53,15 +53,6 @@ struct IconPickerView: View {
               .frame(width: 96, height: 96)
               .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
               .shadow(radius: 8)
-          } else {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-              .fill(Color(.systemGray5))
-              .frame(width: 96, height: 96)
-              .overlay(
-                Image(systemName: "app.fill")
-                  .font(.system(size: 40))
-                  .foregroundColor(.secondary)
-              )
           }
         }
 

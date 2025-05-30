@@ -1,9 +1,6 @@
 1.0
 ---
- * Finalise icons and icon screen.
- * Color picker UI bugs.
-
- * Fix widgets and ensure colours propagate to widgets and watch.
+ * Fix Watch and Watch Widgets
 
  * More Analytics events.
     * Ensure all screen views are done.
@@ -21,6 +18,12 @@
     * completed_purchase
     * received_weekly_digest
     * opened_weekly_digest
+
+ * Finalise icons.
+ * Finalise all UI, light and dark.
+ * Finalise Morsel himself.
+ * Profile for optimisations to memory and framerate, etc.
+ * Get it on TestFlight, write a blurb, do screenshots, etc.
 
 Post 1.0
 --------

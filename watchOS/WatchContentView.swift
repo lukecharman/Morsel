@@ -6,6 +6,8 @@ import WatchKit
 struct WatchContentView: View {
   @Environment(\.modelContext) private var modelContext
 
+  @EnvironmentObject private var appSettings: AppSettings
+
   @Query(filter: todayPredicate, sort: \.timestamp, order: .reverse)
   private var todayEntries: [FoodEntry]
 
@@ -31,7 +33,7 @@ struct WatchContentView: View {
           .progressViewStyle(.circular)
           .padding()
       } else {
-        StaticMorsel()
+        StaticMorsel(color: appSettings.morselColor)
           .onTapGesture {
             showingMealPrompt = true
           }
