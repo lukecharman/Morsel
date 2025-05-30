@@ -19,9 +19,9 @@ struct MonochromeMorsel: View {
       .widgetAccentable()
       .mask {
         ZStack {
-          face // defines the full visible area
+          face
           facialFeatures
-            .blendMode(.destinationOut) // removes features
+            .blendMode(.destinationOut)
         }
       }
       .drawingGroup()
