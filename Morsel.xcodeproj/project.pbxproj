@@ -18,6 +18,9 @@
 		A3BC69BB2DE99932009186B4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		A3BC69BC2DE99932009186B4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		A3BC69BD2DE99932009186B4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = FAC31114A76142BEAB120BFC /* Sentry */; };
+		A3BC6AB92DEA3270009186B4 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A3BC6AB82DEA3270009186B4 /* RevenueCat */; };
+		A3BC6ABB2DEA3270009186B4 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = A3BC6ABA2DEA3270009186B4 /* RevenueCatUI */; };
+		A3BC6ABD2DEA329A009186B4 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC6ABC2DEA329A009186B4 /* StoreKit.framework */; };
 		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
 		A3CD69602DBF752D00AB946D /* Widgets (iOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -88,6 +91,7 @@
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36333E82DC94B7500DD9ADA /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3BC6ABC2DEA329A009186B4 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A3CD69042DBF745E00AB946D /* Morsel (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (iOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CD694E2DBF752B00AB946D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -283,8 +287,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3BC6AB92DEA3270009186B4 /* RevenueCat in Frameworks */,
 				A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */,
 				A3BC69BC2DE99932009186B4 /* (null) in Frameworks */,
+				A3BC6ABD2DEA329A009186B4 /* StoreKit.framework in Frameworks */,
+				A3BC6ABB2DEA3270009186B4 /* RevenueCatUI in Frameworks */,
 				A3BC69BD2DE99932009186B4 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,6 +335,7 @@
 		A3CD694D2DBF752B00AB946D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A3BC6ABC2DEA329A009186B4 /* StoreKit.framework */,
 				A3CD694E2DBF752B00AB946D /* WidgetKit.framework */,
 				A3CD69502DBF752B00AB946D /* SwiftUI.framework */,
 			);
@@ -406,6 +414,8 @@
 			packageProductDependencies = (
 				A36479432DCC948200A2F723 /* TelemetryDeck */,
 				FAC31114A76142BEAB120BFC /* Sentry */,
+				A3BC6AB82DEA3270009186B4 /* RevenueCat */,
+				A3BC6ABA2DEA3270009186B4 /* RevenueCatUI */,
 			);
 			productName = Morsel;
 			productReference = A3CD69042DBF745E00AB946D /* Morsel (iOS).app */;
@@ -466,6 +476,7 @@
 			packageReferences = (
 				A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 				3AC676223C5A44F9A7D439F4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				A3BC6AB72DEA3270009186B4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A3CD69052DBF745E00AB946D /* Products */;
@@ -1028,6 +1039,14 @@
 				minimumVersion = 2.9.4;
 			};
 		};
+		A3BC6AB72DEA3270009186B4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.25.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1040,6 +1059,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
+		};
+		A3BC6AB82DEA3270009186B4 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3BC6AB72DEA3270009186B4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		A3BC6ABA2DEA3270009186B4 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3BC6AB72DEA3270009186B4 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
 		};
 		FAC31114A76142BEAB120BFC /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
