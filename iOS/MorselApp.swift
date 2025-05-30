@@ -1,4 +1,6 @@
 import CloudKit
+import Sentry
+
 import SwiftUI
 import SwiftData
 import UserNotifications
@@ -29,6 +31,8 @@ struct MorselApp: App {
     appDelegate.handleDeepLink = handleDeepLink(_:)
 
     Analytics.setUp()
+
+    configureSentry()
 
     requestNotificationPermissions()
 
@@ -96,12 +100,30 @@ struct MorselApp: App {
     let request = UNNotificationRequest(identifier: "testWeeklyDigestReminder", content: content, trigger: trigger)
     UNUserNotificationCenter.current().add(request)
   }
+
+  func configureSentry() {
+    SentrySDK.start { options in
+      options.dsn = "https://9ccb7b970531185af4de695bb82abb73@o4509382955171840.ingest.de.sentry.io/4509382973784149"
+      options.tracesSampleRate = 1.0
+
+      options.configureProfiling = {
+        $0.sessionSampleRate = 1.0 // We recommend adjusting this value in production.
+        $0.lifecycle = .trace
+      }
+
+      options.attachScreenshot = true // This adds a screenshot to the error events
+      options.attachViewHierarchy = true // This adds the view hierarchy to the error events
+    }
+  }
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   var handleDeepLink: ((URL) -> Void)?
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+  ) -> Bool {
     UNUserNotificationCenter.current().delegate = self
     return true
   }
