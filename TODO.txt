@@ -5,8 +5,6 @@
 
  * Fix widgets and ensure colours propagate to widgets and watch.
 
- * Add crash logging. Figure out Sentry.
-
  * More Analytics events.
     * Ensure all screen views are done.
     * log_craving

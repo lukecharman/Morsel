@@ -4,6 +4,7 @@ struct ColorPickerView: View {
   @EnvironmentObject var appSettings: AppSettings
 
   @Environment(\.dismiss) var dismiss
+  @Environment(\.colorScheme) private var colorScheme
 
   @State private var pendingColor: UIColor?
   @State private var scrollTarget: String?
@@ -31,7 +32,10 @@ struct ColorPickerView: View {
       VStack {
         HStack {
           Spacer()
-          ToggleButton(isActive: true, systemImage: "xmark") {
+          ToggleButton(
+            isActive: true,
+            systemImage: "xmark"
+          ) {
             previewColor = nil
             dismiss()
           }
@@ -68,50 +72,55 @@ struct ColorPickerView: View {
           .animation(.easeInOut, value: scrollTarget)
         }
 
-        scrollView
+        // Grid of swatches, 4 columns, 2 rows
+        LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: 24), count: 4), spacing: 20) {
+          ForEach(colorSwatches, id: \.key) { swatch in
+            ColorSwatchView(
+              swatch: swatch,
+              isSelected: swatch.key == scrollTarget,
+              onTap: {
+                withAnimation {
+                  scrollTarget = swatch.key
+                }
+                selectedKey = swatch.key
+                previewColor = swatch.color
+                // APPLY THE COLOR IMMEDIATELY!
+                appSettings.morselColor = swatch.color
+                // Do NOT call changeIcon here.
+              }
+            )
+            .frame(width: 56, height: 48)
+          }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 12)
+        .onAppear {
+          if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
+            scrollTarget = match.key
+          }
+        }
 
         VStack {
-          Toggle(isOn: $shouldSyncIcon) {
-            Text("Sync app icon?")
-              .font(MorselFont.body)
-              .foregroundStyle(.primary)
-          }
-          .onSubmit {
-            if shouldSyncIcon {
-              Haptics.trigger(.selection)
-            } else {
-              Haptics.trigger(.light)
+          Button(action: {
+            if let key = selectedKey {
+              changeIcon(to: key)
             }
+          }) {
+            Text("Sync App Icon")
+              .font(MorselFont.heading)
+              .foregroundStyle(colorScheme == .dark ? .white : .black)
+              .frame(maxWidth: .infinity)
+              .frame(height: 44)
+              .background(
+                Capsule(style: .continuous)
+                  .stroke(previewColor ?? appSettings.morselColor, lineWidth: 2)
+              )
           }
-          .tint(previewColor)
           .padding(.horizontal)
+          .padding(.top, 16)
           .padding(.bottom, 24)
         }
 
-        Button(action: {
-          if let key = selectedKey,
-             let swatch = colorSwatches.first(where: { $0.key == key }) {
-            withAnimation(.easeInOut(duration: 0.3)) {
-              appSettings.morselColor = swatch.color
-              previewColor = nil
-            }
-            if shouldSyncIcon {
-              changeIcon(to: swatch.key)
-            }
-            dismiss()
-          }
-        }) {
-          Text("Save")
-            .font(MorselFont.title)
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: 44)
-            .padding()
-            .background(previewColor ?? appSettings.morselColor)
-            .clipShape(Capsule(style: .continuous))
-            .padding(.horizontal)
-        }
-        .padding(.bottom, 24)
       }
     }
     .onAppear {
@@ -123,65 +132,19 @@ struct ColorPickerView: View {
     .onChange(of: previewColor) { _ in
       Haptics.trigger(.light)
     }
-  }
+    .onDisappear {
+      // Get the current morsel color key from colorSwatches (non-optional)
+      let currentKey = colorSwatches.first { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }?.key
 
-  var scrollView: some View {
-    ScrollView(.horizontal, showsIndicators: false) {
-      HStack(spacing: 16) {
-        Spacer()
-          .frame(width: UIScreen.main.bounds.width / 2 - 56 / 2 - 16)
-        ForEach(colorSwatches, id: \.key) { swatch in
-          ColorSwatchView(
-            swatch: swatch,
-            isSelected: swatch.key == scrollTarget,
-            onTap: {
-              withAnimation {
-                scrollTarget = swatch.key
-              }
-              selectedKey = swatch.key
-              previewColor = swatch.color
-            }
-          )
-        }
-        Spacer()
-          .frame(width: UIScreen.main.bounds.width / 2 - 56 / 2 - 16)
-      }
-      .offset(x: scrollOffset + dragTranslation)
-      .gesture(
-        DragGesture()
-          .updating($dragTranslation) { value, state, _ in
-            state = value.translation.width
-          }
-          .onEnded { value in
-            let swatchWidth: CGFloat = 56 + 16
-            let velocity = value.velocity.width
-            let offsetWithTranslation = scrollOffset + value.translation.width
-            let predictedOffset = offsetWithTranslation + velocity * 0.2 // a light projection
-            let estimatedIndex = -predictedOffset / swatchWidth
-            let clampedIndex = min(max(Int(round(estimatedIndex)), 0), colorSwatches.count - 1)
-            let newOffset = -CGFloat(clampedIndex) * swatchWidth
-
-            withAnimation(.interactiveSpring(response: 0.4, dampingFraction: 0.85, blendDuration: 0.25)) {
-              scrollOffset = newOffset
-            }
-
-            let swatch = colorSwatches[clampedIndex]
-            scrollTarget = swatch.key
-            selectedKey = swatch.key
-            previewColor = swatch.color
-          }
-      )
-    }
-    .defaultScrollAnchor(.center)
-    .scrollPosition(id: $scrollTarget, anchor: .center)
-    .frame(height: 100)
-    .onAppear {
-      if let match = colorSwatches.first(where: { UIColor($0.color).isEquivalent(to: UIColor(appSettings.morselColor)) }) {
-        scrollTarget = match.key
+      // Only change icon if user selected a new color key and shouldSyncIcon is on
+      if let key = selectedKey,
+         key != currentKey {
+        changeIcon(to: key)
       }
     }
   }
-private func changeIcon(to key: String) {
+
+  private func changeIcon(to key: String) {
     guard UIApplication.shared.supportsAlternateIcons else {
       print("Alternate icons not supported.")
       return

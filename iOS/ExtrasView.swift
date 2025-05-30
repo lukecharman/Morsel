@@ -43,6 +43,7 @@ struct ExtrasView: View {
           description: "Let us know how Morsel’s doing or what you'd like to see next.",
           onTap: { showFeedbackAlert = true }
         )
+#if DEBUG
         CardView(
           title: "",
           value: "Crash",
@@ -50,7 +51,7 @@ struct ExtrasView: View {
           description: "Test crashing the app.",
           onTap: { let x = ["A"][3] }
         )
-
+#endif
       }
       .safeAreaInset(edge: .top) {
         Spacer().frame(height: 16)
