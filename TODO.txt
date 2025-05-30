@@ -1,6 +1,6 @@
 1.0
 ---
- * Fix Watch and Watch Widgets
+ * Finish Watch Widgets
 
  * More Analytics events.
     * Ensure all screen views are done.
@@ -23,7 +23,9 @@
  * Finalise all UI, light and dark.
  * Finalise Morsel himself.
  * Profile for optimisations to memory and framerate, etc.
- * Get it on TestFlight, write a blurb, do screenshots, etc.
+` * Get it on TestFlight, write a blurb, do screenshots, etc.
+
+
 
 Post 1.0
 --------

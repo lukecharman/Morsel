@@ -33,11 +33,20 @@ struct WatchContentView: View {
           .progressViewStyle(.circular)
           .padding()
       } else {
-        StaticMorsel(color: appSettings.morselColor)
-          .onTapGesture {
-            showingMealPrompt = true
-          }
-          .offset(y: -12)
+        MorselView(
+          shouldOpen: .constant(false),
+          shouldClose: .constant(false),
+          isChoosingDestination: .constant(false),
+          destinationProximity: .constant(0),
+          isLookingUp: .constant(false),
+          morselColor: appSettings.morselColor,
+          supportsOpen: false,
+          onAdd: { _ in }
+        )
+        .onTapGesture {
+          showingMealPrompt = true
+        }
+        .offset(y: -12)
         Text("Today’s Morsels")
           .font(MorselFont.widgetTitle)
           .padding(.bottom, 4)
@@ -118,7 +127,16 @@ struct WatchContentView: View {
 
   var destinationPickerSheet: some View {
     VStack {
-      StaticMorsel()
+      MorselView(
+        shouldOpen: .constant(false),
+        shouldClose: .constant(false),
+        isChoosingDestination: .constant(false),
+        destinationProximity: .constant(0),
+        isLookingUp: .constant(false),
+        morselColor: appSettings.morselColor,
+        supportsOpen: false,
+        onAdd: { _ in }
+      )
       Text("Who was it for?")
         .font(MorselFont.body)
         .padding()

@@ -111,7 +111,7 @@ struct QuickLogCornerView: View {
 
 struct QuickLogNoCountCornerView: View {
   var body: some View {
-    Image(systemName: "fork.knife")
+    MonochromeMorsel(width: 30)
       .font(.system(size: 22, weight: .bold))
       .offset(x: 4, y: 4)
       .widgetLabel("Feed")
@@ -125,20 +125,16 @@ struct QuickLogCircularView: View {
 
   var body: some View {
     ZStack {
-      Circle().fill(.white.opacity(0.1))
       VStack {
-        Text("\(entry.mealCount)")
-          .font(.system(size: 24, weight: .semibold))
-          .foregroundColor(.white)
+        MonochromeMorsel(width: 30)
           .widgetAccentable()
-        Image(systemName: "fork.knife")
-          .widgetCurvesContent()
-          .font(.system(size: 12, weight: .semibold))
+        Text("\(entry.mealCount)")
+          .fontDesign(.rounded)
+          .widgetAccentable()
       }
     }
-    .widgetLabel("Log")
     .widgetURL(URL(string: "morsel://add")!)
-    .containerBackground(.fill.tertiary, for: .widget)
+    .containerBackground(.clear, for: .widget)
   }
 }
 
@@ -147,7 +143,8 @@ struct QuickLogNoCountCircularView: View {
     ZStack {
       Circle().fill(.white.opacity(0.1))
       VStack {
-        Image(systemName: "fork.knife")
+        MonochromeMorsel(width: 30)
+          .scaleEffect(0.3)
       }
     }
     .widgetURL(URL(string: "morsel://add")!)
@@ -160,8 +157,7 @@ struct QuickLogRectangularView: View {
 
   var body: some View {
     HStack(spacing: 12) {
-      Image(systemName: "fork.knife")
-        .foregroundColor(.accentColor)
+      MonochromeMorsel(width: 30)
       VStack(alignment: .leading) {
         Text("Add Morsel")
           .font(.headline)
@@ -189,7 +185,7 @@ struct QuickLogInlineView: View {
 struct QuickLogNoCountInlineView: View {
   var body: some View {
     HStack(spacing: 24) {
-      Image(systemName: "fork.knife")
+      MonochromeMorsel(width: 30)
       Text("Add Morsel")
         .widgetURL(URL(string: "morsel://add")!)
         .containerBackground(.fill.tertiary, for: .widget)
@@ -239,7 +235,7 @@ struct WatchWidgetBundle: WidgetBundle {
   }
 }
 
-#Preview(as: .accessoryRectangular, widget: {
+#Preview(as: .accessoryCircular, widget: {
   QuickLogWithCountWidget()
 }, timeline: {
   QuickLogWithCountEntry(date: Date(), mealCount: 0)

@@ -8,6 +8,7 @@ struct MorselView: View {
   @Binding var isLookingUp: Bool
 
   var morselColor: Color
+  var supportsOpen: Bool = true
 
   @EnvironmentObject var appSettings: AppSettings
 
@@ -56,6 +57,7 @@ struct MorselView: View {
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
         .gesture(
+          supportsOpen ?
           DragGesture(minimumDistance: 0)
             .onChanged { _ in
               if !isBeingTouched && !isChoosingDestination {
@@ -78,6 +80,7 @@ struct MorselView: View {
                 }
               }
             }
+          : nil
         )
     }
     .padding(.bottom, 6)
@@ -393,7 +396,8 @@ struct MorselView: View {
     isChoosingDestination: .constant(false),
     destinationProximity: .constant(0),
     isLookingUp: .constant(false),
-    morselColor: .blue
+    morselColor: .blue,
+    supportsOpen: true
   ) { _ in }
 #if os(iOS)
     .background(Color(.systemBackground))
