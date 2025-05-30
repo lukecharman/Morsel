@@ -6,7 +6,7 @@ struct ScreenViewFilledEntries: ScreenViewEvent {
 
   var additionalParameters: EventParameters {
     [
-      "entryCount": count.description
+      "entry_count": count.description
     ]
   }
 }

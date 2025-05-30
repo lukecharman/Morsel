@@ -129,8 +129,11 @@ struct ColorPickerView: View {
         previewColor = appSettings.morselColor
       }
     }
-    .onChange(of: previewColor) { _ in
-      Haptics.trigger(.light)
+    .onChange(of: previewColor) { _, new in
+      if let new {
+        Haptics.trigger(.light)
+        Analytics.track(ChangeColorEvent(newValue: new.description, syncIcon: shouldSyncIcon))
+      }
     }
     .onDisappear {
       // Get the current morsel color key from colorSwatches (non-optional)

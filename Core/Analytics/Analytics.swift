@@ -14,3 +14,9 @@ struct Analytics {
     TelemetryDeck.signal(event.name, parameters: event.parameters)
   }
 }
+
+extension Date {
+  var isoString: String {
+    ISO8601DateFormatter().string(from: self)
+  }
+}

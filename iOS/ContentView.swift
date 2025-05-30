@@ -292,6 +292,12 @@ private extension ContentView {
       try? modelContext.save()
       loadEntries()
 
+      if entry.isForMorsel {
+        Analytics.track(DeleteForMorselEvent(craving: entry))
+      } else {
+        Analytics.track(DeleteForMeEvent(meal: entry))
+      }
+
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         WidgetCenter.shared.reloadAllTimelines()
       }

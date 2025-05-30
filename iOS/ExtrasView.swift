@@ -71,7 +71,9 @@ struct ExtrasView: View {
       )
     )
     .alert("Are you sure?", isPresented: $showClearAlert) {
-      Button("Cancel", role: .cancel) { }
+      Button("Cancel", role: .cancel) {
+        Analytics.track(ClearAllDataCancelEvent())
+      }
       Button("Yes", role: .destructive) {
         confirmClearData()
       }
@@ -91,22 +93,28 @@ struct ExtrasView: View {
     }
     .sheet(isPresented: $showColorSheet) {
       ColorPickerView()
+        .onAppear {
+          Analytics.track(ScreenViewColor())
+        }
     }
     .sheet(isPresented: $showIconSheet) {
       IconPickerView()
+        .onAppear {
+          Analytics.track(ScreenViewIcon())
+        }
     }
     .onAppear {
       Analytics.track(ScreenViewExtras())
     }
-    .onDisappear {
-      print("Extras disappearing!!")
-    }
   }
 
   func confirmClearData() {
+    Analytics.track(ClearAllDataEvent())
     if modelContext.deleteAll(FoodEntry.self) {
+      Analytics.track(ClearAllDataSuccessEvent())
       onClearAll()
     } else {
+      Analytics.track(ClearAllDataFailureEvent())
       showClearFailedAlert = true
     }
   }

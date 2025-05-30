@@ -27,8 +27,13 @@ struct Adder {
 
     WidgetCenter.shared.reloadAllTimelines()
 
-    let event = CreateEntryEvent(entry: model, context: context)
-    Analytics.track(event)
+    if isForMorsel {
+      let event = LogForMorselEvent(craving: model, context: context)
+      Analytics.track(event)
+    } else {
+      let event = LogForMeEvent(meal: model, context: context)
+      Analytics.track(event)
+    }
   }
 
   static func add(
