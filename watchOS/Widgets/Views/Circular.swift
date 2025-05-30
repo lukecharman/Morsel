@@ -22,7 +22,7 @@ struct QuickLogCircularView: View {
 struct QuickLogNoCountCircularView: View {
   var body: some View {
     ZStack {
-      Circle().fill(.white.opacity(0.1))
+      Circle().fill(.white.opacity(0.15))
       VStack {
         MonochromeMorsel(width: 30)
           .widgetAccentable()
@@ -33,3 +33,16 @@ struct QuickLogNoCountCircularView: View {
   }
 }
 
+#Preview(as: .accessoryCircular, widget: {
+  QuickLogWithCountWidget()
+}, timeline: {
+  QuickLogWithCountEntry(date: Date(), mealCount: 0)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(200), mealCount: 1)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(400), mealCount: 2)
+})
+
+#Preview(as: .accessoryCircular, widget: {
+  QuickLogNoCountWidget()
+}, timeline: {
+  QuickLogNoCountEntry(date: Date())
+})

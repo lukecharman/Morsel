@@ -5,7 +5,7 @@ struct QuickLogInlineView: View {
   var entry: QuickLogWithCountEntry
 
   var body: some View {
-    Text("Morsels: \(entry.mealCount)")
+    Text("\(entry.mealCount) Morsels Today")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
@@ -14,11 +14,24 @@ struct QuickLogInlineView: View {
 struct QuickLogNoCountInlineView: View {
   var body: some View {
     HStack(spacing: 24) {
-      MonochromeMorsel(width: 30)
-      Text("Add Morsel")
+      Text("Mmm... Morsels")
         .widgetURL(URL(string: "morsel://add")!)
         .containerBackground(.fill.tertiary, for: .widget)
     }
   }
 }
+
+#Preview(as: .accessoryInline, widget: {
+  QuickLogWithCountWidget()
+}, timeline: {
+  QuickLogWithCountEntry(date: Date(), mealCount: 0)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(200), mealCount: 1)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(400), mealCount: 2)
+})
+
+#Preview(as: .accessoryInline, widget: {
+  QuickLogNoCountWidget()
+}, timeline: {
+  QuickLogNoCountEntry(date: Date())
+})
 

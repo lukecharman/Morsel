@@ -8,7 +8,7 @@ struct QuickLogCornerView: View {
     VStack {
       Text("\(entry.mealCount)")
         .widgetCurvesContent()
-        .widgetLabel("Add Morsel")
+        .widgetLabel("Morsels")
         .widgetAccentable()
         .widgetURL(URL(string: "morsel://add")!)
         .containerBackground(.fill.tertiary, for: .widget)
@@ -18,13 +18,23 @@ struct QuickLogCornerView: View {
 
 struct QuickLogNoCountCornerView: View {
   var body: some View {
-    MonochromeMorsel(width: 30)
+    MonochromeMorsel(width: 28)
       .widgetAccentable()
-      .font(.system(size: 22, weight: .bold))
-      .offset(x: 4, y: 4)
-      .widgetLabel("Feed")
       .widgetURL(URL(string: "morsel://add")!)
       .containerBackground(.fill.tertiary, for: .widget)
   }
 }
 
+#Preview(as: .accessoryCorner, widget: {
+  QuickLogWithCountWidget()
+}, timeline: {
+  QuickLogWithCountEntry(date: Date(), mealCount: 0)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(200), mealCount: 1)
+  QuickLogWithCountEntry(date: Date().addingTimeInterval(400), mealCount: 2)
+})
+
+#Preview(as: .accessoryCorner, widget: {
+  QuickLogNoCountWidget()
+}, timeline: {
+  QuickLogNoCountEntry(date: Date())
+})

@@ -14,6 +14,8 @@ struct MonochromeMorsel: View {
   private var topCorner: CGFloat { width * 0.74 }
   private var bottomCorner: CGFloat { width * 0.37 }
 
+  @Environment(\.isLuminanceReduced) var isLuminanceReduced
+
   var body: some View {
     face
       .widgetAccentable()
@@ -37,7 +39,7 @@ struct MonochromeMorsel: View {
       ),
       style: .continuous
     )
-    .fill(.white)
+    .fill(isLuminanceReduced ? .white.opacity(0.75) : .white)
     .frame(
       width: width,
       height: height
