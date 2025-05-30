@@ -160,6 +160,10 @@
 			membershipExceptions = (
 				Widgets/Assets.xcassets,
 				Widgets/Info.plist,
+				Widgets/Views/Circular.swift,
+				Widgets/Views/Corner.swift,
+				Widgets/Views/Inline.swift,
+				Widgets/Views/Rectangular.swift,
 				Widgets/WatchWidgets.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
@@ -168,6 +172,10 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Widgets/Assets.xcassets,
+				Widgets/Views/Circular.swift,
+				Widgets/Views/Corner.swift,
+				Widgets/Views/Inline.swift,
+				Widgets/Views/Rectangular.swift,
 				Widgets/WatchWidgets.swift,
 			);
 			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;

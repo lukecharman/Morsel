@@ -44,10 +44,11 @@ struct MonochromeMorsel: View {
     )
   }
 
+
   var facialFeatures: some View {
-    VStack(spacing: height * 0.12) {
-      Spacer()
+    VStack(spacing: height * 0.1) {
       eyes
+        .padding(.top, height * 0.03)
       mouth
       Spacer()
     }
