@@ -1,12 +1,11 @@
 1.0
 ---
- * Fix widgets and ensure colours propagate to widgets and watch.
  * Finalise icons and icon screen.
+ * Color picker UI bugs.
 
- * Add crash logging or see if TelemetryDeck does it out of the box. Sentry if not.
+ * Fix widgets and ensure colours propagate to widgets and watch.
 
- * Build a system-wide "isSubscriber" and limit "stuff" behind it.
- * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
+ * Add crash logging. Figure out Sentry.
 
  * More Analytics events.
     * Ensure all screen views are done.
@@ -16,14 +15,14 @@
     * delete_meal
     * expression_shown (on Morsel)
     * change_setting
-    * started_onboarding
-    * completed_onboarding
+
+ * Build a system-wide "isSubscriber" and limit "stuff" behind it.
+ * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
+ * Add subscription analytics events:
     * tapped_subscribe
     * completed_purchase
     * received_weekly_digest
     * opened_weekly_digest
-
- * Color picker UI bugs.
 
 Post 1.0
 --------
