@@ -213,7 +213,7 @@
 		A3BC6A882DE9BA18009186B4 /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				MorselView.swift,
+				Views/MorselView.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
