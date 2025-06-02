@@ -1,5 +1,8 @@
 1.0
 ---
+ * Clean all the code.
+ * Localize strings.
+
  * Build a system-wide "isSubscriber" and limit "stuff" behind it.
  * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
  * Add subscription analytics events:

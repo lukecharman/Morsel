@@ -36,7 +36,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
   @MainActor
   private func fetchTodayFoodEntries() async -> [FoodEntrySnapshot] {
     do {
-      let container: ModelContainer = .sharedContainer
+      let container: ModelContainer = .morsel
       let context = container.mainContext
 
       let calendar = Calendar.current
@@ -61,7 +61,7 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
   }
 
   private func loadMorselColor() -> Color {
-    let defaults = UserDefaults(suiteName: "group.com.lukecharman.morsel")!
+    let defaults = UserDefaults(suiteName: appGroupIdentifier)!
 
     if let data = defaults.data(forKey: Key.morselColor.rawValue),
        let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {

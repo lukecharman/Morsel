@@ -64,8 +64,7 @@ struct Haptics {
       Self.shared.selection.prepare()
     case .success, .warning, .error:
       Self.shared.notification.prepare()
-    case .level(_):
-      // no-op: new generator used each time
+    default:
       break
     }
   }

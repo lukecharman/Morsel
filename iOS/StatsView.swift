@@ -75,7 +75,7 @@ struct StatsView: View {
 
 #Preview {
   StatsView(
-    statsModel: StatsModel(modelContainer: .sharedContainer),
+    statsModel: StatsModel(modelContainer: .morsel),
     onRequestDigest: {}
   )
   .background(Color(.systemGroupedBackground))

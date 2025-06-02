@@ -75,7 +75,7 @@ struct ContentView: View {
     }
     .overlay {
       sidePanelView(alignment: .leading, isVisible: showStats) {
-        StatsView(statsModel: StatsModel(modelContainer: .sharedContainer)) {
+        StatsView(statsModel: StatsModel(modelContainer: .morsel)) {
           showDigest = true
         }
       }

@@ -4,24 +4,20 @@ import WidgetKit
 
 @MainActor
 struct Adder {
-  enum Context: String {
-    case phoneApp
-    case phoneWidget
-    case phoneIntent
-    case phoneFromWatch
-    case watchApp
-    case watchFromPhone
-  }
-
   static func add(
     id: String? = nil,
     name: String,
     timestamp: Date = Date(),
     isForMorsel: Bool,
-    context: Context
+    context: AddContext
   ) async throws {
-    let container = ModelContainer.sharedContainer
-    let model = FoodEntry(id: buildUUID(id: id), name: name, timestamp: timestamp, isForMorsel: isForMorsel)
+    let container = ModelContainer.morsel
+    let model = FoodEntry(
+      id: buildUUID(id: id),
+      name: name,
+      timestamp: timestamp,
+      isForMorsel: isForMorsel
+    )
     container.mainContext.insert(model)
     try container.mainContext.save()
 
@@ -41,9 +37,15 @@ struct Adder {
     name: String,
     timestamp: Date = Date(),
     isForMorsel: Bool,
-    context: Context
+    context: AddContext
   ) async throws {
-    try await add(id: id.uuidString, name: name, timestamp: timestamp, isForMorsel: isForMorsel, context: context)
+    try await add(
+      id: id.uuidString,
+      name: name,
+      timestamp: timestamp,
+      isForMorsel: isForMorsel,
+      context: context
+    )
   }
 }
 

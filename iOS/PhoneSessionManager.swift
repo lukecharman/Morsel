@@ -1,4 +1,5 @@
 import SwiftData
+import SwiftUI
 import WatchConnectivity
 import WidgetKit
 
@@ -32,7 +33,7 @@ class PhoneSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   @MainActor
   func saveMealLocally(name: String, id: UUID, isForMorsel: Bool, origin: String) async {
     do {
-      let container: ModelContainer = .sharedContainer
+      let container: ModelContainer = .morsel
       let context = container.mainContext
       let existingFetch = FetchDescriptor<FoodEntry>(predicate: #Predicate { $0.id == id })
 
@@ -41,6 +42,24 @@ class PhoneSessionManager: NSObject, WCSessionDelegate, ObservableObject {
       try await Adder.add(id: id, name: name, isForMorsel: isForMorsel, context: .phoneFromWatch)
     } catch {
       print("Phone failed to save new meal: \(error)")
+    }
+  }
+
+  func notifyWatchOfNewColor(_ color: Color) {
+    let rgba = UIColor(color).rgba
+
+    let message: [String: Any] = [
+      "morselColorRed": rgba[0],
+      "morselColorGreen": rgba[1],
+      "morselColorBlue": rgba[2],
+      "morselColorAlpha": rgba[3],
+      "origin": "phone"
+    ]
+
+    if WCSession.default.isReachable {
+      WCSession.default.sendMessage(message, replyHandler: nil) { error in
+        print("Failed to send color to Watch: \(error)")
+      }
     }
   }
 

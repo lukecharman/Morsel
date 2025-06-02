@@ -8,7 +8,12 @@ final class FoodEntry {
   var timestamp: Date = Date()
   var isForMorsel: Bool = false
 
-  init(id: UUID = UUID(), name: String, timestamp: Date = Date(), isForMorsel: Bool = false) {
+  init(
+    id: UUID = UUID(),
+    name: String,
+    timestamp: Date = Date(),
+    isForMorsel: Bool = false
+  ) {
     self.id = id
     self.name = name
     self.timestamp = timestamp

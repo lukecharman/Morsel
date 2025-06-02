@@ -22,7 +22,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
        let origin = message["origin"] as? String, origin == "phone" {
 
       let rgba = [r, g, b, a]
-      UserDefaults(suiteName: "group.com.lukecharman.morsel")?.set(rgba, forKey: "morselColorRGBA")
+      UserDefaults(suiteName: appGroupIdentifier)?.set(rgba, forKey: "morselColorRGBA")
       // Notify listeners (e.g., AppSettings) that color was updated
       DispatchQueue.main.async {
         NotificationCenter.default.post(name: .didReceiveMorselColor, object: nil)
@@ -47,7 +47,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
   @MainActor
   func saveMealLocally(name: String, id: UUID, isForMorsel: Bool, origin: String) async {
     do {
-      let container: ModelContainer = .sharedContainer
+      let container: ModelContainer = .morsel
       let context = container.mainContext
       let existingFetch = FetchDescriptor<FoodEntry>(predicate: #Predicate { $0.id == id })
 

@@ -1,28 +1,35 @@
 import SwiftData
 import Foundation
 
+let appGroupIdentifier = "group.com.lukecharman.morsel"
+
 extension ModelContainer {
-  static var sharedContainer: ModelContainer {
+  static var morsel: ModelContainer {
     do {
       let container = try ModelContainer.throwingSharedContainer()
       let context = ModelContext(container)
       _ = try? context.fetch(FetchDescriptor<FoodEntry>())
       return container
     } catch {
-      fatalError("💥 Failed to load shared SwiftData container for Watch: \(error)")
+      Analytics.track(FailedToLoadSwiftDataContainerEvent(error: error.localizedDescription))
+      fatalError("💥 Failed to load shared SwiftData container: \(error.localizedDescription)")
     }
   }
+}
 
-  static func throwingSharedContainer() throws -> ModelContainer {
-    let schema = Schema([FoodEntry.self])
+private extension ModelContainer {
+  static var schema: Schema {
+    Schema([FoodEntry.self])
+  }
 
-    guard let appGroupURL = FileManager.default.containerURL(
-      forSecurityApplicationGroupIdentifier: "group.com.lukecharman.morsel"
-    ) else {
+  static func throwingSharedContainer(fileManager: FileManager = .default) throws -> ModelContainer {
+    guard let appGroupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
+      Analytics.track(FailedToFindAppGroupContainerEvent())
       fatalError("💥 Failed to find App Group container.")
     }
 
-    let databaseURL = appGroupURL.appendingPathComponent("Morsel.sqlite")
+    let databaseFilename = "Morsel.sqlite"
+    let databaseURL = appGroupURL.appendingPathComponent(databaseFilename)
     let config = ModelConfiguration(
       schema: schema,
       url: databaseURL,

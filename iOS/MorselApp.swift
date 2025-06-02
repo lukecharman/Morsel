@@ -21,7 +21,7 @@ struct MorselApp: App {
     WindowGroup {
       ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest)
         .environmentObject(AppSettings.shared)
-        .modelContainer(.sharedContainer)
+        .modelContainer(.morsel)
         .onOpenURL { handleDeepLink($0) }
         .onAppear { launch() }
     }

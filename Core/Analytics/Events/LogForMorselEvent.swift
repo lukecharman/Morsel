@@ -2,7 +2,7 @@ import Foundation
 
 struct LogForMorselEvent: Event {
   let craving: FoodEntry
-  let context: Adder.Context
+  let context: AddContext
 
   var name: String {
     "log_for_morsel"

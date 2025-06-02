@@ -12,7 +12,7 @@ struct QuickLogWithCountProvider: TimelineProvider {
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<QuickLogWithCountEntry>) -> Void) {
-    let container: ModelContainer = .sharedContainer
+    let container: ModelContainer = .morsel
     var mealCount = 0
 
     let context = ModelContext(container)

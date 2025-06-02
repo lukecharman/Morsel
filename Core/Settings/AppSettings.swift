@@ -5,63 +5,68 @@ import WidgetKit
 
 enum Key: String {
   case morselColor
+  case morselColorRGBA
 }
 
 class AppSettings: ObservableObject {
   static let shared = AppSettings()
-  private let defaults = UserDefaults(suiteName: "group.com.lukecharman.morsel")!
+  private let defaults = UserDefaults(suiteName: appGroupIdentifier)
+
+  private static let fallbackColor: Color = .blue
 
   @Published var showDigest = false
 
   @Published var morselColor: Color {
     didSet {
-      let data = try? NSKeyedArchiver.archivedData(withRootObject: UIColor(morselColor), requiringSecureCoding: false)
-      defaults.set(data, forKey: Key.morselColor.rawValue)
+      saveColorToUserDefaults(morselColor)
       WidgetCenter.shared.reloadAllTimelines()
-
-      let uiColor = UIColor(morselColor)
-      var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-      uiColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-
-      let message: [String: Any] = [
-        "morselColorRed": Double(r),
-        "morselColorGreen": Double(g),
-        "morselColorBlue": Double(b),
-        "morselColorAlpha": Double(a),
-        "origin": "phone"
-      ]
-
-      if WCSession.default.isReachable {
-        WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: { error in
-          print("Failed to send color to Watch: \(error)")
-        })
-      }
+#if os(iOS)
+      PhoneSessionManager.shared.notifyWatchOfNewColor(morselColor)
+#endif
     }
   }
 
   private init() {
-    #if os(watchOS)
-    if let rgba = defaults.array(forKey: "morselColorRGBA") as? [Double], rgba.count == 4 {
-      _morselColor = Published(initialValue: Color(.sRGB, red: rgba[0], green: rgba[1], blue: rgba[2], opacity: rgba[3]))
-    } else if let data = defaults.data(forKey: Key.morselColor.rawValue),
-              let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
-      _morselColor = Published(initialValue: Color(color))
-    } else {
-      _morselColor = Published(initialValue: Color.blue)
-    }
+    let initialColor = AppSettings.loadInitialColor(from: defaults)
+    _morselColor = Published(initialValue: initialColor)
 
+#if os(watchOS)
     NotificationCenter.default.addObserver(forName: .didReceiveMorselColor, object: nil, queue: .main) { [weak self] _ in
-      if let rgba = self?.defaults.array(forKey: "morselColorRGBA") as? [Double], rgba.count == 4 {
-        self?.morselColor = Color(.sRGB, red: rgba[0], green: rgba[1], blue: rgba[2], opacity: rgba[3])
-      }
+      self?.morselColor = Self.loadRGBAColor(from: Self.shared.defaults) ?? AppSettings.fallbackColor
     }
-    #else
-    if let data = defaults.data(forKey: Key.morselColor.rawValue),
-       let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) {
-      _morselColor = Published(initialValue: Color(color))
-    } else {
-      _morselColor = Published(initialValue: Color.blue)
+#endif
+  }
+
+}
+
+private extension AppSettings {
+  static func loadInitialColor(from defaults: UserDefaults?) -> Color {
+#if os(watchOS)
+    return loadRGBAColor(from: defaults) ?? loadArchivedColor(from: defaults) ?? Self.fallbackColor
+#else
+    return loadArchivedColor(from: defaults) ?? Self.fallbackColor
+#endif
+  }
+
+  static func loadArchivedColor(from defaults: UserDefaults?) -> Color? {
+    guard let data = defaults?.data(forKey: Key.morselColor.rawValue) else { return nil }
+    guard let uiColor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else { return nil }
+
+    return Color(uiColor)
+  }
+
+  static func loadRGBAColor(from defaults: UserDefaults?) -> Color? {
+    guard let rgba = defaults?.array(forKey: Key.morselColorRGBA.rawValue) as? [Double], rgba.count == 4 else { return nil }
+    return Color(.sRGB, red: rgba[0], green: rgba[1], blue: rgba[2], opacity: rgba[3])
+  }
+
+  func saveColorToUserDefaults(_ color: Color) {
+    let uiColor = UIColor(color)
+    let rgba = uiColor.rgba
+    defaults?.set(rgba, forKey: Key.morselColorRGBA.rawValue)
+
+    if let data = try? NSKeyedArchiver.archivedData(withRootObject: uiColor, requiringSecureCoding: false) {
+      defaults?.set(data, forKey: Key.morselColor.rawValue)
     }
-    #endif
   }
 }

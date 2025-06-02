@@ -2,14 +2,14 @@ import SwiftData
 import SwiftUI
 
 @main
-struct WristMorsel_Watch_AppApp: App {
+struct WatchApp: App {
   @StateObject private var sessionManager = WatchSessionManager()
 
   var body: some Scene {
     WindowGroup {
       WatchContentView()
         .environmentObject(AppSettings.shared)
-        .modelContainer(.sharedContainer)
+        .modelContainer(.morsel)
         .onAppear { Analytics.setUp() }
     }
   }
