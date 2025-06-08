@@ -7,13 +7,13 @@ import UserNotifications
 
 @main
 struct MorselApp: App {
-  let shouldScheduleDigestDeepLink = true
-
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   @StateObject private var sessionManager = PhoneSessionManager()
 
   @State private var shouldOpenMouth = false
   @State private var shouldShowDigest = false
+
+  let notificationsManager = NotificationsManager()
 
   init() {}
 
@@ -29,18 +29,9 @@ struct MorselApp: App {
 
   func launch() {
     appDelegate.handleDeepLink = handleDeepLink(_:)
-
-    Analytics.setUp()
-
+    notificationsManager.prepare()
+    configureTelemetryDeck()
     configureSentry()
-
-    requestNotificationPermissions()
-
-    if shouldScheduleDigestDeepLink {
-      scheduleTestDigestNotification()
-    }
-
-    scheduleWeeklyDigestNotification()
   }
 
   func handleDeepLink(_ url: URL) {
@@ -54,51 +45,8 @@ struct MorselApp: App {
     }
   }
 
-
-  func requestNotificationPermissions() {
-    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-      if let error = error {
-        print("Notification error: \(error)")
-      } else {
-        print("Notifications permission granted: \(granted)")
-      }
-    }
-  }
-
-  func scheduleWeeklyDigestNotification() {
-    UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-      let alreadyExists = requests.contains { $0.identifier == "weeklyDigestReminder" }
-      if !alreadyExists {
-        scheduleWeeklyDigestNotification()
-      }
-    }
-
-    let content = UNMutableNotificationContent()
-    content.title = "Morsel’s got your weekly digest!"
-    content.body = "Wanna see how you did this week? Morsel’s been watching (politely)."
-    content.userInfo = ["deepLink": "morsel://digest"]
-    content.sound = .default
-
-    var dateComponents = DateComponents()
-    dateComponents.weekday = 6
-    dateComponents.hour = 9
-
-    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-
-    let request = UNNotificationRequest(identifier: "weeklyDigestReminder", content: content, trigger: trigger)
-    UNUserNotificationCenter.current().add(request)
-  }
-
-  func scheduleTestDigestNotification() {
-    let content = UNMutableNotificationContent()
-    content.title = "Morsel’s got your weekly digest!"
-    content.body = "Wanna see how you did this week? Morsel’s been watching (politely)."
-    content.userInfo = ["deepLink": "morsel://digest"]
-    content.sound = .default
-
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
-    let request = UNNotificationRequest(identifier: "testWeeklyDigestReminder", content: content, trigger: trigger)
-    UNUserNotificationCenter.current().add(request)
+  func configureTelemetryDeck() {
+    Analytics.setUp()
   }
 
   func configureSentry() {
