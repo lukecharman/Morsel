@@ -7,9 +7,6 @@ struct MorselView: View {
   @Binding var destinationProximity: CGFloat
   @Binding var isLookingUp: Bool
 
-  var morselColor: Color
-  var supportsOpen: Bool = true
-
   @EnvironmentObject var appSettings: AppSettings
 
   @State private var isOpen = false
@@ -21,6 +18,9 @@ struct MorselView: View {
   @State private var idleLookaroundOffset: CGFloat = .zero
 
   @FocusState private var isFocused: Bool
+
+  var morselColor: Color
+  var supportsOpen: Bool = true
 
   var onTap: (() -> Void)? = nil
   var onAdd: (String) -> Void
@@ -402,79 +402,4 @@ struct MorselView: View {
 #if os(iOS)
     .background(Color(.systemBackground))
 #endif
-}
-
-extension CGFloat {
-  static func lerp(from: CGFloat, to: CGFloat, by amount: CGFloat) -> CGFloat {
-    return from + (to - from) * amount
-  }
-}
-
-struct AnimatedEyeView: View {
-  @Binding var amount: CGFloat
-  @Binding var angle: Angle
-
-  var body: some View {
-    EyebrowedEyeShape(eyebrowAmount: amount, angle: angle)
-      .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
-      .animation(.easeInOut(duration: 0.3), value: amount)
-  }
-}
-
-struct EyebrowedEyeShape: Shape {
-  var eyebrowAmount: CGFloat // 0 = circle, 1 = flat segment
-  var angle: Angle           // angle of flat segment
-
-  var animatableData: AnimatablePair<CGFloat, CGFloat> {
-    get { AnimatablePair(eyebrowAmount, CGFloat(angle.degrees)) }
-    set {
-      eyebrowAmount = newValue.first
-      angle = .degrees(Double(newValue.second))
-    }
-  }
-
-  func path(in rect: CGRect) -> Path {
-    let clamped = min(max(eyebrowAmount, 0), 1)
-    let radius = min(rect.width, rect.height) / 2
-    let center = CGPoint(x: rect.midX, y: rect.midY)
-
-    var path = Path()
-
-    if clamped == 0 {
-      path.addEllipse(in: CGRect(
-        x: center.x - radius,
-        y: center.y - radius,
-        width: radius * 2,
-        height: radius * 2
-      ))
-      return path
-    }
-
-    let delta = 90.0 * (1 - clamped)
-    let startAngle = angle + .degrees(delta)
-    let endAngle = angle + .degrees(180 - delta)
-
-    path.addArc(
-      center: center,
-      radius: radius,
-      startAngle: startAngle,
-      endAngle: endAngle,
-      clockwise: true
-    )
-
-    // Flat line to close the arc
-    let left = CGPoint(
-      x: center.x + radius * cos(CGFloat(endAngle.radians)),
-      y: center.y + radius * sin(CGFloat(endAngle.radians))
-    )
-    let right = CGPoint(
-      x: center.x + radius * cos(CGFloat(startAngle.radians)),
-      y: center.y + radius * sin(CGFloat(startAngle.radians))
-    )
-    path.addLine(to: right)
-    path.addLine(to: left)
-
-    path.closeSubpath()
-    return path
-  }
 }
