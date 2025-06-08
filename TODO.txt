@@ -26,3 +26,71 @@ Post 1.0
  * Togglable widget background showing red to green for food for you versus Morsel that day?
  * Daily goal streaks?
  * “Random tip from Morsel” in Extras. Could be serious (“Eat slowly”) or playful (“Ice cream is legal even on Tuesdays”)
+
+
+
+
+
+
+
+
+
+
+
+
+🫧 Micro-Reactions (Contextual, Lightweight)
+
+Subtle and ambient behaviours to reflect mood, interaction, or state.
+  •  Glance at user input: If you’re typing something in the text field, Morsel’s eyes follow the keyboard or cursor.
+  •  Idle fidgets: Finger tap, ear twitch, slow stretch, light bounce, tiny sneeze, tail flick (if he has one).
+  •  Reactive glow: His fill colour pulses or shifts very gently based on time of day or app theme.
+  •  Eye darting: If he’s idle too long, he looks suspiciously left and right.
+
+⸻
+
+😮 Big Emotes (Triggered by Events)
+
+More obvious, more animated. Only for key transitions.
+  •  Happy dance / spin: After a successful add. Maybe even randomise the move slightly.
+  •  Shudder or disgust: When deleting something.
+  •  Impatient tapping or snoring: If left open without input for too long.
+  •  Blush / sparkle: When given a food he “likes” (i.e. you could add a favourites mechanic).
+  •  Heart bubble: Occasionally floats up from his head when “fed”.
+
+
+⸻
+
+💬 Speech / Voice-Like Expressions
+
+He doesn’t need to talk, but…
+  •  Speech bubble variants: “Yum”, “Thanks!”, “Hmm?” — minimal, ambient, no tap targets.
+  •  Emoji or glyph expressions: ❤️ 😴 ❗️ 🥹 — you could even theme them by season.
+
+⸻
+
+🎮 Mini Interactions
+
+Tiny interactions that are not essential but feel delightful.
+  •  Petting: Tapping and holding causes him to smile, melt, or waggle a limb.
+  •  Tilt-based expressions: On device tilt (if phone), his gravity shifts slightly.
+  •  Ticklish spot: There’s one part of him that reacts differently (corner tap easter egg).
+  •  Dressing up: A small seasonal hat or overlay (e.g. pumpkin, santa hat, sunglasses).
+
+⸻
+
+🧠 Behaviour That Learns
+
+This is advanced, but fits your theme of Morsel evolving.
+  •  Mood tracking: Based on how often he’s “fed” vs. ignored, he could look perkier or a bit sluggish.
+  •  Expression changes over day: Maybe he’s sleepy in the morning and smug after dinner.
+  •  Custom animation per user: Favourite foods give him unique reactions over time.
+
+⸻
+
+🔄 Animations That Loop or Cascade
+
+More visual rhythm to fill otherwise idle space.
+  •  Face scrunch + relax: Periodic tensing like a yawn or sigh.
+  •  Ripple pulse: Background colour ripple or gentle bounce on occasion.
+  •  Split-second side glance: Feels alive and aware.
+
