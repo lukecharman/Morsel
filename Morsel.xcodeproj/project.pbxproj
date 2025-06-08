@@ -159,6 +159,7 @@
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
 				Morsels/MonochromeMorsel.swift,
+				Morsels/MorselView.swift,
 				Morsels/StaticMorsel.swift,
 				"Resources/Fonts/Quicksand-Bold.ttf",
 				"Resources/Fonts/Quicksand-Light.ttf",
@@ -207,13 +208,6 @@
 				Widgets/WatchWidgets.swift,
 			);
 			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
-		};
-		A3BC6A882DE9BA18009186B4 /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Views/MorselView.swift,
-			);
-			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
 		A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -280,7 +274,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A3CD69272DBF745F00AB946D /* Exceptions for "iOS" folder in "Morsel (iOS)" target */,
-				A3BC6A882DE9BA18009186B4 /* Exceptions for "iOS" folder in "Morsel (watchOS)" target */,
 				A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */,
 			);
 			path = iOS;
