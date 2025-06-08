@@ -116,8 +116,6 @@
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
-				Morsels/MonochromeMorsel.swift,
-				Morsels/StaticMorsel.swift,
 				"Resources/Fonts/Quicksand-Bold.ttf",
 				"Resources/Fonts/Quicksand-Light.ttf",
 				"Resources/Fonts/Quicksand-Medium.ttf",
@@ -158,9 +156,7 @@
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
-				Morsels/MonochromeMorsel.swift,
 				Morsels/MorselView.swift,
-				Morsels/StaticMorsel.swift,
 				"Resources/Fonts/Quicksand-Bold.ttf",
 				"Resources/Fonts/Quicksand-Light.ttf",
 				"Resources/Fonts/Quicksand-Medium.ttf",
@@ -181,6 +177,7 @@
 				Widgets/FoodEntryWidget.swift,
 				Widgets/FoodEntryWidgetBundle.swift,
 				Widgets/FoodEntryWidgetView.swift,
+				Widgets/Morsels/StaticMorsel.swift,
 			);
 			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
@@ -200,6 +197,7 @@
 		A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Morsels/MonochromeMorsel.swift,
 				Widgets/Assets.xcassets,
 				Widgets/Views/Circular.swift,
 				Widgets/Views/Corner.swift,
@@ -220,6 +218,7 @@
 				Widgets/FoodEntryWidgetBundle.swift,
 				Widgets/FoodEntryWidgetView.swift,
 				Widgets/Info.plist,
+				Widgets/Morsels/StaticMorsel.swift,
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
@@ -237,8 +236,6 @@
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
-				Morsels/MonochromeMorsel.swift,
-				Morsels/StaticMorsel.swift,
 				"Resources/Fonts/Quicksand-Bold.ttf",
 				"Resources/Fonts/Quicksand-Light.ttf",
 				"Resources/Fonts/Quicksand-Medium.ttf",

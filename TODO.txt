@@ -13,7 +13,7 @@
  * Finalise all UI, light and dark.
  * Finalise Morsel himself.
  * Profile for optimisations to memory and framerate, etc.
-` * Get it on TestFlight, write a blurb, do screenshots, etc.
+ * Get it on TestFlight, write a blurb, do screenshots, etc.
 
 
 
