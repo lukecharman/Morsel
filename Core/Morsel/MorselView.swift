@@ -1,5 +1,17 @@
 import SwiftUI
 
+enum MorselDebugControlMode {
+  case automatic
+  case manual
+}
+
+struct MorselDebugBindings {
+  var isBlinking: Binding<Bool>?
+  var isSwallowing: Binding<Bool>?
+  var idleOffset: Binding<CGSize>?
+  var idleLookaroundOffset: Binding<CGFloat>?
+}
+
 struct MorselView: View {
   @Binding var shouldOpen: Bool
   @Binding var shouldClose: Bool
@@ -10,12 +22,12 @@ struct MorselView: View {
   @EnvironmentObject var appSettings: AppSettings
 
   @State private var isOpen = false
-  @State private var isSwallowing = false
-  @State private var isBlinking = false
+  @State private var isSwallowingInternal = false
+  @State private var isBlinkingInternal = false
+  @State private var idleOffsetInternal: CGSize = .zero
+  @State private var idleLookaroundOffsetInternal: CGFloat = .zero
   @State private var isBeingTouched = false
   @State private var text: String = ""
-  @State private var idleOffset: CGSize = .zero
-  @State private var idleLookaroundOffset: CGFloat = .zero
 
   @FocusState private var isFocused: Bool
 
@@ -24,6 +36,46 @@ struct MorselView: View {
 
   var onTap: (() -> Void)? = nil
   var onAdd: (String) -> Void
+
+  var debugBindings: MorselDebugBindings? = nil
+
+  var debugControlMode: MorselDebugControlMode = .automatic
+
+  private var isSwallowing: Bool {
+    switch debugControlMode {
+    case .manual:
+      return debugBindings?.isSwallowing?.wrappedValue ?? isSwallowingInternal
+    case .automatic:
+      return isSwallowingInternal
+    }
+  }
+
+  private var isBlinking: Bool {
+    switch debugControlMode {
+    case .manual:
+      return debugBindings?.isBlinking?.wrappedValue ?? isBlinkingInternal
+    case .automatic:
+      return isBlinkingInternal
+    }
+  }
+
+  private var idleOffset: CGSize {
+    switch debugControlMode {
+    case .manual:
+      return debugBindings?.idleOffset?.wrappedValue ?? idleOffsetInternal
+    case .automatic:
+      return idleOffsetInternal
+    }
+  }
+
+  private var idleLookaroundOffset: CGFloat {
+    switch debugControlMode {
+    case .manual:
+      return debugBindings?.idleLookaroundOffset?.wrappedValue ?? idleLookaroundOffsetInternal
+    case .automatic:
+      return idleLookaroundOffsetInternal
+    }
+  }
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -314,14 +366,22 @@ struct MorselView: View {
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       withAnimation {
-        isSwallowing = true
+        if debugControlMode == .manual, let ext = debugBindings?.isSwallowing {
+          ext.wrappedValue = true
+        } else {
+          isSwallowingInternal = true
+        }
       }
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.7
     ) {
       withAnimation {
-        isSwallowing = false
+        if debugControlMode == .manual, let ext = debugBindings?.isSwallowing {
+          ext.wrappedValue = false
+        } else {
+          isSwallowingInternal = false
+        }
       }
     }
   }
@@ -329,12 +389,20 @@ struct MorselView: View {
   func startBlinking() {
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 4...8), repeats: true) { _ in
       withAnimation {
-        isBlinking = true
+        if debugControlMode == .manual, let ext = debugBindings?.isBlinking {
+          ext.wrappedValue = true
+        } else {
+          isBlinkingInternal = true
+        }
       }
 
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
         withAnimation {
-          isBlinking = false
+          if debugControlMode == .manual, let ext = debugBindings?.isBlinking {
+            ext.wrappedValue = false
+          } else {
+            isBlinkingInternal = false
+          }
         }
       }
     }
@@ -344,26 +412,46 @@ struct MorselView: View {
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 4...7), repeats: true) { _ in
       let offsetY = CGFloat(Int.random(in: -1...8))
       withAnimation(.easeInOut(duration: 1)) {
-        idleOffset = CGSize(width: 0, height: offsetY)
+        if debugControlMode == .manual, let ext = debugBindings?.idleOffset {
+          ext.wrappedValue = CGSize(width: 0, height: offsetY)
+        } else {
+          idleOffsetInternal = CGSize(width: 0, height: offsetY)
+        }
       }
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         withAnimation(.easeInOut(duration: 0.3)) {
-          idleOffset = .zero
+          if debugControlMode == .manual, let ext = debugBindings?.idleOffset {
+            ext.wrappedValue = .zero
+          } else {
+            idleOffsetInternal = .zero
+          }
         }
       }
     }
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 5...10), repeats: true) { _ in
       let direction: CGFloat = Bool.random() ? 1 : -1
       withAnimation(.easeInOut(duration: 0.1)) {
-        idleLookaroundOffset = 10 * direction
+        if debugControlMode == .manual, let ext = debugBindings?.idleLookaroundOffset {
+          ext.wrappedValue = 10 * direction
+        } else {
+          idleLookaroundOffsetInternal = 10 * direction
+        }
       }
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         withAnimation(.easeInOut(duration: 0.2)) {
-          idleLookaroundOffset = -6 * direction
+          if debugControlMode == .manual, let ext = debugBindings?.idleLookaroundOffset {
+            ext.wrappedValue = -6 * direction
+          } else {
+            idleLookaroundOffsetInternal = -6 * direction
+          }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           withAnimation(.easeInOut(duration: 0.3)) {
-            idleLookaroundOffset = 0
+            if debugControlMode == .manual, let ext = debugBindings?.idleLookaroundOffset {
+              ext.wrappedValue = 0
+            } else {
+              idleLookaroundOffsetInternal = 0
+            }
           }
         }
       }

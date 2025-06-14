@@ -3,7 +3,10 @@ import SwiftUI
 struct BottomBarView: View {
   @Binding var showStats: Bool
   @Binding var showExtras: Bool
+  @Binding var showStudio: Bool
   let isKeyboardVisible: Bool
+
+  @State private var showingStudio = false
 
   var body: some View {
     GeometryReader { geo in
@@ -22,10 +25,28 @@ struct BottomBarView: View {
             )
             .padding(.leading, 24)
             .transition(.blurReplace)
+            .onLongPressGesture {
+              showingStudio = true
+            }
+            .sheet(isPresented: $showingStudio) { MorselStudio() }
           }
-
+#if DEBUG
+          if !showStudio {
+            ToggleButton(
+              isActive: showStudio,
+              systemImage: "light.overhead.right",
+              action: {
+                withAnimation {
+                  showingStudio = true
+                }
+              }
+            )
+            .padding(.leading, 24)
+            .transition(.blurReplace)
+            .sheet(isPresented: $showingStudio) { MorselStudio() }
+          }
+#endif
           Spacer()
-
           if !showStats {
             ToggleButton(
               isActive: showExtras,

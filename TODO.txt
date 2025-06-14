@@ -1,17 +1,10 @@
 1.0
 ---
- * Decide what goes behind the paywall.
- * Build a system-wide "isSubscriber" and limit "stuff" behind it.
- * Support a free trial and introduce subs using RevenueCat – £1.99 per year?
- * Add subscription analytics events:
-    * tapped_subscribe
-    * completed_purchase
-    * received_weekly_digest
-    * opened_weekly_digest
+No paywall.
 
+ * Finalise Morsel himself.
  * Finalise icons.
  * Finalise all UI, light and dark.
- * Finalise Morsel himself.
  * Profile for optimisations to memory and framerate, etc.
  * Get it on TestFlight, write a blurb, do screenshots, etc.
 

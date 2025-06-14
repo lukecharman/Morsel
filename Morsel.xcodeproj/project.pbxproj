@@ -272,6 +272,11 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		A3ABD73B2DFD635900910A48 /* Debug */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		A3CD69062DBF745E00AB946D /* iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -338,6 +343,7 @@
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
+				A3ABD73B2DFD635900910A48 /* Debug */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
@@ -432,6 +438,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A35D3DCB2DBFDDC300C4C166 /* Core */,
+				A3ABD73B2DFD635900910A48 /* Debug */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 			);
 			name = "Morsel (iOS)";
