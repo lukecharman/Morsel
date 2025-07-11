@@ -1,5 +1,16 @@
 import SwiftUI
 
+// MARK: - Configuration
+private struct DigestConfiguration {
+  /// When digests unlock each week
+  /// weekday: 1 = Sunday, 2 = Monday, ..., 6 = Friday, 7 = Saturday
+  /// hour: 0-23 (24-hour format)
+  /// minute: 0-59
+  static let unlockWeekday = 6    // Friday
+  static let unlockHour = 0       // Midnight
+  static let unlockMinute = 0     // :00
+}
+
 struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
   @Environment(\.dismiss) private var dismiss
@@ -7,6 +18,8 @@ struct DigestView: View {
 
   @State private var currentPageIndex: Int = 0
   @Namespace private var animation
+  @State private var unblurAnimationInProgress: Set<String> = []
+  @State private var animatingBlurRadius: [String: Double] = [:]
 
   private var availableOffsets: [Int] {
     guard let earliest = meals.map(\.date).min() else { return [0] }
@@ -26,138 +39,143 @@ struct DigestView: View {
   }
 
   var body: some View {
-    NavigationView {
-      VStack(spacing: 16) {
+    VStack(spacing: 16) {
 
-        TabView(selection: $currentPageIndex) {
-          ForEach(availableOffsets, id: \.self) { offset in
-            let digest = digest(forOffset: offset)
-            let isCurrent = isCurrentWeek(digest)
+      TabView(selection: $currentPageIndex) {
+        ForEach(availableOffsets, id: \.self) { offset in
+          let digest = digest(forOffset: offset)
+          let availabilityState = digestAvailabilityState(digest)
+          let digestKey = digestUnlockKey(for: digest)
 
-            ZStack {
-              ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                  VStack(alignment: .leading, spacing: 8) {
-                    Text("Weekly Digest")
-                      .padding(.top, 16)
-                      .font(MorselFont.title)
+          ZStack {
+            ScrollView {
+              VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                  Text("Weekly Digest")
+                    .padding(.top, 16)
+                    .font(MorselFont.title)
 
-                    Text(formattedRange(for: digest))
-                      .font(MorselFont.body)
-                      .foregroundStyle(.secondary)
-                  }
-
-                  VStack(alignment: .leading, spacing: 12) {
-                    DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
-                    DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
-                    DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
-                    DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
-                    DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
-                  }
-
-                  VStack(alignment: .leading, spacing: 8) {
-                    Text("How you did")
-                      .font(MorselFont.heading)
-                    Text(encouragement(for: digest))
-                      .font(MorselFont.body)
-                  }
-
-                  VStack(alignment: .leading, spacing: 8) {
-                    Text("Morsel’s Tip")
-                      .font(MorselFont.heading)
-                    Text(digest.tip.rawValue)
-                      .font(MorselFont.body)
-                  }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                .blur(radius: isCurrent ? 8 : 0)
-                .allowsHitTesting(!isCurrent)
-                .accessibilityHidden(isCurrent)
-              }
-              .disabled(isCurrent)
-              if isCurrent {
-                VStack(spacing: 12) {
-                  Text("This week isn't finished yet!")
-                    .font(MorselFont.heading)
-                  Text("Check back on Friday to see your full digest.")
+                  Text(formattedRange(for: digest))
                     .font(MorselFont.body)
-                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial)
-                .cornerRadius(12)
-                .padding()
+
+                VStack(alignment: .leading, spacing: 12) {
+                  DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
+                  DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
+                  DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
+                  DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
+                  DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                  Text("How you did")
+                    .font(MorselFont.heading)
+                  Text(encouragement(for: digest))
+                    .font(MorselFont.body)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                  Text("Morsel's Tip")
+                    .font(MorselFont.heading)
+                  Text(digest.tip.rawValue)
+                    .font(MorselFont.body)
+                }
+              }
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding()
+              .blur(radius: availabilityState == .locked ? 8 : (animatingBlurRadius[digestKey] ?? 0))
+              .allowsHitTesting(availabilityState != .locked)
+              .accessibilityHidden(availabilityState == .locked)
+            }
+            .disabled(availabilityState == .locked)
+            .onAppear {
+              if availabilityState == .unlockable {
+                triggerUnblurAnimation(for: digest)
               }
             }
-            .tag(offset)
-          }
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .onAppear {
-          currentPageIndex = 0
-        }
 
-        HStack {
-          Button(action: {
-            withAnimation {
-              currentPageIndex += 1
-            }
-          }) {
-            Image(systemName: "chevron.left")
-              .foregroundColor(.white)
-              .padding(8)
-          }
-          .opacity(currentPageIndex < availableOffsets.count - 1 ? 1 : 0)
-          .disabled(currentPageIndex >= availableOffsets.count - 1)
-          .animation(.easeOut(duration: 0.2), value: currentPageIndex)
-
-          Spacer()
-
-          if currentPageIndex >= 0 && currentPageIndex < availableOffsets.count {
-            let tag = availableOffsets.reversed()[currentPageIndex]
-            let currentDigest = digest(forOffset: tag)
-            ZStack {
-              HStack {
-                Text(formattedRange(for: currentDigest))
+            if availabilityState == .locked {
+              VStack(spacing: 12) {
+                Text("This week isn't finished yet!")
+                  .font(MorselFont.heading)
+                Text("Check back on Friday to see your full digest.")
                   .font(MorselFont.body)
-                  .foregroundColor(.white)
-                  .lineLimit(1)
-                  .minimumScaleFactor(0.7)
                   .multilineTextAlignment(.center)
-                  .frame(maxWidth: .infinity)
-                  .id(tag)
-                  .matchedGeometryEffect(id: "weekLabel", in: animation)
               }
+              .padding()
+              .frame(maxWidth: .infinity)
+              .background(.ultraThinMaterial)
+              .cornerRadius(12)
+              .padding()
             }
-            .animation(.easeInOut(duration: 0.3), value: tag)
           }
+          .tag(offset)
+        }
+      }
+      .tabViewStyle(.page(indexDisplayMode: .never))
+      .onAppear {
+        currentPageIndex = 0
+      }
 
-          Spacer()
+      HStack {
+        Button(action: {
+          withAnimation {
+            currentPageIndex += 1
+          }
+        }) {
+          Image(systemName: "chevron.left")
+            .foregroundColor(.white)
+            .padding(8)
+        }
+        .opacity(currentPageIndex < availableOffsets.count - 1 ? 1 : 0)
+        .disabled(currentPageIndex >= availableOffsets.count - 1)
+        .animation(.easeOut(duration: 0.2), value: currentPageIndex)
 
-          Button(action: {
-            withAnimation {
-              currentPageIndex -= 1
+        Spacer()
+
+        if currentPageIndex >= 0 && currentPageIndex < availableOffsets.count {
+          let tag = availableOffsets.reversed()[currentPageIndex]
+          let currentDigest = digest(forOffset: tag)
+          ZStack {
+            HStack {
+              Text(formattedRange(for: currentDigest))
+                .font(MorselFont.body)
+                .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .id(tag)
+                .matchedGeometryEffect(id: "weekLabel", in: animation)
             }
-          }) {
-            Image(systemName: "chevron.right")
-              .foregroundColor(.white)
-              .padding(8)
           }
-          .opacity(currentPageIndex > 0 ? 1 : 0)
-          .disabled(currentPageIndex == 0)
-          .animation(.easeOut(duration: 0.2), value: currentPageIndex)
+          .animation(.easeInOut(duration: 0.3), value: tag)
         }
-        .padding(.horizontal)
-        .padding(.bottom, 32)
-      }
-      .overlay(alignment: .topTrailing) {
-        ToggleButton(isActive: true, systemImage: "xmark") {
-          dismiss()
+
+        Spacer()
+
+        Button(action: {
+          withAnimation {
+            currentPageIndex -= 1
+          }
+        }) {
+          Image(systemName: "chevron.right")
+            .foregroundColor(.white)
+            .padding(8)
         }
-        .padding()
+        .opacity(currentPageIndex > 0 ? 1 : 0)
+        .disabled(currentPageIndex == 0)
+        .animation(.easeOut(duration: 0.2), value: currentPageIndex)
       }
+      .padding(.horizontal)
+      .padding(.bottom, 32)
+    }
+    .overlay(alignment: .topTrailing) {
+      ToggleButton(isActive: true, systemImage: "xmark") {
+        dismiss()
+      }
+      .padding()
     }
   }
 }
@@ -380,20 +398,88 @@ private extension DigestView {
     return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
   }
 
-  private func isCurrentWeek(_ digest: DigestModel) -> Bool {
+  private func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
     let calendar = Calendar.current
     let now = Date()
-    
-    // If it's not the current week, it's available
+
+    // If it's not the current week, it's always unlocked
     guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
-      return false
+      return .unlocked
     }
-    
-    // If it's the current week, check if it's Friday or later
-    let weekday = calendar.component(.weekday, from: now)
-    // weekday: 1 = Sunday, 2 = Monday, ..., 6 = Friday, 7 = Saturday
-    return weekday < 6 // Only blur if it's before Friday (Sunday through Thursday)
+
+    // Calculate the exact unlock time for this week
+    let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
+
+    // Check if we've reached the unlock time
+    if now < unlockTime {
+      return .locked
+    } else {
+      // We're past the unlock time - check if this digest has been unlocked before
+      let digestKey = digestUnlockKey(for: digest)
+      if UserDefaults.standard.bool(forKey: digestKey) {
+        return .unlocked
+      } else {
+        return .unlockable
+      }
+    }
   }
+
+  private func calculateUnlockTime(for weekStart: Date, calendar: Calendar) -> Date {
+    // Find the target day in this week
+    let weekday = calendar.component(.weekday, from: weekStart)
+    let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
+
+    guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: weekStart) else {
+      return weekStart // Fallback to start of week
+    }
+
+    // Set the exact time
+    var components = calendar.dateComponents([.year, .month, .day], from: targetDay)
+    components.hour = DigestConfiguration.unlockHour
+    components.minute = DigestConfiguration.unlockMinute
+    components.second = 0
+
+    return calendar.date(from: components) ?? targetDay
+  }
+
+  private func digestUnlockKey(for digest: DigestModel) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return "digest_unlocked_\(formatter.string(from: digest.weekStart))"
+  }
+
+  private func markDigestAsUnlocked(_ digest: DigestModel) {
+    let digestKey = digestUnlockKey(for: digest)
+    UserDefaults.standard.set(true, forKey: digestKey)
+  }
+
+  private func triggerUnblurAnimation(for digest: DigestModel) {
+    let digestKey = digestUnlockKey(for: digest)
+
+    // Start the animation - set initial blur radius
+    animatingBlurRadius[digestKey] = 8.0
+    unblurAnimationInProgress.insert(digestKey)
+
+    // Animate the unblur over 1.5 seconds
+    withAnimation(.easeInOut(duration: 1.5)) {
+      animatingBlurRadius[digestKey] = 0.0
+    }
+
+    // Clean up after animation completes
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+      unblurAnimationInProgress.remove(digestKey)
+      animatingBlurRadius.removeValue(forKey: digestKey)
+    }
+
+    // Mark as unlocked so it doesn't animate again
+    markDigestAsUnlocked(digest)
+  }
+}
+
+enum DigestAvailabilityState {
+  case locked      // Current week, before Friday midnight
+  case unlockable  // Current week, after Friday midnight, not yet unlocked
+  case unlocked    // Has been unlocked (first viewed after Friday midnight) or past week
 }
 
 enum DigestEncouragementState {
