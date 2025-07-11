@@ -382,7 +382,17 @@ private extension DigestView {
 
   private func isCurrentWeek(_ digest: DigestModel) -> Bool {
     let calendar = Calendar.current
-    return calendar.isDate(Date(), equalTo: digest.weekStart, toGranularity: .weekOfYear)
+    let now = Date()
+    
+    // If it's not the current week, it's available
+    guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
+      return false
+    }
+    
+    // If it's the current week, check if it's Friday or later
+    let weekday = calendar.component(.weekday, from: now)
+    // weekday: 1 = Sunday, 2 = Monday, ..., 6 = Friday, 7 = Saturday
+    return weekday < 6 // Only blur if it's before Friday (Sunday through Thursday)
   }
 }
 
