@@ -158,7 +158,6 @@ struct MorselView: View {
     let baseColor = morselColor
     let topColor = Color(adjustedTopColor(from: UIColor(baseColor), sadness: sadnessLevel, happiness: happinessLevel))
 
-
     return ZStack {
       Color.clear.frame(width: 240, height: 86)
       UnevenRoundedRectangle(
@@ -184,6 +183,17 @@ struct MorselView: View {
       .frame(
         width: isOpen ? 240 : .lerp(from: 86, to: 107, by: happinessLevel),
         height: isOpen ? 120 : .lerp(from: 64, to: 80, by: happinessLevel)
+      )
+      .glassEffect(
+        in: UnevenRoundedRectangle(
+          cornerRadii: .init(
+            topLeading: isOpen ? 120 : faceTopCornerRadius,
+            bottomLeading: isOpen ? 32 : faceBottomCornerRadius,
+            bottomTrailing: isOpen ? 32 : faceBottomCornerRadius,
+            topTrailing: isOpen ? 120 : faceTopCornerRadius
+          ),
+          style: .continuous
+        )
       )
       .animation(.easeInOut(duration: 0.3), value: faceBottomCornerRadius)
       .overlay(

@@ -21,24 +21,21 @@ struct CardView: View {
           .frame(width: 24, height: 24)
           .foregroundStyle(tintColor)
           .padding(8)
-          .background(.ultraThinMaterial, in: Circle())
-          .frame(width: 40, height: 40)
-
-        (
-          Text(value + " " + title)
-            .font(MorselFont.heading)
-        )
-        .lineLimit(1)
+        Text(value + " " + title)
+          .font(MorselFont.heading)
+          .lineLimit(1)
 
         Spacer()
 
         if description != nil {
-          ToggleButton(isActive: isExpanded, systemImage: "chevron.down") {
-            withAnimation {
-              isExpanded.toggle()
+          Image(systemName: "chevron.down")
+            .padding(.trailing, 8)
+            .tint(appSettings.morselColor)
+            .onTapGesture {
+              withAnimation {
+                isExpanded.toggle()
+              }
             }
-          }
-          .scaleEffect(0.75)
         }
       }
 
@@ -50,14 +47,10 @@ struct CardView: View {
       }
     }
     .padding()
-    .background(
-      RoundedRectangle(cornerRadius: 12, style: .continuous)
-        .fill(Color(.secondarySystemBackground))
-    )
-    .shadow(radius: 4, y: 2)
     .onTapGesture {
       onTap?()
     }
+    .glassEffect()
   }
 
   var tintColor: Color {

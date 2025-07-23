@@ -41,7 +41,6 @@ struct BottomBarView: View {
                 }
               }
             )
-            .padding(.leading, 24)
             .transition(.blurReplace)
             .sheet(isPresented: $showingStudio) { MorselStudio() }
           }
