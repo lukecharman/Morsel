@@ -57,6 +57,15 @@ struct NotificationsManager {
   func scheduleTestDigestNotification() {
     guard shouldScheduleDigestDeepLink else { return }
 
+    // Clear any existing digest unlock keys for current week to reset animation state
+    let calendar = Calendar.current
+    let weekStart = calendar.startOfWeek(for: Date())
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    let digestKey = "digest_unlocked_\(formatter.string(from: weekStart))"
+    UserDefaults.standard.removeObject(forKey: digestKey)
+    print("🐛 DEBUG: Cleared digest key: \(digestKey)")
+
     // Set debug unlock time to 15 seconds from now
     let debugTime = Date().addingTimeInterval(15)
     NotificationsManager.debugUnlockTime = debugTime

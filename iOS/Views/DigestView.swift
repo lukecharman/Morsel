@@ -20,6 +20,7 @@ struct DigestView: View {
   @Namespace private var animation
   @State private var unblurAnimationInProgress: Set<String> = []
   @State private var animatingBlurRadius: [String: Double] = [:]
+  @State private var hasTriggeredAnimation: Set<String> = []
 
   private var availableOffsets: [Int] {
     guard let earliest = meals.map(\.date).min() else { return [0] }
@@ -84,13 +85,18 @@ struct DigestView: View {
               }
               .frame(maxWidth: .infinity, alignment: .leading)
               .padding()
-              .blur(radius: availabilityState == .locked ? 8 : (animatingBlurRadius[digestKey] ?? 0))
+              .blur(radius: availabilityState == .locked ? 8 : (animatingBlurRadius[digestKey] ?? (availabilityState == .unlockable ? 8 : 0)))
               .allowsHitTesting(availabilityState != .locked)
               .accessibilityHidden(availabilityState == .locked)
             }
             .disabled(availabilityState == .locked)
             .onAppear {
-              if availabilityState == .unlockable {
+              // Check if this digest should animate and hasn't been animated yet
+              let digestKey = digestUnlockKey(for: digest)
+              let shouldAnimate = availabilityState == .unlockable && !hasTriggeredAnimation.contains(digestKey)
+              
+              if shouldAnimate {
+                hasTriggeredAnimation.insert(digestKey)
                 triggerUnblurAnimation(for: digest)
               }
             }
@@ -416,7 +422,9 @@ private extension DigestView {
     } else {
       // We're past the unlock time - check if this digest has been unlocked before
       let digestKey = digestUnlockKey(for: digest)
-      if UserDefaults.standard.bool(forKey: digestKey) {
+      let hasBeenUnlocked = UserDefaults.standard.bool(forKey: digestKey)
+      
+      if hasBeenUnlocked {
         return .unlocked
       } else {
         return .unlockable
@@ -428,7 +436,6 @@ private extension DigestView {
     // Check for debug override (only for current week)
     if calendar.isDate(Date(), equalTo: weekStart, toGranularity: .weekOfYear),
        let debugTime = NotificationsManager.debugUnlockTime {
-      print("🐛 DEBUG: Using debug unlock time: \(debugTime)")
       return debugTime
     }
     
@@ -467,19 +474,21 @@ private extension DigestView {
     animatingBlurRadius[digestKey] = 8.0
     unblurAnimationInProgress.insert(digestKey)
 
-    // Animate the unblur over 1.5 seconds
-    withAnimation(.easeInOut(duration: 1.5)) {
-      animatingBlurRadius[digestKey] = 0.0
+    // Give SwiftUI a moment to render the blur, then animate
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+      withAnimation(.easeInOut(duration: 1.5)) {
+        self.animatingBlurRadius[digestKey] = 0.0
+      }
     }
 
-    // Clean up after animation completes
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+    // Clean up after animation completes (0.1s delay + 1.5s animation)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
       unblurAnimationInProgress.remove(digestKey)
       animatingBlurRadius.removeValue(forKey: digestKey)
+      
+      // Mark as unlocked AFTER animation completes
+      self.markDigestAsUnlocked(digest)
     }
-
-    // Mark as unlocked so it doesn't animate again
-    markDigestAsUnlocked(digest)
   }
 }
 
