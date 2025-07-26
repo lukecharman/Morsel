@@ -7,7 +7,7 @@ private struct DigestConfiguration {
   /// hour: 0-23 (24-hour format)
   /// minute: 0-59
   static let unlockWeekday = 6    // Friday
-  static let unlockHour = 0       // Midnight
+  static let unlockHour = 9       // 9 AM
   static let unlockMinute = 0     // :00
 }
 
