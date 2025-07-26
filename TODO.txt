@@ -1,41 +1,34 @@
 1.0
 ---
-No paywall.
-
- * Finalise Morsel himself.
- * Finalise icons.
- * Finalise all UI, light and dark.
+ * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
+ * Add an optional speech bubble above Morsel with a small phrase inside.
+ * Host a JSON file somewhere to remotely update these small phrases.
+ * Finalise Morsel himself – add more expressions and make him feel more alive.
+    - Does he need eyebrows?
+    - Does he need a talking animation while the speech bubble is visible?
+    - Should he speak Simlish or Animal Crossing like?
+    - I want MVP, but MV Lovable P.
+ * Finalise all app icons.
+ * Finalise all UI, light and dark. Make this toggleable separate to the system setting (light, dark, with system)
  * Profile for optimisations to memory and framerate, etc.
  * Get it on TestFlight, write a blurb, do screenshots, etc.
-
-
+ * Use it for a couple of weeks on phone and watch, find bugs, do proper testing.
 
 Post 1.0
 --------
- * Use Image Playground for a background for Morsel. Morsel's Playground. Tapping him does stuff, etc.
  * Food ranking system using an open API or a big local JSON.
  * Figure out this custom AppEntity thing for speaking the item in one term to Siri.
  * Add some reminder notifications, NOT NAGS. Maybe with a reminder time? User can select up to 3 times per day?
  * Togglable widget background showing red to green for food for you versus Morsel that day?
  * Daily goal streaks?
- * “Random tip from Morsel” in Extras. Could be serious (“Eat slowly”) or playful (“Ice cream is legal even on Tuesdays”)
 
-
-
-
-
-
-
-
-
-
-
-
+Future Ideas
+------------
 🫧 Micro-Reactions (Contextual, Lightweight)
 
 Subtle and ambient behaviours to reflect mood, interaction, or state.
   •  Glance at user input: If you’re typing something in the text field, Morsel’s eyes follow the keyboard or cursor.
-  •  Idle fidgets: Finger tap, ear twitch, slow stretch, light bounce, tiny sneeze, tail flick (if he has one).
+  •  Idle fidgets: Finger tap, ear twitch, slow stretch, light bounce, tiny sneeze.
   •  Reactive glow: His fill colour pulses or shifts very gently based on time of day or app theme.
   •  Eye darting: If he’s idle too long, he looks suspiciously left and right.
 
@@ -49,15 +42,6 @@ More obvious, more animated. Only for key transitions.
   •  Impatient tapping or snoring: If left open without input for too long.
   •  Blush / sparkle: When given a food he “likes” (i.e. you could add a favourites mechanic).
   •  Heart bubble: Occasionally floats up from his head when “fed”.
-
-
-⸻
-
-💬 Speech / Voice-Like Expressions
-
-He doesn’t need to talk, but…
-  •  Speech bubble variants: “Yum”, “Thanks!”, “Hmm?” — minimal, ambient, no tap targets.
-  •  Emoji or glyph expressions: ❤️ 😴 ❗️ 🥹 — you could even theme them by season.
 
 ⸻
 
