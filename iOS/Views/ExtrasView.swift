@@ -9,12 +9,20 @@ struct ExtrasView: View {
   @State private var showFeedbackAlert = false
   @State private var showColorSheet = false
   @State private var showIconSheet = false
+  @State private var showThemeSheet = false
 
   var onClearAll: () -> Void
 
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
+        CardView(
+          title: "",
+          value: "Appearance",
+          icon: "moon.circle.fill",
+          description: "Choose between light, dark, or system appearance.",
+          onTap: { showThemeSheet = true }
+        )
         CardView(
           title: "",
           value: "Theme",
@@ -101,6 +109,12 @@ struct ExtrasView: View {
       IconPickerView()
         .onAppear {
           Analytics.track(ScreenViewIcon())
+        }
+    }
+    .sheet(isPresented: $showThemeSheet) {
+      ThemePickerView()
+        .onAppear {
+          Analytics.track(ScreenViewTheme())
         }
     }
     .onAppear {

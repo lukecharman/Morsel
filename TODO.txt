@@ -9,7 +9,6 @@
     - Should he speak Simlish or Animal Crossing like?
     - I want MVP, but MV Lovable P.
  * Finalise all app icons.
- * Finalise all UI, light and dark. Make this toggleable separate to the system setting (light, dark, with system)
  * Profile for optimisations to memory and framerate, etc.
  * Get it on TestFlight, write a blurb, do screenshots, etc.
  * Use it for a couple of weeks on phone and watch, find bugs, do proper testing.

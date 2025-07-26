@@ -8,6 +8,7 @@ import UserNotifications
 struct MorselApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   @StateObject private var sessionManager = PhoneSessionManager()
+  @StateObject private var appSettings = AppSettings.shared
 
   @State private var shouldOpenMouth = false
   @State private var shouldShowDigest = false
@@ -19,8 +20,9 @@ struct MorselApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest)
-        .environmentObject(AppSettings.shared)
+        .environmentObject(appSettings)
         .modelContainer(.morsel)
+        .preferredColorScheme(appSettings.appTheme.colorScheme)
         .onOpenURL { handleDeepLink($0) }
         .onAppear { launch() }
     }

@@ -2,16 +2,20 @@ import SwiftUI
 import UIKit
 
 struct BackgroundGradientView: View {
-  @Environment(\.colorScheme) private var colorScheme
+  @Environment(\.colorScheme) private var systemColorScheme
   @EnvironmentObject var appSettings: AppSettings
 
   var body: some View {
     LinearGradient(
-      colors: gradientColors(colorScheme: colorScheme),
+      colors: gradientColors(colorScheme: effectiveColorScheme),
       startPoint: .top,
       endPoint: .bottom
     )
     .ignoresSafeArea()
+  }
+  
+  var effectiveColorScheme: ColorScheme {
+    appSettings.appTheme.colorScheme ?? systemColorScheme
   }
 
   func gradientColors(colorScheme: ColorScheme) -> [Color] {

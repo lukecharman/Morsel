@@ -6,6 +6,29 @@ import WidgetKit
 enum Key: String {
   case morselColor
   case morselColorRGBA
+  case appTheme
+}
+
+enum AppTheme: String, CaseIterable {
+  case system = "system"
+  case light = "light"
+  case dark = "dark"
+  
+  var displayName: String {
+    switch self {
+    case .system: return "System"
+    case .light: return "Light"
+    case .dark: return "Dark"
+    }
+  }
+  
+  var colorScheme: ColorScheme? {
+    switch self {
+    case .system: return nil
+    case .light: return .light
+    case .dark: return .dark
+    }
+  }
 }
 
 class AppSettings: ObservableObject {
@@ -15,6 +38,12 @@ class AppSettings: ObservableObject {
   private static let fallbackColor: Color = .blue
 
   @Published var showDigest = false
+
+  @Published var appTheme: AppTheme {
+    didSet {
+      defaults?.set(appTheme.rawValue, forKey: Key.appTheme.rawValue)
+    }
+  }
 
   @Published var morselColor: Color {
     didSet {
@@ -28,7 +57,10 @@ class AppSettings: ObservableObject {
 
   private init() {
     let initialColor = AppSettings.loadInitialColor(from: defaults)
+    let initialTheme = AppTheme(rawValue: defaults?.string(forKey: Key.appTheme.rawValue) ?? "") ?? .system
+    
     _morselColor = Published(initialValue: initialColor)
+    _appTheme = Published(initialValue: initialTheme)
 
 #if os(watchOS)
     NotificationCenter.default.addObserver(forName: .didReceiveMorselColor, object: nil, queue: .main) { [weak self] _ in
