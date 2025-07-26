@@ -10,6 +10,9 @@ import NotificationCenter
 
 struct NotificationsManager {
   let shouldScheduleDigestDeepLink = false // Debug
+  
+  // Debug unlock time for digest testing
+  static var debugUnlockTime: Date?
 
   func prepare() {
     requestNotificationPermissions()
@@ -54,9 +57,15 @@ struct NotificationsManager {
   func scheduleTestDigestNotification() {
     guard shouldScheduleDigestDeepLink else { return }
 
+    // Set debug unlock time to 15 seconds from now
+    let debugTime = Date().addingTimeInterval(15)
+    NotificationsManager.debugUnlockTime = debugTime
+    
+    print("🐛 DEBUG: Scheduling test notification and digest unlock for \(debugTime)")
+
     let content = UNMutableNotificationContent()
-    content.title = "Morsel’s got your weekly digest!"
-    content.body = "Wanna see how you did this week? Morsel’s been watching (politely)."
+    content.title = "Morsel's got your weekly digest!"
+    content.body = "Wanna see how you did this week? Morsel's been watching (politely)."
     content.userInfo = ["deepLink": "morsel://digest"]
     content.sound = .default
 

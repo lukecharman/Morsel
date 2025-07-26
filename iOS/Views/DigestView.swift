@@ -425,6 +425,13 @@ private extension DigestView {
   }
 
   private func calculateUnlockTime(for weekStart: Date, calendar: Calendar) -> Date {
+    // Check for debug override (only for current week)
+    if calendar.isDate(Date(), equalTo: weekStart, toGranularity: .weekOfYear),
+       let debugTime = NotificationsManager.debugUnlockTime {
+      print("🐛 DEBUG: Using debug unlock time: \(debugTime)")
+      return debugTime
+    }
+    
     // Find the target day in this week
     let weekday = calendar.component(.weekday, from: weekStart)
     let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
