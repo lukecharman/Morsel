@@ -9,7 +9,7 @@ import Foundation
 import NotificationCenter
 
 struct NotificationsManager {
-  let shouldScheduleDigestDeepLink = true // Debug
+  let shouldScheduleDigestDeepLink = false // Debug
   
   // Debug unlock time for digest testing
   static var debugUnlockTime: Date?
