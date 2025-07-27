@@ -1,5 +1,46 @@
 import SwiftUI
 
+struct SpeechBubble: View {
+  let text: String
+  let isVisible: Bool
+  
+  var body: some View {
+    VStack(spacing: 4) {
+      Text(text)
+        .font(MorselFont.body)
+        .foregroundColor(.primary)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(
+          RoundedRectangle(cornerRadius: 16)
+            .stroke(.primary.opacity(0.1), lineWidth: 1)
+        )
+      
+      // Speech bubble tail
+      Path { path in
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: 8, y: 8))
+        path.addLine(to: CGPoint(x: 16, y: 0))
+        path.closeSubpath()
+      }
+      .fill(.ultraThinMaterial)
+      .frame(width: 16, height: 8)
+      .overlay(
+        Path { path in
+          path.move(to: CGPoint(x: 0, y: 0))
+          path.addLine(to: CGPoint(x: 8, y: 8))
+          path.addLine(to: CGPoint(x: 16, y: 0))
+        }
+        .stroke(.primary.opacity(0.1), lineWidth: 1)
+      )
+    }
+    .opacity(isVisible ? 1 : 0)
+    .scaleEffect(isVisible ? 1 : 0.8)
+    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isVisible)
+  }
+}
+
 enum MorselDebugControlMode {
   case automatic
   case manual
@@ -28,6 +69,8 @@ struct MorselView: View {
   @State private var idleLookaroundOffsetInternal: CGFloat = .zero
   @State private var isBeingTouched = false
   @State private var text: String = ""
+  @State private var showSpeechBubble = false
+  @State private var speechBubbleText = ""
 
   @FocusState private var isFocused: Bool
 
@@ -79,6 +122,11 @@ struct MorselView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
+      // Speech bubble above Morsel
+      SpeechBubble(text: speechBubbleText, isVisible: showSpeechBubble)
+        .offset(y: -140)
+        .zIndex(1)
+      
       face
         .rotation3DEffect(
           .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
@@ -139,6 +187,7 @@ struct MorselView: View {
     .onAppear {
       startBlinking()
       startIdleWiggle()
+      startRandomSpeechBubbles()
     }
     .onChange(of: shouldOpen) { oldValue, newValue in
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -348,6 +397,7 @@ struct MorselView: View {
   }
 
   func open() {
+    hideSpeechBubble() // Hide speech bubble when opening
     withAnimation {
       isOpen = true
       shouldOpen = false
@@ -473,6 +523,52 @@ struct MorselView: View {
     let adjustedBrightness = max(min(brightness * (1 - happiness * 0.18), 1), 0)
 
     return UIColor(hue: hue, saturation: adjustedSaturation, brightness: adjustedBrightness, alpha: alpha)
+  }
+  
+  // MARK: - Speech Bubble Functions
+  
+  private let randomPhrases = [
+    "Hey there! 👋",
+    "Feeling snacky?",
+    "What's cooking?",
+    "Ready to log?",
+    "Tap me! 😊",
+    "I'm here to help",
+    "Let's track together",
+    "Morsel mode: ON",
+    "Healthy choices!",
+    "You've got this!",
+    "Craving control 💪",
+    "Small bites, big wins"
+  ]
+  
+  func showRandomSpeechBubble() {
+    guard !isOpen && !showSpeechBubble else { return }
+    
+    speechBubbleText = randomPhrases.randomElement() ?? "Hi there!"
+    withAnimation {
+      showSpeechBubble = true
+    }
+    
+    // Hide after 4 seconds
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+      hideSpeechBubble()
+    }
+  }
+  
+  func hideSpeechBubble() {
+    withAnimation {
+      showSpeechBubble = false
+    }
+  }
+  
+  func startRandomSpeechBubbles() {
+    Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+      // Only show speech bubble occasionally and when not interacting
+      if !isOpen && !isBeingTouched && !showSpeechBubble && Double.random(in: 0...1) < 0.9 {
+        showRandomSpeechBubble()
+      }
+    }
   }
 }
 
