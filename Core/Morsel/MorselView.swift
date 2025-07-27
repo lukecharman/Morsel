@@ -1,46 +1,5 @@
 import SwiftUI
 
-struct SpeechBubble: View {
-  let text: String
-  let isVisible: Bool
-  
-  var body: some View {
-    VStack(spacing: 4) {
-      Text(text)
-        .font(MorselFont.body)
-        .foregroundColor(.primary)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .overlay(
-          RoundedRectangle(cornerRadius: 16)
-            .stroke(.primary.opacity(0.1), lineWidth: 1)
-        )
-      
-      // Speech bubble tail
-      Path { path in
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: 8, y: 8))
-        path.addLine(to: CGPoint(x: 16, y: 0))
-        path.closeSubpath()
-      }
-      .fill(.ultraThinMaterial)
-      .frame(width: 16, height: 8)
-      .overlay(
-        Path { path in
-          path.move(to: CGPoint(x: 0, y: 0))
-          path.addLine(to: CGPoint(x: 8, y: 8))
-          path.addLine(to: CGPoint(x: 16, y: 0))
-        }
-        .stroke(.primary.opacity(0.1), lineWidth: 1)
-      )
-    }
-    .opacity(isVisible ? 1 : 0)
-    .scaleEffect(isVisible ? 1 : 0.8)
-    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isVisible)
-  }
-}
-
 enum MorselDebugControlMode {
   case automatic
   case manual
@@ -122,9 +81,8 @@ struct MorselView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
-      // Speech bubble above Morsel
       SpeechBubble(text: speechBubbleText, isVisible: showSpeechBubble)
-        .offset(y: -140)
+        .offset(y: -96)
         .zIndex(1)
       
       face
@@ -571,6 +529,41 @@ struct MorselView: View {
     }
   }
 }
+
+struct SpeechBubble: View {
+  let text: String
+  let isVisible: Bool
+
+  var body: some View {
+    GlassEffectContainer {
+      VStack(spacing: 0) {
+        // Main bubble content
+        Text(text)
+          .font(MorselFont.body)
+          .foregroundColor(.black)
+          .multilineTextAlignment(.center)
+          .padding(.horizontal, 16)
+          .padding(.vertical, 12)
+          .glassEffect(.regular.tint(.white))
+        Circle()
+          .foregroundStyle(.clear)
+          .frame(width: 32, height: 32)
+          .glassEffect(.regular.tint(.white))
+          .offset(x: 64, y: 10)
+        Circle()
+          .foregroundStyle(.clear)
+          .frame(width: 16, height: 16)
+          .glassEffect(.regular.tint(.white))
+          .offset(x: 36, y: 12)
+      }
+      .opacity(isVisible ? 1 : 0)
+      .blur(radius: isVisible ? 0 : 4)
+      .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isVisible)
+    }
+  }
+}
+
+
 
 #Preview {
   MorselView(

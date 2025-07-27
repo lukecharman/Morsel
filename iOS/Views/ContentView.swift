@@ -153,6 +153,7 @@ private extension ContentView {
       .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+      .parallax(amount: 24)
     }
   }
 
