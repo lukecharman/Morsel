@@ -167,7 +167,6 @@
 				"Resources/Fonts/Quicksand-Regular.ttf",
 				"Resources/Fonts/Quicksand-SemiBold.ttf",
 				Settings/AppSettings.swift,
-				UI/SpeechBubbleView.swift,
 				UI/Style.swift,
 			);
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;

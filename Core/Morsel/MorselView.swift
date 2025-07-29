@@ -28,8 +28,6 @@ struct MorselView: View {
   @State private var idleLookaroundOffsetInternal: CGFloat = .zero
   @State private var isBeingTouched = false
   @State private var text: String = ""
-  @State private var showSpeechBubble = false
-  @State private var speechBubbleText = ""
 
   @FocusState private var isFocused: Bool
 
@@ -81,10 +79,9 @@ struct MorselView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
-      SpeechBubble(text: speechBubbleText, isVisible: showSpeechBubble)
-        .offset(y: -96)
+      SpeechBubble(isOpen: $isOpen, isBeingTouched: $isBeingTouched)
+        .offset(y: -80)
         .zIndex(1)
-      
       face
         .rotation3DEffect(
           .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
@@ -145,7 +142,6 @@ struct MorselView: View {
     .onAppear {
       startBlinking()
       startIdleWiggle()
-      startRandomSpeechBubbles()
     }
     .onChange(of: shouldOpen) { oldValue, newValue in
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -355,7 +351,6 @@ struct MorselView: View {
   }
 
   func open() {
-    hideSpeechBubble() // Hide speech bubble when opening
     withAnimation {
       isOpen = true
       shouldOpen = false
@@ -483,9 +478,20 @@ struct MorselView: View {
     return UIColor(hue: hue, saturation: adjustedSaturation, brightness: adjustedBrightness, alpha: alpha)
   }
   
-  // MARK: - Speech Bubble Functions
-  
-  private let randomPhrases = [
+}
+
+struct SpeechBubble: View {
+  @Binding var isOpen: Bool
+  @Binding var isBeingTouched: Bool
+
+  @Namespace var union
+
+  @State private var currentText = ""
+  @State private var showSmallBubble = false
+  @State private var showMediumBubble = false
+  @State private var showMainBubble = false
+
+  private let phrases = [
     "Hey there! 👋",
     "Feeling snacky?",
     "What's cooking?",
@@ -499,83 +505,116 @@ struct MorselView: View {
     "Craving control 💪",
     "Small bites, big wins"
   ]
-  
-  func showRandomSpeechBubble() {
-    guard !isOpen && !showSpeechBubble else { return }
-    
-    speechBubbleText = randomPhrases.randomElement() ?? "Hi there!"
-    withAnimation {
-      showSpeechBubble = true
-    }
-    
-    // Hide after 4 seconds
-    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-      hideSpeechBubble()
-    }
-  }
-  
-  func hideSpeechBubble() {
-    withAnimation {
-      showSpeechBubble = false
-    }
-  }
-  
-  func startRandomSpeechBubbles() {
-    Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
-      // Only show speech bubble occasionally and when not interacting
-      if !isOpen && !isBeingTouched && !showSpeechBubble && Double.random(in: 0...1) < 0.9 {
-        showRandomSpeechBubble()
-      }
-    }
-  }
-}
-
-struct SpeechBubble: View {
-  let text: String
-  let isVisible: Bool
 
   var body: some View {
-    GlassEffectContainer {
-      VStack(spacing: 0) {
-        // Main bubble content
-        Text(text)
+    ZStack {
+      VStack {
+        // Main bubble
+        Text(currentText)
           .font(MorselFont.body)
-          .foregroundColor(.black)
+          .foregroundStyle(.white)
           .multilineTextAlignment(.center)
           .padding(.horizontal, 16)
           .padding(.vertical, 12)
-          .glassEffect(.regular.tint(.white))
+          .glassEffect(.clear)
+          .opacity(showMainBubble ? 1 : 0)
+          .scaleEffect(showMainBubble ? 1 : 0.8)
+          .offset(x: 0, y: -2)
+
+        // Medium bubble
         Circle()
-          .foregroundStyle(.clear)
           .frame(width: 32, height: 32)
-          .glassEffect(.regular.tint(.white))
-          .offset(x: 64, y: 10)
+          .glassEffect(.clear)
+          .opacity(showMediumBubble ? 1 : 0)
+          .scaleEffect(showMediumBubble ? 1 : 0.8)
+          .offset(x: 60, y: 2)
+
+        // Small bubble
         Circle()
-          .foregroundStyle(.clear)
-          .frame(width: 16, height: 16)
-          .glassEffect(.regular.tint(.white))
-          .offset(x: 36, y: 12)
+          .frame(width: 24, height: 24)
+          .glassEffect(.clear)
+          .opacity(showSmallBubble ? 1 : 0)
+          .scaleEffect(showSmallBubble ? 1 : 0.8)
+          .offset(x: 40, y: 0)
       }
-      .opacity(isVisible ? 1 : 0)
-      .blur(radius: isVisible ? 0 : 4)
-      .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isVisible)
+    }
+    .onAppear {
+      startBubbleLoop()
+    }
+  }
+
+  private func startBubbleLoop() {
+    showSmallBubble = false
+    showMediumBubble = false
+    showMainBubble = false
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+      bubbleCycle()
+    }
+  }
+
+  private func bubbleCycle() {
+    currentText = phrases.randomElement() ?? "Hi there!"
+
+    // Animate in: small → medium → main
+    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+      showSmallBubble = true
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+      withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+        showMediumBubble = true
+      }
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+      withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+        showMainBubble = true
+      }
+    }
+
+    // Pause for 3s, then animate out: main → medium → small
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+      withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+        showMainBubble = false
+      }
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+          showMediumBubble = false
+        }
+      }
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+          showSmallBubble = false
+        }
+      }
+
+      // Clear text after fade-out, then restart loop
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+        currentText = ""
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          bubbleCycle()
+        }
+      }
     }
   }
 }
 
-
-
 #Preview {
-  MorselView(
-    shouldOpen: .constant(false),
-    shouldClose: .constant(false),
-    isChoosingDestination: .constant(false),
-    destinationProximity: .constant(0),
-    isLookingUp: .constant(false),
-    morselColor: .blue,
-    supportsOpen: true
-  ) { _ in }
+  VStack {
+    Spacer()
+    MorselView(
+      shouldOpen: .constant(false),
+      shouldClose: .constant(false),
+      isChoosingDestination: .constant(false),
+      destinationProximity: .constant(0),
+      isLookingUp: .constant(false),
+      morselColor: .blue,
+      supportsOpen: true
+    ) { _ in }
 #if os(iOS)
-    .background(Color(.systemBackground))
+      .background(Color(.black))
 #endif
+    Spacer()
+  }
+  .frame(maxWidth: .infinity)
+  .background(.black)
 }
