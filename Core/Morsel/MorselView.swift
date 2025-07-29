@@ -38,7 +38,6 @@ struct MorselView: View {
   var onAdd: (String) -> Void
 
   var debugBindings: MorselDebugBindings? = nil
-
   var debugControlMode: MorselDebugControlMode = .automatic
 
   private var isSwallowing: Bool {
