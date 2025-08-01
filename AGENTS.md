@@ -14,6 +14,7 @@ This repository follows a default template for top-notch iOS engineering. These 
 - Keep line length under **120 characters** when possible.
 - Prefer structs and value types where appropriate.
 - Group related extensions together using `// MARK:` comments.
+- Place private methods and variables in a `private` extension on the enclosing type whenever possible.
 
 ## Commit Messages
 - Write informative commit messages in present tense (e.g., "Add loading state to StatsView").
