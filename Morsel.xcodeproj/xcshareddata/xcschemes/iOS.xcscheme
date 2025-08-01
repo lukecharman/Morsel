@@ -52,6 +52,17 @@
                ReferencedContainer = "container:Morsel.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A388577A2E3D230D003ED5E1"
+               BuildableName = "Morsel iOS Tests.xctest"
+               BlueprintName = "Morsel iOS Tests"
+               ReferencedContainer = "container:Morsel.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

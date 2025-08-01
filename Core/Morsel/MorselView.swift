@@ -28,6 +28,11 @@ struct MorselView: View {
   @State private var idleLookaroundOffsetInternal: CGFloat = .zero
   @State private var isBeingTouched = false
   @State private var text: String = ""
+  @State private var playSpeechBubbleAnimation = false
+
+  @State private var didTriggerLongPress = false
+  
+  @State private var dragOffset: CGSize = .zero
 
   @FocusState private var isFocused: Bool
 
@@ -78,10 +83,11 @@ struct MorselView: View {
 
   var body: some View {
     ZStack(alignment: .bottom) {
-      SpeechBubble(isOpen: $isOpen, isBeingTouched: $isBeingTouched)
+      SpeechBubble(isOpen: $isOpen, isBeingTouched: $isBeingTouched, playAnimation: $playSpeechBubbleAnimation)
         .offset(y: -80)
         .zIndex(1)
       face
+        .offset(dragOffset)
         .rotation3DEffect(
           .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
           axis: (x: 1, y: 0, z: 0),
@@ -110,32 +116,6 @@ struct MorselView: View {
         )
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(isOpen ? .zero : idleOffset)
-        .gesture(
-          supportsOpen ?
-          DragGesture(minimumDistance: 0)
-            .onChanged { _ in
-              if !isBeingTouched && !isChoosingDestination {
-                withAnimation {
-                  isBeingTouched = true
-                }
-              }
-            }
-            .onEnded { _ in
-              withAnimation {
-                isBeingTouched = false
-              }
-              if !isChoosingDestination {
-                onTap?()
-
-                if isOpen {
-                  close()
-                } else {
-                  open()
-                }
-              }
-            }
-          : nil
-        )
     }
     .padding(.bottom, 6)
     .onAppear {
@@ -189,6 +169,46 @@ struct MorselView: View {
       .animation(.easeInOut(duration: 0.3), value: faceBottomCornerRadius)
       .overlay(
         facialFeatures
+      )
+      .gesture(
+        supportsOpen ?
+        DragGesture(minimumDistance: 0)
+          .onChanged { value in
+            dragOffset = CGSize(width: value.translation.width * 0.35, height: value.translation.height * 0.35)
+            if !isBeingTouched && !isChoosingDestination {
+              withAnimation {
+                isBeingTouched = true
+              }
+            }
+          }
+          .onEnded { _ in
+            if !didTriggerLongPress {
+              withAnimation {
+                isBeingTouched = false
+              }
+              if !isChoosingDestination {
+                onTap?()
+
+                if isOpen {
+                  close()
+                } else {
+                  open()
+                }
+              }
+            }
+            didTriggerLongPress = false
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+              dragOffset = .zero
+            }
+          }
+        : nil
+      )
+      .simultaneousGesture(
+        LongPressGesture(minimumDuration: 0.6)
+          .onEnded { _ in
+            didTriggerLongPress = true
+            playSpeechBubbleAnimation = true
+          }
       )
     }
   }
@@ -482,6 +502,7 @@ struct MorselView: View {
 struct SpeechBubble: View {
   @Binding var isOpen: Bool
   @Binding var isBeingTouched: Bool
+  @Binding var playAnimation: Bool
 
   @Namespace var union
 
@@ -537,18 +558,10 @@ struct SpeechBubble: View {
           .offset(x: 40, y: 0)
       }
     }
-    .onAppear {
-      startBubbleLoop()
-    }
-  }
-
-  private func startBubbleLoop() {
-    showSmallBubble = false
-    showMediumBubble = false
-    showMainBubble = false
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-      bubbleCycle()
+    .onChange(of: playAnimation) { newValue in
+      if newValue {
+        bubbleCycle()
+      }
     }
   }
 
@@ -586,12 +599,10 @@ struct SpeechBubble: View {
         }
       }
 
-      // Clear text after fade-out, then restart loop
+      // Clear text after fade-out, then reset playAnimation flag
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
         currentText = ""
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-          bubbleCycle()
-        }
+        playAnimation = false
       }
     }
   }
@@ -617,3 +628,4 @@ struct SpeechBubble: View {
   .frame(maxWidth: .infinity)
   .background(.black)
 }
+
