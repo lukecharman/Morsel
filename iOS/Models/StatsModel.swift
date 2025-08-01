@@ -58,40 +58,37 @@ private extension StatsModel {
   func streaks(from sortedUniqueDays: [Date]) -> (longest: Int, current: Int) {
     let calendar = Calendar.current
 
-    var longest = 0
-    var current = 0
-    var streak = 0
+    guard var previousDay = sortedUniqueDays.first else { return (0, 0) }
 
-    var previousDay: Date?
-
-    for day in sortedUniqueDays {
-      if let prev = previousDay {
-        let expectedNext = calendar.date(byAdding: .day, value: -1, to: prev)!
-        if calendar.isDate(day, inSameDayAs: expectedNext) {
-          streak += 1
-        } else {
-          streak = 1
-        }
+    // Calculate longest streak across all days
+    var longest = 1
+    var running = 1
+    for day in sortedUniqueDays.dropFirst() {
+      let expected = calendar.date(byAdding: .day, value: -1, to: previousDay)!
+      if calendar.isDate(day, inSameDayAs: expected) {
+        running += 1
       } else {
-        streak = 1
+        longest = max(longest, running)
+        running = 1
       }
+      previousDay = day
+    }
+    longest = max(longest, running)
 
-      // Check if the streak includes today (for current)
-      if current == 0, calendar.isDate(day, inSameDayAs: Date()) {
-        current = streak
-      } else if current > 0 {
-        // Continue the current streak only if the days are continuous
-        let expectedNext = calendar.date(byAdding: .day, value: -1, to: previousDay!)!
-        if calendar.isDate(day, inSameDayAs: expectedNext) {
-          current = streak
+    // Calculate current streak starting from today if present
+    var current = 0
+    if calendar.isDate(sortedUniqueDays.first!, inSameDayAs: Date()) {
+      current = 1
+      previousDay = sortedUniqueDays.first!
+      for day in sortedUniqueDays.dropFirst() {
+        let expected = calendar.date(byAdding: .day, value: -1, to: previousDay)!
+        if calendar.isDate(day, inSameDayAs: expected) {
+          current += 1
+          previousDay = day
         } else {
-          // streak broke
-          current = 0
+          break
         }
       }
-
-      longest = max(longest, streak)
-      previousDay = day
     }
 
     return (longest, current)
