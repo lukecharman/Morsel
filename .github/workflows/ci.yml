@@ -15,7 +15,7 @@ jobs:
       - name: Run unit tests
         run: |
           xcodebuild test \
-            -workspace Morsel.xcodeproj/project.xcworkspace \
+            -project Morsel.xcodeproj \
             -scheme iOS \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
             CODE_SIGNING_ALLOWED=NO
