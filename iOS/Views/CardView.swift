@@ -50,7 +50,7 @@ struct CardView: View {
     .onTapGesture {
       onTap?()
     }
-    .glassEffect()
+    .glassEffect(in: RoundedRectangle(cornerRadius: 16))
   }
 
   var tintColor: Color {
