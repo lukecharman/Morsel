@@ -30,68 +30,77 @@ struct ContentView: View {
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
   @State private var destinationPickerHeight: CGFloat = 0
+  @State private var showOnboarding = false
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
 
   var body: some View {
     ZStack {
-      NavigationStack {
-        if entries.isEmpty {
-          emptyStateView
-        } else {
-          filledView
+      if hasSeenOnboarding {
+        NavigationStack {
+          if entries.isEmpty {
+            emptyStateView
+          } else {
+            filledView
+          }
         }
-      }
 
-      if isChoosingDestination {
-        DestinationPickerView(
-          onPick: { isForMorsel in
-            add(entryText, isForMorsel: isForMorsel)
-            entryText = ""
-            withAnimation {
-              isChoosingDestination = false
+        if isChoosingDestination {
+          DestinationPickerView(
+            onPick: { isForMorsel in
+              add(entryText, isForMorsel: isForMorsel)
+              entryText = ""
+              withAnimation {
+                isChoosingDestination = false
+              }
+            },
+            onCancel: {
+              entryText = ""
+              withAnimation {
+                isChoosingDestination = false
+              }
+            },
+            onDrag: { position in
+              withAnimation {
+                destinationProximity = position
+              }
             }
-          },
-          onCancel: {
-            entryText = ""
-            withAnimation {
-              isChoosingDestination = false
+          )
+          .frame(maxHeight: .infinity)
+          .ignoresSafeArea()
+          .background(
+            HeightReader { height in
+              destinationPickerHeight = height
             }
-          },
-          onDrag: { position in
-            withAnimation {
-              destinationProximity = position
-            }
-          }
-        )
-        .frame(maxHeight: .infinity)
-        .ignoresSafeArea()
-        .background(
-          HeightReader { height in
-            destinationPickerHeight = height
-          }
-        )
-      }
-    }
-    .overlay {
-      sidePanelView(alignment: .leading, isVisible: showStats) {
-        StatsView(statsModel: StatsModel(modelContainer: .morsel)) {
-          showDigest = true
+          )
         }
       }
     }
     .overlay {
-      sidePanelView(alignment: .trailing, isVisible: showExtras) {
-        ExtrasView() {
-          withAnimation {
-            showExtras = false
-            loadEntries()
+      if hasSeenOnboarding {
+        sidePanelView(alignment: .leading, isVisible: showStats) {
+          StatsView(statsModel: StatsModel(modelContainer: .morsel)) {
+            showDigest = true
           }
         }
       }
     }
-    .overlay(alignment: .top) { bottomBar }
+    .overlay {
+      if hasSeenOnboarding {
+        sidePanelView(alignment: .trailing, isVisible: showExtras) {
+          ExtrasView() {
+            withAnimation {
+              showExtras = false
+              loadEntries()
+            }
+          }
+        }
+      }
+    }
+    .overlay(alignment: .top) {
+      if hasSeenOnboarding { bottomBar }
+    }
     .overlay(alignment: .bottom) { morsel }
     .onAppear { onAppear() }
     .onReceive(NotificationPublishers.keyboardWillShow) { notification in
@@ -118,11 +127,14 @@ struct ContentView: View {
         Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
       })
     }
+    .sheet(isPresented: $showOnboarding, onDismiss: { hasSeenOnboarding = true }) {
+      OnboardingView { showOnboarding = false }
+    }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
     .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
-    .statusBarHidden(shouldBlurBackground)
+    .statusBarHidden(shouldBlurBackground || !hasSeenOnboarding)
   }
 }
 
@@ -133,26 +145,30 @@ private extension ContentView {
 
   var morsel: some View {
     GeometryReader { geo in
-      MorselView(
+      let view = MorselView(
         shouldOpen: _shouldOpenMouth,
         shouldClose: $shouldCloseMouth,
         isChoosingDestination: $isChoosingDestination,
         destinationProximity: $destinationProximity,
         isLookingUp: .constant(isLookingUp),
         morselColor: appSettings.morselColor,
-        onTap: {
-          if showStats { withAnimation { showStats = false } }
-          if showExtras { withAnimation { showExtras = false } }
-        },
+        supportsOpen: hasSeenOnboarding,
+        onTap: { handleMorselTap() },
         onAdd: { text in
           entryText = text
           withAnimation { isChoosingDestination = true }
         }
       )
-      .scaleEffect(isChoosingDestination ? 2 : 1)
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-      .offset(y: offsetY)
-      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+        .scaleEffect(isChoosingDestination ? 2 : 1)
+        .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+        .offset(y: offsetY)
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+
+      if hasSeenOnboarding {
+        view
+      } else {
+        view.onTapGesture { handleMorselTap() }
+      }
     }
   }
 
@@ -179,12 +195,11 @@ private extension ContentView {
   }
 
   var emptyStateView: some View {
-    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: !hasSeenOnboarding) {
+    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: false) {
       if shouldBlurBackground {
         shouldOpenMouth = false
         shouldCloseMouth = true
       }
-      hasSeenOnboarding = true
     }
   }
 
@@ -232,6 +247,16 @@ private extension ContentView {
     }
 
     WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  @MainActor
+  func handleMorselTap() {
+    if !hasSeenOnboarding {
+      showOnboarding = true
+    } else {
+      if showStats { withAnimation { showStats = false } }
+      if showExtras { withAnimation { showExtras = false } }
+    }
   }
 
   func handleScroll(_ offset: CGPoint) {
