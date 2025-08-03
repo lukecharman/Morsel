@@ -1,0 +1,16 @@
+name: CoreTests
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Core tests
+        run: |
+          xcodebuild test \
+            -project Morsel.xcodeproj \
+            -scheme CoreTests \
+            -destination 'platform=iOS Simulator,OS=17.5,name=iPhone 15'
