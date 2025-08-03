@@ -15,4 +15,4 @@ jobs:
           xcodebuild test \
             -project Morsel.xcodeproj \
             -scheme CoreTests \
-            -destination 'platform=iOS Simulator,OS=26.0,name=iPhone 15'
+            -destination 'platform=iOS Simulator,OS=26.0,name=iPhone 16'
