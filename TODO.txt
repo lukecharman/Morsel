@@ -3,6 +3,7 @@
 Testing
  * Add unit and UI testing targets.
  * Write some tests.
+ * Hook up a simple CI.
 
 Digest Bug
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
@@ -22,6 +23,12 @@ Side Panels
 
 Personality
  * Finalise Morsel himself – add more expressions and make him feel more alive.
+
+Onboarding
+ * Make a beautiful, impression-leaving onboarding.
+
+Watch & Widgets
+ * Check this is all super smooth and working. Test what you can.
 
 App Store Stuff
  * Finalise all app icons – we have a set Morsel now so we can do this whenever.
