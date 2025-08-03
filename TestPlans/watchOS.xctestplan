@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "CD04761D-44E7-4ED3-9728-AE9B31562D07",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Morsel.xcodeproj",
+        "identifier" : "A329C3302E3F5820001D158E",
+        "name" : "watchOSTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Morsel.xcodeproj",
+        "identifier" : "A329C34C2E3F587E001D158E",
+        "name" : "watchOSUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
