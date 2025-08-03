@@ -4,7 +4,7 @@ import SwiftData
 
 @MainActor
 struct WatchContentViewTests {
-  @Test func todayPredicateFiltersEntriesForToday() throws {
+  @Test func todayPredicateReturnsOnlyTodayEntry() throws {
     let config = ModelConfiguration(inMemory: true)
     let container = try ModelContainer(for: FoodEntry.self, configurations: config)
     let context = container.mainContext
