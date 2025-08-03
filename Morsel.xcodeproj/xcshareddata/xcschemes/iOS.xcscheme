@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:iOS.xctestplan"
+            reference = "container:TestPlans/iOS.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
