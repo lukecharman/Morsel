@@ -134,6 +134,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A34C631C2E3FB7CA00454742 /* Exceptions for "Core" folder in "CoreTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Extensions/CGFloat+Lerp.swift",
+			);
+			target = A329C3182E3F57CF001D158E /* CoreTests */;
+		};
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -331,6 +338,7 @@
 				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */,
 				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */,
 				A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Widgets (watchOS)" target */,
+				A34C631C2E3FB7CA00454742 /* Exceptions for "Core" folder in "CoreTests" target */,
 			);
 			path = Core;
 			sourceTree = "<group>";

@@ -1,3 +1,4 @@
+@testable import Morsel__watchOS_
 import Testing
 
 struct watchOSTests {
