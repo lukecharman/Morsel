@@ -1,18 +1,36 @@
 1.0
 ---
+Testing
+ * Add unit and UI testing targets.
+ * Write some tests.
+
+Digest Bug
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
- * Make the speech bubble dismissable / occur a bit less (tap and hold Morsel to make it appear?)
+ * Then, make the unlock itself beautiful. Animation, haptic – moment of truth.
+
+Speech Bubble
+ * Clean up the speech bubble's visual appearance.
+ * Decide logic for when to show a speech bubble.
+ * Add a talking animation while the bubble is on-screen.
  * Haptic pattern as the speech bubble appears / disappears
- * Rethink the UI of the side panels, make it glassier, better with the bigger rounded corners etc. Can specify these.
+ * Decide on a simple little speech / sound for Morsel.
  * Host a JSON file somewhere to remotely update these small phrases.
+
+Side Panels
+ * Rethink the UI of the side panels, make it glassier, better with the bigger rounded corners etc. Can specify these.
+ * Decide if the stats is useful enough, add more, clean them up, remove glass, etc.
+
+Personality
  * Finalise Morsel himself – add more expressions and make him feel more alive.
-    - Does he need a talking animation while the speech bubble is visible?
-    - Should he speak Simlish or Animal Crossing like?
-    - I want MVP, but MV Lovable P.
+
+App Store Stuff
  * Finalise all app icons – we have a set Morsel now so we can do this whenever.
  * Profile for optimisations to memory and framerate, etc.
  * Get it on TestFlight, write a blurb, do screenshots, etc.
  * Use it for a couple of weeks on phone and watch, find bugs, do proper testing.
+
+
+
 
 Post 1.0
 --------
