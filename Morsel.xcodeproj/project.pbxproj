@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A34C631A2E3FB7AD00454742 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A34C63192E3FB7AD00454742 /* Sentry */; };
 		A35012DA2DEDA30600ACBA75 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A35012D92DEDA30600ACBA75 /* TelemetryDeck */; };
 		A35012DC2DEDA31200ACBA75 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DB2DEDA31200ACBA75 /* TelemetryDeck */; };
 		A35012DE2DEDA31700ACBA75 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DD2DEDA31700ACBA75 /* Sentry */; };
@@ -134,6 +135,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A34C631C2E3FB7CA00454742 /* Exceptions for "Core" folder in "CoreTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Extensions/CGFloat+Lerp.swift",
+			);
+			target = A329C3182E3F57CF001D158E /* CoreTests */;
+		};
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -331,6 +339,7 @@
 				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Morsel (watchOS)" target */,
 				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "Core" folder in "Widgets (iOS)" target */,
 				A3F3F3332DC4BD330088E1CB /* Exceptions for "Core" folder in "Widgets (watchOS)" target */,
+				A34C631C2E3FB7CA00454742 /* Exceptions for "Core" folder in "CoreTests" target */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -356,6 +365,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A34C631A2E3FB7AD00454742 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +509,7 @@
 			);
 			name = CoreTests;
 			packageProductDependencies = (
+				A34C63192E3FB7AD00454742 /* Sentry */,
 			);
 			productName = CoreTests;
 			productReference = A329C3192E3F57CF001D158E /* CoreTests.xctest */;
@@ -1682,6 +1693,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A34C63192E3FB7AD00454742 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AC676223C5A44F9A7D439F4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 		A35012D92DEDA30600ACBA75 /* TelemetryDeck */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;

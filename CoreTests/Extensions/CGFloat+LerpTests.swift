@@ -1,6 +1,5 @@
-import Testing
-@testable import Core
 import Foundation
+import Testing
 
 struct CGFloatLerpTests {
   @Test func returnsStartValueWhenAmountIsZero() async throws {
