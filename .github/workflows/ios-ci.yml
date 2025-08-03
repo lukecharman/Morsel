@@ -27,7 +27,7 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild \
-            -scheme Morsel \
+            -scheme iOS \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 16e' \
             clean test | xcbeautify
