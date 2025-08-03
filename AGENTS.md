@@ -25,3 +25,4 @@ This repository follows a default template for top-notch iOS engineering. These 
 - Mention testing performed, even if minimal.
 - Run any available linters. If none are present, at least build the project to ensure there are no syntax errors.
 - There's no need to run `swift test` as it will always fail. Instead, run the unit tests via xcodebuild.
+- Trigger the iOS CI workflow for the branch you are working on and ensure it passes. If not, iterate and fix it.
