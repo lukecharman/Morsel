@@ -8,10 +8,10 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - name: Select Xcode 26 beta
+      - name: Select Xcode 26
         run: |
           sudo xcode-select -s /Applications/Xcode_26_beta.app/Contents/Developer
-      - name: Select Xcode 26 beta
+      - name: Install iOS 26 SDK
         run: |
           sudo xcodebuild -downloadPlatform iOS
       - name: Run Test Plan
