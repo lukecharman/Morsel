@@ -1,9 +1,7 @@
 1.0
 ---
 Testing
- * Add unit and UI testing targets.
  * Write some tests.
- * Hook up a simple CI.
 
 Digest Bug
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
