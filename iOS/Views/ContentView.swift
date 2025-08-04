@@ -1,4 +1,5 @@
 import CoreData
+import CoreMorsel
 import CloudKit
 import SwiftUI
 import SwiftData
@@ -295,9 +296,9 @@ private extension ContentView {
       loadEntries()
 
       if entry.isForMorsel {
-        Analytics.track(DeleteForMorselEvent(craving: entry))
+        Analytics.track(DeleteForMorselEvent(cravingName: entry.name, timestamp: entry.timestamp))
       } else {
-        Analytics.track(DeleteForMeEvent(meal: entry))
+        Analytics.track(DeleteForMeEvent(mealName: entry.name, timestamp: entry.timestamp))
       }
 
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

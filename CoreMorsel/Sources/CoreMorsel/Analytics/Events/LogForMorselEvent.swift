@@ -4,9 +4,9 @@ public struct LogForMorselEvent: Event {
   public let name = "log_for_morsel"
   public let parameters: EventParameters
 
-  public init(cravingName: String, timestamp: Date, context: String) {
+  public init(craving: String, timestamp: Date, context: String) {
     parameters = [
-      "name": cravingName,
+      "name": craving,
       "timestamp": timestamp.isoString,
       "context": context
     ]
