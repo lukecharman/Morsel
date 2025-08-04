@@ -59,9 +59,8 @@ jobs:
       # 8. Convert result bundle to JUnit for GitHub UI
       - name: Convert to JUnit
         run: |
-          xcbeautify --junit --result-bundle-path TestResults.xcresult > junit.xml
+          xcbeautify --report junit --report-path . --result-bundle-path TestResults.xcresult
 
-      # 9. Upload JUnit report for native GitHub test annotations
       - name: Publish test results
         uses: dorny/test-reporter@v1
         with:
