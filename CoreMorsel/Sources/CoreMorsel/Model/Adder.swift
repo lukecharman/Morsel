@@ -1,11 +1,10 @@
-import CoreMorsel
 import Foundation
 import SwiftData
 import WidgetKit
 
 @MainActor
-struct Adder {
-  static func add(
+public struct Adder {
+  public static func add(
     id: String? = nil,
     name: String,
     timestamp: Date = Date(),
@@ -35,7 +34,7 @@ struct Adder {
     Analytics.track(event)
   }
 
-  static func add(
+  public static func add(
     id: UUID,
     name: String,
     timestamp: Date = Date(),

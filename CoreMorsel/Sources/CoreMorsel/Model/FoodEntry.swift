@@ -2,13 +2,13 @@ import Foundation
 import SwiftData
 
 @Model
-final class FoodEntry {
-  var id: UUID = UUID()
-  var name: String = ""
-  var timestamp: Date = Date()
-  var isForMorsel: Bool = false
+public final class FoodEntry {
+  public var id: UUID = UUID()
+  public var name: String = ""
+  public var timestamp: Date = Date()
+  public var isForMorsel: Bool = false
 
-  init(
+  public init(
     id: UUID = UUID(),
     name: String,
     timestamp: Date = Date(),

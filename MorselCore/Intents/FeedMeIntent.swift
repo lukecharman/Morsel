@@ -1,4 +1,5 @@
 import AppIntents
+import CoreMorsel
 import Foundation
 
 struct FeedMeIntent: AppIntent {

@@ -1,10 +1,9 @@
-import CoreMorsel
 import SwiftData
 import Foundation
 
-let appGroupIdentifier = "group.com.lukecharman.morsel"
+public let appGroupIdentifier = "group.com.lukecharman.morsel"
 
-extension ModelContainer {
+public extension ModelContainer {
   static var morsel: ModelContainer {
     do {
       let container = try ModelContainer.throwingSharedContainer()
@@ -42,7 +41,7 @@ private extension ModelContainer {
   }
 }
 
-extension ModelContext {
+public extension ModelContext {
   @MainActor
   func deleteAll<T: PersistentModel>(_ type: T.Type) -> Bool {
     let descriptor = FetchDescriptor<T>()

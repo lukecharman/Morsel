@@ -1,3 +1,4 @@
+import CoreMorsel
 import WidgetKit
 import SwiftUI
 import SwiftData

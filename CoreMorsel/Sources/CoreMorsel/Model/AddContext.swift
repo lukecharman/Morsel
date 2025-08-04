@@ -1,6 +1,6 @@
 import Foundation
 
-enum AddContext: String {
+public enum AddContext: String {
   case phoneApp
   case phoneWidget
   case phoneIntent

@@ -1,3 +1,4 @@
+import CoreMorsel
 import SwiftData
 import SwiftUI
 import WatchConnectivity
