@@ -31,11 +31,11 @@ jobs:
       # 4. Install simulators if not cached (quiet, filtered output)
       - name: Install iOS 26 SDK
         run: |
-          xcodebuild -downloadPlatform iOS 2>&1 | grep --line-buffered -v "Downloading"
+          xcodebuild -downloadPlatform iOS
 
       - name: Install watchOS 26 SDK
         run: |
-          xcodebuild -downloadPlatform watchOS 2>&1 | grep --line-buffered -v "Downloading"
+          xcodebuild -downloadPlatform watchOS
 
       # 5. Prepare iOS Simulator
       - name: Prepare iOS Simulator
