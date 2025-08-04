@@ -11,6 +11,7 @@
 		A35012DC2DEDA31200ACBA75 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DB2DEDA31200ACBA75 /* TelemetryDeck */; };
 		A35012DE2DEDA31700ACBA75 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DD2DEDA31700ACBA75 /* Sentry */; };
 		A35012E02DEDA31D00ACBA75 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DF2DEDA31D00ACBA75 /* Sentry */; };
+		A35982722E40C068007679F3 /* Morsel.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = A35982712E40C068007679F3 /* Morsel.xctestplan */; };
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.txt */; };
 		A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A36479432DCC948200A2F723 /* TelemetryDeck */; };
@@ -115,11 +116,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A329C3192E3F57CF001D158E /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C3242E3F57FC001D158E /* iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C3312E3F5820001D158E /* watchOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = watchOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C33E2E3F586A001D158E /* iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C34D2E3F587E001D158E /* watchOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = watchOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A35982712E40C068007679F3 /* Morsel.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Morsel.xctestplan; sourceTree = "<group>"; };
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36333E82DC94B7500DD9ADA /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,13 +132,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A34C631C2E3FB7CA00454742 /* Exceptions for "MorselCore" folder in "CoreTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Extensions/CGFloat+Lerp.swift",
-			);
-			target = A329C3182E3F57CF001D158E /* CoreTests */;
-		};
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -315,11 +309,6 @@
 			path = watchOSUITests;
 			sourceTree = "<group>";
 		};
-		A329C35B2E3F599F001D158E /* TestPlans */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TestPlans;
-			sourceTree = "<group>";
-		};
 		A35D3CD72DBFB0B100C4C166 /* watchOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -335,7 +324,6 @@
 				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Morsel (watchOS)" target */,
 				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */,
 				A3F3F3332DC4BD330088E1CB /* Exceptions for "MorselCore" folder in "Widgets (watchOS)" target */,
-				A34C631C2E3FB7CA00454742 /* Exceptions for "MorselCore" folder in "CoreTests" target */,
 			);
 			path = MorselCore;
 			sourceTree = "<group>";
@@ -357,13 +345,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A329C3162E3F57CF001D158E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A329C3212E3F57FC001D158E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -439,7 +420,6 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
-				A36333E82DC94B7500DD9ADA /* TODO.txt */,
 				A35D3DCB2DBFDDC300C4C166 /* MorselCore */,
 				A329C31A2E3F57CF001D158E /* MorselCoreTests */,
 				A3CD69062DBF745E00AB946D /* iOS */,
@@ -449,8 +429,9 @@
 				A329C3322E3F5820001D158E /* watchOSTests */,
 				A329C34E2E3F587E001D158E /* watchOSUITests */,
 				A3ABD73B2DFD635900910A48 /* Debug */,
-				A329C35B2E3F599F001D158E /* TestPlans */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
+				A36333E82DC94B7500DD9ADA /* TODO.txt */,
+				A35982712E40C068007679F3 /* Morsel.xctestplan */,
 				A3CD69052DBF745E00AB946D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -462,7 +443,6 @@
 				A3CD694C2DBF752B00AB946D /* Widgets (iOS).appex */,
 				A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */,
 				A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */,
-				A329C3192E3F57CF001D158E /* CoreTests.xctest */,
 				A329C3242E3F57FC001D158E /* iOSTests.xctest */,
 				A329C3312E3F5820001D158E /* watchOSTests.xctest */,
 				A329C33E2E3F586A001D158E /* iOSUITests.xctest */,
@@ -484,28 +464,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A329C3182E3F57CF001D158E /* CoreTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A329C31D2E3F57CF001D158E /* Build configuration list for PBXNativeTarget "CoreTests" */;
-			buildPhases = (
-				A329C3152E3F57CF001D158E /* Sources */,
-				A329C3162E3F57CF001D158E /* Frameworks */,
-				A329C3172E3F57CF001D158E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				A329C31A2E3F57CF001D158E /* MorselCoreTests */,
-			);
-			name = CoreTests;
-			packageProductDependencies = (
-			);
-			productName = CoreTests;
-			productReference = A329C3192E3F57CF001D158E /* CoreTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		A329C3232E3F57FC001D158E /* iOSTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A329C32A2E3F57FC001D158E /* Build configuration list for PBXNativeTarget "iOSTests" */;
@@ -706,9 +664,6 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
-					A329C3182E3F57CF001D158E = {
-						CreatedOnToolsVersion = 26.0;
-					};
 					A329C3232E3F57FC001D158E = {
 						CreatedOnToolsVersion = 26.0;
 						TestTargetID = A3CD69032DBF745E00AB946D;
@@ -761,7 +716,6 @@
 				A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */,
 				A3CD694B2DBF752B00AB946D /* Widgets (iOS) */,
 				A3AE56992DC2731800608E0D /* Widgets (watchOS) */,
-				A329C3182E3F57CF001D158E /* CoreTests */,
 				A329C3232E3F57FC001D158E /* iOSTests */,
 				A329C3302E3F5820001D158E /* watchOSTests */,
 				A329C33D2E3F586A001D158E /* iOSUITests */,
@@ -771,13 +725,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A329C3172E3F57CF001D158E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A329C3222E3F57FC001D158E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -824,6 +771,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A35982722E40C068007679F3 /* Morsel.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -855,13 +803,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A329C3152E3F57CF001D158E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A329C3202E3F57FC001D158E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -960,54 +901,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A329C31E2E3F57CF001D158E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 82DGSFCWSX;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.CoreTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Debug;
-		};
-		A329C31F2E3F57CF001D158E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 82DGSFCWSX;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lukecharman.CoreTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Release;
-		};
 		A329C32B2E3F57FC001D158E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1572,15 +1465,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A329C31D2E3F57CF001D158E /* Build configuration list for PBXNativeTarget "CoreTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A329C31E2E3F57CF001D158E /* Debug */,
-				A329C31F2E3F57CF001D158E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A329C32A2E3F57FC001D158E /* Build configuration list for PBXNativeTarget "iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

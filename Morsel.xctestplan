@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "CD04761D-44E7-4ED3-9728-AE9B31562D07",
+      "id" : "B7454DCD-B0E8-436F-8D90-977EE533DD62",
       "name" : "Configuration 1",
       "options" : {
 
@@ -21,9 +21,16 @@
     },
     {
       "target" : {
+        "containerPath" : "container:CoreMorsel",
+        "identifier" : "CoreMorselTests",
+        "name" : "CoreMorselTests"
+      }
+    },
+    {
+      "target" : {
         "containerPath" : "container:Morsel.xcodeproj",
-        "identifier" : "A329C34C2E3F587E001D158E",
-        "name" : "watchOSUITests"
+        "identifier" : "A329C3232E3F57FC001D158E",
+        "name" : "iOSTests"
       }
     }
   ],
