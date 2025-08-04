@@ -16,8 +16,6 @@
 		A35984FE2E40CB1F007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35984FD2E40CB1F007679F3 /* CoreMorsel */; };
 		A35985002E40CB23007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35984FF2E40CB23007679F3 /* CoreMorsel */; };
 		A35985022E40CB27007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35985012E40CB27007679F3 /* CoreMorsel */; };
-		A35989812E40EDA8007679F3 /* MorselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A359897E2E40EDA8007679F3 /* MorselView.swift */; };
-		A35989832E40EDC0007679F3 /* MorselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A359897E2E40EDA8007679F3 /* MorselView.swift */; };
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.txt */; };
 		A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A36479432DCC948200A2F723 /* TelemetryDeck */; };
@@ -127,7 +125,6 @@
 		A329C33E2E3F586A001D158E /* iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C34D2E3F587E001D158E /* watchOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = watchOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35982712E40C068007679F3 /* Morsel.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Morsel.xctestplan; sourceTree = "<group>"; };
-		A359897E2E40EDA8007679F3 /* MorselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorselView.swift; sourceTree = "<group>"; };
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36333E82DC94B7500DD9ADA /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -366,7 +363,6 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
-				A359897E2E40EDA8007679F3 /* MorselView.swift */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A329C3252E3F57FC001D158E /* iOSTests */,
 				A329C33F2E3F586A001D158E /* iOSUITests */,
@@ -781,14 +777,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A35D3CD22DBFB0B100C4C166 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A35989832E40EDC0007679F3 /* MorselView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+                A35D3CD22DBFB0B100C4C166 /* Sources */ = {
+                        isa = PBXSourcesBuildPhase;
+                        buildActionMask = 2147483647;
+                        files = (
+                        );
+                        runOnlyForDeploymentPostprocessing = 0;
+                };
 		A3AE56962DC2731800608E0D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -796,15 +791,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A3CD69002DBF745E00AB946D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */,
-				A35989812E40EDA8007679F3 /* MorselView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+                A3CD69002DBF745E00AB946D /* Sources */ = {
+                        isa = PBXSourcesBuildPhase;
+                        buildActionMask = 2147483647;
+                        files = (
+                                A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */,
+                        );
+                        runOnlyForDeploymentPostprocessing = 0;
+                };
 		A3CD69482DBF752B00AB946D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;

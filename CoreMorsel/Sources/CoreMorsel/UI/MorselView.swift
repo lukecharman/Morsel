@@ -1,34 +1,55 @@
-import CoreMorsel
 import SwiftUI
 
-enum MorselDebugControlMode {
+public enum MorselDebugControlMode {
   case automatic
   case manual
 }
 
-struct MorselDebugBindings {
-  var isBlinking: Binding<Bool>?
-  var isSwallowing: Binding<Bool>?
-  var idleOffset: Binding<CGSize>?
-  var idleLookaroundOffset: Binding<CGFloat>?
+public struct MorselDebugBindings {
+  public var isBlinking: Binding<Bool>?
+  public var isSwallowing: Binding<Bool>?
+  public var idleOffset: Binding<CGSize>?
+  public var idleLookaroundOffset: Binding<CGFloat>?
+
+  public init(
+    isBlinking: Binding<Bool>? = nil,
+    isSwallowing: Binding<Bool>? = nil,
+    idleOffset: Binding<CGSize>? = nil,
+    idleLookaroundOffset: Binding<CGFloat>? = nil
+  ) {
+    self.isBlinking = isBlinking
+    self.isSwallowing = isSwallowing
+    self.idleOffset = idleOffset
+    self.idleLookaroundOffset = idleLookaroundOffset
+  }
 }
 
-struct AnimatedEyeView: View {
+public struct AnimatedEyeView: View {
   @Binding var amount: CGFloat
   @Binding var angle: Angle
 
-  var body: some View {
+  public init(amount: Binding<CGFloat>, angle: Binding<Angle>) {
+    _amount = amount
+    _angle = angle
+  }
+
+  public var body: some View {
     EyebrowedEyeShape(eyebrowAmount: amount, angle: angle)
       .fill(Color(uiColor: UIColor(red: 0.07, green: 0.20, blue: 0.37, alpha: 1.00)))
       .animation(.easeInOut(duration: 0.3), value: amount)
   }
 }
 
-struct EyebrowedEyeShape: Shape {
-  var eyebrowAmount: CGFloat // 0 = circle, 1 = flat segment
-  var angle: Angle // angle of flat segment
+public struct EyebrowedEyeShape: Shape {
+  public var eyebrowAmount: CGFloat // 0 = circle, 1 = flat segment
+  public var angle: Angle // angle of flat segment
 
-  var animatableData: AnimatablePair<CGFloat, CGFloat> {
+  public init(eyebrowAmount: CGFloat, angle: Angle) {
+    self.eyebrowAmount = eyebrowAmount
+    self.angle = angle
+  }
+
+  public var animatableData: AnimatablePair<CGFloat, CGFloat> {
     get { AnimatablePair(eyebrowAmount, CGFloat(angle.degrees)) }
     set {
       eyebrowAmount = newValue.first
@@ -36,7 +57,7 @@ struct EyebrowedEyeShape: Shape {
     }
   }
 
-  func path(in rect: CGRect) -> Path {
+  public func path(in rect: CGRect) -> Path {
     let clamped = min(max(eyebrowAmount, 0), 1)
     let radius = min(rect.width, rect.height) / 2
     let center = CGPoint(x: rect.midX, y: rect.midY)
@@ -83,7 +104,7 @@ struct EyebrowedEyeShape: Shape {
 }
 
 
-struct MorselView: View {
+public struct MorselView: View {
   @Binding var shouldOpen: Bool
   @Binding var shouldClose: Bool
   @Binding var isChoosingDestination: Bool
@@ -102,7 +123,7 @@ struct MorselView: View {
   @State private var playSpeechBubbleAnimation = false
 
   @State private var didTriggerLongPress = false
-  
+
   @State private var dragOffset: CGSize = .zero
 
   @FocusState private var isFocused: Bool
@@ -115,6 +136,32 @@ struct MorselView: View {
 
   var debugBindings: MorselDebugBindings? = nil
   var debugControlMode: MorselDebugControlMode = .automatic
+
+  public init(
+    shouldOpen: Binding<Bool>,
+    shouldClose: Binding<Bool>,
+    isChoosingDestination: Binding<Bool>,
+    destinationProximity: Binding<CGFloat>,
+    isLookingUp: Binding<Bool>,
+    morselColor: Color,
+    supportsOpen: Bool = true,
+    onTap: (() -> Void)? = nil,
+    onAdd: @escaping (String) -> Void,
+    debugBindings: MorselDebugBindings? = nil,
+    debugControlMode: MorselDebugControlMode = .automatic
+  ) {
+    _shouldOpen = shouldOpen
+    _shouldClose = shouldClose
+    _isChoosingDestination = isChoosingDestination
+    _destinationProximity = destinationProximity
+    _isLookingUp = isLookingUp
+    self.morselColor = morselColor
+    self.supportsOpen = supportsOpen
+    self.onTap = onTap
+    self.onAdd = onAdd
+    self.debugBindings = debugBindings
+    self.debugControlMode = debugControlMode
+  }
 
   private var isSwallowing: Bool {
     switch debugControlMode {
@@ -152,7 +199,7 @@ struct MorselView: View {
     }
   }
 
-  var body: some View {
+  public var body: some View {
     ZStack(alignment: .bottom) {
       SpeechBubble(isOpen: $isOpen, isBeingTouched: $isBeingTouched, playAnimation: $playSpeechBubbleAnimation)
         .offset(y: -80)
@@ -570,7 +617,7 @@ struct MorselView: View {
   
 }
 
-struct SpeechBubble: View {
+public struct SpeechBubble: View {
   @Binding var isOpen: Bool
   @Binding var isBeingTouched: Bool
   @Binding var playAnimation: Bool
@@ -581,6 +628,16 @@ struct SpeechBubble: View {
   @State private var showSmallBubble = false
   @State private var showMediumBubble = false
   @State private var showMainBubble = false
+
+  public init(
+    isOpen: Binding<Bool>,
+    isBeingTouched: Binding<Bool>,
+    playAnimation: Binding<Bool>
+  ) {
+    _isOpen = isOpen
+    _isBeingTouched = isBeingTouched
+    _playAnimation = playAnimation
+  }
 
   private let phrases = [
     "Hey there! 👋",
@@ -597,7 +654,7 @@ struct SpeechBubble: View {
     "Small bites, big wins"
   ]
 
-  var body: some View {
+  public var body: some View {
     ZStack {
       VStack {
         // Main bubble
