@@ -18,9 +18,6 @@
 		A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
 		A3AE569C2DC2731800608E0D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD69502DBF752B00AB946D /* SwiftUI.framework */; };
 		A3AE56A72DC2731A00608E0D /* Widgets (watchOS).appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A3BC69BA2DE99932009186B4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		A3BC69BB2DE99932009186B4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		A3BC69BC2DE99932009186B4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		A3BC69BD2DE99932009186B4 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = FAC31114A76142BEAB120BFC /* Sentry */; };
 		A3BC6ABD2DEA329A009186B4 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BC6ABC2DEA329A009186B4 /* StoreKit.framework */; };
 		A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3CD694E2DBF752B00AB946D /* WidgetKit.framework */; };
@@ -400,7 +397,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3647A8B2DCE2BA100A2F723 /* TelemetryDeck in Frameworks */,
-				A3BC69BA2DE99932009186B4 /* (null) in Frameworks */,
 				A35012E02DEDA31D00ACBA75 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,7 +417,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */,
-				A3BC69BC2DE99932009186B4 /* (null) in Frameworks */,
 				A3BC6ABD2DEA329A009186B4 /* StoreKit.framework in Frameworks */,
 				A3BC69BD2DE99932009186B4 /* Sentry in Frameworks */,
 			);
@@ -434,7 +429,6 @@
 				A35012DE2DEDA31700ACBA75 /* Sentry in Frameworks */,
 				A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */,
 				A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */,
-				A3BC69BB2DE99932009186B4 /* (null) in Frameworks */,
 				A35012DA2DEDA30600ACBA75 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
