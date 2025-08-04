@@ -1088,7 +1088,7 @@
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
+				INFOPLIST_FILE = watchOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsels;
@@ -1119,7 +1119,7 @@
 				DEVELOPMENT_TEAM = 82DGSFCWSX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "WristMorsel-Watch-App-Info.plist";
+				INFOPLIST_FILE = watchOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Morsel;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.lukecharman.morsels;
