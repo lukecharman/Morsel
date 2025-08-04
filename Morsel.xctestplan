@@ -15,6 +15,13 @@
     {
       "target" : {
         "containerPath" : "container:Morsel.xcodeproj",
+        "identifier" : "A329C3232E3F57FC001D158E",
+        "name" : "iOSTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Morsel.xcodeproj",
         "identifier" : "A329C3302E3F5820001D158E",
         "name" : "watchOSTests"
       }
@@ -24,13 +31,6 @@
         "containerPath" : "container:CoreMorsel",
         "identifier" : "CoreMorselTests",
         "name" : "CoreMorselTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Morsel.xcodeproj",
-        "identifier" : "A329C3232E3F57FC001D158E",
-        "name" : "iOSTests"
       }
     }
   ],

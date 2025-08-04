@@ -284,11 +284,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A329C31A2E3F57CF001D158E /* MorselCoreTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MorselCoreTests;
-			sourceTree = "<group>";
-		};
 		A329C3252E3F57FC001D158E /* iOSTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = iOSTests;
@@ -421,7 +416,6 @@
 			isa = PBXGroup;
 			children = (
 				A35D3DCB2DBFDDC300C4C166 /* MorselCore */,
-				A329C31A2E3F57CF001D158E /* MorselCoreTests */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A329C3252E3F57FC001D158E /* iOSTests */,
 				A329C33F2E3F586A001D158E /* iOSUITests */,
