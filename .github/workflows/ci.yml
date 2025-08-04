@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: apple-actions/setup-xcode@v1
+      - name: Run tests
+        run: >-
+          xcodebuild test -workspace Morsel.xcworkspace -scheme iOS -testPlan Morsel
+          -destination "platform=iOS Simulator,OS=18.0,name=iPhone 15 Pro"
