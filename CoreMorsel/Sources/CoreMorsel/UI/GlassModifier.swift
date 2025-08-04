@@ -8,8 +8,8 @@ public enum GlassType {
   @available(iOS 26, watchOS 26, *)
   var glass: Glass {
     switch self {
-    case .clear: .clear
-    case .regular: .regular
+    case .clear: Glass.regular
+    case .regular: Glass.regular
     }
   }
 }
@@ -18,7 +18,7 @@ public extension View {
   @ViewBuilder
   func glass<ShapeType: Shape>(
     _ variant: GlassType = .regular,
-    in shape: ShapeType? = nil,
+    in shape: ShapeType? = nil
   ) -> some View {
     if #available(iOS 26, watchOS 26, *) {
       if let shape {
@@ -32,10 +32,10 @@ public extension View {
   }
 
   func glass(
-    _ variant: GlassType = .regular,
+    _ variant: GlassType = .regular
   ) -> some View {
     if #available(iOS 26, watchOS 26, *) {
-      return self.glassEffect(variant.glass, in: DefaultGlassEffectShape())
+      return self.glassEffect(variant.glass, in: Rectangle())
     } else {
       return self.glass(displayMode: .automatic)
     }

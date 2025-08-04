@@ -21,13 +21,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Morsel.xcodeproj",
-        "identifier" : "A329C3302E3F5820001D158E",
-        "name" : "watchOSTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:CoreMorsel",
         "identifier" : "CoreMorselTests",
         "name" : "CoreMorselTests"
