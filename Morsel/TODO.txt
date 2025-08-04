@@ -1,0 +1,98 @@
+1.0
+---
+Testing
+ * Add unit and UI testing targets.
+ * Write some tests.
+ * Hook up a simple CI.
+
+Digest Bug
+ * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
+ * Then, make the unlock itself beautiful. Animation, haptic – moment of truth.
+
+Speech Bubble
+ * Clean up the speech bubble's visual appearance.
+ * Decide logic for when to show a speech bubble.
+ * Add a talking animation while the bubble is on-screen.
+ * Haptic pattern as the speech bubble appears / disappears
+ * Decide on a simple little speech / sound for Morsel.
+ * Host a JSON file somewhere to remotely update these small phrases.
+
+Side Panels
+ * Rethink the UI of the side panels, make it glassier, better with the bigger rounded corners etc. Can specify these.
+ * Decide if the stats is useful enough, add more, clean them up, remove glass, etc.
+
+Personality
+ * Finalise Morsel himself – add more expressions and make him feel more alive.
+
+Onboarding
+ * Make a beautiful, impression-leaving onboarding.
+
+Watch & Widgets
+ * Check this is all super smooth and working. Test what you can.
+
+App Store Stuff
+ * Finalise all app icons – we have a set Morsel now so we can do this whenever.
+ * Profile for optimisations to memory and framerate, etc.
+ * Get it on TestFlight, write a blurb, do screenshots, etc.
+ * Use it for a couple of weeks on phone and watch, find bugs, do proper testing.
+
+
+
+
+Post 1.0
+--------
+ * Food ranking system using an open API or a big local JSON.
+ * Figure out this custom AppEntity thing for speaking the item in one term to Siri.
+ * Add some reminder notifications, NOT NAGS. Maybe with a reminder time? User can select up to 3 times per day?
+ * Togglable widget background showing red to green for food for you versus Morsel that day?
+ * Daily goal streaks?
+
+Future Ideas
+------------
+🫧 Micro-Reactions (Contextual, Lightweight)
+
+Subtle and ambient behaviours to reflect mood, interaction, or state.
+  •  Glance at user input: If you’re typing something in the text field, Morsel’s eyes follow the keyboard or cursor.
+  •  Idle fidgets: Finger tap, ear twitch, slow stretch, light bounce, tiny sneeze.
+  •  Reactive glow: His fill colour pulses or shifts very gently based on time of day or app theme.
+  •  Eye darting: If he’s idle too long, he looks suspiciously left and right.
+
+⸻
+
+😮 Big Emotes (Triggered by Events)
+
+More obvious, more animated. Only for key transitions.
+  •  Happy dance / spin: After a successful add. Maybe even randomise the move slightly.
+  •  Shudder or disgust: When deleting something.
+  •  Impatient tapping or snoring: If left open without input for too long.
+  •  Blush / sparkle: When given a food he “likes” (i.e. you could add a favourites mechanic).
+  •  Heart bubble: Occasionally floats up from his head when “fed”.
+
+⸻
+
+🎮 Mini Interactions
+
+Tiny interactions that are not essential but feel delightful.
+  •  Petting: Tapping and holding causes him to smile, melt, or waggle a limb.
+  •  Tilt-based expressions: On device tilt (if phone), his gravity shifts slightly.
+  •  Ticklish spot: There’s one part of him that reacts differently (corner tap easter egg).
+  •  Dressing up: A small seasonal hat or overlay (e.g. pumpkin, santa hat, sunglasses).
+
+⸻
+
+🧠 Behaviour That Learns
+
+This is advanced, but fits your theme of Morsel evolving.
+  •  Mood tracking: Based on how often he’s “fed” vs. ignored, he could look perkier or a bit sluggish.
+  •  Expression changes over day: Maybe he’s sleepy in the morning and smug after dinner.
+  •  Custom animation per user: Favourite foods give him unique reactions over time.
+
+⸻
+
+🔄 Animations That Loop or Cascade
+
+More visual rhythm to fill otherwise idle space.
+  •  Face scrunch + relax: Periodic tensing like a yawn or sigh.
+  •  Ripple pulse: Background colour ripple or gentle bounce on occasion.
+  •  Split-second side glance: Feels alive and aware.
+

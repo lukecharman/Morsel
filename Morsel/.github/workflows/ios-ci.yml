@@ -1,0 +1,33 @@
+name: iOS CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - codex/**
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 26.0.0-beta
+
+      - name: Install dependencies
+        run: |
+          brew install xcbeautify || true
+
+      - name: Build and test
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -scheme iOS \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 16e' \
+            clean test | xcbeautify
