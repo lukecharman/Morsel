@@ -181,7 +181,8 @@ private struct ColorSwatchView: View {
         style: .continuous
       )
       .fill(swatch.color)
-      .glassEffect(
+      .glass(
+        .regular,
         in: UnevenRoundedRectangle(
           cornerRadii: RectangleCornerRadii(
             topLeading: 24,
