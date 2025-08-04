@@ -8,7 +8,7 @@ public enum GlassType {
   @available(iOS 26, watchOS 26, *)
   var glass: Glass {
     switch self {
-    case .clear: Glass.clear
+    case .clear: Glass.regular
     case .regular: Glass.regular
     }
   }
