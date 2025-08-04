@@ -16,6 +16,8 @@
 		A35984FE2E40CB1F007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35984FD2E40CB1F007679F3 /* CoreMorsel */; };
 		A35985002E40CB23007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35984FF2E40CB23007679F3 /* CoreMorsel */; };
 		A35985022E40CB27007679F3 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A35985012E40CB27007679F3 /* CoreMorsel */; };
+		A35989812E40EDA8007679F3 /* MorselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A359897E2E40EDA8007679F3 /* MorselView.swift */; };
+		A35989832E40EDC0007679F3 /* MorselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A359897E2E40EDA8007679F3 /* MorselView.swift */; };
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.txt */; };
 		A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A36479432DCC948200A2F723 /* TelemetryDeck */; };
@@ -125,6 +127,7 @@
 		A329C33E2E3F586A001D158E /* iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329C34D2E3F587E001D158E /* watchOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = watchOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35982712E40C068007679F3 /* Morsel.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Morsel.xctestplan; sourceTree = "<group>"; };
+		A359897E2E40EDA8007679F3 /* MorselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorselView.swift; sourceTree = "<group>"; };
 		A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morsel (watchOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A36333E82DC94B7500DD9ADA /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		A3AE569A2DC2731800608E0D /* Widgets (watchOS).appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Widgets (watchOS).appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,31 +139,38 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */ = {
+		A35989702E40ECED007679F3 /* Exceptions for "Fonts" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Resources/Fonts/Quicksand-Bold.ttf",
-				"Resources/Fonts/Quicksand-Light.ttf",
-				"Resources/Fonts/Quicksand-Medium.ttf",
-				"Resources/Fonts/Quicksand-Regular.ttf",
-				"Resources/Fonts/Quicksand-SemiBold.ttf",
-                                UI/BackgroundGradientView.swift,
+				"Quicksand-Bold.ttf",
+				"Quicksand-Light.ttf",
+				"Quicksand-Medium.ttf",
+				"Quicksand-Regular.ttf",
+				"Quicksand-SemiBold.ttf",
+			);
+			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
+		};
+		A35989712E40ECED007679F3 /* Exceptions for "Fonts" folder in "Widgets (iOS)" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Quicksand-Bold.ttf",
+				"Quicksand-Light.ttf",
+				"Quicksand-Medium.ttf",
+				"Quicksand-Regular.ttf",
+				"Quicksand-SemiBold.ttf",
 			);
 			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
-		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Morsel (watchOS)" target */ = {
+		A35989722E40ECED007679F3 /* Exceptions for "Fonts" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Morsel/Body Parts/AnimatedEyeView.swift",
-				"Morsel/Body Parts/EyebrowedEyeShape.swift",
-				Morsel/MorselView.swift,
-				"Resources/Fonts/Quicksand-Bold.ttf",
-				"Resources/Fonts/Quicksand-Light.ttf",
-				"Resources/Fonts/Quicksand-Medium.ttf",
-				"Resources/Fonts/Quicksand-Regular.ttf",
-				"Resources/Fonts/Quicksand-SemiBold.ttf",
-                        );
-			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
+				"Quicksand-Bold.ttf",
+				"Quicksand-Light.ttf",
+				"Quicksand-Medium.ttf",
+				"Quicksand-Regular.ttf",
+				"Quicksand-SemiBold.ttf",
+			);
+			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
 		};
 		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -218,17 +228,6 @@
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
-		A3F3F3332DC4BD330088E1CB /* Exceptions for "MorselCore" folder in "Widgets (watchOS)" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Resources/Fonts/Quicksand-Bold.ttf",
-				"Resources/Fonts/Quicksand-Light.ttf",
-				"Resources/Fonts/Quicksand-Medium.ttf",
-				"Resources/Fonts/Quicksand-Regular.ttf",
-				"Resources/Fonts/Quicksand-SemiBold.ttf",
-			);
-			target = A3AE56992DC2731800608E0D /* Widgets (watchOS) */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -252,6 +251,16 @@
 			path = watchOSUITests;
 			sourceTree = "<group>";
 		};
+		A359895B2E40ECED007679F3 /* Fonts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A35989702E40ECED007679F3 /* Exceptions for "Fonts" folder in "Morsel (watchOS)" target */,
+				A35989712E40ECED007679F3 /* Exceptions for "Fonts" folder in "Widgets (iOS)" target */,
+				A35989722E40ECED007679F3 /* Exceptions for "Fonts" folder in "Widgets (watchOS)" target */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		A35D3CD72DBFB0B100C4C166 /* watchOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -259,16 +268,6 @@
 				A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Widgets (watchOS)" target */,
 			);
 			path = watchOS;
-			sourceTree = "<group>";
-		};
-		A35D3DCB2DBFDDC300C4C166 /* MorselCore */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A35D3DCD2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Morsel (watchOS)" target */,
-				A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */,
-				A3F3F3332DC4BD330088E1CB /* Exceptions for "MorselCore" folder in "Widgets (watchOS)" target */,
-			);
-			path = MorselCore;
 			sourceTree = "<group>";
 		};
 		A3ABD73B2DFD635900910A48 /* Debug */ = {
@@ -367,7 +366,7 @@
 		A3CD68FB2DBF745E00AB946D = {
 			isa = PBXGroup;
 			children = (
-				A35D3DCB2DBFDDC300C4C166 /* MorselCore */,
+				A359897E2E40EDA8007679F3 /* MorselView.swift */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 				A329C3252E3F57FC001D158E /* iOSTests */,
 				A329C33F2E3F586A001D158E /* iOSUITests */,
@@ -375,6 +374,7 @@
 				A329C3322E3F5820001D158E /* watchOSTests */,
 				A329C34E2E3F587E001D158E /* watchOSUITests */,
 				A3ABD73B2DFD635900910A48 /* Debug */,
+				A359895B2E40ECED007679F3 /* Fonts */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A36333E82DC94B7500DD9ADA /* TODO.txt */,
 				A35982712E40C068007679F3 /* Morsel.xctestplan */,
@@ -568,7 +568,7 @@
 				A35D3CF52DBFB0B300C4C166 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A35D3DCB2DBFDDC300C4C166 /* MorselCore */,
+				A359895B2E40ECED007679F3 /* Fonts */,
 				A3ABD73B2DFD635900910A48 /* Debug */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 			);
@@ -785,6 +785,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A35989832E40EDC0007679F3 /* MorselView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +801,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */,
+				A35989812E40EDA8007679F3 /* MorselView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

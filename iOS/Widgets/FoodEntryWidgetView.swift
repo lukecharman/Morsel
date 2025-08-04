@@ -77,8 +77,7 @@ struct FoodEntryWidgetView: View {
     .ignoresSafeArea()
     .widgetURL(URL(string: "morsel://list")!)
     .containerBackground(for: .widget) {
-      BackgroundGradientView()
-        .environmentObject(appSettings)
+      Color.black
     }
   }
 
