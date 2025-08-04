@@ -664,7 +664,7 @@ public struct SpeechBubble: View {
           .multilineTextAlignment(.center)
           .padding(.horizontal, 16)
           .padding(.vertical, 12)
-          .glassEffect(.clear)
+          .glass(.clear)
           .opacity(showMainBubble ? 1 : 0)
           .scaleEffect(showMainBubble ? 1 : 0.8)
           .offset(x: 0, y: -2)
@@ -672,7 +672,7 @@ public struct SpeechBubble: View {
         // Medium bubble
         Circle()
           .frame(width: 32, height: 32)
-          .glassEffect(.clear)
+          .glass(.clear)
           .opacity(showMediumBubble ? 1 : 0)
           .scaleEffect(showMediumBubble ? 1 : 0.8)
           .offset(x: 60, y: 2)
@@ -680,13 +680,13 @@ public struct SpeechBubble: View {
         // Small bubble
         Circle()
           .frame(width: 24, height: 24)
-          .glassEffect(.clear)
+          .glass(.clear)
           .opacity(showSmallBubble ? 1 : 0)
           .scaleEffect(showSmallBubble ? 1 : 0.8)
           .offset(x: 40, y: 0)
       }
     }
-    .onChange(of: playAnimation) { newValue in
+    .onChange(of: playAnimation) { _, newValue in
       if newValue {
         bubbleCycle()
       }

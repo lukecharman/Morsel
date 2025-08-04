@@ -16,7 +16,7 @@ struct ToggleButton: View {
         .frame(width: 44, height: 44)
         .clipShape(Circle())
         .tint(.white)
-        .glassEffect(.regular.tint(tintColor.opacity(0.25)))
+        .glass(.regular)
     }
     .animation(.easeInOut(duration: 0.25), value: isActive)
   }
