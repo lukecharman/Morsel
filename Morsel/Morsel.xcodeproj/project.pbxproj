@@ -7,14 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A35012DA2DEDA30600ACBA75 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A35012D92DEDA30600ACBA75 /* TelemetryDeck */; };
-		A35012DC2DEDA31200ACBA75 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DB2DEDA31200ACBA75 /* TelemetryDeck */; };
 		A35012DE2DEDA31700ACBA75 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DD2DEDA31700ACBA75 /* Sentry */; };
 		A35012E02DEDA31D00ACBA75 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = A35012DF2DEDA31D00ACBA75 /* Sentry */; };
 		A35D3CF62DBFB0B300C4C166 /* Morsel (watchOS).app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A35D3CD62DBFB0B100C4C166 /* Morsel (watchOS).app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A36333E92DC94B7500DD9ADA /* TODO.txt in Sources */ = {isa = PBXBuildFile; fileRef = A36333E82DC94B7500DD9ADA /* TODO.txt */; };
-		A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A36479432DCC948200A2F723 /* TelemetryDeck */; };
-		A3647A8B2DCE2BA100A2F723 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = A3647A8A2DCE2BA100A2F723 /* TelemetryDeck */; };
 		A374EFBC2E40AFEC00F27F04 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A374EFBB2E40AFEC00F27F04 /* CoreMorsel */; };
 		A374EFBE2E40AFF300F27F04 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A374EFBD2E40AFF300F27F04 /* CoreMorsel */; };
 		A374EFC02E40AFF700F27F04 /* CoreMorsel in Frameworks */ = {isa = PBXBuildFile; productRef = A374EFBF2E40AFF700F27F04 /* CoreMorsel */; };
@@ -136,13 +132,7 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Analytics/Analytics.swift,
-				Analytics/Event.swift,
-				Analytics/Events/FailedToFindAppGroupContainerEvent.swift,
-				Analytics/Events/FailedToLoadSwiftDataContainerEvent.swift,
-				Analytics/Events/LogForMeEvent.swift,
-				Analytics/Events/LogForMorselEvent.swift,
-				"Extensions/Color+Utilities.swift",
+                                "Extensions/Color+Utilities.swift",
 				"Extensions/ModelContainer+Morsel.swift",
 				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
@@ -162,27 +152,7 @@
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Analytics/Analytics.swift,
-				Analytics/Event.swift,
-				Analytics/Events/ChangeColorEvent.swift,
-				Analytics/Events/ChangeIconEvent.swift,
-				Analytics/Events/ClearAllDataEvent.swift,
-				Analytics/Events/DeleteForMeEvent.swift,
-				Analytics/Events/DeleteForMorselEvent.swift,
-				Analytics/Events/FailedToFindAppGroupContainerEvent.swift,
-				Analytics/Events/FailedToLoadSwiftDataContainerEvent.swift,
-				Analytics/Events/LogForMeEvent.swift,
-				Analytics/Events/LogForMorselEvent.swift,
-				Analytics/Events/Screens/ScreenViewColor.swift,
-				Analytics/Events/Screens/ScreenViewDestinationPicker.swift,
-				Analytics/Events/Screens/ScreenViewEmptyState.swift,
-				Analytics/Events/Screens/ScreenViewEvent.swift,
-				Analytics/Events/Screens/ScreenViewExtras.swift,
-				Analytics/Events/Screens/ScreenViewFeedback.swift,
-				Analytics/Events/Screens/ScreenViewFilledEntries.swift,
-				Analytics/Events/Screens/ScreenViewIcon.swift,
-				Analytics/Events/Screens/ScreenViewStats.swift,
-				"Extensions/Color+Utilities.swift",
+                                "Extensions/Color+Utilities.swift",
 				"Extensions/ModelContainer+Morsel.swift",
 				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
@@ -259,13 +229,7 @@
 		A3F3F3332DC4BD330088E1CB /* Exceptions for "MorselCore" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Analytics/Analytics.swift,
-				Analytics/Event.swift,
-				Analytics/Events/FailedToFindAppGroupContainerEvent.swift,
-				Analytics/Events/FailedToLoadSwiftDataContainerEvent.swift,
-				Analytics/Events/LogForMeEvent.swift,
-				Analytics/Events/LogForMorselEvent.swift,
-				"Extensions/ModelContainer+Morsel.swift",
+                                "Extensions/ModelContainer+Morsel.swift",
 				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
 				Model/Adder.swift,
@@ -376,7 +340,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A374EFBE2E40AFF300F27F04 /* CoreMorsel in Frameworks */,
-				A3647A8B2DCE2BA100A2F723 /* TelemetryDeck in Frameworks */,
 				A35012E02DEDA31D00ACBA75 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,7 +352,6 @@
 				A3AE569B2DC2731800608E0D /* WidgetKit.framework in Frameworks */,
 				BAF2A8FFFA3F45989944E0DD /* Sentry in Frameworks */,
 				A374EFC22E40AFFB00F27F04 /* CoreMorsel in Frameworks */,
-				A35012DC2DEDA31200ACBA75 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,7 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A374EFBC2E40AFEC00F27F04 /* CoreMorsel in Frameworks */,
-				A36479442DCC948200A2F723 /* TelemetryDeck in Frameworks */,
 				A3BC69BD2DE99932009186B4 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,7 +372,6 @@
 				A3CD69512DBF752B00AB946D /* SwiftUI.framework in Frameworks */,
 				A3CD694F2DBF752B00AB946D /* WidgetKit.framework in Frameworks */,
 				A374EFC02E40AFF700F27F04 /* CoreMorsel in Frameworks */,
-				A35012DA2DEDA30600ACBA75 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,7 +535,6 @@
 			);
 			name = "Morsel (watchOS)";
 			packageProductDependencies = (
-				A3647A8A2DCE2BA100A2F723 /* TelemetryDeck */,
 				A35012DF2DEDA31D00ACBA75 /* Sentry */,
 				A374EFBD2E40AFF300F27F04 /* CoreMorsel */,
 			);
@@ -597,7 +556,6 @@
 			);
 			name = "Widgets (watchOS)";
 			packageProductDependencies = (
-				A35012DB2DEDA31200ACBA75 /* TelemetryDeck */,
 				A374EFC12E40AFFB00F27F04 /* CoreMorsel */,
 			);
 			productName = WatchWidgetsExtension;
@@ -628,7 +586,6 @@
 			);
 			name = "Morsel (iOS)";
 			packageProductDependencies = (
-				A36479432DCC948200A2F723 /* TelemetryDeck */,
 				FAC31114A76142BEAB120BFC /* Sentry */,
 				A374EFBB2E40AFEC00F27F04 /* CoreMorsel */,
 			);
@@ -650,7 +607,6 @@
 			);
 			name = "Widgets (iOS)";
 			packageProductDependencies = (
-				A35012D92DEDA30600ACBA75 /* TelemetryDeck */,
 				A35012DD2DEDA31700ACBA75 /* Sentry */,
 				A374EFBF2E40AFF700F27F04 /* CoreMorsel */,
 			);
@@ -708,7 +664,6 @@
 			mainGroup = A3CD68FB2DBF745E00AB946D;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 				3AC676223C5A44F9A7D439F4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -1560,9 +1515,7 @@
 				minimumVersion = 8.0.0;
 			};
 		};
-		A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.9.4;
@@ -1571,15 +1524,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A35012D92DEDA30600ACBA75 /* TelemetryDeck */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
 		};
-		A35012DB2DEDA31200ACBA75 /* TelemetryDeck */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
 		};
 		A35012DD2DEDA31700ACBA75 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1591,15 +1538,9 @@
 			package = 3AC676223C5A44F9A7D439F4 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
-		A36479432DCC948200A2F723 /* TelemetryDeck */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
 		};
-		A3647A8A2DCE2BA100A2F723 /* TelemetryDeck */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A36479422DCC948200A2F723 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
 		};
 		A374EFBB2E40AFEC00F27F04 /* CoreMorsel */ = {
 			isa = XCSwiftPackageProductDependency;

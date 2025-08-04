@@ -1,13 +1,13 @@
 import Foundation
 
-typealias EventParameters = [String: String]
+public typealias EventParameters = [String: String]
 
-protocol Event {
+public protocol Event {
   var name: String { get }
   var parameters: EventParameters { get }
 }
 
-extension Event {
+public extension Event {
   var parameters: EventParameters {
     [:]
   }

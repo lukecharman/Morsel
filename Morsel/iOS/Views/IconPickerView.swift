@@ -1,3 +1,4 @@
+import CoreMorsel
 import SwiftUI
 
 struct IconPickerView: View {

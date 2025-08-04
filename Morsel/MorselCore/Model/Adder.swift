@@ -1,3 +1,4 @@
+import CoreMorsel
 import Foundation
 import SwiftData
 import WidgetKit
@@ -24,10 +25,18 @@ struct Adder {
     WidgetCenter.shared.reloadAllTimelines()
 
     if isForMorsel {
-      let event = LogForMorselEvent(craving: model, context: context)
+      let event = LogForMorselEvent(
+        cravingName: model.name,
+        timestamp: model.timestamp,
+        context: context.rawValue
+      )
       Analytics.track(event)
     } else {
-      let event = LogForMeEvent(meal: model, context: context)
+      let event = LogForMeEvent(
+        mealName: model.name,
+        timestamp: model.timestamp,
+        context: context.rawValue
+      )
       Analytics.track(event)
     }
   }

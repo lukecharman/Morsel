@@ -1,4 +1,5 @@
 import Foundation
+import CoreMorsel
 import SwiftUI
 
 struct FilledEntriesView: View {

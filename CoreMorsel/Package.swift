@@ -14,9 +14,15 @@ let package = Package(
       targets: ["CoreMorsel"]
     ),
   ],
+  dependencies: [
+    .package(url: "https://github.com/TelemetryDeck/SwiftSDK", from: "2.9.4")
+  ],
   targets: [
     .target(
-      name: "CoreMorsel"
+      name: "CoreMorsel",
+      dependencies: [
+        .product(name: "TelemetryDeck", package: "SwiftSDK")
+      ]
     ),
     .testTarget(
       name: "CoreMorselTests",

@@ -1,11 +1,11 @@
 import Foundation
 
-protocol ScreenViewEvent: Event {
+public protocol ScreenViewEvent: Event {
   var screenName: String { get }
   var additionalParameters: EventParameters { get }
 }
 
-extension ScreenViewEvent {
+public extension ScreenViewEvent {
   var additionalParameters: EventParameters {
     [:]
   }
