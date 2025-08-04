@@ -35,7 +35,7 @@ public extension View {
     _ variant: GlassType = .regular
   ) -> some View {
     if #available(iOS 26, watchOS 26, *) {
-      return self.glassEffect(variant.glass, in: DefaultGlassEffectShape())
+      return self.glassEffect(variant.glass, in: Rectangle())
     } else {
       return self.glass(displayMode: .automatic)
     }
