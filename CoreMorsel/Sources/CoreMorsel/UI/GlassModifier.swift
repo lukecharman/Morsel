@@ -32,7 +32,7 @@ public extension View {
   }
 
   func glass(
-    _ variant: GlassType = .regular,
+    _ variant: GlassType = .regular
   ) -> some View {
     if #available(iOS 26, watchOS 26, *) {
       return self.glassEffect(variant.glass, in: DefaultGlassEffectShape())
