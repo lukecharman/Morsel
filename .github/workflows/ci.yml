@@ -25,4 +25,15 @@ jobs:
           xcodebuild test \
             -workspace Morsel.xcworkspace \
             -scheme iOS \
-            -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16e'
+            -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16e' \
+            -resultBundlePath TestResults.xcresult
+      - name: Convert xcresult to JUnit
+        run: |
+          brew install xcbeautify
+          xcbeautify --junit --result-bundle-path TestResults.xcresult > junit.xml
+      - name: Upload test report
+        uses: dorny/test-reporter@v1
+        with:
+          name: iOS Tests
+          path: junit.xml
+          reporter: java-junit
