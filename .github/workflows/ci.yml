@@ -11,7 +11,9 @@ jobs:
       - name: Select Xcode 26 beta
         run: |
           sudo xcode-select -s /Applications/Xcode_26_beta.app/Contents/Developer
-          xcodebuild -version
+      - name: Select Xcode 26 beta
+        run: |
+          sudo xcodebuild -downloadPlatform iOS
       - name: Run Test Plan
         run: |
           xcodebuild test \
