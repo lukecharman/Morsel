@@ -144,8 +144,7 @@
 				"Resources/Fonts/Quicksand-Medium.ttf",
 				"Resources/Fonts/Quicksand-Regular.ttf",
 				"Resources/Fonts/Quicksand-SemiBold.ttf",
-				Settings/AppSettings.swift,
-				UI/BackgroundGradientView.swift,
+                                UI/BackgroundGradientView.swift,
 			);
 			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
@@ -160,8 +159,7 @@
 				"Resources/Fonts/Quicksand-Medium.ttf",
 				"Resources/Fonts/Quicksand-Regular.ttf",
 				"Resources/Fonts/Quicksand-SemiBold.ttf",
-				Settings/AppSettings.swift,
-			);
+                        );
 			target = A35D3CD52DBFB0B100C4C166 /* Morsel (watchOS) */;
 		};
 		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */ = {
