@@ -14,5 +14,5 @@ jobs:
         run: |
           xcodebuild test \
             -workspace Morsel.xcworkspace \
-            -scheme CoreMorsel \
+            -scheme iOS \
             -destination 'platform=iOS Simulator,OS=26.0,name=iPhone 16e'
