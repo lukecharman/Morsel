@@ -10,6 +10,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Select Xcode 26
         run: sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
+      - name: Install iOS 26
+        run: sudo xcodebuild -downloadPlatform iOS -buildVersion 26.0
       - name: Run Core tests
         run: |
           xcodebuild test \
