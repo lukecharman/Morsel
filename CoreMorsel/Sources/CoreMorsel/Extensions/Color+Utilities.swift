@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-extension Color {
+public extension Color {
   static func darkened(from color: Color, percentage: CGFloat = 0.75) -> Color {
     var hue: CGFloat = 0
     var saturation: CGFloat = 0

@@ -139,10 +139,7 @@
 		A35D3DCC2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Extensions/CGFloat+Lerp.swift",
-				"Extensions/Color+Utilities.swift",
 				"Extensions/ModelContainer+Morsel.swift",
-				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
@@ -160,10 +157,7 @@
 		A35D3DCD2DBFDDC900C4C166 /* Exceptions for "MorselCore" folder in "Morsel (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Extensions/CGFloat+Lerp.swift",
-				"Extensions/Color+Utilities.swift",
 				"Extensions/ModelContainer+Morsel.swift",
-				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
@@ -239,9 +233,7 @@
 		A3F3F3332DC4BD330088E1CB /* Exceptions for "MorselCore" folder in "Widgets (watchOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Extensions/CGFloat+Lerp.swift",
 				"Extensions/ModelContainer+Morsel.swift",
-				"Extensions/UIColor+Utilities.swift",
 				Model/AddContext.swift,
 				Model/Adder.swift,
 				Model/FoodEntry.swift,
