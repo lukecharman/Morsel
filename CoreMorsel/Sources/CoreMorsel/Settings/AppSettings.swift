@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import WidgetKit
 
-enum Key: String {
+public enum Key: String {
   case morselColor
   case morselColorRGBA
   case appTheme
