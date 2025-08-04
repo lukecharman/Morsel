@@ -76,7 +76,3 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
 
   func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {}
 }
-
-extension Notification.Name {
-  static let didReceiveMorselColor = Notification.Name("didReceiveMorselColor")
-}

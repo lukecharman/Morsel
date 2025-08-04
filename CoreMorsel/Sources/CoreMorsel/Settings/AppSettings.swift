@@ -1,7 +1,5 @@
-import CoreMorsel
 import Foundation
 import SwiftUI
-import WatchConnectivity
 import WidgetKit
 
 enum Key: String {
@@ -10,12 +8,12 @@ enum Key: String {
   case appTheme
 }
 
-enum AppTheme: String, CaseIterable {
+public enum AppTheme: String, CaseIterable {
   case system = "system"
   case light = "light"
   case dark = "dark"
   
-  var displayName: String {
+  public var displayName: String {
     switch self {
     case .system: return "System"
     case .light: return "Light"
@@ -23,7 +21,7 @@ enum AppTheme: String, CaseIterable {
     }
   }
   
-  var colorScheme: ColorScheme? {
+  public var colorScheme: ColorScheme? {
     switch self {
     case .system: return nil
     case .light: return .light
@@ -32,29 +30,29 @@ enum AppTheme: String, CaseIterable {
   }
 }
 
-class AppSettings: ObservableObject {
-  static let shared = AppSettings()
+public final class AppSettings: ObservableObject {
+  public static let shared = AppSettings()
   private let defaults = UserDefaults(suiteName: appGroupIdentifier)
 
   private static let fallbackColor: Color = .blue
 
-  @Published var showDigest = false
+  @Published public var showDigest = false
 
-  @Published var appTheme: AppTheme {
+  @Published public var appTheme: AppTheme {
     didSet {
       defaults?.set(appTheme.rawValue, forKey: Key.appTheme.rawValue)
     }
   }
 
-  @Published var morselColor: Color {
+  @Published public var morselColor: Color {
     didSet {
       saveColorToUserDefaults(morselColor)
       WidgetCenter.shared.reloadAllTimelines()
-#if os(iOS)
-      PhoneSessionManager.shared.notifyWatchOfNewColor(morselColor)
-#endif
+      onMorselColorChange?(morselColor)
     }
   }
+
+  public var onMorselColorChange: ((Color) -> Void)?
 
   private init() {
     let initialColor = AppSettings.loadInitialColor(from: defaults)

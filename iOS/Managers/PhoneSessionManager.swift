@@ -13,6 +13,9 @@ class PhoneSessionManager: NSObject, WCSessionDelegate, ObservableObject {
       WCSession.default.delegate = self
       WCSession.default.activate()
     }
+    AppSettings.shared.onMorselColorChange = { [weak self] color in
+      self?.notifyWatchOfNewColor(color)
+    }
   }
   
   func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
