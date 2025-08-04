@@ -31,7 +31,7 @@ jobs:
         run: |
           brew install xcbeautify
           xcbeautify --junit --result-bundle-path TestResults.xcresult > junit.xml
-      - name: Upload test report
+      - name: Upload Test Report
         uses: dorny/test-reporter@v1
         with:
           name: iOS Tests
