@@ -1,4 +1,4 @@
-name: Unit Tests
+name: CI
 
 on:
   pull_request:
@@ -13,4 +13,4 @@ jobs:
           xcodebuild test \
             -workspace Morsel.xcworkspace \
             -scheme iOS \
-            -destination 'platform=iOS Simulator,OS=18.6,name=iPhone 16e'
+            -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16e'
