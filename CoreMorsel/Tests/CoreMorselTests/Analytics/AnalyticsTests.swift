@@ -1,4 +1,5 @@
 @testable import CoreMorsel
+import Foundation
 import Testing
 
 struct AnalyticsTests {
