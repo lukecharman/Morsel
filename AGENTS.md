@@ -1,13 +1,15 @@
 # AGENTS
 
-This repository follows a default template for top-notch iOS engineering. These instructions apply to all files unless overridden by a nested `AGENTS.md`.
+This repository follows a default template for top-notch iOS engineering.
+
+These instructions apply to all files unless overridden by a nested `AGENTS.md`.
 
 ## General Principles
 - Code must be written in Swift using modern iOS development practices.
 - Aim for clear, concise code with comments where necessary.
 - Keep functions small and focused on a single responsibility.
 - Use `@MainActor` when performing UI-related tasks.
-- Target **iOS 26** and make use of its APIs where beneficial.
+- Target iOS 18, but make use of iOS 16's new APIs where beneficial.
 
 ## Code Style
 - Indentation uses **two spaces**. No tabs.
@@ -24,5 +26,6 @@ This repository follows a default template for top-notch iOS engineering. These 
 - Summarize any user-facing or developer-facing changes.
 - Mention testing performed, even if minimal.
 - Run any available linters. If none are present, at least build the project to ensure there are no syntax errors.
-- There's no need to run `swift test` as it will always fail. Instead, run the unit tests via xcodebuild.
+- There's no need to run `swift test` as it will always fail. Instead, run the unit tests via the CI workflows when opening PRs.
+- Your runners won't work with xcodebuild so you can't run that locally – only via CI workflows on Github Actions.
 - Trigger the iOS CI workflow for the branch you are working on and ensure it passes. If not, iterate and fix it.
