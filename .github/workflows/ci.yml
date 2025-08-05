@@ -1,21 +1,19 @@
 name: CI
 
 on:
-  pull_request:
+  pull_request
+  workflow_dispatch
 
 jobs:
   test:
     runs-on: macos-15
     steps:
-      # 1. Checkout code
       - uses: actions/checkout@v4
 
-      # 2. Select Xcode 26
       - name: Select Xcode 26
         run: |
           sudo xcode-select -s /Applications/Xcode_26_beta.app/Contents/Developer
 
-      # 3. Cache iOS & watchOS simulators
       - name: Cache iOS Simulator
         uses: actions/cache@v4
         with:
@@ -28,7 +26,6 @@ jobs:
           path: ~/Library/Developer/CoreSimulator/Profiles/Runtimes
           key: watch-sim-26-23A5260l
 
-      # 4. Install simulators if not cached (quiet, filtered output)
       - name: Install iOS 26 SDK
         run: |
           xcodebuild -downloadPlatform iOS
@@ -37,16 +34,13 @@ jobs:
         run: |
           xcodebuild -downloadPlatform watchOS
 
-      # 5. Prepare iOS Simulator
       - name: Prepare iOS Simulator
         run: |
           sudo xcodebuild -runFirstLaunch
 
-      # 6. Install xcbeautify for better logs & junit conversion
       - name: Install xcbeautify
         run: brew install xcbeautify
 
-      # 7. Run tests and export result bundle
       - name: Run Test Plan
         run: |
           set -o pipefail
