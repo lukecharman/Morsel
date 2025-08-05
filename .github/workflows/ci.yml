@@ -7,33 +7,51 @@ jobs:
   test:
     runs-on: macos-15
     steps:
+      # 1. Checkout code
       - uses: actions/checkout@v4
+
+      # 2. Select Xcode 26
       - name: Select Xcode 26
         run: |
           sudo xcode-select -s /Applications/Xcode_26_beta.app/Contents/Developer
+
+      # 3. Cache iOS & watchOS simulators
+      - name: Cache iOS Simulator
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/CoreSimulator/Profiles/Runtimes
+          key: ios-sim-26-23A5260l
+
+      - name: Cache watchOS Simulator
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/CoreSimulator/Profiles/Runtimes
+          key: watch-sim-26-23A5260l
+
+      # 4. Install simulators if not cached (quiet, filtered output)
       - name: Install iOS 26 SDK
         run: |
           xcodebuild -downloadPlatform iOS
+
       - name: Install watchOS 26 SDK
         run: |
           xcodebuild -downloadPlatform watchOS
+
+      # 5. Prepare iOS Simulator
       - name: Prepare iOS Simulator
         run: |
           sudo xcodebuild -runFirstLaunch
+
+      # 6. Install xcbeautify for better logs & junit conversion
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+
+      # 7. Run tests and export result bundle
       - name: Run Test Plan
         run: |
+          set -o pipefail
           xcodebuild test \
             -workspace Morsel.xcworkspace \
             -scheme iOS \
             -destination 'platform=iOS Simulator,OS=18.5,name=iPhone 16e' \
-            -resultBundlePath TestResults.xcresult
-      - name: Convert xcresult to JUnit
-        run: |
-          brew install xcbeautify
-          xcbeautify --junit --result-bundle-path TestResults.xcresult > junit.xml
-      - name: Upload test report
-        uses: dorny/test-reporter@v1
-        with:
-          name: iOS Tests
-          path: junit.xml
-          reporter: java-junit
+            -resultBundlePath TestResults.xcresult | xcbeautify
