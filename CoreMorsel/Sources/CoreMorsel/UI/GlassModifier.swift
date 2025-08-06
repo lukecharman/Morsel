@@ -27,7 +27,12 @@ public extension View {
         self.glassEffect(variant.glass)
       }
     } else {
-      self.glass(displayMode: .automatic)
+      if let shape {
+        self.glass(displayMode: .automatic)
+          .clipShape(shape)
+      } else {
+        self.glass(displayMode: .automatic)
+      }
     }
   }
 
