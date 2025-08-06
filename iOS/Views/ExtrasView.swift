@@ -11,6 +11,9 @@ struct ExtrasView: View {
   @State private var showColorSheet = false
   @State private var showIconSheet = false
   @State private var showThemeSheet = false
+#if DEBUG
+  @State private var showDebugMenu = false
+#endif
 
   var onClearAll: () -> Void
 
@@ -52,6 +55,15 @@ struct ExtrasView: View {
           description: "Let us know how Morsel’s doing or what you'd like to see next.",
           onTap: { showFeedbackAlert = true }
         )
+#if DEBUG
+        CardView(
+          title: "",
+          value: "Debug",
+          icon: "ladybug.fill",
+          description: "Developer tools and test actions.",
+          onTap: { showDebugMenu = true }
+        )
+#endif
 #if DEBUG
         CardView(
           title: "",
@@ -118,6 +130,11 @@ struct ExtrasView: View {
           Analytics.track(ScreenViewTheme())
         }
     }
+#if DEBUG
+    .sheet(isPresented: $showDebugMenu) {
+      DebugMenuView()
+    }
+#endif
     .onAppear {
       Analytics.track(ScreenViewExtras())
     }

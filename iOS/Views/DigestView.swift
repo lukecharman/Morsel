@@ -25,6 +25,8 @@ struct DigestView: View {
   @State private var unblurAnimationInProgress: Set<String> = []
   @State private var animatingBlurRadius: [String: Double] = [:]
   @State private var hasTriggeredAnimation: Set<String> = []
+  @State private var now = Date()
+  private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
   private var availableOffsets: [Int] {
     guard let earliest = meals.map(\.date).min() else { return [0] }
@@ -195,6 +197,18 @@ struct DigestView: View {
       }
       .padding(.horizontal)
       .padding(.bottom, 32)
+    }
+    .onReceive(timer) { date in
+      now = date
+      for offset in availableOffsets {
+        let digest = digest(forOffset: offset)
+        let state = digestAvailabilityState(digest)
+        let key = digestUnlockKey(for: digest)
+        if state == .unlockable && !hasTriggeredAnimation.contains(key) {
+          hasTriggeredAnimation.insert(key)
+          triggerUnblurAnimation(for: digest)
+        }
+      }
     }
     .overlay(alignment: .topTrailing) {
       ToggleButton(isActive: true, systemImage: "xmark") {
@@ -484,7 +498,7 @@ private extension DigestView {
 
   private func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
     let calendar = Calendar.current
-    let now = Date()
+    let now = self.now
 
     if DigestConfiguration.isDailyDigest {
       // For daily digest: if it's not today, it's always unlocked
@@ -536,9 +550,10 @@ private extension DigestView {
   }
 
   private func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
+    let now = self.now
     if DigestConfiguration.isDailyDigest {
       // Check for debug override (only for current day)
-      if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .day),
+      if calendar.isDate(now, equalTo: periodStart, toGranularity: .day),
          let debugTime = NotificationsManager.debugUnlockTime {
         return debugTime
       }
@@ -552,7 +567,7 @@ private extension DigestView {
       return calendar.date(from: components) ?? periodStart
     } else {
       // Check for debug override (only for current week)
-      if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
+      if calendar.isDate(now, equalTo: periodStart, toGranularity: .weekOfYear),
          let debugTime = NotificationsManager.debugUnlockTime {
         return debugTime
       }
