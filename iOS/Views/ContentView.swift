@@ -30,6 +30,9 @@ struct ContentView: View {
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
   @State private var destinationPickerHeight: CGFloat = 0
+  @State private var recentlyDeleted: FoodEntry?
+  @State private var showUndoToast = false
+  @State private var undoWorkItem: DispatchWorkItem?
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
@@ -93,6 +96,15 @@ struct ContentView: View {
     }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
+    .overlay(alignment: .bottom) {
+      if showUndoToast {
+        UndoToastView {
+          undoDelete()
+        }
+        .padding(.bottom, 160)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+      }
+    }
     .onAppear { onAppear() }
     .onReceive(NotificationPublishers.keyboardWillShow) { notification in
       if let height = extractKeyboardHeight(from: notification) {
@@ -286,7 +298,15 @@ private extension ContentView {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
   }
 
+  @MainActor
   func delete(entry: FoodEntry) {
+    let backup = FoodEntry(
+      id: entry.id,
+      name: entry.name,
+      timestamp: entry.timestamp,
+      isForMorsel: entry.isForMorsel
+    )
+
     withAnimation {
       modelContext.delete(entry)
 
@@ -302,6 +322,39 @@ private extension ContentView {
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
         WidgetCenter.shared.reloadAllTimelines()
       }
+    }
+
+    recentlyDeleted = backup
+    showUndoToast = true
+
+    undoWorkItem?.cancel()
+    let workItem = DispatchWorkItem {
+      withAnimation {
+        showUndoToast = false
+        recentlyDeleted = nil
+      }
+    }
+    undoWorkItem = workItem
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: workItem)
+  }
+
+  @MainActor
+  func undoDelete() {
+    guard let entry = recentlyDeleted else { return }
+
+    modelContext.insert(entry)
+
+    try? modelContext.save()
+    loadEntries()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+      WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    recentlyDeleted = nil
+    undoWorkItem?.cancel()
+    withAnimation {
+      showUndoToast = false
     }
   }
 
