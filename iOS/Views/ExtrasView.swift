@@ -14,6 +14,10 @@ struct ExtrasView: View {
 
   var onClearAll: () -> Void
 
+#if DEBUG
+  @State private var showDebugMenu = false
+#endif
+
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
@@ -53,6 +57,13 @@ struct ExtrasView: View {
           onTap: { showFeedbackAlert = true }
         )
 #if DEBUG
+        CardView(
+          title: "",
+          value: "Debug",
+          icon: "ladybug.fill",
+          description: "Tools for testing.",
+          onTap: { showDebugMenu = true }
+        )
         CardView(
           title: "",
           value: "Crash",
@@ -118,6 +129,9 @@ struct ExtrasView: View {
           Analytics.track(ScreenViewTheme())
         }
     }
+#if DEBUG
+    .sheet(isPresented: $showDebugMenu) { DebugMenuView() }
+#endif
     .onAppear {
       Analytics.track(ScreenViewExtras())
     }
