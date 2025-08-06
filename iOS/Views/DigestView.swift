@@ -4,7 +4,7 @@ import SwiftUI
 // MARK: - Configuration
 struct DigestConfiguration {
   /// Debug flag for daily vs weekly digests
-  static let isDailyDigest = true // Set to true for daily digest testing
+  static let isDailyDigest = false // Set to true for daily digest testing
   
   /// When digests unlock each week/day
   /// weekday: 1 = Sunday, 2 = Monday, ..., 6 = Friday, 7 = Saturday

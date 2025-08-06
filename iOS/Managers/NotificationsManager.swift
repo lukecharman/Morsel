@@ -117,6 +117,44 @@ struct NotificationsManager {
     let request = UNNotificationRequest(identifier: "testDigestReminder", content: content, trigger: trigger)
     UNUserNotificationCenter.current().add(request)
   }
+
+  func scheduleDebugDigest() {
+    UNUserNotificationCenter.current().removePendingNotificationRequests(
+      withIdentifiers: ["debugDigestReminder"]
+    )
+
+    let calendar = Calendar.current
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+
+    if DigestConfiguration.isDailyDigest {
+      let dayStart = calendar.startOfDay(for: Date())
+      let key = "daily_digest_unlocked_\(formatter.string(from: dayStart))"
+      UserDefaults.standard.removeObject(forKey: key)
+    } else {
+      let weekStart = calendar.startOfWeek(for: Date())
+      let key = "digest_unlocked_\(formatter.string(from: weekStart))"
+      UserDefaults.standard.removeObject(forKey: key)
+    }
+
+    let fireDate = Date().addingTimeInterval(30)
+    NotificationsManager.debugUnlockTime = fireDate
+
+    let content = UNMutableNotificationContent()
+    if DigestConfiguration.isDailyDigest {
+      content.title = "Morsel's got your daily digest!"
+      content.body = "Ready to see how you did today? Morsel's been keeping track."
+    } else {
+      content.title = "Morsel's got your weekly digest!"
+      content.body = "Wanna see how you did this week? Morsel's been watching (politely)."
+    }
+    content.userInfo = ["deepLink": "morsel://digest"]
+    content.sound = .default
+
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
+    let request = UNNotificationRequest(identifier: "debugDigestReminder", content: content, trigger: trigger)
+    UNUserNotificationCenter.current().add(request)
+  }
   
   /// Call this when switching between daily/weekly digest modes to reschedule notifications
   func rescheduleDigestNotifications() {
