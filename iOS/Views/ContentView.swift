@@ -301,7 +301,6 @@ private extension ContentView {
   @MainActor
   func delete(entry: FoodEntry) {
     let backup = FoodEntry(
-      id: entry.id,
       name: entry.name,
       timestamp: entry.timestamp,
       isForMorsel: entry.isForMorsel
