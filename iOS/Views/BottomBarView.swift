@@ -3,7 +3,6 @@ import SwiftUI
 struct BottomBarView: View {
   @Binding var showStats: Bool
   @Binding var showExtras: Bool
-  @Binding var showStudio: Bool
   let isKeyboardVisible: Bool
 
   @State private var showingStudio = false
@@ -30,21 +29,6 @@ struct BottomBarView: View {
             }
             .sheet(isPresented: $showingStudio) { MorselStudio() }
           }
-#if DEBUG
-          if !showStudio {
-            ToggleButton(
-              isActive: showStudio,
-              systemImage: "light.overhead.right",
-              action: {
-                withAnimation {
-                  showingStudio = true
-                }
-              }
-            )
-            .transition(.blurReplace)
-            .sheet(isPresented: $showingStudio) { MorselStudio() }
-          }
-#endif
           Spacer()
           if !showStats {
             ToggleButton(

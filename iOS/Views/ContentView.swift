@@ -26,7 +26,6 @@ struct ContentView: View {
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
-  @State private var showStudio = false
   @State private var showDigest = false
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
@@ -173,7 +172,6 @@ private extension ContentView {
       BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,
-        showStudio: $showStudio,
         isKeyboardVisible: isKeyboardVisible
       )
     }
