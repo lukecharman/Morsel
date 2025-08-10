@@ -10,9 +10,11 @@ struct MorselApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   @StateObject private var sessionManager = PhoneSessionManager()
   @StateObject private var appSettings = AppSettings.shared
+  @Environment(\.scenePhase) private var scenePhase
 
   @State private var shouldOpenMouth = false
   @State private var shouldShowDigest = false
+  @State private var digestOffset: Int? = nil
 
   let notificationsManager = NotificationsManager()
 
@@ -20,12 +22,17 @@ struct MorselApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest)
+      ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest, initialDigestOffset: digestOffset)
         .environmentObject(appSettings)
         .modelContainer(.morsel)
         .preferredColorScheme(appSettings.appTheme.colorScheme)
         .onOpenURL { handleDeepLink($0) }
         .onAppear { launch() }
+        .onChange(of: scenePhase) { _, phase in
+          if phase == .active {
+            notificationsManager.runCatchUpCheck()
+          }
+        }
     }
   }
 
@@ -41,6 +48,13 @@ struct MorselApp: App {
     case "add":
       shouldOpenMouth = true
     case "digest":
+      if let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
+         let offStr = items.first(where: { $0.name == "offset" })?.value,
+         let off = Int(offStr ?? "") {
+        digestOffset = off
+      } else {
+        digestOffset = nil
+      }
       shouldShowDigest = true
     default:
       shouldOpenMouth = false
