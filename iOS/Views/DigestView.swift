@@ -1,23 +1,16 @@
 import CoreMorsel
 import SwiftUI
 
-// MARK: - Configuration
 struct DigestConfiguration {
-  /// Debug flag for daily vs weekly digests
-  static let isDailyDigest = false // Set to true for daily digest testing
-  
-  /// When digests unlock each week/day
-  /// weekday: 1 = Sunday, 2 = Monday, ..., 6 = Friday, 7 = Saturday
-  /// hour: 0-23 (24-hour format)
-  /// minute: 0-59
-  static let unlockWeekday = 6    // Friday (for weekly)
-  static let unlockHour = 9       // 9 AM (for daily: every day at 9 AM)
-  static let unlockMinute = 0     // :00
+  static let unlockWeekday = 2 // 1 = Sunday
+  static let unlockHour = 12
+  static let unlockMinute = 15
 }
 
 struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
   @Environment(\.dismiss) private var dismiss
+
   let meals: [Meal]
 
   @State private var currentPageIndex: Int = 0
@@ -31,31 +24,17 @@ struct DigestView: View {
 
     let calendar = Calendar.current
     
-    if DigestConfiguration.isDailyDigest {
-      let startOfToday = calendar.startOfDay(for: Date())
-      let startOfEarliestDay = calendar.startOfDay(for: earliest)
-      
-      let daysBetween = calendar.dateComponents([.day], from: startOfEarliestDay, to: startOfToday).day ?? 0
-      return Array((0...daysBetween).reversed())
-    } else {
-      let startOfThisWeek = calendar.startOfWeek(for: Date())
-      let startOfEarliestWeek = calendar.startOfWeek(for: earliest)
+    let startOfThisWeek = calendar.startOfWeek(for: Date())
+    let startOfEarliestWeek = calendar.startOfWeek(for: earliest)
 
-      let weeksBetween = calendar.dateComponents([.weekOfYear], from: startOfEarliestWeek, to: startOfThisWeek).weekOfYear ?? 0
-      return Array((0...weeksBetween).reversed())
-    }
+    let weeksBetween = calendar.dateComponents([.weekOfYear], from: startOfEarliestWeek, to: startOfThisWeek).weekOfYear ?? 0
+    return Array((0...weeksBetween).reversed())
   }
 
   private func digest(forOffset offset: Int) -> DigestModel {
-    if DigestConfiguration.isDailyDigest {
-      // Offset is a positive number of days into the past (0 = today, 1 = yesterday, etc.)
-      let targetDate = Calendar.current.date(byAdding: .day, value: -offset, to: Date())!
-      return DigestModel(forDayContaining: targetDate, allMeals: meals)
-    } else {
-      // Offset is a positive number of weeks into the past (0 = this week, 1 = last week, etc.)
-      let targetDate = Calendar.current.date(byAdding: .weekOfYear, value: -offset, to: Date())!
-      return DigestModel(forWeekContaining: targetDate, allMeals: meals)
-    }
+    // Offset is a positive number of weeks into the past (0 = this week, 1 = last week, etc.)
+    let targetDate = Calendar.current.date(byAdding: .weekOfYear, value: -offset, to: Date())!
+    return DigestModel(forWeekContaining: targetDate, allMeals: meals)
   }
 
   var body: some View {
@@ -71,7 +50,7 @@ struct DigestView: View {
             ScrollView {
               VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
-                  Text(DigestConfiguration.isDailyDigest ? "Daily Digest" : "Weekly Digest")
+                  Text("Weekly Digest")
                     .padding(.top, 16)
                     .font(MorselFont.title)
 
@@ -84,7 +63,7 @@ struct DigestView: View {
                   DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
                   DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
                   DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
-                  DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) \(DigestConfiguration.isDailyDigest ? "days" : "weeks")")
+                  DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
                   DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
                 }
 
@@ -122,9 +101,9 @@ struct DigestView: View {
 
             if availabilityState == .locked {
               VStack(spacing: 12) {
-                Text(DigestConfiguration.isDailyDigest ? "Today isn't finished yet!" : "This week isn't finished yet!")
+                Text("This week isn't finished yet!")
                   .font(MorselFont.heading)
-                Text(DigestConfiguration.isDailyDigest ? "Check back at 9 AM to see your full digest." : "Check back on Friday to see your full digest.")
+                Text("Check back on Friday to see your full digest.")
                   .font(MorselFont.body)
                   .multilineTextAlignment(.center)
               }
@@ -464,122 +443,66 @@ private extension DigestView {
   }
   func formattedRange(for digest: DigestModel) -> String {
     let formatter = DateFormatter()
-    
-    if DigestConfiguration.isDailyDigest {
-      // For daily digest, show just the date
-      if Calendar.current.isDateInToday(digest.weekStart) {
-        return "Today"
-      } else if Calendar.current.isDateInYesterday(digest.weekStart) {
-        return "Yesterday"
-      } else {
-        formatter.dateFormat = "d MMM"
-        return formatter.string(from: digest.weekStart)
-      }
-    } else {
-      // For weekly digest, show the range
-      formatter.dateFormat = "d MMM"
-      return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
-    }
+    formatter.dateFormat = "d MMM"
+    return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
   }
 
   private func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
     let calendar = Calendar.current
     let now = Date()
 
-    if DigestConfiguration.isDailyDigest {
-      // For daily digest: if it's not today, it's always unlocked
-      guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .day) else {
-        return .unlocked
-      }
+    // If it's not the current week, it's always unlocked
+    guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
+      return .unlocked
+    }
 
-      // Calculate the exact unlock time for today
-      let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
+    // Calculate the exact unlock time for this week
+    let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
 
-      // Check if we've reached the unlock time
-      if now < unlockTime {
-        return .locked
-      } else {
-        // We're past the unlock time - check if this digest has been unlocked before
-        let digestKey = digestUnlockKey(for: digest)
-        let hasBeenUnlocked = UserDefaults.standard.bool(forKey: digestKey)
-        
-        if hasBeenUnlocked {
-          return .unlocked
-        } else {
-          return .unlockable
-        }
-      }
+    // Check if we've reached the unlock time
+    if now < unlockTime {
+      return .locked
     } else {
-      // For weekly digest: if it's not the current week, it's always unlocked
-      guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
+      // We're past the unlock time - check if this digest has been unlocked before
+      let digestKey = digestUnlockKey(for: digest)
+      let hasBeenUnlocked = UserDefaults.standard.bool(forKey: digestKey)
+
+      if hasBeenUnlocked {
         return .unlocked
-      }
-
-      // Calculate the exact unlock time for this week
-      let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
-
-      // Check if we've reached the unlock time
-      if now < unlockTime {
-        return .locked
       } else {
-        // We're past the unlock time - check if this digest has been unlocked before
-        let digestKey = digestUnlockKey(for: digest)
-        let hasBeenUnlocked = UserDefaults.standard.bool(forKey: digestKey)
-        
-        if hasBeenUnlocked {
-          return .unlocked
-        } else {
-          return .unlockable
-        }
+        return .unlockable
       }
     }
   }
 
   private func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
-    if DigestConfiguration.isDailyDigest {
-      // Check for debug override (only for current day)
-      if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .day),
-         let debugTime = NotificationsManager.debugUnlockTime {
-        return debugTime
-      }
-      
-      // For daily digest, unlock at the specified time each day
-      var components = calendar.dateComponents([.year, .month, .day], from: periodStart)
-      components.hour = DigestConfiguration.unlockHour
-      components.minute = DigestConfiguration.unlockMinute
-      components.second = 0
-
-      return calendar.date(from: components) ?? periodStart
-    } else {
-      // Check for debug override (only for current week)
-      if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
-         let debugTime = NotificationsManager.debugUnlockTime {
-        return debugTime
-      }
-      
-      // Find the target day in this week
-      let weekday = calendar.component(.weekday, from: periodStart)
-      let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
-
-      guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: periodStart) else {
-        return periodStart // Fallback to start of week
-      }
-
-      // Set the exact time
-      var components = calendar.dateComponents([.year, .month, .day], from: targetDay)
-      components.hour = DigestConfiguration.unlockHour
-      components.minute = DigestConfiguration.unlockMinute
-      components.second = 0
-
-      return calendar.date(from: components) ?? targetDay
+    // Check for debug override (only for current week)
+    if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
+       let debugTime = NotificationsManager.debugUnlockTime {
+      return debugTime
     }
+
+    // Find the target day in this week
+    let weekday = calendar.component(.weekday, from: periodStart)
+    let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
+
+    guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: periodStart) else {
+      return periodStart // Fallback to start of week
+    }
+
+    // Set the exact time
+    var components = calendar.dateComponents([.year, .month, .day], from: targetDay)
+    components.hour = DigestConfiguration.unlockHour
+    components.minute = DigestConfiguration.unlockMinute
+    components.second = 0
+
+    return calendar.date(from: components) ?? targetDay
   }
 
   private func digestUnlockKey(for digest: DigestModel) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
-    let prefix = DigestConfiguration.isDailyDigest ? "daily_digest_unlocked" : "digest_unlocked"
-    return "\(prefix)_\(formatter.string(from: digest.weekStart))"
+    return "digest_unlocked_\(formatter.string(from: digest.weekStart))"
   }
 
   private func markDigestAsUnlocked(_ digest: DigestModel) {

@@ -5,6 +5,7 @@ Testing
 
 Digest Bug
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
+ * This needs to be 100% rock solid.
  * Then, make the unlock itself beautiful. Animation, haptic – moment of truth.
 
 Speech Bubble

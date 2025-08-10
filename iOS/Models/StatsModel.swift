@@ -37,19 +37,19 @@ struct StatsModel {
 
     let calendar = Calendar.current
 
-    // 1. Group entries by day
+    /// 1. Group entries by day
     let grouped = Dictionary(grouping: entries) {
       calendar.startOfDay(for: $0.timestamp)
     }
 
-    // 2. Calculate daily percentages
+    /// 2. Calculate daily percentages
     let dailyPercentages: [Double] = grouped.values.map { dayEntries in
       guard !dayEntries.isEmpty else { return 0 }
       let morselCount = dayEntries.filter { $0.isForMorsel }.count
       return Double(morselCount) / Double(dayEntries.count)
     }
 
-    // 3. Average
+    /// 3. Average
     let total = dailyPercentages.reduce(0, +)
     return Int((total / Double(dailyPercentages.count)) * 100)
   }
@@ -61,7 +61,7 @@ private extension StatsModel {
 
     guard var previousDay = sortedUniqueDays.first else { return (0, 0) }
 
-    // Calculate longest streak across all days
+    /// Calculate longest streak across all days
     var longest = 1
     var running = 1
     for day in sortedUniqueDays.dropFirst() {
@@ -76,7 +76,7 @@ private extension StatsModel {
     }
     longest = max(longest, running)
 
-    // Calculate current streak starting from today if present
+    /// Calculate current streak starting from today if present
     var current = 0
     if calendar.isDate(sortedUniqueDays.first!, inSameDayAs: Date()) {
       current = 1
