@@ -1,5 +1,6 @@
 import CoreMorsel
 import SwiftUI
+import UserNotifications
 
 struct DigestConfiguration {
   static let unlockWeekday = 2 // 1 = Sunday
@@ -12,6 +13,7 @@ struct DigestView: View {
   @Environment(\.dismiss) private var dismiss
 
   let meals: [Meal]
+  let initialOffset: Int? = nil
 
   @State private var currentPageIndex: Int = 0
   @Namespace private var animation
@@ -20,14 +22,15 @@ struct DigestView: View {
   @State private var hasTriggeredAnimation: Set<String> = []
 
   private var availableOffsets: [Int] {
-    guard let earliest = meals.map(\.date).min() else { return [0] }
-
     let calendar = Calendar.current
-    
+    // Always include last week, even if there are no meals
+    guard let earliest = meals.map(\.date).min() else { return [1, 0] }
+
     let startOfThisWeek = calendar.startOfWeek(for: Date())
     let startOfEarliestWeek = calendar.startOfWeek(for: earliest)
 
-    let weeksBetween = calendar.dateComponents([.weekOfYear], from: startOfEarliestWeek, to: startOfThisWeek).weekOfYear ?? 0
+    let rawWeeks = calendar.dateComponents([.weekOfYear], from: startOfEarliestWeek, to: startOfThisWeek).weekOfYear ?? 0
+    let weeksBetween = max(1, rawWeeks)
     return Array((0...weeksBetween).reversed())
   }
 
@@ -103,7 +106,7 @@ struct DigestView: View {
               VStack(spacing: 12) {
                 Text("This week isn't finished yet!")
                   .font(MorselFont.heading)
-                Text("Check back on Friday to see your full digest.")
+                Text(unlockMessage(for: digest))
                   .font(MorselFont.body)
                   .multilineTextAlignment(.center)
               }
@@ -119,7 +122,7 @@ struct DigestView: View {
       }
       .tabViewStyle(.page(indexDisplayMode: .never))
       .onAppear {
-        currentPageIndex = 0
+        currentPageIndex = initialOffset ?? 0
       }
 
       HStack {
@@ -422,7 +425,11 @@ struct SeededGenerator: RandomNumberGenerator {
 
 extension Calendar {
   func startOfWeek(for date: Date) -> Date {
-    self.date(from: self.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
+    // Force ISO-8601 (Monday-start) weeks but keep the current timezone
+    var cal = Calendar(identifier: .iso8601)
+    cal.timeZone = self.timeZone
+    let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+    return cal.date(from: comps)!
   }
 }
 
@@ -444,7 +451,9 @@ private extension DigestView {
   func formattedRange(for digest: DigestModel) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "d MMM"
-    return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: digest.weekEnd))"
+    let calendar = Calendar.current
+    let displayEnd = calendar.date(byAdding: .day, value: -1, to: digest.weekEnd) ?? digest.weekEnd
+    return "\(formatter.string(from: digest.weekStart)) – \(formatter.string(from: displayEnd))"
   }
 
   private func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
@@ -499,6 +508,16 @@ private extension DigestView {
     return calendar.date(from: components) ?? targetDay
   }
 
+  private func unlockMessage(for digest: DigestModel) -> String {
+    let calendar = Calendar.current
+    let unlock = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
+    let dayFormatter = DateFormatter()
+    dayFormatter.dateFormat = "EEEE"
+    let timeFormatter = DateFormatter()
+    timeFormatter.dateFormat = "HH:mm"
+    return "Check back on \(dayFormatter.string(from: unlock)) at \(timeFormatter.string(from: unlock)) to see your full digest."
+  }
+
   private func digestUnlockKey(for digest: DigestModel) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
@@ -508,6 +527,17 @@ private extension DigestView {
   private func markDigestAsUnlocked(_ digest: DigestModel) {
     let digestKey = digestUnlockKey(for: digest)
     UserDefaults.standard.set(true, forKey: digestKey)
+  }
+
+  private func nudgeSentKey(for digest: DigestModel) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return "digest_nudge_sent_\(formatter.string(from: digest.weekStart))"
+  }
+
+  private func markWeeklyNudgeAsSent(for digest: DigestModel) {
+    let key = nudgeSentKey(for: digest)
+    UserDefaults.standard.set(true, forKey: key)
   }
 
   private func triggerUnblurAnimation(for digest: DigestModel) {
@@ -531,6 +561,16 @@ private extension DigestView {
       
       // Mark as unlocked AFTER animation completes
       self.markDigestAsUnlocked(digest)
+
+      // Also mark the week's nudge as sent and clean up delivered notifications
+      self.markWeeklyNudgeAsSent(for: digest)
+      let center = UNUserNotificationCenter.current()
+      center.getDeliveredNotifications { notes in
+        let ids = notes.filter { $0.request.content.threadIdentifier == "digest_final" }.map { $0.request.identifier }
+        if !ids.isEmpty {
+          center.removeDeliveredNotifications(withIdentifiers: ids)
+        }
+      }
     }
   }
 }
