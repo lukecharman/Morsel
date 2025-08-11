@@ -36,7 +36,7 @@ struct ContentView: View {
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
-  let initialDigestOffset: Int?
+  @Binding var deepLinkDigestOffset: Int?
 
   var body: some View {
     ZStack {
@@ -129,7 +129,7 @@ struct ContentView: View {
     .sheet(isPresented: $shouldShowDigest) {
       DigestView(
         meals: entries.map { Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving) },
-        initialOffset: initialDigestOffset
+        initialOffset: deepLinkDigestOffset
       )
     }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
@@ -463,6 +463,6 @@ private extension ContentView {
 }
 
 #Preview {
-  ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), initialDigestOffset: nil)
+  ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), deepLinkDigestOffset: .constant(nil))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }

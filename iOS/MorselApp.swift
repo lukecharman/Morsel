@@ -22,7 +22,7 @@ struct MorselApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest, initialDigestOffset: digestOffset)
+      ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest, deepLinkDigestOffset: $digestOffset)
         .environmentObject(appSettings)
         .modelContainer(.morsel)
         .preferredColorScheme(appSettings.appTheme.colorScheme)
