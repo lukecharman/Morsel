@@ -13,7 +13,7 @@ struct DigestView: View {
   @Environment(\.dismiss) private var dismiss
 
   let meals: [Meal]
-  let initialOffset: Int? = nil
+  var initialOffset: Int? = nil
 
   @State private var currentPageIndex: Int = 0
   @Namespace private var animation

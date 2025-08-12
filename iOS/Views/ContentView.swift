@@ -10,13 +10,12 @@ struct ContentView: View {
   let shouldGenerateFakeData = false
 
   @Environment(\.modelContext) private var modelContext
-
   @EnvironmentObject var appSettings: AppSettings
-
   @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+  @Query(sort: \FoodEntry.timestamp, order: .reverse)
 
-  @State private var entries: [FoodEntry] = []
-  @State private var modelContextRefreshTrigger = UUID()
+  private var entries: [FoodEntry]
+
   @State private var widgetReloadWorkItem: DispatchWorkItem?
   @State private var scrollOffset: CGFloat = 0
   @State private var isDraggingHorizontally = false
@@ -90,7 +89,6 @@ struct ContentView: View {
         ExtrasView() {
           withAnimation {
             showExtras = false
-            loadEntries()
           }
         }
       }
@@ -132,9 +130,8 @@ struct ContentView: View {
         initialOffset: deepLinkDigestOffset
       )
     }
-    .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in loadEntries() }
-    .onReceive(NotificationPublishers.appDidBecomeActive) { _ in modelContextRefreshTrigger = UUID() }
-    .onChange(of: modelContextRefreshTrigger) { _, _ in loadEntries() }
+    .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in }
+    .onReceive(NotificationPublishers.appDidBecomeActive) { _ in }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
     .statusBarHidden(shouldBlurBackground)
   }
@@ -236,17 +233,6 @@ private extension ContentView {
 }
 
 private extension ContentView {
-  func loadEntries() {
-    do {
-      let descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.timestamp, order: .reverse)])
-      entries = try modelContext.fetch(descriptor)
-    } catch {
-      print("Failed to load entries: \(error)")
-    }
-
-    WidgetCenter.shared.reloadAllTimelines()
-  }
-
   func handleScroll(_ offset: CGPoint) {
     scrollOffset = offset.y
   }
@@ -255,13 +241,11 @@ private extension ContentView {
     if shouldGenerateFakeData {
       generateFakeEntries()
     }
-    loadEntries()
     NotificationCenter.default.addObserver(
       forName: NSPersistentCloudKitContainer.eventChangedNotification,
       object: nil,
       queue: OperationQueue.main
     ) { _ in
-      self.loadEntries()
       WidgetCenter.shared.reloadAllTimelines()
     }
   }
@@ -312,7 +296,6 @@ private extension ContentView {
       modelContext.delete(entry)
 
       try? modelContext.save()
-      loadEntries()
 
       if entry.isForMorsel {
         Analytics.track(DeleteForMorselEvent(cravingName: entry.name, timestamp: entry.timestamp))
@@ -346,7 +329,6 @@ private extension ContentView {
     modelContext.insert(entry)
 
     try? modelContext.save()
-    loadEntries()
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       WidgetCenter.shared.reloadAllTimelines()
@@ -366,7 +348,6 @@ private extension ContentView {
     _ = withAnimation {
       Task {
         try await Adder.add(name: trimmed, isForMorsel: isForMorsel, context: .phoneApp)
-        loadEntries()
       }
     }
 
