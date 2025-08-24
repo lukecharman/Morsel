@@ -18,7 +18,9 @@ struct MorselApp: App {
 
   let notificationsManager = NotificationsManager()
 
-  init() {}
+  init() {
+    OverlayController.shared.show()
+  }
 
   var body: some Scene {
     WindowGroup {
