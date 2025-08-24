@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:Morsel.xcodeproj">
+      location = "group:CoreMorsel">
    </FileRef>
    <FileRef
-      location = "group:CoreMorsel">
+      location = "container:Morsel.xcodeproj">
    </FileRef>
 </Workspace>
