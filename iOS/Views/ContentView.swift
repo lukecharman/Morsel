@@ -32,6 +32,7 @@ struct ContentView: View {
   @State private var recentlyDeleted: FoodEntry?
   @State private var showUndoToast = false
   @State private var undoWorkItem: DispatchWorkItem?
+  @State private var showOnboarding = false
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
@@ -104,7 +105,12 @@ struct ContentView: View {
         .transition(.move(edge: .bottom).combined(with: .opacity))
       }
     }
-    .onAppear { onAppear() }
+    .onAppear {
+      onAppear()
+      if !hasSeenOnboarding {
+        showOnboarding = true
+      }
+    }
     .onReceive(NotificationPublishers.keyboardWillShow) { notification in
       if let height = extractKeyboardHeight(from: notification) {
         withAnimation {
@@ -134,6 +140,12 @@ struct ContentView: View {
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
     .statusBarHidden(shouldBlurBackground)
+    .sheet(isPresented: $showOnboarding) {
+      OnboardingView(pages: 3) {
+        hasSeenOnboarding = true
+        showOnboarding = false
+      }
+    }
   }
 }
 
