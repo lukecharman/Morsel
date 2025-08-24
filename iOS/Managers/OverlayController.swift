@@ -7,6 +7,7 @@ final class OverlayController {
   static let shared = OverlayController()
   private var window: SelectiveHitWindow?
   private weak var host: UIHostingController<OverlayMorselView>?
+  private var configuration: MorselConfiguration = .empty
 
   func show(in windowScene: UIWindowScene) {
     guard window == nil else { return }
@@ -16,7 +17,7 @@ final class OverlayController {
     w.windowLevel = .alert + 1
     w.backgroundColor = .clear
 
-    let host = UIHostingController(rootView: OverlayMorselView())
+    let host = UIHostingController(rootView: OverlayMorselView(configuration: configuration))
     host.view.backgroundColor = .clear
     w.rootViewController = host
 
@@ -24,6 +25,11 @@ final class OverlayController {
     w.makeKeyAndVisible()          // must be key to receive touches
     self.window = w
     self.host = host
+  }
+
+  func configure(_ configuration: MorselConfiguration) {
+    self.configuration = configuration
+    host?.rootView = OverlayMorselView(configuration: configuration)
   }
 
   func updateInteractiveRect(_ rectInWindow: CGRect?) {
@@ -45,6 +51,34 @@ final class OverlayController {
     window?.rootViewController = nil
     window = nil
     host = nil
+  }
+}
+
+struct MorselConfiguration {
+  var shouldOpen: Binding<Bool>
+  var shouldClose: Binding<Bool>
+  var isChoosingDestination: Binding<Bool>
+  var destinationProximity: Binding<CGFloat>
+  var keyboardHeight: Binding<CGFloat>
+  var isKeyboardVisible: Binding<Bool>
+  var destinationPickerHeight: Binding<CGFloat>
+  var isLookingUp: Binding<Bool>
+  var onTap: () -> Void
+  var onAdd: (String) -> Void
+
+  static var empty: MorselConfiguration {
+    .init(
+      shouldOpen: .constant(false),
+      shouldClose: .constant(false),
+      isChoosingDestination: .constant(false),
+      destinationProximity: .constant(0),
+      keyboardHeight: .constant(0),
+      isKeyboardVisible: .constant(false),
+      destinationPickerHeight: .constant(0),
+      isLookingUp: .constant(false),
+      onTap: {},
+      onAdd: { _ in }
+    )
   }
 }
 
@@ -74,38 +108,45 @@ struct WindowFrameReporter: UIViewRepresentable {
 
 private struct OverlayMorselView: View {
   @ObservedObject private var appSettings = AppSettings.shared
-  @State private var shouldOpen = false
-  @State private var shouldClose = false
-  @State private var isChoosingDestination = false
-  @State private var destinationProximity: CGFloat = 0
-  @State private var isLookingUp = false
+  let configuration: MorselConfiguration
 
   var body: some View {
-    // Full-screen layout, mascot pinned bottom
-    MorselView(
-      shouldOpen: $shouldOpen,
-      shouldClose: $shouldClose,
-      isChoosingDestination: $isChoosingDestination,
-      destinationProximity: $destinationProximity,
-      isLookingUp: $isLookingUp,
-      morselColor: appSettings.morselColor,
-      onTap: { /* mascot tap */ },
-      onAdd: { _ in }
-    )
+    GeometryReader { geo in
+      MorselView(
+        shouldOpen: configuration.shouldOpen,
+        shouldClose: configuration.shouldClose,
+        isChoosingDestination: configuration.isChoosingDestination,
+        destinationProximity: configuration.destinationProximity,
+        isLookingUp: configuration.isLookingUp,
+        morselColor: appSettings.morselColor,
+        onTap: configuration.onTap,
+        onAdd: configuration.onAdd
+      )
+      .scaleEffect(configuration.isChoosingDestination.wrappedValue ? 2 : 1)
+      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+      .offset(y: offsetY)
+      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+    }
     .environmentObject(appSettings)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-    // Ensure only the mascot is hittable; everything else passes through
     .background(
-      // Place the reporter exactly where the mascot actually draws.
-      // If MorselView has an internal container for the tappable area,
-      // attach the reporter *inside* that container instead.
       WindowFrameReporter { rectInWindow in
         OverlayController.shared.updateInteractiveRect(rectInWindow)
       }
-      .frame(width: 1, height: 1) // tiny; just needs to share the same parent
-      .allowsHitTesting(false)
-      , alignment: .bottom // align with the mascot
+      .frame(width: 1, height: 1)
+      .allowsHitTesting(false),
+      alignment: .bottom
     )
+  }
+
+  private var offsetY: CGFloat {
+    if configuration.isChoosingDestination.wrappedValue {
+      return -(configuration.destinationPickerHeight.wrappedValue / 2 + 40)
+    } else if configuration.isKeyboardVisible.wrappedValue {
+      return -(configuration.keyboardHeight.wrappedValue / 2)
+    } else {
+      return 0
+    }
   }
 }
 final class SelectiveHitWindow: UIWindow {

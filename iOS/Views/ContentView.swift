@@ -106,6 +106,26 @@ struct ContentView: View {
     }
     .onAppear {
       onAppear()
+      OverlayController.shared.configure(
+        .init(
+          shouldOpen: _shouldOpenMouth,
+          shouldClose: $shouldCloseMouth,
+          isChoosingDestination: $isChoosingDestination,
+          destinationProximity: $destinationProximity,
+          keyboardHeight: $keyboardHeight,
+          isKeyboardVisible: $isKeyboardVisible,
+          destinationPickerHeight: $destinationPickerHeight,
+          isLookingUp: Binding(get: { isLookingUp }, set: { _ in }),
+          onTap: {
+            if showStats { withAnimation { showStats = false } }
+            if showExtras { withAnimation { showExtras = false } }
+          },
+          onAdd: { text in
+            entryText = text
+            withAnimation { isChoosingDestination = true }
+          }
+        )
+      )
       if !hasSeenOnboarding {
         showOnboarding = true
       }
@@ -151,41 +171,6 @@ struct ContentView: View {
 private extension ContentView {
   var isLookingUp: Bool {
     showStats || showExtras
-  }
-
-  var morsel: some View {
-    GeometryReader { geo in
-      MorselView(
-        shouldOpen: _shouldOpenMouth,
-        shouldClose: $shouldCloseMouth,
-        isChoosingDestination: $isChoosingDestination,
-        destinationProximity: $destinationProximity,
-        isLookingUp: .constant(isLookingUp),
-        morselColor: appSettings.morselColor,
-        onTap: {
-          if showStats { withAnimation { showStats = false } }
-          if showExtras { withAnimation { showExtras = false } }
-        },
-        onAdd: { text in
-          entryText = text
-          withAnimation { isChoosingDestination = true }
-        }
-      )
-      .scaleEffect(isChoosingDestination ? 2 : 1)
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-      .offset(y: offsetY)
-      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
-    }
-  }
-
-  var offsetY: CGFloat {
-    if isChoosingDestination {
-      return -(destinationPickerHeight / 2 + 40)
-    } else if isKeyboardVisible {
-      return -(keyboardHeight / 2)
-    } else {
-      return 0
-    }
   }
 
   @ViewBuilder
