@@ -11,6 +11,7 @@ struct ExtrasView: View {
   @State private var showColorSheet = false
   @State private var showIconSheet = false
   @State private var showThemeSheet = false
+  @State private var showOnboarding = false
 
   var onClearAll: () -> Void
 
@@ -41,6 +42,13 @@ struct ExtrasView: View {
           icon: "questionmark.app.dashed",
           description: "Choose a different app icon for Morsel.",
           onTap: { showIconSheet = true }
+        )
+        CardView(
+          title: "",
+          value: "Onboarding",
+          icon: "info.circle",
+          description: "View the welcome screens again.",
+          onTap: { showOnboarding = true }
         )
         CardView(
           title: "",
@@ -122,6 +130,11 @@ struct ExtrasView: View {
         .onAppear {
           Analytics.track(ScreenViewIcon())
         }
+    }
+    .sheet(isPresented: $showOnboarding) {
+      OnboardingView(pages: 3) {
+        showOnboarding = false
+      }
     }
     .sheet(isPresented: $showThemeSheet) {
       ThemePickerView()
