@@ -95,7 +95,6 @@ struct ContentView: View {
       }
     }
     .overlay(alignment: .top) { bottomBar }
-    .overlay(alignment: .bottom) { morsel }
     .overlay(alignment: .bottom) {
       if showUndoToast {
         UndoToastView {

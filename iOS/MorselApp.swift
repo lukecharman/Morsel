@@ -18,10 +18,6 @@ struct MorselApp: App {
 
   let notificationsManager = NotificationsManager()
 
-  init() {
-    OverlayController.shared.show()
-  }
-
   var body: some Scene {
     WindowGroup {
       ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest, deepLinkDigestOffset: $digestOffset)
@@ -31,7 +27,8 @@ struct MorselApp: App {
         .onOpenURL { handleDeepLink($0) }
         .onAppear { launch() }
         .onChange(of: scenePhase) { _, phase in
-          if phase == .active {
+          if phase == .active, let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            OverlayController.shared.show(in: windowScene)
             notificationsManager.runCatchUpCheck()
           }
         }
