@@ -111,7 +111,7 @@ private struct OverlayMorselView: View {
   let configuration: MorselConfiguration
 
   var body: some View {
-    GeometryReader { geo in
+    GeometryReader { _ in
       MorselView(
         shouldOpen: configuration.shouldOpen,
         shouldClose: configuration.shouldClose,
@@ -122,21 +122,20 @@ private struct OverlayMorselView: View {
         onTap: configuration.onTap,
         onAdd: configuration.onAdd
       )
+      .fixedSize()
       .scaleEffect(configuration.isChoosingDestination.wrappedValue ? 2 : 1)
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+      .background(
+        WindowFrameReporter { rectInWindow in
+          OverlayController.shared.updateInteractiveRect(rectInWindow)
+        }
+        .allowsHitTesting(false)
+      )
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
     }
     .environmentObject(appSettings)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-    .background(
-      WindowFrameReporter { rectInWindow in
-        OverlayController.shared.updateInteractiveRect(rectInWindow)
-      }
-      .frame(width: 1, height: 1)
-      .allowsHitTesting(false),
-      alignment: .bottom
-    )
   }
 
   private var offsetY: CGFloat {
