@@ -95,12 +95,12 @@ struct WindowFrameReporter: UIViewRepresentable {
   func updateUIView(_ view: UIView, context: Context) {
     // Defer to next runloop so layout is final.
     DispatchQueue.main.async {
-      guard let window = view.window else {
+      guard let window = view.window, let superview = view.superview else {
         onChange(nil)
         return
       }
-      // Convert the reporter's bounds into window coordinates.
-      let frameInWindow = view.convert(view.bounds, to: window)
+      // Account for transforms like scale or offset by using the view's frame.
+      let frameInWindow = superview.convert(view.frame, to: window)
       onChange(frameInWindow)
     }
   }
@@ -152,8 +152,9 @@ final class SelectiveHitWindow: UIWindow {
   /// Window-space hit area. If empty, everything passes through.
   var interactivePath: UIBezierPath = .init()
 
-  override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-    interactivePath.contains(point)
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard interactivePath.contains(point) else { return nil }
+    return super.hitTest(point, with: event)
   }
 
   // Optional: allow hardware keyboard to stay with underlying window.
