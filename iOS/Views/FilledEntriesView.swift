@@ -10,8 +10,6 @@ struct FilledEntriesView: View {
 
   @Binding var scrollOffset: CGFloat
   @Binding var isDraggingHorizontally: Bool
-  @Binding var isChoosingDestination: Bool
-  @Binding var entryText: String
 
   let onTap: () -> Void
   let onScroll: (CGPoint) -> Void
@@ -67,7 +65,6 @@ struct FilledEntriesView: View {
       )
     }
     .scrollDisabled(shouldBlurBackground)
-    .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .onAppear {
       Analytics.track(ScreenViewFilledEntries(count: entries.count))
     }

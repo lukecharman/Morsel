@@ -20,15 +20,11 @@ struct ContentView: View {
   @State private var scrollOffset: CGFloat = 0
   @State private var isDraggingHorizontally = false
   @State private var isKeyboardVisible = false
-  @State private var keyboardHeight: CGFloat = 0
-  @State private var entryText: String = ""
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
   @State private var showDigest = false
   @State private var shouldCloseMouth: Bool = false
-  @State private var destinationProximity: CGFloat = 0
-  @State private var destinationPickerHeight: CGFloat = 0
   @State private var recentlyDeleted: FoodEntry?
   @State private var showUndoToast = false
   @State private var undoWorkItem: DispatchWorkItem?
@@ -48,35 +44,6 @@ struct ContentView: View {
         }
       }
 
-      if isChoosingDestination {
-        DestinationPickerView(
-          onPick: { isForMorsel in
-            add(entryText, isForMorsel: isForMorsel)
-            entryText = ""
-            withAnimation {
-              isChoosingDestination = false
-            }
-          },
-          onCancel: {
-            entryText = ""
-            withAnimation {
-              isChoosingDestination = false
-            }
-          },
-          onDrag: { position in
-            withAnimation {
-              destinationProximity = position
-            }
-          }
-        )
-        .frame(maxHeight: .infinity)
-        .ignoresSafeArea()
-        .background(
-          HeightReader { height in
-            destinationPickerHeight = height
-          }
-        )
-      }
     }
     .overlay {
       sidePanelView(alignment: .leading, isVisible: showStats) {
@@ -106,22 +73,24 @@ struct ContentView: View {
     }
     .onAppear {
       onAppear()
+      OverlayController.shared.configure(
+        .init(
+          shouldOpen: _shouldOpenMouth,
+          shouldClose: $shouldCloseMouth,
+          isChoosingDestination: $isChoosingDestination,
+          isKeyboardVisible: $isKeyboardVisible,
+          isLookingUp: Binding(get: { isLookingUp }, set: { _ in }),
+          onTap: {
+            if showStats { withAnimation { showStats = false } }
+            if showExtras { withAnimation { showExtras = false } }
+          },
+          onAdd: { text, isForMorsel in
+            add(text, isForMorsel: isForMorsel)
+          }
+        )
+      )
       if !hasSeenOnboarding {
         showOnboarding = true
-      }
-    }
-    .onReceive(NotificationPublishers.keyboardWillShow) { notification in
-      if let height = extractKeyboardHeight(from: notification) {
-        withAnimation {
-          keyboardHeight = height
-          isKeyboardVisible = true
-        }
-      }
-    }
-    .onReceive(NotificationPublishers.keyboardWillHide) { _ in
-      withAnimation {
-        keyboardHeight = 0
-        isKeyboardVisible = false
       }
     }
     .sheet(isPresented: $showDigest) {
@@ -153,41 +122,6 @@ private extension ContentView {
     showStats || showExtras
   }
 
-  var morsel: some View {
-    GeometryReader { geo in
-      MorselView(
-        shouldOpen: _shouldOpenMouth,
-        shouldClose: $shouldCloseMouth,
-        isChoosingDestination: $isChoosingDestination,
-        destinationProximity: $destinationProximity,
-        isLookingUp: .constant(isLookingUp),
-        morselColor: appSettings.morselColor,
-        onTap: {
-          if showStats { withAnimation { showStats = false } }
-          if showExtras { withAnimation { showExtras = false } }
-        },
-        onAdd: { text in
-          entryText = text
-          withAnimation { isChoosingDestination = true }
-        }
-      )
-      .scaleEffect(isChoosingDestination ? 2 : 1)
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-      .offset(y: offsetY)
-      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
-    }
-  }
-
-  var offsetY: CGFloat {
-    if isChoosingDestination {
-      return -(destinationPickerHeight / 2 + 40)
-    } else if isKeyboardVisible {
-      return -(keyboardHeight / 2)
-    } else {
-      return 0
-    }
-  }
-
   @ViewBuilder
   var bottomBar: some View {
     if !isKeyboardVisible && !isChoosingDestination {
@@ -215,8 +149,6 @@ private extension ContentView {
       shouldBlurBackground: shouldBlurBackground,
       scrollOffset: $scrollOffset,
       isDraggingHorizontally: $isDraggingHorizontally,
-      isChoosingDestination: $isChoosingDestination,
-      entryText: $entryText,
       onTap: {
         if shouldBlurBackground {
           shouldOpenMouth = false
@@ -376,17 +308,6 @@ private extension ContentView {
         print("Failed to send meal to Watch: \(error)")
       })
     }
-  }
-
-  func extractKeyboardHeight(from notification: Notification) -> CGFloat? {
-    guard
-      let userInfo = notification.userInfo,
-      let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
-    else {
-      return nil
-    }
-
-    return frame.height
   }
 
   @ViewBuilder
