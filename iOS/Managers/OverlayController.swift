@@ -214,8 +214,12 @@ final class SelectiveHitWindow: UIWindow {
   /// Window-space hit area. If empty, everything passes through.
   var interactivePath: UIBezierPath = .init()
 
+  override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    interactivePath.contains(point)
+  }
+
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard interactivePath.contains(point) else { return nil }
+    guard point(inside: point, with: event) else { return nil }
     return super.hitTest(point, with: event)
   }
 
