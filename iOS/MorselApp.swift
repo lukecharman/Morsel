@@ -25,9 +25,19 @@ struct MorselApp: App {
         .modelContainer(.morsel)
         .preferredColorScheme(appSettings.appTheme.colorScheme)
         .onOpenURL { handleDeepLink($0) }
-        .onAppear { launch() }
+        .onAppear {
+          launch()
+          if let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) {
+            OverlayController.shared.show(in: windowScene)
+          }
+        }
         .onChange(of: scenePhase) { _, phase in
-          if phase == .active, let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+          if phase == .active,
+             let windowScene = UIApplication.shared.connectedScenes
+              .compactMap({ $0 as? UIWindowScene })
+              .first(where: { $0.activationState == .foregroundActive }) {
             OverlayController.shared.show(in: windowScene)
             notificationsManager.runCatchUpCheck()
           }
