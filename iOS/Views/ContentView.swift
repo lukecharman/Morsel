@@ -166,6 +166,7 @@ private extension ContentView {
         isChoosingDestination: $isChoosingDestination,
         destinationProximity: $destinationProximity,
         isLookingUp: .constant(isLookingUp),
+        isOnboardingVisible: $showOnboarding,
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }
@@ -176,7 +177,6 @@ private extension ContentView {
           withAnimation { isChoosingDestination = true }
         }
       )
-      .scaleEffect(isChoosingDestination ? 2 : 1)
       .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
@@ -195,7 +195,7 @@ private extension ContentView {
 
   @ViewBuilder
   var bottomBar: some View {
-    if !isKeyboardVisible && !isChoosingDestination {
+    if !isKeyboardVisible && !isChoosingDestination && !showOnboarding {
       BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,

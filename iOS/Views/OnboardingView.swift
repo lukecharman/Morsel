@@ -19,6 +19,7 @@ struct OnboardingView: View {
                 onClose()
               }
               .padding()
+              .padding(.bottom, 40)
             } else {
               Button("Next") {
                 withAnimation {
