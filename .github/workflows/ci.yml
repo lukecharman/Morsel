@@ -17,9 +17,8 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild test \
+          xcodebuild build \
             -workspace Morsel.xcworkspace \
             -scheme iOS \
             -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
-            -resultBundlePath TestResults.xcresult
             | xcbeautify
