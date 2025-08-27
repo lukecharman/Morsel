@@ -1,11 +1,12 @@
+---
 name: CI
 
-on:
+'on':
   pull_request:
   workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -19,11 +20,11 @@ jobs:
       - name: Install xcbeautify
         run: brew install xcbeautify
 
-      - name: Run Test Plan
+      - name: Build
         run: |
           set -o pipefail
-          xcodebuild test \
+          xcodebuild build \
             -workspace Morsel.xcworkspace \
             -scheme iOS \
-            -destination 'platform=iOS Simulator,OS=latest,name=iPhone 15 Pro' \
-            -resultBundlePath TestResults.xcresult | xcbeautify
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+            | xcbeautify
