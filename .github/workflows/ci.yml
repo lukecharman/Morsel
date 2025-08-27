@@ -14,8 +14,10 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Select Xcode
-        run: xcodes list
+      - name: Dir
+        run: |
+          cd /Applications
+          ls -al
 
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_26_beta_6.app/Contents/Developer  
