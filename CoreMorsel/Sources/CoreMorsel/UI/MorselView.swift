@@ -236,7 +236,7 @@ public struct MorselView: View {
           perspective: 0.5
         )
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
-        .offset(isOpen ? .zero : idleOffset)
+        .offset(faceOffset)
     }
     .scaleEffect(isChoosingDestination || isOnboardingVisible ? 2 : 1)
     .padding(.bottom, 6)
@@ -255,6 +255,14 @@ public struct MorselView: View {
       if oldValue == false && newValue == true {
         close()
       }
+    }
+  }
+
+  var faceOffset: CGSize {
+    if isOnboardingVisible {
+      return CGSize(width: 0, height: -200)
+    } else {
+      return isOpen ? .zero : idleOffset
     }
   }
 
@@ -308,7 +316,7 @@ public struct MorselView: View {
               withAnimation {
                 isBeingTouched = false
               }
-              if !isChoosingDestination {
+              if !isChoosingDestination && !isOnboardingVisible {
                 onTap?()
 
                 if isOpen {
