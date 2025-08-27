@@ -13,7 +13,7 @@ struct ExtrasView: View {
   @State private var showThemeSheet = false
 
   var onClearAll: () -> Void
-  var onShowOnboarding: () -> Void
+  var onShowWelcome: () -> Void
 
 #if DEBUG
   @State private var showDebugMenu = false
@@ -59,10 +59,10 @@ struct ExtrasView: View {
         )
         CardView(
           title: "",
-          value: "Onboarding",
-          icon: "rectangle.fill.on.rectangle.fill",
-          description: "View the onboarding again.",
-          onTap: { onShowOnboarding() }
+          value: "Welcome",
+          icon: "hand.wave",
+          description: "View the welcome again.",
+          onTap: { onShowWelcome() }
         )
 #if DEBUG
         CardView(
@@ -158,6 +158,6 @@ struct ExtrasView: View {
 }
 
 #Preview {
-  ExtrasView(onClearAll: {}, onShowOnboarding: {})
+  ExtrasView(onClearAll: {}, onShowWelcome: {})
     .background(Color(.systemGroupedBackground))
 }

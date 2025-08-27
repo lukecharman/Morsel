@@ -111,6 +111,7 @@ public struct MorselView: View {
   @Binding var destinationProximity: CGFloat
   @Binding var isLookingUp: Bool
   @Binding var isOnboardingVisible: Bool
+  @Binding var onboardingPage: Double
 
   @EnvironmentObject var appSettings: AppSettings
 
@@ -145,6 +146,7 @@ public struct MorselView: View {
     destinationProximity: Binding<CGFloat>,
     isLookingUp: Binding<Bool>,
     isOnboardingVisible: Binding<Bool> = .constant(false),
+    onboardingPage: Binding<Double> = .constant(0),
     morselColor: Color,
     supportsOpen: Bool = true,
     onTap: (() -> Void)? = nil,
@@ -158,6 +160,7 @@ public struct MorselView: View {
     _destinationProximity = destinationProximity
     _isLookingUp = isLookingUp
     _isOnboardingVisible = isOnboardingVisible
+    _onboardingPage = onboardingPage
     self.morselColor = morselColor
     self.supportsOpen = supportsOpen
     self.onTap = onTap
@@ -238,7 +241,14 @@ public struct MorselView: View {
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
         .offset(faceOffset)
     }
-    .scaleEffect(isChoosingDestination || isOnboardingVisible ? 2 : 1)
+    .scaleEffect(
+      isChoosingDestination
+        ? 2
+        : isOnboardingVisible
+          ? max(1, min(2, 2 - 0.5 * onboardingPage))
+          : 1
+    )
+    .animation(.easeInOut(duration: 0.2), value: onboardingPage)
     .padding(.bottom, 6)
     .onAppear {
       startBlinking()
