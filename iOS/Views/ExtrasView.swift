@@ -77,7 +77,7 @@ struct ExtrasView: View {
           value: "Crash",
           icon: "exclamationmark.triangle.fill",
           description: "Test crashing the app.",
-          onTap: { let x = ["A"][3] }
+          onTap: { let _ = ["A"][3] }
         )
 #endif
       }
