@@ -11,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install xcbeautify
-        run: brew install xcbeautify
-
       - name: Show Xcode version
         run: xcodebuild -version
 
