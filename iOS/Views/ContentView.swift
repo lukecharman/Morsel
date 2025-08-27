@@ -26,6 +26,7 @@ struct ContentView: View {
   @State private var showStats = false
   @State private var showExtras = false
   @State private var showDigest = false
+  @State private var showOnboarding = false
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
   @State private var destinationPickerHeight: CGFloat = 0
@@ -90,6 +91,21 @@ struct ContentView: View {
           withAnimation {
             showExtras = false
           }
+        } onShowOnboarding: {
+          withAnimation {
+            showExtras = false
+            showOnboarding = true
+          }
+        }
+      }
+    }
+    .overlay {
+      bottomPanelView(isVisible: showOnboarding) {
+        OnboardingView() {
+          withAnimation {
+            showOnboarding = false
+          }
+          hasSeenOnboarding = true
         }
       }
     }
@@ -150,6 +166,7 @@ private extension ContentView {
         isChoosingDestination: $isChoosingDestination,
         destinationProximity: $destinationProximity,
         isLookingUp: .constant(isLookingUp),
+        isOnboardingVisible: $showOnboarding,
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }
@@ -160,7 +177,6 @@ private extension ContentView {
           withAnimation { isChoosingDestination = true }
         }
       )
-      .scaleEffect(isChoosingDestination ? 2 : 1)
       .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
@@ -179,7 +195,7 @@ private extension ContentView {
 
   @ViewBuilder
   var bottomBar: some View {
-    if !isKeyboardVisible && !isChoosingDestination {
+    if !isKeyboardVisible && !isChoosingDestination && !showOnboarding {
       BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,
@@ -228,7 +244,7 @@ private extension ContentView {
   }
 
   var shouldBlurBackground: Bool {
-    isKeyboardVisible || isChoosingDestination || showStats || showExtras
+    isKeyboardVisible || isChoosingDestination || showStats || showExtras || showOnboarding
   }
 }
 
@@ -240,6 +256,9 @@ private extension ContentView {
   func onAppear() {
     if shouldGenerateFakeData {
       generateFakeEntries()
+    }
+    if !hasSeenOnboarding {
+      showOnboarding = true
     }
     NotificationCenter.default.addObserver(
       forName: NSPersistentCloudKitContainer.eventChangedNotification,
@@ -405,6 +424,23 @@ private extension ContentView {
                 }
               }
           )
+      }
+    }
+  }
+
+  @ViewBuilder
+  func bottomPanelView<Content: View>(
+    isVisible: Bool,
+    @ViewBuilder content: @escaping () -> Content
+  ) -> some View {
+    ZStack {
+      if isVisible {
+        Color.black.opacity(0.25)
+          .ignoresSafeArea()
+        content()
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+          .transition(.move(edge: .bottom))
+          .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isVisible)
       }
     }
   }

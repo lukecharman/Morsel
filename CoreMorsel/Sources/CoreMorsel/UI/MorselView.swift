@@ -110,6 +110,7 @@ public struct MorselView: View {
   @Binding var isChoosingDestination: Bool
   @Binding var destinationProximity: CGFloat
   @Binding var isLookingUp: Bool
+  @Binding var isOnboardingVisible: Bool
 
   @EnvironmentObject var appSettings: AppSettings
 
@@ -143,6 +144,7 @@ public struct MorselView: View {
     isChoosingDestination: Binding<Bool>,
     destinationProximity: Binding<CGFloat>,
     isLookingUp: Binding<Bool>,
+    isOnboardingVisible: Binding<Bool> = .constant(false),
     morselColor: Color,
     supportsOpen: Bool = true,
     onTap: (() -> Void)? = nil,
@@ -155,6 +157,7 @@ public struct MorselView: View {
     _isChoosingDestination = isChoosingDestination
     _destinationProximity = destinationProximity
     _isLookingUp = isLookingUp
+    _isOnboardingVisible = isOnboardingVisible
     self.morselColor = morselColor
     self.supportsOpen = supportsOpen
     self.onTap = onTap
@@ -233,8 +236,9 @@ public struct MorselView: View {
           perspective: 0.5
         )
         .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
-        .offset(isOpen ? .zero : idleOffset)
+        .offset(faceOffset)
     }
+    .scaleEffect(isChoosingDestination || isOnboardingVisible ? 2 : 1)
     .padding(.bottom, 6)
     .onAppear {
       startBlinking()
@@ -251,6 +255,14 @@ public struct MorselView: View {
       if oldValue == false && newValue == true {
         close()
       }
+    }
+  }
+
+  var faceOffset: CGSize {
+    if isOnboardingVisible {
+      return CGSize(width: 0, height: -200)
+    } else {
+      return isOpen ? .zero : idleOffset
     }
   }
 
@@ -304,7 +316,7 @@ public struct MorselView: View {
               withAnimation {
                 isBeingTouched = false
               }
-              if !isChoosingDestination {
+              if !isChoosingDestination && !isOnboardingVisible {
                 onTap?()
 
                 if isOpen {
