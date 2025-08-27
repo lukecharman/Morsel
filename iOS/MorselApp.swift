@@ -50,7 +50,7 @@ struct MorselApp: App {
     case "digest":
       if let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
          let offStr = items.first(where: { $0.name == "offset" })?.value,
-         let off = Int(offStr ?? "") {
+         let off = Int(offStr) {
         digestOffset = off
       } else {
         digestOffset = nil
