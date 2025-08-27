@@ -27,6 +27,7 @@ struct ContentView: View {
   @State private var showExtras = false
   @State private var showDigest = false
   @State private var showOnboarding = false
+  @State private var onboardingPage: Double = 0
   @State private var shouldCloseMouth: Bool = false
   @State private var destinationProximity: CGFloat = 0
   @State private var destinationPickerHeight: CGFloat = 0
@@ -91,7 +92,7 @@ struct ContentView: View {
           withAnimation {
             showExtras = false
           }
-        } onShowOnboarding: {
+        } onShowWelcome: {
           withAnimation {
             showExtras = false
             showOnboarding = true
@@ -101,11 +102,12 @@ struct ContentView: View {
     }
     .overlay {
       bottomPanelView(isVisible: showOnboarding) {
-        OnboardingView() {
+        OnboardingView(page: $onboardingPage) {
           withAnimation {
             showOnboarding = false
           }
           hasSeenOnboarding = true
+          onboardingPage = 0
         }
       }
     }
@@ -167,6 +169,7 @@ private extension ContentView {
         destinationProximity: $destinationProximity,
         isLookingUp: .constant(isLookingUp),
         isOnboardingVisible: $showOnboarding,
+        onboardingPage: $onboardingPage,
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }
