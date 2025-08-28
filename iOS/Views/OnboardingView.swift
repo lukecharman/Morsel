@@ -29,6 +29,7 @@ struct OnboardingView: View {
 
   @State private var currentPage = 0
   @State private var didSpeakGreeting = false
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     GeometryReader { geo in
@@ -36,17 +37,21 @@ struct OnboardingView: View {
 
       ZStack {
         TabView(selection: $currentPage) {
-          ForEach(Array(pages.enumerated()), id: \.offset) { index, page in
+          ForEach(Array(pages.enumerated()), id: \.offset) { index, content in
             VStack(spacing: 24) {
               Spacer()
-              Text(page.title)
+              Text(content.title)
                 .font(MorselFont.title)
                 .foregroundStyle(appSettings.morselColor)
-              Text(page.message)
+                .offset(x: reduceMotion ? 0 : CGFloat(-(self.page - Double(index)) * Double(width) * 0.25))
+                .animation(.interactiveSpring(response: 0.45, dampingFraction: 0.82), value: self.page)
+              Text(content.message)
                 .font(MorselFont.body)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
                 .padding(.vertical, 56)
+                .offset(x: reduceMotion ? 0 : CGFloat(-(self.page - Double(index)) * Double(width) * 0.12))
+                .animation(.interactiveSpring(response: 0.45, dampingFraction: 0.86), value: self.page)
             }
             .tag(index)
             .onAppear {
@@ -131,4 +136,3 @@ struct OnboardingView: View {
 #Preview {
   OnboardingView(page: .constant(0), onClose: {})
 }
-
