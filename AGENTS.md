@@ -10,9 +10,6 @@ These instructions apply to all files unless overridden by a nested `AGENTS.md`.
 - Practise safe, modern Swift 6 concurrency.
 - Target iOS 18, but make use of iOS 26's new APIs and Liquid Glass where beneficial.
 - Do not run `swift test` or `swift build` – they will always fail.
-- After completing a task, run xcodebuild like this so I see it in my Simulator.
-`xcodebuild build -workspace Morsel.xcworkspace -scheme iOS -destination 'platform=iOS Simulator,name=iPhone 16 Pro'`
-- If the build fails, iterate until it is fixed, do not stop working until we have a working build.
 
 ## Code Style
 - Indentation uses **two spaces**. No tabs.
