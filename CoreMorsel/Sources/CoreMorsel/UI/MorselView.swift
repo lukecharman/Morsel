@@ -1,5 +1,24 @@
 import SwiftUI
 
+// MARK: - Positioning Anchor
+
+public struct MorselAnchor: Equatable {
+  public enum Edge: Equatable {
+    case top
+    case bottom
+    case left
+    case right
+  }
+
+  public var edge: Edge
+  public var padding: CGFloat
+
+  public init(edge: Edge, padding: CGFloat) {
+    self.edge = edge
+    self.padding = padding
+  }
+}
+
 public enum MorselDebugControlMode {
   case automatic
   case manual
@@ -132,6 +151,9 @@ public struct MorselView: View {
 
   @FocusState private var isFocused: Bool
 
+  // Controls on-screen positioning
+  @Binding var anchor: MorselAnchor?
+
   var morselColor: Color
   var supportsOpen: Bool = true
 
@@ -150,6 +172,7 @@ public struct MorselView: View {
     isOnboardingVisible: Binding<Bool> = .constant(false),
     onboardingPage: Binding<Double> = .constant(0),
     speaker: MorselSpeaker = .init(),
+    anchor: Binding<MorselAnchor?> = .constant(nil),
     morselColor: Color,
     supportsOpen: Bool = true,
     onTap: (() -> Void)? = nil,
@@ -165,6 +188,7 @@ public struct MorselView: View {
     _isOnboardingVisible = isOnboardingVisible
     _onboardingPage = onboardingPage
     self.speaker = speaker
+    _anchor = anchor
     self.morselColor = morselColor
     self.supportsOpen = supportsOpen
     self.onTap = onTap
@@ -210,55 +234,12 @@ public struct MorselView: View {
   }
 
   public var body: some View {
-    ZStack(alignment: .bottom) {
-      SpeechBubble(
-        isOpen: $isOpen,
-        isBeingTouched: $isBeingTouched,
-        playAnimation: $playSpeechBubbleAnimation,
-        message: $speaker.message
-      )
-        .offset(y: -80)
-        .zIndex(1)
-      face
-        .offset(dragOffset)
-        .rotation3DEffect(
-          .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
-          axis: (x: 1, y: 0, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .scaleEffect(1.0 - 0.05 * sadnessLevel)
-        .shadow(radius: 10 - sadnessLevel * 7)
-        .rotation3DEffect(
-          .degrees(isOpen ? 0 : idleLookaroundOffset),
-          axis: (x: 0, y: 1, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .rotation3DEffect(
-          .degrees(destinationProximity < 0 ? destinationProximity * 25 : 0),
-          axis: (x: 1, y: 0, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .rotation3DEffect(
-          .degrees(destinationProximity > 0 ? -destinationProximity * -25 : (isLookingUp ? -20 : 0)),
-          axis: (x: 1, y: 0, z: 0),
-          anchor: .center,
-          perspective: 0.5
-        )
-        .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
-        .offset(faceOffset)
+    GeometryReader { _ in
+      content
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignmentForAnchor)
+        .padding(paddingForAnchor)
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: anchor)
     }
-    .scaleEffect(
-      isChoosingDestination
-        ? 2
-        : isOnboardingVisible
-          ? max(1, min(2, 2 - 0.5 * onboardingPage))
-          : 1
-    )
-    .animation(.easeInOut(duration: 0.2), value: onboardingPage)
-    .padding(.bottom, 6)
     .onAppear {
       startBlinking()
       startIdleWiggle()
@@ -300,6 +281,28 @@ public struct MorselView: View {
         break
       }
     }
+  }
+
+  private var content: some View {
+    VStack(spacing: 8) {
+      SpeechBubble(
+        isOpen: $isOpen,
+        isBeingTouched: $isBeingTouched,
+        playAnimation: $playSpeechBubbleAnimation,
+        message: $speaker.message
+      )
+      face
+    }
+    .offset(dragOffset)
+    .offset(faceOffset)
+    .scaleEffect(
+      isChoosingDestination
+        ? 2
+        : isOnboardingVisible
+          ? max(1, min(2, 2 - 0.5 * onboardingPage))
+          : 1
+    )
+    .animation(.easeInOut(duration: 0.2), value: onboardingPage)
   }
 
   var faceOffset: CGSize {
@@ -390,6 +393,55 @@ public struct MorselView: View {
             playSpeechBubbleAnimation = true
           }
       )
+    }
+    .rotation3DEffect(
+      .degrees(isSwallowing ? -20 : -10 * sadnessLevel),
+      axis: (x: 1, y: 0, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
+    .scaleEffect(1.0 - 0.05 * sadnessLevel)
+    .shadow(radius: 10 - sadnessLevel * 7)
+    .rotation3DEffect(
+      .degrees(isOpen ? 0 : idleLookaroundOffset),
+      axis: (x: 0, y: 1, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
+    .rotation3DEffect(
+      .degrees(destinationProximity < 0 ? destinationProximity * 25 : 0),
+      axis: (x: 1, y: 0, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
+    .rotation3DEffect(
+      .degrees(destinationProximity > 0 ? -destinationProximity * -25 : (isLookingUp ? -20 : 0)),
+      axis: (x: 1, y: 0, z: 0),
+      anchor: .center,
+      perspective: 0.5
+    )
+    .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
+  }
+
+  // MARK: - Anchor helpers
+
+  private var alignmentForAnchor: Alignment {
+    guard let anchor else { return .center }
+    switch anchor.edge {
+    case .top: return .top
+    case .bottom: return .bottom
+    case .left: return .leading
+    case .right: return .trailing
+    }
+  }
+
+  private var paddingForAnchor: EdgeInsets {
+    guard let anchor else { return EdgeInsets() }
+    switch anchor.edge {
+    case .top: return EdgeInsets(top: anchor.padding, leading: 0, bottom: 0, trailing: 0)
+    case .bottom: return EdgeInsets(top: 0, leading: 0, bottom: anchor.padding, trailing: 0)
+    case .left: return EdgeInsets(top: 0, leading: anchor.padding, bottom: 0, trailing: 0)
+    case .right: return EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: anchor.padding)
     }
   }
 
@@ -554,6 +606,7 @@ public struct MorselView: View {
       isOpen = true
       shouldOpen = false
       isFocused = true
+      anchor = nil
     }
   }
 
@@ -563,6 +616,7 @@ public struct MorselView: View {
       isOpen = false
       shouldClose = false
       isFocused = false
+      anchor = MorselAnchor(edge: .bottom, padding: 6)
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -839,4 +893,3 @@ public struct SpeechBubble: View {
   .frame(maxWidth: .infinity)
   .background(.black)
 }
-

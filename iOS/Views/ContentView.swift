@@ -35,6 +35,7 @@ struct ContentView: View {
   @State private var showUndoToast = false
   @State private var undoWorkItem: DispatchWorkItem?
   @StateObject private var morselSpeaker = MorselSpeaker()
+  @State private var morselAnchor: MorselAnchor? = .init(edge: .bottom, padding: 6)
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
@@ -174,6 +175,7 @@ private extension ContentView {
         isOnboardingVisible: $showOnboarding,
         onboardingPage: $onboardingPage,
         speaker: morselSpeaker,
+        anchor: $morselAnchor,
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }
@@ -184,7 +186,7 @@ private extension ContentView {
           withAnimation { isChoosingDestination = true }
         }
       )
-      .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+      .frame(width: geo.size.width, height: geo.size.height)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
     }
