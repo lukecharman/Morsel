@@ -112,6 +112,7 @@ public struct MorselView: View {
   @Binding var isLookingUp: Bool
   @Binding var isOnboardingVisible: Bool
   @Binding var onboardingPage: Double
+  @ObservedObject var speaker: MorselSpeaker
 
   @EnvironmentObject var appSettings: AppSettings
 
@@ -123,6 +124,7 @@ public struct MorselView: View {
   @State private var isBeingTouched = false
   @State private var text: String = ""
   @State private var playSpeechBubbleAnimation = false
+  @State private var isTalking = false
 
   @State private var didTriggerLongPress = false
 
@@ -147,6 +149,7 @@ public struct MorselView: View {
     isLookingUp: Binding<Bool>,
     isOnboardingVisible: Binding<Bool> = .constant(false),
     onboardingPage: Binding<Double> = .constant(0),
+    speaker: MorselSpeaker = .init(),
     morselColor: Color,
     supportsOpen: Bool = true,
     onTap: (() -> Void)? = nil,
@@ -161,6 +164,7 @@ public struct MorselView: View {
     _isLookingUp = isLookingUp
     _isOnboardingVisible = isOnboardingVisible
     _onboardingPage = onboardingPage
+    self.speaker = speaker
     self.morselColor = morselColor
     self.supportsOpen = supportsOpen
     self.onTap = onTap
@@ -207,7 +211,12 @@ public struct MorselView: View {
 
   public var body: some View {
     ZStack(alignment: .bottom) {
-      SpeechBubble(isOpen: $isOpen, isBeingTouched: $isBeingTouched, playAnimation: $playSpeechBubbleAnimation)
+      SpeechBubble(
+        isOpen: $isOpen,
+        isBeingTouched: $isBeingTouched,
+        playAnimation: $playSpeechBubbleAnimation,
+        message: $speaker.message
+      )
         .offset(y: -80)
         .zIndex(1)
       face
@@ -253,6 +262,12 @@ public struct MorselView: View {
     .onAppear {
       startBlinking()
       startIdleWiggle()
+    }
+    .onChange(of: speaker.message) { _, newValue in
+      if newValue != nil {
+        playSpeechBubbleAnimation = true
+        startTalking()
+      }
     }
     .onChange(of: shouldOpen) { oldValue, newValue in
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -439,7 +454,7 @@ public struct MorselView: View {
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
-        height: isOpen ? 74 : .lerp(from: 8, to: 30, by: happinessLevel)
+        height: isOpen ? 74 : (isTalking ? 20 : .lerp(from: 8, to: 30, by: happinessLevel))
       )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: (isOpen ? 16 : 24) + droopOffset - (isLookingUp ? 4 : 0))
@@ -572,6 +587,23 @@ public struct MorselView: View {
     }
   }
 
+  func startTalking() {
+    var elapsed: Double = 0
+    let interval: Double = 0.2
+    Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
+      elapsed += interval
+      withAnimation(.easeInOut(duration: 0.1)) {
+        isTalking.toggle()
+      }
+      if elapsed >= 3 {
+        timer.invalidate()
+        withAnimation(.easeInOut(duration: 0.1)) {
+          isTalking = false
+        }
+      }
+    }
+  }
+
   func startBlinking() {
     Timer.scheduledTimer(withTimeInterval: Double.random(in: 4...8), repeats: true) { _ in
       withAnimation {
@@ -668,6 +700,7 @@ public struct SpeechBubble: View {
   @Binding var isOpen: Bool
   @Binding var isBeingTouched: Bool
   @Binding var playAnimation: Bool
+  @Binding var message: String?
 
   @Namespace var union
 
@@ -679,11 +712,13 @@ public struct SpeechBubble: View {
   public init(
     isOpen: Binding<Bool>,
     isBeingTouched: Binding<Bool>,
-    playAnimation: Binding<Bool>
+    playAnimation: Binding<Bool>,
+    message: Binding<String?>
   ) {
     _isOpen = isOpen
     _isBeingTouched = isBeingTouched
     _playAnimation = playAnimation
+    _message = message
   }
 
   private let phrases = [
@@ -741,7 +776,7 @@ public struct SpeechBubble: View {
   }
 
   private func bubbleCycle() {
-    currentText = phrases.randomElement() ?? "Hi there!"
+    currentText = message ?? phrases.randomElement() ?? "Hi there!"
 
     // Animate in: small → medium → main
     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
@@ -778,6 +813,7 @@ public struct SpeechBubble: View {
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
         currentText = ""
         playAnimation = false
+        message = nil
       }
     }
   }
