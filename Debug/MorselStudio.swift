@@ -1,4 +1,5 @@
 import CoreMorsel
+import UIKit
 import SwiftUI
 
 struct MorselStudio: View {
@@ -17,29 +18,36 @@ struct MorselStudio: View {
   @State private var debugIdleOffset: CGSize = .zero
   @State private var debugLookaroundOffset: CGFloat = 0
   @State private var messageText: String = ""
+  @State private var isKeyboardVisible = false
+  @State private var keyboardHeight: CGFloat = 0
 
   var body: some View {
     VStack {
-      MorselView(
-        shouldOpen: $shouldOpen,
-        shouldClose: $shouldClose,
-        isChoosingDestination: $isChoosingDestination,
-        destinationProximity: $destinationProximity,
-        isLookingUp: $isLookingUp,
-        speaker: speaker,
-        anchor: $anchor,
-        morselColor: morselColor,
-        onAdd: { item in
-          print(item)
-        },
-        debugBindings: .init(
-          isBlinking: $debugIsBlinking,
-          isSwallowing: $debugIsSwallowing,
-          idleOffset: $debugIdleOffset,
-          idleLookaroundOffset: $debugLookaroundOffset
-        ),
-        debugControlMode: debugMode ? .manual : .automatic
-      )
+      GeometryReader { geo in
+        MorselView(
+          shouldOpen: $shouldOpen,
+          shouldClose: $shouldClose,
+          isChoosingDestination: $isChoosingDestination,
+          destinationProximity: $destinationProximity,
+          isLookingUp: $isLookingUp,
+          speaker: speaker,
+          anchor: $anchor,
+          morselColor: morselColor,
+          onAdd: { item in
+            print(item)
+          },
+          debugBindings: .init(
+            isBlinking: $debugIsBlinking,
+            isSwallowing: $debugIsSwallowing,
+            idleOffset: $debugIdleOffset,
+            idleLookaroundOffset: $debugLookaroundOffset
+          ),
+          debugControlMode: debugMode ? .manual : .automatic
+        )
+        .frame(width: geo.size.width, height: geo.size.height)
+        .offset(y: debugOffsetY)
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: debugOffsetY)
+      }
       Toggle("Is Looking Up", isOn: Binding(
         get: { isLookingUp },
         set: { newValue in
@@ -49,6 +57,7 @@ struct MorselStudio: View {
         }
       ))
       .padding(.horizontal)
+      .ignoresSafeArea(.all)
       // Anchor controls
       VStack(alignment: .leading, spacing: 12) {
         Toggle("Center (nil anchor)", isOn: Binding(
@@ -161,5 +170,35 @@ struct MorselStudio: View {
         }.padding()
       }
     }
+    .onReceive(NotificationPublishers.keyboardWillShow) { notification in
+      if let height = extractKeyboardHeight(from: notification) {
+        withAnimation {
+          keyboardHeight = height
+          isKeyboardVisible = true
+        }
+      }
+    }
+    .onReceive(NotificationPublishers.keyboardWillHide) { _ in
+      withAnimation {
+        keyboardHeight = 0
+        isKeyboardVisible = false
+      }
+    }
+  }
+}
+
+private extension MorselStudio {
+  var debugOffsetY: CGFloat {
+    isKeyboardVisible ? -(keyboardHeight / 2) : 0
+  }
+
+  func extractKeyboardHeight(from notification: Notification) -> CGFloat? {
+    guard
+      let userInfo = notification.userInfo,
+      let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+    else {
+      return nil
+    }
+    return frame.height
   }
 }

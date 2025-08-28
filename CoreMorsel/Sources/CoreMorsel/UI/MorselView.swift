@@ -240,6 +240,7 @@ public struct MorselView: View {
         .padding(paddingForAnchor)
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: anchor)
     }
+    .ignoresSafeArea(edges: ignoredSafeAreaEdges)
     .onAppear {
       startBlinking()
       startIdleWiggle()
@@ -324,7 +325,8 @@ public struct MorselView: View {
     let topColor = Color(adjustedTopColor(from: UIColor(baseColor), sadness: sadnessLevel, happiness: happinessLevel))
 
     return ZStack {
-      Color.clear.frame(width: 240, height: 86)
+//      Color.clear
+//        .frame(width: 240, height: 64)
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: isOpen ? 120 : faceTopCornerRadius,
@@ -442,6 +444,16 @@ public struct MorselView: View {
     case .bottom: return EdgeInsets(top: 0, leading: 0, bottom: anchor.padding, trailing: 0)
     case .left: return EdgeInsets(top: 0, leading: anchor.padding, bottom: 0, trailing: 0)
     case .right: return EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: anchor.padding)
+    }
+  }
+
+  private var ignoredSafeAreaEdges: Edge.Set {
+    guard let anchor, anchor.padding == 0 else { return [] }
+    switch anchor.edge {
+    case .top: return [.top]
+    case .bottom: return [.bottom]
+    case .left: return [.leading]
+    case .right: return [.trailing]
     }
   }
 
