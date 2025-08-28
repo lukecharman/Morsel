@@ -1,7 +1,6 @@
 # AGENTS
 
 This repository follows a default template for top-notch iOS engineering.
-
 These instructions apply to all files unless overridden by a nested `AGENTS.md`.
 
 ## General Principles
@@ -26,6 +25,5 @@ These instructions apply to all files unless overridden by a nested `AGENTS.md`.
 - Summarize any user-facing or developer-facing changes.
 - Mention testing performed, even if minimal.
 - Run any available linters. If none are present, at least build the project to ensure there are no syntax errors.
-- There's no need to run `swift test` as it will always fail. Instead, run the unit tests via the CI workflows when opening PRs.
+- Do not run `swift test` or `swift build` – they will always fail.
 - Your runners won't work with xcodebuild so you can't run that locally – only via CI workflows on Github Actions.
-- Trigger the iOS CI workflow for the branch you are working on and ensure it passes. If not, iterate and fix it.

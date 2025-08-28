@@ -34,6 +34,7 @@ struct ContentView: View {
   @State private var recentlyDeleted: FoodEntry?
   @State private var showUndoToast = false
   @State private var undoWorkItem: DispatchWorkItem?
+  @StateObject private var morselSpeaker = MorselSpeaker()
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
@@ -102,13 +103,15 @@ struct ContentView: View {
     }
     .overlay {
       bottomPanelView(isVisible: showOnboarding) {
-        OnboardingView(page: $onboardingPage) {
+        OnboardingView(page: $onboardingPage, onClose: {
           withAnimation {
             showOnboarding = false
           }
           hasSeenOnboarding = true
           onboardingPage = 0
-        }
+        }, onSpeak: { message in
+          morselSpeaker.speak(message)
+        })
       }
     }
     .overlay(alignment: .top) { bottomBar }
@@ -170,6 +173,7 @@ private extension ContentView {
         isLookingUp: .constant(isLookingUp),
         isOnboardingVisible: $showOnboarding,
         onboardingPage: $onboardingPage,
+        speaker: morselSpeaker,
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }

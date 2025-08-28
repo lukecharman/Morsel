@@ -25,8 +25,10 @@ struct OnboardingView: View {
   @EnvironmentObject var appSettings: AppSettings
   @Binding var page: Double
   var onClose: () -> Void
+  var onSpeak: (String) -> Void = { _ in }
 
   @State private var currentPage = 0
+  @State private var didSpeakGreeting = false
 
   var body: some View {
     GeometryReader { geo in
@@ -47,6 +49,12 @@ struct OnboardingView: View {
                 .padding(.vertical, 56)
             }
             .tag(index)
+            .onAppear {
+              if index == 0 && !didSpeakGreeting {
+                onSpeak("Hi, I'm Morsel!")
+                didSpeakGreeting = true
+              }
+            }
           }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
