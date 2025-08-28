@@ -1,7 +1,28 @@
 import SwiftUI
+import CoreMorsel
+
+private struct OnboardingPage {
+  let title: String
+  let message: String
+}
 
 struct OnboardingView: View {
-  var pages: [String] = ["Page 1", "Page 2", "Page 3"]
+  private let pages: [OnboardingPage] = [
+    OnboardingPage(
+      title: "Meet Morsel",
+      message: "Your mindful eating companion who helps you handle cravings."
+    ),
+    OnboardingPage(
+      title: "Feed Your Cravings",
+      message: "Tap Morsel when a craving hits and give it a name to stay aware."
+    ),
+    OnboardingPage(
+      title: "Digest Your Progress",
+      message: "Review patterns and celebrate wins in the Digest and Stats views."
+    )
+  ]
+
+  @EnvironmentObject var appSettings: AppSettings
   @Binding var page: Double
   var onClose: () -> Void
 
@@ -13,17 +34,23 @@ struct OnboardingView: View {
 
       ZStack {
         TabView(selection: $currentPage) {
-          ForEach(Array(pages.enumerated()), id: \.offset) { index, title in
-            VStack {
+          ForEach(Array(pages.enumerated()), id: \.offset) { index, page in
+            VStack(spacing: 24) {
               Spacer()
-              Text(title)
-              Spacer()
+              Text(page.title)
+                .font(MorselFont.title)
+                .foregroundStyle(appSettings.morselColor)
+              Text(page.message)
+                .font(MorselFont.body)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.vertical, 56)
             }
             .tag(index)
           }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .onChange(of: currentPage) { newValue in
+        .onChange(of: currentPage) { _, newValue in
           withAnimation { page = Double(newValue) }
         }
         .simultaneousGesture(
@@ -74,14 +101,17 @@ struct OnboardingView: View {
           HStack(spacing: 8) {
             ForEach(0..<pages.count, id: \.self) { index in
               Circle()
-                .fill(index == Int(round(page)) ? Color.primary : Color.primary.opacity(0.3))
+                .fill(
+                  index == Int(round(page))
+                    ? appSettings.morselColor
+                    : appSettings.morselColor.opacity(0.3)
+                )
                 .frame(width: 8, height: 8)
             }
           }
           .padding(.bottom, 24)
         }
         .frame(width: geo.size.width, height: geo.size.height)
-        .foregroundStyle(.primary)
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)

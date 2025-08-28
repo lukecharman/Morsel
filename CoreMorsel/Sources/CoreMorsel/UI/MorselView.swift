@@ -266,11 +266,36 @@ public struct MorselView: View {
         close()
       }
     }
+    .onChange(of: onboardingPage) { oldValue, newValue in
+      let oldPage = Int(round(oldValue))
+      let newPage = Int(round(newValue))
+      guard oldPage != newPage else { return }
+
+      switch newPage {
+      case 0:
+        withAnimation { isOpen = false }
+        isFocused = false
+        isSwallowingInternal = false
+      case 1:
+        withAnimation { isOpen = true }
+        isFocused = false
+      case 2:
+        close()
+      default:
+        break
+      }
+    }
   }
 
   var faceOffset: CGSize {
     if isOnboardingVisible {
-      return CGSize(width: 0, height: -200)
+      if onboardingPage == 0 {
+        return CGSize(width: 0, height: -300)
+      } else if onboardingPage == 1 {
+        return CGSize(width: 0, height: -380)
+      } else {
+        return CGSize(width: 0, height: -220)
+      }
     } else {
       return isOpen ? .zero : idleOffset
     }
