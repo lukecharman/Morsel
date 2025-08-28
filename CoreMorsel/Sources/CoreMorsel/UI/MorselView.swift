@@ -289,7 +289,13 @@ public struct MorselView: View {
 
   var faceOffset: CGSize {
     if isOnboardingVisible {
-      return CGSize(width: 0, height: -200)
+      if onboardingPage == 0 {
+        return CGSize(width: 0, height: -300)
+      } else if onboardingPage == 1 {
+        return CGSize(width: 0, height: -380)
+      } else {
+        return CGSize(width: 0, height: -220)
+      }
     } else {
       return isOpen ? .zero : idleOffset
     }

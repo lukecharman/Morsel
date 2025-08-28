@@ -44,13 +44,13 @@ struct OnboardingView: View {
                 .font(MorselFont.body)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
-              Spacer()
+                .padding(.vertical, 56)
             }
             .tag(index)
           }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .onChange(of: currentPage) { newValue in
+        .onChange(of: currentPage) { _, newValue in
           withAnimation { page = Double(newValue) }
         }
         .simultaneousGesture(
