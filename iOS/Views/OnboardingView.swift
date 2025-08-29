@@ -116,10 +116,12 @@ struct OnboardingView: View {
                 }
               }
             }) {
-              Image(systemName: "chevron.right")
+              // Change the right control icon when on the last page
+              Image(systemName: currentPage == pages.count - 1 ? "checkmark" : "chevron.right")
                 .font(.title3)
                 .foregroundStyle(appSettings.morselColor)
                 .frame(width: 44, height: 44)
+                .contentTransition(.symbolEffect)
             }
           }
           .padding(.horizontal, 16)

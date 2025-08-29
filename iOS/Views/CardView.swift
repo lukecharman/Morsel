@@ -15,30 +15,42 @@ struct CardView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      HStack(spacing: 16) {
-        Image(systemName: icon)
-          .resizable()
-          .scaledToFit()
-          .frame(width: 24, height: 24)
-          .foregroundStyle(tintColor)
-          .padding(8)
-        Text(value + " " + title)
-          .font(MorselFont.heading)
-          .lineLimit(1)
-
-        Spacer()
-
+      Button {
+        // Make the entire header row tappable
+        onTap?()
         if description != nil {
-          Image(systemName: "chevron.down")
-            .padding(.trailing, 8)
-            .tint(appSettings.morselColor)
-            .onTapGesture {
-              withAnimation {
-                isExpanded.toggle()
-              }
-            }
+          withAnimation {
+            isExpanded.toggle()
+          }
         }
+      } label: {
+        HStack(spacing: 16) {
+          Image(systemName: icon)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 24, height: 24)
+            .foregroundStyle(tintColor)
+            .padding(8)
+
+          Text(value + " " + title)
+            .font(MorselFont.heading)
+            .lineLimit(1)
+
+          Spacer()
+
+          if description != nil {
+            Image(systemName: "chevron.down")
+              .rotationEffect(.degrees(isExpanded ? 180 : 0))
+              .animation(.easeInOut(duration: 0.2), value: isExpanded)
+              .padding(.trailing, 8)
+              .tint(appSettings.morselColor)
+          }
+        }
+        // Ensure the entire horizontal area is tappable, not just subviews
+        .contentShape(Rectangle())
       }
+      // Keep the row visually plain (no default button styling)
+      .buttonStyle(.plain)
 
       if isExpanded, let description = description {
         Text(description)
@@ -48,9 +60,6 @@ struct CardView: View {
       }
     }
     .padding()
-    .onTapGesture {
-      onTap?()
-    }
     .glass(.regular, in: RoundedRectangle(cornerRadius: 16))
   }
 
