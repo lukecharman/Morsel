@@ -144,6 +144,7 @@ public struct MorselView: View {
   @State private var text: String = ""
   @State private var playSpeechBubbleAnimation = false
   @State private var isTalking = false
+  @State private var talkingHeightDelta: CGFloat = 0
 
   @State private var didTriggerLongPress = false
 
@@ -248,7 +249,11 @@ public struct MorselView: View {
     .onChange(of: speaker.message) { _, newValue in
       if newValue != nil {
         playSpeechBubbleAnimation = true
-        startTalking()
+        if let text = newValue {
+          startTalking(totalDuration: readingDuration(for: text))
+        } else {
+          startTalking(totalDuration: 2.6)
+        }
       }
     }
     .onChange(of: shouldOpen) { oldValue, newValue in
@@ -271,6 +276,7 @@ public struct MorselView: View {
       switch newPage {
       case 0:
         withAnimation { isOpen = false }
+        anchor = MorselAnchor(edge: .bottom, padding: 48)
         isFocused = false
         isSwallowingInternal = false
       case 1:
@@ -290,20 +296,39 @@ public struct MorselView: View {
         isOpen: $isOpen,
         isBeingTouched: $isBeingTouched,
         playAnimation: $playSpeechBubbleAnimation,
-        message: $speaker.message
+        message: $speaker.message,
+        tailOnLeft: tailOnLeft,
+        placeBelow: shouldPlaceBubbleBelow
       )
       face
+        .scaleEffect(contentScale)
+        .animation(.easeInOut(duration: 0.2), value: onboardingPage)
     }
     .offset(dragOffset)
     .offset(faceOffset)
-    .scaleEffect(
-      isChoosingDestination
-        ? 2
-        : isOnboardingVisible
-          ? max(1, min(2, 2 - 0.5 * onboardingPage))
-          : 1
-    )
-    .animation(.easeInOut(duration: 0.2), value: onboardingPage)
+  }
+
+  private var contentScale: CGFloat {
+    if isChoosingDestination { return 2 }
+    if isOnboardingVisible { return max(1, min(2, 2 - 0.5 * onboardingPage)) }
+    return 1
+  }
+
+  private var tailOnLeft: Bool {
+    guard let anchor else { return false }
+    switch anchor.edge {
+    case .right: return true
+    case .left: return false
+    default: return false
+    }
+  }
+
+  private var shouldPlaceBubbleBelow: Bool {
+    if let anchor, anchor.edge == .top { return true }
+    if isOnboardingVisible {
+      return faceOffset.height < -300
+    }
+    return false
   }
 
   var faceOffset: CGSize {
@@ -391,8 +416,12 @@ public struct MorselView: View {
       .simultaneousGesture(
         LongPressGesture(minimumDuration: 0.6)
           .onEnded { _ in
+            guard !isOnboardingVisible && !isChoosingDestination else { return }
+
             didTriggerLongPress = true
             playSpeechBubbleAnimation = true
+            // Animate mouth even when using a random phrase bubble
+            startTalking(totalDuration: 2.6)
           }
       )
     }
@@ -518,7 +547,9 @@ public struct MorselView: View {
       .animation(.easeInOut(duration: 0.2), value: sadnessLevel)
       .frame(
         width: isOpen ? 170 : .lerp(from: 24, to: 76, by: happinessLevel),
-        height: isOpen ? 74 : (isTalking ? 20 : .lerp(from: 8, to: 30, by: happinessLevel))
+        height: isOpen
+          ? 74
+          : (.lerp(from: 8, to: 30, by: happinessLevel) + (isTalking ? talkingHeightDelta : 0))
       )
       .scaleEffect(1 - sadnessLevel * 0.3, anchor: .center)
       .offset(y: (isOpen ? 16 : 24) + droopOffset - (isLookingUp ? 4 : 0))
@@ -561,6 +592,7 @@ public struct MorselView: View {
       .textFieldStyle(.plain)
       .scaleEffect(isOpen ? CGSize(width: 1, height: 1) : .zero)
       .offset(y: isOpen ? 14 : 32)
+      .allowsHitTesting(!isOnboardingVisible && !isChoosingDestination)
   }
 
   var eyeScaleX: CGFloat {
@@ -653,21 +685,37 @@ public struct MorselView: View {
     }
   }
 
-  func startTalking() {
+  func startTalking(totalDuration: Double) {
+    isTalking = true
     var elapsed: Double = 0
-    let interval: Double = 0.2
+    let interval: Double = 0.12
+    let total: Double = max(1.6, min(totalDuration, 7.0))
     Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
       elapsed += interval
-      withAnimation(.easeInOut(duration: 0.1)) {
-        isTalking.toggle()
+
+      // Subtle height-only variation for a less intense look
+      let targetHeight = CGFloat.random(in: 1...3)
+
+      withAnimation(.easeInOut(duration: Double.random(in: 0.08...0.14))) {
+        talkingHeightDelta = targetHeight
       }
-      if elapsed >= 3 {
+
+      if elapsed >= total {
         timer.invalidate()
-        withAnimation(.easeInOut(duration: 0.1)) {
+        withAnimation(.easeInOut(duration: 0.2)) {
           isTalking = false
+          talkingHeightDelta = 0
         }
       }
     }
+  }
+
+  func readingDuration(for text: String) -> Double {
+    // Estimate by words, with a floor/ceiling to feel snappy
+    let words = text.split { $0.isWhitespace || $0.isNewline }.count
+    // Base 1.6s + 0.25s per word, clamped
+    let duration = 1.6 + 0.25 * Double(words)
+    return max(1.8, min(duration, 7.0))
   }
 
   func startBlinking() {
@@ -767,6 +815,8 @@ public struct SpeechBubble: View {
   @Binding var isBeingTouched: Bool
   @Binding var playAnimation: Bool
   @Binding var message: String?
+  var tailOnLeft: Bool = false
+  var placeBelow: Bool = false
 
   @Namespace var union
 
@@ -779,12 +829,16 @@ public struct SpeechBubble: View {
     isOpen: Binding<Bool>,
     isBeingTouched: Binding<Bool>,
     playAnimation: Binding<Bool>,
-    message: Binding<String?>
+    message: Binding<String?>,
+    tailOnLeft: Bool = false,
+    placeBelow: Bool = false
   ) {
     _isOpen = isOpen
     _isBeingTouched = isBeingTouched
     _playAnimation = playAnimation
     _message = message
+    self.tailOnLeft = tailOnLeft
+    self.placeBelow = placeBelow
   }
 
   private let phrases = [
@@ -804,34 +858,70 @@ public struct SpeechBubble: View {
 
   public var body: some View {
     ZStack {
-      VStack {
-        // Main bubble
-        Text(currentText)
-          .font(MorselFont.body)
-          .foregroundStyle(.white)
-          .multilineTextAlignment(.center)
-          .padding(.horizontal, 16)
-          .padding(.vertical, 12)
-          .glass(.clear)
-          .opacity(showMainBubble ? 1 : 0)
-          .scaleEffect(showMainBubble ? 1 : 0.8)
-          .offset(x: 0, y: -2)
+      if placeBelow {
+        // Tail points upward (circles above), bubble below the face
+        VStack(spacing: 0) {
+          // Tail circles
+          Circle()
+            .frame(width: 24, height: 24)
+            .glass(.clear)
+            .opacity(showSmallBubble ? 1 : 0)
+            .scaleEffect(showSmallBubble ? 1 : 0.8)
+            .offset(x: tailOnLeft ? -40 : 40, y: -4)
 
-        // Medium bubble
-        Circle()
-          .frame(width: 32, height: 32)
-          .glass(.clear)
-          .opacity(showMediumBubble ? 1 : 0)
-          .scaleEffect(showMediumBubble ? 1 : 0.8)
-          .offset(x: 60, y: 2)
+          Circle()
+            .frame(width: 32, height: 32)
+            .glass(.clear)
+            .opacity(showMediumBubble ? 1 : 0)
+            .scaleEffect(showMediumBubble ? 1 : 0.8)
+            .offset(x: tailOnLeft ? -60 : 60, y: -2)
 
-        // Small bubble
-        Circle()
-          .frame(width: 24, height: 24)
-          .glass(.clear)
-          .opacity(showSmallBubble ? 1 : 0)
-          .scaleEffect(showSmallBubble ? 1 : 0.8)
-          .offset(x: 40, y: 0)
+          // Main bubble
+          Text(currentText)
+            .font(MorselFont.body)
+            .foregroundStyle(.white)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .glass(.clear)
+            .frame(maxWidth: 320)
+            .fixedSize(horizontal: false, vertical: true)
+            .opacity(showMainBubble ? 1 : 0)
+            .scaleEffect(showMainBubble ? 1 : 0.8)
+            .offset(x: 0, y: -2)
+        }
+      } else {
+        // Tail points downward (circles below), bubble above the face
+        VStack(spacing: 0) {
+          // Main bubble
+          Text(currentText)
+            .font(MorselFont.body)
+            .foregroundStyle(.white)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .glass(.clear)
+            .frame(maxWidth: 320)
+            .fixedSize(horizontal: false, vertical: true)
+            .opacity(showMainBubble ? 1 : 0)
+            .scaleEffect(showMainBubble ? 1 : 0.8)
+            .offset(x: 0, y: -2)
+
+          // Tail circles
+          Circle()
+            .frame(width: 32, height: 32)
+            .glass(.clear)
+            .opacity(showMediumBubble ? 1 : 0)
+            .scaleEffect(showMediumBubble ? 1 : 0.8)
+            .offset(x: tailOnLeft ? -60 : 60, y: 2)
+
+          Circle()
+            .frame(width: 24, height: 24)
+            .glass(.clear)
+            .opacity(showSmallBubble ? 1 : 0)
+            .scaleEffect(showSmallBubble ? 1 : 0.8)
+            .offset(x: tailOnLeft ? -40 : 40, y: 0)
+        }
       }
     }
     .onChange(of: playAnimation) { _, newValue in
@@ -859,8 +949,9 @@ public struct SpeechBubble: View {
       }
     }
 
-    // Pause for 3s, then animate out: main → medium → small
-    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+    // Pause based on text length, then animate out: main → medium → small
+    let hold = readingDuration(for: currentText)
+    DispatchQueue.main.asyncAfter(deadline: .now() + hold) {
       withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
         showMainBubble = false
       }
@@ -882,6 +973,13 @@ public struct SpeechBubble: View {
         message = nil
       }
     }
+  }
+
+  private func readingDuration(for text: String) -> Double {
+    let words = text.split { $0.isWhitespace || $0.isNewline }.count
+    // Base + per-word; keep within pleasant bounds
+    let duration = 1.6 + 0.25 * Double(words)
+    return max(1.8, min(duration, 7.0))
   }
 }
 

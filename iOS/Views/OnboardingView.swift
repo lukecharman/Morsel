@@ -4,21 +4,25 @@ import CoreMorsel
 private struct OnboardingPage {
   let title: String
   let message: String
+  let bubble: String
 }
 
 struct OnboardingView: View {
   private let pages: [OnboardingPage] = [
     OnboardingPage(
       title: "Meet Morsel",
-      message: "Your mindful eating companion who helps you handle cravings."
+      message: "Your mindful eating companion who helps you handle cravings.",
+      bubble: "Hi! I’m Morsel — nice to meet you 👋"
     ),
     OnboardingPage(
       title: "Feed Your Cravings",
-      message: "Tap Morsel when a craving hits and give it a name to stay aware."
+      message: "Tap Morsel when a craving hits and give it a name to stay aware.",
+      bubble: "Name the craving. I’ll handle the pep talk."
     ),
     OnboardingPage(
       title: "Digest Your Progress",
-      message: "Review patterns and celebrate wins in the Digest and Stats views."
+      message: "Review patterns and celebrate wins in the Digest and Stats views.",
+      bubble: "I’ll help you reflect — small bites, big wins."
     )
   ]
 
@@ -31,8 +35,6 @@ struct OnboardingView: View {
   @State private var didSpeakGreeting = false
   @State private var isDragging = false
   @State private var dragAnchorPage = 0
-  @State private var dragFraction: Double = 0
-  @State private var dragDirection: Int = 0 // -1 = back, 1 = forward, 0 = none
 
   var body: some View {
     GeometryReader { geo in
@@ -40,7 +42,6 @@ struct OnboardingView: View {
 
       ZStack {
         VStack(spacing: 24) {
-          Spacer()
           titleView()
             .font(MorselFont.title)
             .foregroundStyle(appSettings.morselColor)
@@ -50,7 +51,9 @@ struct OnboardingView: View {
             .padding(.horizontal, 32)
             .padding(.vertical, 56)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        // Anchor text above page dots and controls
+        .padding(.bottom, geo.safeAreaInsets.bottom + 104)
         .contentShape(Rectangle())
         .gesture(
           DragGesture()
@@ -58,16 +61,13 @@ struct OnboardingView: View {
               if !isDragging {
                 isDragging = true
                 dragAnchorPage = currentPage
-                dragDirection = 0
-                dragFraction = 0
+                // Reset drag state
               }
               // Positive when swiping left (toward next page)
               let deltaPages = -Double(value.translation.width / width)
               let target: Double = Double(dragAnchorPage) + deltaPages
               let clamped = min(max(target, 0.0), Double(pages.count - 1))
               page = clamped
-              dragDirection = deltaPages == 0 ? 0 : (deltaPages > 0 ? 1 : -1)
-              dragFraction = min(max(abs(deltaPages), 0.0), 1.0)
             }
             .onEnded { value in
               // Inertia + snap using predicted end position
@@ -82,27 +82,28 @@ struct OnboardingView: View {
               }
 
               isDragging = false
-              dragFraction = 0
-              dragDirection = 0
             }
         )
 
-        // Bottom-left and bottom-right controls, positioned like Stats/Extras
+        // Centered bottom controls in a glass container
         VStack {
           Spacer()
-          HStack {
-            ToggleButton(isActive: false, systemImage: "chevron.left") {
+          HStack(spacing: 24) {
+            Button(action: {
               withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
                 currentPage = max(currentPage - 1, 0)
                 page = Double(currentPage)
               }
+            }) {
+              Image(systemName: "chevron.left")
+                .font(.title3)
+                .foregroundStyle(appSettings.morselColor)
+                .frame(width: 44, height: 44)
             }
-            .padding(.leading, 24)
-            .opacity(currentPage == 0 ? 0 : 1)
+            .opacity(currentPage == 0 ? 0.4 : 1)
+            .disabled(currentPage == 0)
 
-            Spacer()
-
-            ToggleButton(isActive: currentPage == pages.count - 1, systemImage: "chevron.right") {
+            Button(action: {
               withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
                 if currentPage == pages.count - 1 {
                   onClose()
@@ -111,10 +112,21 @@ struct OnboardingView: View {
                   page = Double(currentPage)
                 }
               }
+            }) {
+              Image(systemName: "chevron.right")
+                .font(.title3)
+                .foregroundStyle(appSettings.morselColor)
+                .frame(width: 44, height: 44)
             }
-            .padding(.trailing, 24)
           }
-          .padding(.bottom, geo.safeAreaInsets.bottom + 60)
+          .padding(.horizontal, 16)
+          .padding(.vertical, 8)
+          .background(
+            Capsule(style: .continuous)
+              .fill(Color.clear)
+              .glass(.clear, in: Capsule(style: .continuous))
+          )
+          .padding(.bottom, geo.safeAreaInsets.bottom + 24)
         }
         .frame(width: geo.size.width, height: geo.size.height)
 
@@ -131,20 +143,24 @@ struct OnboardingView: View {
                 .frame(width: 8, height: 8)
             }
           }
-          .padding(.bottom, 24)
+          .padding(.bottom, geo.safeAreaInsets.bottom + 128)
         }
         .frame(width: geo.size.width, height: geo.size.height)
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color(.systemBackground))
     .ignoresSafeArea()
     .onAppear {
       if !didSpeakGreeting {
-        onSpeak("Hi, I'm Morsel!")
+        onSpeak(pages[0].bubble)
         didSpeakGreeting = true
       }
       page = Double(currentPage)
+    }
+    .onChange(of: currentPage) { _, newValue in
+      // Speak a friendly bubble line on each page change
+      let index = max(0, min(pages.count - 1, newValue))
+      onSpeak(pages[index].bubble)
     }
   }
 }
@@ -152,53 +168,22 @@ struct OnboardingView: View {
 // MARK: - Private helpers
 
 private extension OnboardingView {
-  // Title: instant swap during drag (no crossfade, no per-character)
+  // Title: fade on page change; no per-character or drag-time swap
   @ViewBuilder
   func titleView() -> some View {
-    if isDragging {
-      let outgoingIndex = dragAnchorPage
-      if dragDirection == 0 {
-        Text(pages[outgoingIndex].title)
-      } else {
-        let incomingIndex: Int = dragDirection > 0
-          ? min(dragAnchorPage + 1, pages.count - 1)
-          : max(dragAnchorPage - 1, 0)
-        // Instantly swap to the incoming title; no crossfade.
-        Text(pages[incomingIndex].title)
-      }
-    } else {
-      Text(pages[currentPage].title)
-    }
+    Text(pages[currentPage].title)
+      .id(currentPage)
+      .contentTransition(.opacity)
+      .animation(.easeInOut(duration: 0.25), value: currentPage)
   }
 
-  // Body: reveal characters by coloring from clear -> primary while keeping layout stable
+  // Body: simple fade-in on page change; no per-character reveal
   @ViewBuilder
   func messageView() -> some View {
-    if isDragging {
-      if dragDirection == 0 {
-        Text(pages[dragAnchorPage].message)
-      } else {
-        let incomingIndex: Int = dragDirection > 0
-        ? min(dragAnchorPage + 1, pages.count - 1)
-        : max(dragAnchorPage - 1, 0)
-        let text = pages[incomingIndex].message
-        let total = text.count
-        let countToShow = Int((Double(total) * dragFraction).rounded(.toNearestOrAwayFromZero))
-        let end = text.index(text.startIndex, offsetBy: min(max(countToShow, 0), total))
-        let visible = String(text[..<end])
-
-        ZStack(alignment: .topLeading) {
-          // Full layout text in clear color to prevent shifting
-          Text(text)
-            .foregroundStyle(Color.primary.opacity(0))
-          // Overlay visible portion in primary color
-          Text(visible)
-            .foregroundStyle(.primary)
-        }
-      }
-    } else {
-      Text(pages[currentPage].message)
-    }
+    Text(pages[currentPage].message)
+      .id(currentPage)
+      .contentTransition(.opacity)
+      .animation(.easeInOut(duration: 0.25), value: currentPage)
   }
 
   // (No other helpers)

@@ -45,7 +45,7 @@ struct BottomBarView: View {
           }
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, geo.safeAreaInsets.bottom + 60)
+        .padding(.bottom, geo.safeAreaInsets.bottom + 50)
         .transition(.opacity.combined(with: .scale))
         .animation(.easeInOut(duration: 0.25), value: isKeyboardVisible)
       }
