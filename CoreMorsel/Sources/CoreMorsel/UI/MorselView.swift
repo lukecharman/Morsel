@@ -320,6 +320,8 @@ public struct MorselView: View {
         tailOnLeft: tailOnLeft,
         placeBelow: shouldPlaceBubbleBelow
       )
+      // Keep the bubble away from the scaled face
+      .padding(shouldPlaceBubbleBelow ? .top : .bottom, bubbleAvoidancePadding)
       face
         .scaleEffect(contentScale)
         .animation(.easeInOut(duration: 0.2), value: onboardingPage)
@@ -332,6 +334,23 @@ public struct MorselView: View {
     if isChoosingDestination { return 2 }
     if isOnboardingVisible { return max(1, min(2, 2 - 0.5 * onboardingPage)) }
     return 1
+  }
+
+  // Estimated face height used to separate the bubble when scaling
+  private var faceBaseHeight: CGFloat {
+    if isOpen {
+      return 120
+    } else {
+      return .lerp(from: 64, to: 80, by: happinessLevel)
+    }
+  }
+
+  // How much extra space the bubble should keep from the face as it scales
+  private var bubbleAvoidancePadding: CGFloat {
+    let scale = contentScale
+    guard scale > 1 else { return 0 }
+    // Face scales around its center; the top edge moves up by ~((s-1) * h / 2)
+    return (scale - 1) * (faceBaseHeight / 2)
   }
 
   private var tailOnLeft: Bool {
@@ -353,12 +372,17 @@ public struct MorselView: View {
 
   var faceOffset: CGSize {
     if isOnboardingVisible {
-      if onboardingPage == 0 {
+      let pageIndex = Int(round(onboardingPage))
+      switch pageIndex {
+      case 0:
         return CGSize(width: 0, height: -300)
-      } else if onboardingPage == 1 {
+      case 1:
         return CGSize(width: 0, height: -380)
-      } else {
-        return CGSize(width: 0, height: -220)
+      case 2:
+        // Lift Morsel higher on page 3 to avoid overlapping text
+        return CGSize(width: 0, height: -320)
+      default:
+        return CGSize(width: 0, height: -320)
       }
     } else {
       return isOpen ? .zero : idleOffset
