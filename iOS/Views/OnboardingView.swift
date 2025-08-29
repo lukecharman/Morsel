@@ -66,7 +66,11 @@ struct OnboardingView: View {
               let deltaPages = -Double(value.translation.width / width)
               let target: Double = Double(dragAnchorPage) + deltaPages
               let clamped = min(max(target, 0.0), Double(pages.count - 1))
-              page = clamped
+
+              // Wrap in an animated transaction so transitions run during drag
+              withAnimation(.easeInOut(duration: 0.2)) {
+                page = clamped
+              }
             }
             .onEnded { value in
               // Inertia + snap using predicted end position
@@ -171,7 +175,7 @@ struct OnboardingView: View {
 // MARK: - Private helpers
 
 private extension OnboardingView {
-  // Drive what we show off the live (rounded) page value
+  // Drive what we show off the live (rounded) page value so it updates during drag.
   var displayedIndex: Int {
     max(0, min(pages.count - 1, Int(round(page))))
   }
@@ -181,7 +185,7 @@ private extension OnboardingView {
     Text(pages[displayedIndex].title)
       .id(displayedIndex)
       .transition(.blurReplace)
-      .animation(.easeInOut(duration: 0.25), value: displayedIndex)
+      .animation(.easeInOut(duration: 0.2), value: displayedIndex)
   }
 
   @ViewBuilder
@@ -189,7 +193,7 @@ private extension OnboardingView {
     Text(pages[displayedIndex].message)
       .id(displayedIndex)
       .transition(.blurReplace)
-      .animation(.easeInOut(duration: 0.25), value: displayedIndex)
+      .animation(.easeInOut(duration: 0.2), value: displayedIndex)
   }
 }
 
