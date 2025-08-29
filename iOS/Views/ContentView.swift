@@ -109,7 +109,7 @@ struct ContentView: View {
             showOnboarding = false
           }
           hasSeenOnboarding = true
-          onboardingPage = 0
+          morselAnchor = .init(edge: .bottom, padding: 6)
         }, onSpeak: { message in
           morselSpeaker.speak(message)
         })
@@ -186,7 +186,6 @@ private extension ContentView {
           withAnimation { isChoosingDestination = true }
         }
       )
-      .opacity(showOnboarding ? 0 : 1)
       .frame(width: geo.size.width, height: geo.size.height)
       .offset(y: offsetY)
       .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)

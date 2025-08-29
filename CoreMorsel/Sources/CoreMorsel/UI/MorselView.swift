@@ -145,6 +145,7 @@ public struct MorselView: View {
   @State private var playSpeechBubbleAnimation = false
   @State private var isTalking = false
   @State private var talkingHeightDelta: CGFloat = 0
+  @State private var storedAnchorBeforeOnboarding: MorselAnchor?
 
   @State private var didTriggerLongPress = false
 
@@ -245,6 +246,25 @@ public struct MorselView: View {
     .onAppear {
       startBlinking()
       startIdleWiggle()
+    }
+    .onChange(of: isOnboardingVisible) { oldValue, newValue in
+      if newValue {
+        // Capture the current anchor before onboarding moves/scales Morsel
+        storedAnchorBeforeOnboarding = anchor
+      } else {
+        // Restore anchor and neutral pose when onboarding closes
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+          anchor = storedAnchorBeforeOnboarding ?? MorselAnchor(edge: .bottom, padding: 6)
+          isOpen = false
+          isBeingTouched = false
+        }
+        // Reset subtle offsets to avoid drifting from the original position
+        withAnimation(.easeInOut(duration: 0.2)) {
+          idleOffsetInternal = .zero
+          idleLookaroundOffsetInternal = 0
+          dragOffset = .zero
+        }
+      }
     }
     .onChange(of: speaker.message) { _, newValue in
       if newValue != nil {
