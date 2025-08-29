@@ -4,7 +4,7 @@ import CoreMorsel
 private struct OnboardingPage {
   let title: String
   let message: String
-  let bubble: String
+  let bubble: String?
 }
 
 struct OnboardingView: View {
@@ -12,17 +12,17 @@ struct OnboardingView: View {
     OnboardingPage(
       title: "Meet Morsel",
       message: "Your mindful eating companion who helps you handle cravings.",
-      bubble: "Hi! I’m Morsel — nice to meet you 👋"
+      bubble: nil
     ),
     OnboardingPage(
       title: "Feed Your Cravings",
       message: "Tap Morsel when a craving hits and give it a name to stay aware.",
-      bubble: "Name the craving. I’ll handle the pep talk."
+      bubble: nil
     ),
     OnboardingPage(
       title: "Digest Your Progress",
       message: "Review patterns and celebrate wins in the Digest and Stats views.",
-      bubble: "I’ll help you reflect — small bites, big wins."
+      bubble: nil
     )
   ]
 
@@ -61,7 +61,6 @@ struct OnboardingView: View {
               if !isDragging {
                 isDragging = true
                 dragAnchorPage = currentPage
-                // Reset drag state
               }
               // Positive when swiping left (toward next page)
               let deltaPages = -Double(value.translation.width / width)
@@ -136,7 +135,7 @@ struct OnboardingView: View {
             ForEach(0..<pages.count, id: \.self) { index in
               Circle()
                 .fill(
-                  index == Int(round(page))
+                  index == displayedIndex
                     ? appSettings.morselColor
                     : appSettings.morselColor.opacity(0.3)
                 )
@@ -152,15 +151,19 @@ struct OnboardingView: View {
     .ignoresSafeArea()
     .onAppear {
       if !didSpeakGreeting {
-        onSpeak(pages[0].bubble)
+        if let bubble = pages[0].bubble {
+          onSpeak(bubble)
+        }
         didSpeakGreeting = true
       }
       page = Double(currentPage)
     }
     .onChange(of: currentPage) { _, newValue in
-      // Speak a friendly bubble line on each page change
+      // Speak a friendly bubble line on each page change when present
       let index = max(0, min(pages.count - 1, newValue))
-      onSpeak(pages[index].bubble)
+      if let bubble = pages[index].bubble {
+        onSpeak(bubble)
+      }
     }
   }
 }
@@ -168,25 +171,26 @@ struct OnboardingView: View {
 // MARK: - Private helpers
 
 private extension OnboardingView {
-  // Title: fade on page change; no per-character or drag-time swap
+  // Drive what we show off the live (rounded) page value
+  var displayedIndex: Int {
+    max(0, min(pages.count - 1, Int(round(page))))
+  }
+
   @ViewBuilder
   func titleView() -> some View {
-    Text(pages[currentPage].title)
-      .id(currentPage)
-      .contentTransition(.opacity)
-      .animation(.easeInOut(duration: 0.25), value: currentPage)
+    Text(pages[displayedIndex].title)
+      .id(displayedIndex)
+      .transition(.blurReplace)
+      .animation(.easeInOut(duration: 0.25), value: displayedIndex)
   }
 
-  // Body: simple fade-in on page change; no per-character reveal
   @ViewBuilder
   func messageView() -> some View {
-    Text(pages[currentPage].message)
-      .id(currentPage)
-      .contentTransition(.opacity)
-      .animation(.easeInOut(duration: 0.25), value: currentPage)
+    Text(pages[displayedIndex].message)
+      .id(displayedIndex)
+      .transition(.blurReplace)
+      .animation(.easeInOut(duration: 0.25), value: displayedIndex)
   }
-
-  // (No other helpers)
 }
 
 #Preview {

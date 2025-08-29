@@ -60,8 +60,8 @@ public struct AnimatedEyeView: View {
 }
 
 public struct EyebrowedEyeShape: Shape {
-  public var eyebrowAmount: CGFloat // 0 = circle, 1 = flat segment
-  public var angle: Angle // angle of flat segment
+  public var eyebrowAmount: CGFloat
+  public var angle: Angle
 
   public init(eyebrowAmount: CGFloat, angle: Angle) {
     self.eyebrowAmount = eyebrowAmount
@@ -97,15 +97,8 @@ public struct EyebrowedEyeShape: Shape {
     let startAngle = angle + .degrees(delta)
     let endAngle = angle + .degrees(180 - delta)
 
-    path.addArc(
-      center: center,
-      radius: radius,
-      startAngle: startAngle,
-      endAngle: endAngle,
-      clockwise: true
-    )
+    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
-    // Flat line to close the arc
     let left = CGPoint(
       x: center.x + radius * cos(CGFloat(endAngle.radians)),
       y: center.y + radius * sin(CGFloat(endAngle.radians))
@@ -121,7 +114,6 @@ public struct EyebrowedEyeShape: Shape {
     return path
   }
 }
-
 
 public struct MorselView: View {
   @Binding var shouldOpen: Bool
@@ -153,7 +145,6 @@ public struct MorselView: View {
 
   @FocusState private var isFocused: Bool
 
-  // Controls on-screen positioning
   @Binding var anchor: MorselAnchor?
 
   var morselColor: Color
@@ -247,18 +238,15 @@ public struct MorselView: View {
       startBlinking()
       startIdleWiggle()
     }
-    .onChange(of: isOnboardingVisible) { oldValue, newValue in
+    .onChange(of: isOnboardingVisible) { _, newValue in
       if newValue {
-        // Capture the current anchor before onboarding moves/scales Morsel
         storedAnchorBeforeOnboarding = anchor
       } else {
-        // Restore anchor and neutral pose when onboarding closes
         withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
           anchor = storedAnchorBeforeOnboarding ?? MorselAnchor(edge: .bottom, padding: 6)
           isOpen = false
           isBeingTouched = false
         }
-        // Reset subtle offsets to avoid drifting from the original position
         withAnimation(.easeInOut(duration: 0.2)) {
           idleOffsetInternal = .zero
           idleLookaroundOffsetInternal = 0
@@ -320,7 +308,6 @@ public struct MorselView: View {
         tailOnLeft: tailOnLeft,
         placeBelow: shouldPlaceBubbleBelow
       )
-      // Keep the bubble away from the scaled face
       .padding(shouldPlaceBubbleBelow ? .top : .bottom, bubbleAvoidancePadding)
       face
         .scaleEffect(contentScale)
@@ -328,15 +315,41 @@ public struct MorselView: View {
     }
     .offset(dragOffset)
     .offset(faceOffset)
+    // Disable all hit testing while onboarding is visible so swipes go to onboarding
+    .allowsHitTesting(!isOnboardingVisible)
   }
 
+  // New, clearer scaling: explicit per-page targets with interpolation
   private var contentScale: CGFloat {
     if isChoosingDestination { return 2 }
-    if isOnboardingVisible { return max(1, min(2, 2 - 0.5 * onboardingPage)) }
-    return 1
+
+    guard isOnboardingVisible else { return 1 }
+
+    // Define target scales for integer pages
+    let page0: CGFloat = 1.0
+    let page1: CGFloat = 1.6 // slightly larger in the middle page
+    let page2: CGFloat = 1.3 // same as page 0, per request
+
+    // Interpolate between nearest pages for smooth dragging
+    let p = max(0.0, min(2.0, onboardingPage))
+    let lower = floor(p)
+    let upper = ceil(p)
+    let t = CGFloat(p - lower)
+
+    func scaleFor(page: CGFloat) -> CGFloat {
+      switch Int(page) {
+      case 0: return page0
+      case 1: return page1
+      case 2: return page2
+      default: return page2
+      }
+    }
+
+    let s0 = scaleFor(page: lower)
+    let s1 = scaleFor(page: upper)
+    return s0 + (s1 - s0) * t
   }
 
-  // Estimated face height used to separate the bubble when scaling
   private var faceBaseHeight: CGFloat {
     if isOpen {
       return 120
@@ -345,11 +358,9 @@ public struct MorselView: View {
     }
   }
 
-  // How much extra space the bubble should keep from the face as it scales
   private var bubbleAvoidancePadding: CGFloat {
     let scale = contentScale
     guard scale > 1 else { return 0 }
-    // Face scales around its center; the top edge moves up by ~((s-1) * h / 2)
     return (scale - 1) * (faceBaseHeight / 2)
   }
 
@@ -375,11 +386,10 @@ public struct MorselView: View {
       let pageIndex = Int(round(onboardingPage))
       switch pageIndex {
       case 0:
-        return CGSize(width: 0, height: -300)
+        return CGSize(width: 0, height: -400)
       case 1:
         return CGSize(width: 0, height: -380)
       case 2:
-        // Lift Morsel higher on page 3 to avoid overlapping text
         return CGSize(width: 0, height: -320)
       default:
         return CGSize(width: 0, height: -320)
@@ -394,8 +404,6 @@ public struct MorselView: View {
     let topColor = Color(adjustedTopColor(from: UIColor(baseColor), sadness: sadnessLevel, happiness: happinessLevel))
 
     return ZStack {
-//      Color.clear
-//        .frame(width: 240, height: 64)
       UnevenRoundedRectangle(
         cornerRadii: .init(
           topLeading: isOpen ? 120 : faceTopCornerRadius,
@@ -428,6 +436,8 @@ public struct MorselView: View {
         supportsOpen ?
         DragGesture(minimumDistance: 0)
           .onChanged { value in
+            // Do nothing while onboarding is visible
+            guard !isOnboardingVisible else { return }
             dragOffset = CGSize(width: value.translation.width * 0.35, height: value.translation.height * 0.35)
             if !isBeingTouched && !isChoosingDestination {
               withAnimation {
@@ -436,13 +446,18 @@ public struct MorselView: View {
             }
           }
           .onEnded { _ in
+            // Do nothing interactive while onboarding is visible
+            guard !isOnboardingVisible else {
+              didTriggerLongPress = false
+              withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) { dragOffset = .zero }
+              return
+            }
             if !didTriggerLongPress {
               withAnimation {
                 isBeingTouched = false
               }
-              if !isChoosingDestination && !isOnboardingVisible {
+              if !isChoosingDestination {
                 onTap?()
-
                 if isOpen {
                   close()
                 } else {
@@ -461,10 +476,8 @@ public struct MorselView: View {
         LongPressGesture(minimumDuration: 0.6)
           .onEnded { _ in
             guard !isOnboardingVisible && !isChoosingDestination else { return }
-
             didTriggerLongPress = true
             playSpeechBubbleAnimation = true
-            // Animate mouth even when using a random phrase bubble
             startTalking(totalDuration: 2.6)
           }
       )
@@ -497,8 +510,6 @@ public struct MorselView: View {
     )
     .scaleEffect(isBeingTouched ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1))
   }
-
-  // MARK: - Anchor helpers
 
   private var alignmentForAnchor: Alignment {
     guard let anchor else { return .center }
@@ -675,7 +686,7 @@ public struct MorselView: View {
     if isOpen {
       return 32
     } else if destinationProximity > 0 {
-      return .lerp(from: 32, to: 32, by: happinessLevel) // stays flat
+      return .lerp(from: 32, to: 32, by: happinessLevel)
     } else {
       return 32 + destinationProximity * 12
     }
@@ -717,8 +728,7 @@ public struct MorselView: View {
       }
     }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7
-    ) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
       withAnimation {
         if debugControlMode == .manual, let ext = debugBindings?.isSwallowing {
           ext.wrappedValue = false
@@ -736,14 +746,10 @@ public struct MorselView: View {
     let total: Double = max(1.6, min(totalDuration, 7.0))
     Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { timer in
       elapsed += interval
-
-      // Subtle height-only variation for a less intense look
       let targetHeight = CGFloat.random(in: 1...3)
-
       withAnimation(.easeInOut(duration: Double.random(in: 0.08...0.14))) {
         talkingHeightDelta = targetHeight
       }
-
       if elapsed >= total {
         timer.invalidate()
         withAnimation(.easeInOut(duration: 0.2)) {
@@ -755,9 +761,7 @@ public struct MorselView: View {
   }
 
   func readingDuration(for text: String) -> Double {
-    // Estimate by words, with a floor/ceiling to feel snappy
     let words = text.split { $0.isWhitespace || $0.isNewline }.count
-    // Base 1.6s + 0.25s per word, clamped
     let duration = 1.6 + 0.25 * Double(words)
     return max(1.8, min(duration, 7.0))
   }
@@ -903,9 +907,7 @@ public struct SpeechBubble: View {
   public var body: some View {
     ZStack {
       if placeBelow {
-        // Tail points upward (circles above), bubble below the face
         VStack(spacing: 0) {
-          // Tail circles
           Circle()
             .frame(width: 24, height: 24)
             .glass(.clear)
@@ -920,7 +922,6 @@ public struct SpeechBubble: View {
             .scaleEffect(showMediumBubble ? 1 : 0.8)
             .offset(x: tailOnLeft ? -60 : 60, y: -2)
 
-          // Main bubble
           Text(currentText)
             .font(MorselFont.body)
             .foregroundStyle(.white)
@@ -935,9 +936,7 @@ public struct SpeechBubble: View {
             .offset(x: 0, y: -2)
         }
       } else {
-        // Tail points downward (circles below), bubble above the face
         VStack(spacing: 0) {
-          // Main bubble
           Text(currentText)
             .font(MorselFont.body)
             .foregroundStyle(.white)
@@ -951,7 +950,6 @@ public struct SpeechBubble: View {
             .scaleEffect(showMainBubble ? 1 : 0.8)
             .offset(x: 0, y: -2)
 
-          // Tail circles
           Circle()
             .frame(width: 32, height: 32)
             .glass(.clear)
@@ -978,7 +976,6 @@ public struct SpeechBubble: View {
   private func bubbleCycle() {
     currentText = message ?? phrases.randomElement() ?? "Hi there!"
 
-    // Animate in: small → medium → main
     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
       showSmallBubble = true
     }
@@ -993,7 +990,6 @@ public struct SpeechBubble: View {
       }
     }
 
-    // Pause based on text length, then animate out: main → medium → small
     let hold = readingDuration(for: currentText)
     DispatchQueue.main.asyncAfter(deadline: .now() + hold) {
       withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
@@ -1010,7 +1006,6 @@ public struct SpeechBubble: View {
         }
       }
 
-      // Clear text after fade-out, then reset playAnimation flag
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
         currentText = ""
         playAnimation = false
@@ -1021,7 +1016,6 @@ public struct SpeechBubble: View {
 
   private func readingDuration(for text: String) -> Double {
     let words = text.split { $0.isWhitespace || $0.isNewline }.count
-    // Base + per-word; keep within pleasant bounds
     let duration = 1.6 + 0.25 * Double(words)
     return max(1.8, min(duration, 7.0))
   }
