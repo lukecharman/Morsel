@@ -29,85 +29,94 @@ struct OnboardingView: View {
 
   @State private var currentPage = 0
   @State private var didSpeakGreeting = false
-  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @State private var isDragging = false
+  @State private var dragAnchorPage = 0
+  @State private var dragFraction: Double = 0
+  @State private var dragDirection: Int = 0 // -1 = back, 1 = forward, 0 = none
 
   var body: some View {
     GeometryReader { geo in
       let width = geo.size.width
 
       ZStack {
-        TabView(selection: $currentPage) {
-          ForEach(Array(pages.enumerated()), id: \.offset) { index, content in
-            VStack(spacing: 24) {
-              Spacer()
-              Text(content.title)
-                .font(MorselFont.title)
-                .foregroundStyle(appSettings.morselColor)
-                .offset(x: reduceMotion ? 0 : CGFloat(-(self.page - Double(index)) * Double(width) * 0.25))
-                .animation(.interactiveSpring(response: 0.45, dampingFraction: 0.82), value: self.page)
-              Text(content.message)
-                .font(MorselFont.body)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 56)
-                .offset(x: reduceMotion ? 0 : CGFloat(-(self.page - Double(index)) * Double(width) * 0.12))
-                .animation(.interactiveSpring(response: 0.45, dampingFraction: 0.86), value: self.page)
-            }
-            .tag(index)
-            .onAppear {
-              if index == 0 && !didSpeakGreeting {
-                onSpeak("Hi, I'm Morsel!")
-                didSpeakGreeting = true
-              }
-            }
-          }
+        VStack(spacing: 24) {
+          Spacer()
+          titleView()
+            .font(MorselFont.title)
+            .foregroundStyle(appSettings.morselColor)
+          messageView()
+            .font(MorselFont.body)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
+            .padding(.vertical, 56)
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .onChange(of: currentPage) { _, newValue in
-          withAnimation { page = Double(newValue) }
-        }
-        .simultaneousGesture(
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .contentShape(Rectangle())
+        .gesture(
           DragGesture()
             .onChanged { value in
-              let progress = Double(currentPage) - Double(value.translation.width / width)
-              page = min(max(progress, 0), Double(pages.count - 1))
+              if !isDragging {
+                isDragging = true
+                dragAnchorPage = currentPage
+                dragDirection = 0
+                dragFraction = 0
+              }
+              // Positive when swiping left (toward next page)
+              let deltaPages = -Double(value.translation.width / width)
+              let target: Double = Double(dragAnchorPage) + deltaPages
+              let clamped = min(max(target, 0.0), Double(pages.count - 1))
+              page = clamped
+              dragDirection = deltaPages == 0 ? 0 : (deltaPages > 0 ? 1 : -1)
+              dragFraction = min(max(abs(deltaPages), 0.0), 1.0)
             }
-            .onEnded { _ in
-              page = Double(currentPage)
+            .onEnded { value in
+              // Inertia + snap using predicted end position
+              let predictedDeltaPages = -Double(value.predictedEndTranslation.width / width)
+              let predicted = Double(dragAnchorPage) + predictedDeltaPages
+              var targetIndex = Int(round(predicted))
+              targetIndex = max(0, min(pages.count - 1, targetIndex))
+
+              currentPage = targetIndex
+              withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
+                page = Double(targetIndex)
+              }
+
+              isDragging = false
+              dragFraction = 0
+              dragDirection = 0
             }
         )
 
-        HStack {
-          Button {
-            withAnimation {
-              currentPage = max(currentPage - 1, 0)
-              page = Double(currentPage)
-            }
-          } label: {
-            Image(systemName: "chevron.left")
-              .frame(width: 44, height: 44)
-          }
-          .opacity(currentPage == 0 ? 0 : 1)
-
+        // Bottom-left and bottom-right controls, positioned like Stats/Extras
+        VStack {
           Spacer()
-
-          Button {
-            withAnimation {
-              if currentPage == pages.count - 1 {
-                onClose()
-              } else {
-                currentPage = min(currentPage + 1, pages.count - 1)
+          HStack {
+            ToggleButton(isActive: false, systemImage: "chevron.left") {
+              withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
+                currentPage = max(currentPage - 1, 0)
                 page = Double(currentPage)
               }
             }
-          } label: {
-            Image(systemName: currentPage == pages.count - 1 ? "xmark" : "chevron.right")
-              .frame(width: 44, height: 44)
+            .padding(.leading, 24)
+            .opacity(currentPage == 0 ? 0 : 1)
+
+            Spacer()
+
+            ToggleButton(isActive: currentPage == pages.count - 1, systemImage: "chevron.right") {
+              withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
+                if currentPage == pages.count - 1 {
+                  onClose()
+                } else {
+                  currentPage = min(currentPage + 1, pages.count - 1)
+                  page = Double(currentPage)
+                }
+              }
+            }
+            .padding(.trailing, 24)
           }
+          .padding(.bottom, geo.safeAreaInsets.bottom + 60)
         }
-        .padding(.horizontal, 8)
         .frame(width: geo.size.width, height: geo.size.height)
-        .foregroundStyle(.primary)
 
         VStack {
           Spacer()
@@ -130,7 +139,69 @@ struct OnboardingView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color(.systemBackground))
     .ignoresSafeArea()
+    .onAppear {
+      if !didSpeakGreeting {
+        onSpeak("Hi, I'm Morsel!")
+        didSpeakGreeting = true
+      }
+      page = Double(currentPage)
+    }
   }
+}
+
+// MARK: - Private helpers
+
+private extension OnboardingView {
+  // Title: instant swap during drag (no crossfade, no per-character)
+  @ViewBuilder
+  func titleView() -> some View {
+    if isDragging {
+      let outgoingIndex = dragAnchorPage
+      if dragDirection == 0 {
+        Text(pages[outgoingIndex].title)
+      } else {
+        let incomingIndex: Int = dragDirection > 0
+          ? min(dragAnchorPage + 1, pages.count - 1)
+          : max(dragAnchorPage - 1, 0)
+        // Instantly swap to the incoming title; no crossfade.
+        Text(pages[incomingIndex].title)
+      }
+    } else {
+      Text(pages[currentPage].title)
+    }
+  }
+
+  // Body: reveal characters by coloring from clear -> primary while keeping layout stable
+  @ViewBuilder
+  func messageView() -> some View {
+    if isDragging {
+      if dragDirection == 0 {
+        Text(pages[dragAnchorPage].message)
+      } else {
+        let incomingIndex: Int = dragDirection > 0
+        ? min(dragAnchorPage + 1, pages.count - 1)
+        : max(dragAnchorPage - 1, 0)
+        let text = pages[incomingIndex].message
+        let total = text.count
+        let countToShow = Int((Double(total) * dragFraction).rounded(.toNearestOrAwayFromZero))
+        let end = text.index(text.startIndex, offsetBy: min(max(countToShow, 0), total))
+        let visible = String(text[..<end])
+
+        ZStack(alignment: .topLeading) {
+          // Full layout text in clear color to prevent shifting
+          Text(text)
+            .foregroundStyle(Color.primary.opacity(0))
+          // Overlay visible portion in primary color
+          Text(visible)
+            .foregroundStyle(.primary)
+        }
+      }
+    } else {
+      Text(pages[currentPage].message)
+    }
+  }
+
+  // (No other helpers)
 }
 
 #Preview {
