@@ -8,11 +8,13 @@ struct DestinationPickerView: View {
 
   @GestureState private var dragOffset: CGSize = .zero
   @EnvironmentObject private var appSettings: AppSettings
+
   @State private var lastHapticBucket: Int = 0
   @State private var wiggleOffset: CGFloat = 0
   @State private var showWiggle = true
   @State private var hasUserInteracted = false
   @State private var wiggleTimer: Timer?
+  @State private var snackPrompt: String = Self.randomSnackPrompt
 
   private let threshold: CGFloat = 80
 
@@ -29,9 +31,10 @@ struct DestinationPickerView: View {
         VStack {
           Spacer()
           VStack(spacing: 48) {
-            Text(snackEaterString)
+            Text(snackPrompt)
               .font(MorselFont.title)
               .foregroundColor(.primary)
+              .multilineTextAlignment(.center)
 
             ZStack {
               // Me icon on the left
@@ -139,7 +142,7 @@ struct DestinationPickerView: View {
     }
   }
 
-  var snackEaterString: String {
+  static var randomSnackPrompt: String {
     [
       "So… was that snack meant for you, or me?",
       "Be honest — are you logging it, or offering it?",
