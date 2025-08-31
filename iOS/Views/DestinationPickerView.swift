@@ -29,7 +29,7 @@ struct DestinationPickerView: View {
         VStack {
           Spacer()
           VStack(spacing: 48) {
-            Text("Who was the snack for?")
+            Text(snackEaterString)
               .font(MorselFont.title)
               .foregroundColor(.primary)
 
@@ -137,5 +137,30 @@ struct DestinationPickerView: View {
         }
       }
     }
+  }
+
+  var snackEaterString: String {
+    [
+      "So… was that snack meant for you, or me?",
+      "Be honest — are you logging it, or offering it?",
+      "Snack time: yours or Morsel’s?",
+      "Who’s actually getting this one then?",
+      "Logging calories, or feeding the beast?",
+      "Snack entered... snack surrendered?",
+      "Do you plan to eat it, or donate it to me?",
+      "Morsel senses a treat — intended target?",
+      "Sacrifice accepted… unless you’re keeping it?",
+      "Is this for your belly, or my database?",
+      "Snack detected. Snack redirected?",
+      "Tell me — does this go to you or your faithful Morsel?",
+      "Food input confirmed. Ownership uncertain.",
+      "Claim it, or let me gobble it down?",
+      "Snack logged... but who gets first bite?",
+      "Are we recording nutrition or enacting ritual sacrifice?",
+      "Who feasts: human or mascot?",
+      "Was that snack a confession… or a gift?",
+      "For you, or for Morsel?",
+      "Snack spotted. Mouth: yours or mine?"
+    ].randomElement() ?? "Who was the snack for?"
   }
 }
