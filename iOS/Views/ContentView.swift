@@ -371,9 +371,10 @@ private extension ContentView {
   func undoDelete() {
     guard let entry = recentlyDeleted else { return }
 
-    modelContext.insert(entry)
-
-    try? modelContext.save()
+    withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
+      modelContext.insert(entry)
+      try? modelContext.save()
+    }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       WidgetCenter.shared.reloadAllTimelines()

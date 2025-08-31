@@ -26,6 +26,7 @@ struct FilledEntriesView: View {
             Text(dateString(for: group.date, entryCount: group.entries.count))
               .font(MorselFont.title)
               .padding()
+              .contentTransition(.numericText())
 
             ForEach(group.entries) { entry in
               DeletableRowView(isDraggingHorizontally: $isDraggingHorizontally) {
@@ -33,11 +34,14 @@ struct FilledEntriesView: View {
               } content: {
                 MealRowView(entry: entry)
                   .frame(minHeight: 44)
+                  .transition(.move(edge: .leading).combined(with: .opacity))
               }
               .contentShape(Rectangle())
             }
           }
         }
+        // Animate structural changes like insertions
+        .animation(.spring(response: 0.45, dampingFraction: 0.85), value: entries.map(\.id))
         .opacity(shouldBlurBackground ? 0.06 : 1)
         .scaleEffect(shouldBlurBackground ? CGSize(width: 0.97, height: 0.97) : CGSize(width: 1.0, height: 1.0), anchor: .top)
         .scrollDismissesKeyboard(.immediately)
