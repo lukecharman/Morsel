@@ -21,9 +21,12 @@ struct NotificationsManager {
   }
 
   func prepare() {
-    requestNotificationPermissions()
     scheduleDigestNotifications()
     catchUpIfNeeded()
+  }
+  
+  func requestNotificationPermissions() {
+    notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
   }
 
   func runCatchUpCheck() {
@@ -58,9 +61,6 @@ struct NotificationsManager {
 }
 
 private extension NotificationsManager {
-  func requestNotificationPermissions() {
-    notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
-  }
 
   func scheduleDigestNotifications() {
     // Kill legacy identifiers if any linger

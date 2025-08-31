@@ -36,6 +36,7 @@ struct ContentView: View {
   @State private var undoWorkItem: DispatchWorkItem?
   @StateObject private var morselSpeaker = MorselSpeaker()
   @State private var morselAnchor: MorselAnchor? = .init(edge: .bottom, padding: 6)
+  private let notificationsManager = NotificationsManager()
 
   @Binding var shouldOpenMouth: Bool
   @Binding var shouldShowDigest: Bool
@@ -109,6 +110,7 @@ struct ContentView: View {
             showOnboarding = false
           }
           hasSeenOnboarding = true
+          notificationsManager.requestNotificationPermissions()
           morselAnchor = .init(edge: .bottom, padding: 6)
         }, onSpeak: { message in
           morselSpeaker.speak(message)
@@ -227,6 +229,7 @@ private extension ContentView {
         shouldCloseMouth = true
       }
       hasSeenOnboarding = true
+      notificationsManager.requestNotificationPermissions()
     }
   }
 
