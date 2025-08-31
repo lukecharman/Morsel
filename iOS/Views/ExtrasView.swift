@@ -21,12 +21,13 @@ struct ExtrasView: View {
 
   var body: some View {
     ScrollView {
-      VStack(spacing: 16) {
+      VStack(spacing: 0) {
         CardView(
           title: "",
           value: "Appearance",
           icon: "moon.circle.fill",
           description: "Choose between light, dark, or system appearance.",
+          isFirst: true,
           onTap: { showThemeSheet = true }
         )
         CardView(
@@ -62,23 +63,24 @@ struct ExtrasView: View {
           value: "Welcome",
           icon: "hand.wave",
           description: "View the welcome again.",
+          isLast: true,
           onTap: { onShowWelcome() }
         )
 #if DEBUG
-        CardView(
-          title: "",
-          value: "Debug",
-          icon: "ladybug.fill",
-          description: "Tools for testing.",
-          onTap: { showDebugMenu = true }
-        )
-        CardView(
-          title: "",
-          value: "Crash",
-          icon: "exclamationmark.triangle.fill",
-          description: "Test crashing the app.",
-          onTap: { let _ = ["A"][3] }
-        )
+//        CardView(
+//          title: "",
+//          value: "Debug",
+//          icon: "ladybug.fill",
+//          description: "Tools for testing.",
+//          onTap: { showDebugMenu = true }
+//        )
+//        CardView(
+//          title: "",
+//          value: "Crash",
+//          icon: "exclamationmark.triangle.fill",
+//          description: "Test crashing the app.",
+//          onTap: { let _ = ["A"][3] }
+//        )
 #endif
       }
       .safeAreaInset(edge: .top) {

@@ -7,6 +7,9 @@ struct CardView: View {
   let icon: String
   let description: String?
 
+  var isFirst: Bool = false
+  var isLast: Bool = false
+
   @State private var isExpanded: Bool = false
 
   var onTap: (() -> Void)?
@@ -60,7 +63,17 @@ struct CardView: View {
       }
     }
     .padding()
-    .glass(.regular, in: RoundedRectangle(cornerRadius: 16))
+    .glass(.regular, in: shape)
+  }
+
+  var shape: some Shape {
+    if isFirst {
+      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16))
+    } else if isLast {
+      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 16, bottomTrailing: 16, topTrailing: 0))
+    } else {
+      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 0, bottomTrailing: 0, topTrailing: 0))
+    }
   }
 
   var tintColor: Color {

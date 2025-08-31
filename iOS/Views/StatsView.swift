@@ -7,13 +7,14 @@ struct StatsView: View {
 
   var body: some View {
     ScrollView {
-      VStack(spacing: 16) {
+      VStack(spacing: 0) {
         Spacer().frame(height: 16)
         CardView(
           title: "The Digest",
           value: "",
           icon: "fork.knife",
-          description: nil
+          description: nil,
+          isFirst: true,
         ) {
           onRequestDigest()
         }
@@ -51,7 +52,8 @@ struct StatsView: View {
           title: "% For Morsel",
           value: "\(statsModel.averageMorselPercentagePerDay)",
           icon: "percent",
-          description: "The average daily percentage of meals you fed to Morsel."
+          description: "The average daily percentage of meals you fed to Morsel.",
+          isLast: true
         )
       }
       .padding(.horizontal, 16)
