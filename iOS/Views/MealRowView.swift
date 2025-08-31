@@ -5,13 +5,19 @@ import SwiftData
 struct MealRowView: View {
   var entry: FoodEntry
 
+  @EnvironmentObject private var appSettings: AppSettings
+
   var body: some View {
     HStack(spacing: 16) {
+      Image(systemName: entry.isForMorsel ? "face.smiling.fill" : "person.fill")
+        .font(.title3) // slightly larger than footnote/body
+        .foregroundStyle(appSettings.morselColor)
+
       Text(entry.name)
         .font(MorselFont.heading)
-        .foregroundColor(entry.isForMorsel ? .primary.opacity(0.5) : .primary)
-        .opacity(entry.isForMorsel ? 0.5 : 1)
+        .foregroundColor(.primary)
         .layoutPriority(1)
+
       Rectangle()
         .foregroundStyle(
           LinearGradient(
@@ -23,6 +29,7 @@ struct MealRowView: View {
         .frame(height: 1)
         .allowsTightening(true)
         .allowsHitTesting(false)
+
       Text(entry.timestamp, format: .dateTime.hour().minute())
         .font(MorselFont.small)
         .foregroundColor(.secondary)
@@ -38,5 +45,6 @@ struct MealRowView: View {
 #Preview {
   MealRowView(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now))
     .padding()
+    .environmentObject(AppSettings.shared)
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
