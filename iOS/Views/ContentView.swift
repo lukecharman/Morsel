@@ -187,16 +187,23 @@ private extension ContentView {
         }
       )
       .frame(width: geo.size.width, height: geo.size.height)
-      .offset(y: offsetY)
-      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY)
+      .offset(y: offsetY(for: geo))
+      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: offsetY(for: geo))
     }
   }
 
-  var offsetY: CGFloat {
+  func offsetY(for geometry: GeometryProxy) -> CGFloat {
     if isChoosingDestination {
       return -(destinationPickerHeight / 2 + 40)
     } else if isKeyboardVisible {
-      return -(keyboardHeight / 2)
+      // Calculate the center of the space above the keyboard
+      let screenHeight = geometry.size.height
+      let availableSpaceAboveKeyboard = screenHeight - keyboardHeight
+      let centerOfAvailableSpace = availableSpaceAboveKeyboard / 2
+      let currentDefaultPosition = screenHeight / 2
+      
+      // Move the morsel to be centered in the available space above keyboard
+      return centerOfAvailableSpace - currentDefaultPosition
     } else {
       return 0
     }
