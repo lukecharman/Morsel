@@ -440,7 +440,7 @@ private extension ContentView {
           }
         content()
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
-          .transition(.move(edge: alignment == .leading ? .leading : .trailing))
+          .transition(.move(edge: alignment == .leading ? .leading : .trailing).combined(with: .blurReplace))
           .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isVisible)
           .gesture(
             DragGesture()
