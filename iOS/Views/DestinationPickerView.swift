@@ -9,6 +9,10 @@ struct DestinationPickerView: View {
   @GestureState private var dragOffset: CGSize = .zero
   @EnvironmentObject private var appSettings: AppSettings
   @State private var lastHapticBucket: Int = 0
+  @State private var wiggleOffset: CGFloat = 0
+  @State private var showWiggle = true
+  @State private var hasUserInteracted = false
+  @State private var wiggleTimer: Timer?
 
   private let threshold: CGFloat = 80
 
@@ -62,11 +66,20 @@ struct DestinationPickerView: View {
                   Image(systemName: "fork.knife")
                     .foregroundColor(.primary)
                 )
-                .offset(x: dragX)
+                .offset(x: dragX + (showWiggle ? wiggleOffset : 0))
                 .gesture(
-                  DragGesture()
+                  DragGesture(minimumDistance: 0)
                     .updating($dragOffset) { value, state, _ in
                       state = value.translation
+                      
+                      // Stop wiggle animation immediately when user touches the handle
+                      if showWiggle {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                          showWiggle = false
+                          wiggleOffset = 0
+                        }
+                      }
+                      
                       let normalised = max(-1, min(1, value.translation.width / threshold))
                       onDrag(normalised)
 
@@ -108,6 +121,21 @@ struct DestinationPickerView: View {
     }
     .onAppear {
       Analytics.track(ScreenViewDestinationPicker())
+      
+      // Start the wiggle animation to indicate the handle can be dragged
+      // Start from left position and animate to right, then autoreverses
+      wiggleOffset = -15
+      withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) {
+        wiggleOffset = 15
+      }
+      
+      // Stop wiggle after 3 seconds if user hasn't interacted
+      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        withAnimation(.easeOut(duration: 0.3)) {
+          showWiggle = false
+          wiggleOffset = 0
+        }
+      }
     }
   }
 }
