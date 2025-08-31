@@ -12,6 +12,7 @@ struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject var appSettings: AppSettings
   @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+  @AppStorage("hasEverAddedEntry") private var hasEverAddedEntry: Bool = false
   @Query(sort: \FoodEntry.timestamp, order: .reverse)
 
   private var entries: [FoodEntry]
@@ -223,7 +224,7 @@ private extension ContentView {
   }
 
   var emptyStateView: some View {
-    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: !hasSeenOnboarding) {
+    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: !hasEverAddedEntry) {
       if shouldBlurBackground {
         shouldOpenMouth = false
         shouldCloseMouth = true
@@ -279,6 +280,12 @@ private extension ContentView {
     if !hasSeenOnboarding {
       showOnboarding = true
     }
+    
+    // Set hasEverAddedEntry to true if there are already entries (e.g., from CloudKit sync)
+    if !entries.isEmpty && !hasEverAddedEntry {
+      hasEverAddedEntry = true
+    }
+    
     NotificationCenter.default.addObserver(
       forName: NSPersistentCloudKitContainer.eventChangedNotification,
       object: nil,
@@ -389,6 +396,7 @@ private extension ContentView {
       }
     }
 
+    hasEverAddedEntry = true
     WidgetCenter.shared.reloadAllTimelines()
   }
 
