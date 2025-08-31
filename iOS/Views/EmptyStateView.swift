@@ -13,50 +13,48 @@ struct EmptyStateView: View {
   var body: some View {
     ZStack(alignment: .bottom) {
       BackgroundGradientView()
-
-      SnapshotBlurView(isActive: shouldBlurBackground, blurRadius: 8) {
-        VStack(spacing: 24) {
-          Image(systemName: isFirstLaunch ? "sparkles" : "fork.knife.circle")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 80, height: 80)
-            .foregroundColor(appSettings.morselColor)
-            .opacity(0.4)
-            .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-
-          (
-            Text(isFirstLaunch ? "Welcome to " : "Still waiting on your ")
-              .font(MorselFont.title)
-              .fontWeight(.medium)
-            +
-            Text(isFirstLaunch ? "Morsel" : "first bite")
-              .font(MorselFont.title)
-              .fontWeight(.bold)
-            +
-            Text("...")
-              .font(MorselFont.title)
-              .fontWeight(.medium)
-          )
+      VStack(spacing: 24) {
+        Image(systemName: isFirstLaunch ? "sparkles" : "fork.knife.circle")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 80, height: 80)
+          .foregroundColor(appSettings.morselColor)
+          .opacity(0.4)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-          .multilineTextAlignment(.center)
 
-          Text(isFirstLaunch
-            ? "Track what you eat and what you resist.\nGive Morsel a tap to begin."
-            : "The first snack is the hardest.\nGive Morsel a tap to begin.")
-            .font(MorselFont.body)
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.center)
-            .padding(.horizontal)
-            .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-
-          Text("↓")
+        (
+          Text(isFirstLaunch ? "Welcome to " : "Still waiting on your ")
             .font(MorselFont.title)
             .fontWeight(.medium)
-            .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+          +
+          Text(isFirstLaunch ? "Morsel" : "first bite")
+            .font(MorselFont.title)
+            .fontWeight(.bold)
+          +
+          Text("...")
+            .font(MorselFont.title)
+            .fontWeight(.medium)
+        )
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+        .multilineTextAlignment(.center)
+
+        Text(isFirstLaunch
+          ? "Track what you eat and what you resist.\nGive Morsel a tap to begin."
+          : "The first snack is the hardest.\nGive Morsel a tap to begin.")
+          .font(MorselFont.body)
+          .foregroundColor(.secondary)
+          .multilineTextAlignment(.center)
+          .padding(.horizontal)
+          .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+
+        Text("↓")
+          .font(MorselFont.title)
+          .fontWeight(.medium)
+          .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
       }
+      .padding()
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .blur(radius: shouldBlurBackground ? 6 : 0)
       .onAppear {
         Analytics.track(ScreenViewEmptyState())
       }
@@ -79,3 +77,4 @@ struct EmptyStateView: View {
     )
   }
 }
+
