@@ -1,3 +1,4 @@
+import CoreMorsel
 import SwiftUI
 
 struct UndoToastView: View {
@@ -6,10 +7,12 @@ struct UndoToastView: View {
   var body: some View {
     HStack {
       Text("Entry deleted")
+        .font(MorselFont.body)
       Spacer()
       Button("Undo") {
         onUndo()
       }
+      .font(MorselFont.body)
       .buttonStyle(.bordered)
     }
     .padding()
