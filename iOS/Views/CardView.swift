@@ -5,8 +5,8 @@ struct CardView: View {
   let title: String
   let value: String
   let icon: String
-  let description: String?
 
+  var description: String? = nil
   var isFirst: Bool = false
   var isLast: Bool = false
 
@@ -19,7 +19,6 @@ struct CardView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       Button {
-        // Make the entire header row tappable
         onTap?()
         if description != nil {
           withAnimation {
@@ -67,14 +66,19 @@ struct CardView: View {
   }
 
   var shape: some Shape {
-    if isFirst {
-      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16))
-    } else if isLast {
-      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 16, bottomTrailing: 16, topTrailing: 0))
-    } else {
-      return UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 0, bottomTrailing: 0, topTrailing: 0))
-    }
+    if isFirst { UnevenRoundedRectangle(cornerRadii: topRect) }
+    else if isLast { UnevenRoundedRectangle(cornerRadii: bottomRect) }
+    else { UnevenRoundedRectangle(cornerRadii: midRect) }
   }
+
+  var topRect: RectangleCornerRadii =
+    RectangleCornerRadii(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16)
+
+  var bottomRect: RectangleCornerRadii =
+    RectangleCornerRadii(topLeading: 0, bottomLeading: 16, bottomTrailing: 16, topTrailing: 0)
+
+  var midRect: RectangleCornerRadii =
+    RectangleCornerRadii(topLeading: 0, bottomLeading: 0, bottomTrailing: 0, topTrailing: 0)
 
   var tintColor: Color {
     Color(appSettings.morselColor)

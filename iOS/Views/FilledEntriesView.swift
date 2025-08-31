@@ -42,7 +42,7 @@ struct FilledEntriesView: View {
         }
         // Animate structural changes like insertions
         .animation(.spring(response: 0.45, dampingFraction: 0.85), value: entries.map(\.id))
-        .blur(radius: shouldBlurBackground ? 6 : 0)
+        .scaleEffect(shouldBlurBackground ? 0.98 : 1)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -55,19 +55,11 @@ struct FilledEntriesView: View {
       }
       .scrollDisabled(isDraggingHorizontally)
       .scrollIndicators(.hidden)
-      .mask(
-        LinearGradient(
-          gradient: Gradient(stops: [
-            .init(color: .clear, location: 0),
-            .init(color: .black, location: 0.03),
-            .init(color: .black, location: 0.92),
-            .init(color: .clear, location: 0.95),
-            .init(color: .clear, location: 1)
-          ]),
-          startPoint: .top,
-          endPoint: .bottom
-        )
-      )
+      .mask { mask }
+      if shouldBlurBackground {
+        Rectangle().fill(Material.ultraThinMaterial).ignoresSafeArea()
+        Color(.systemBackground).opacity(0.65).ignoresSafeArea()
+      }
     }
     .scrollDisabled(shouldBlurBackground)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
@@ -89,6 +81,20 @@ struct FilledEntriesView: View {
             onTap()
           }
         }
+    )
+  }
+
+  private var mask: LinearGradient {
+    LinearGradient(
+      gradient: Gradient(stops: [
+        .init(color: .clear, location: 0),
+        .init(color: .black, location: 0.03),
+        .init(color: .black, location: 0.92),
+        .init(color: .clear, location: 0.95),
+        .init(color: .clear, location: 1)
+      ]),
+      startPoint: .top,
+      endPoint: .bottom
     )
   }
 

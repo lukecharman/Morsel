@@ -26,7 +26,6 @@ struct ExtrasView: View {
           title: "",
           value: "Appearance",
           icon: "moon.circle.fill",
-          description: "Choose between light, dark, or system appearance.",
           isFirst: true,
           onTap: { showThemeSheet = true }
         )
@@ -34,53 +33,50 @@ struct ExtrasView: View {
           title: "",
           value: "Theme",
           icon: "theatermask.and.paintbrush.fill",
-          description: "Pick a colour scheme for your Morsel and make it your own.",
           onTap: { showColorSheet = true }
         )
         CardView(
           title: "",
           value: "Icon",
           icon: "questionmark.app.dashed",
-          description: "Choose a different app icon for Morsel.",
           onTap: { showIconSheet = true }
         )
         CardView(
           title: "",
           value: "Reset",
           icon: "trash",
-          description: "This will permanently delete all your entries and cannot be undone.",
           onTap: { showClearAlert = true }
         )
         CardView(
           title: "",
           value: "Feedback",
           icon: "ellipsis.message",
-          description: "Let us know how Morsel’s doing or what you'd like to see next.",
           onTap: { showFeedbackAlert = true }
         )
         CardView(
           title: "",
           value: "Welcome",
           icon: "hand.wave",
-          description: "View the welcome again.",
           isLast: true,
           onTap: { onShowWelcome() }
         )
 #if DEBUG
-//        CardView(
-//          title: "",
-//          value: "Debug",
-//          icon: "ladybug.fill",
-//          description: "Tools for testing.",
-//          onTap: { showDebugMenu = true }
-//        )
-//        CardView(
-//          title: "",
-//          value: "Crash",
-//          icon: "exclamationmark.triangle.fill",
-//          description: "Test crashing the app.",
-//          onTap: { let _ = ["A"][3] }
-//        )
+        Spacer()
+          .frame(height: 16)
+        CardView(
+          title: "",
+          value: "Debug",
+          icon: "ladybug.fill",
+          isFirst: true,
+          onTap: { showDebugMenu = true }
+        )
+        CardView(
+          title: "",
+          value: "Crash",
+          icon: "exclamationmark.triangle.fill",
+          isLast: true,
+          onTap: { let _ = ["A"][3] }
+        )
 #endif
       }
       .safeAreaInset(edge: .top) {
