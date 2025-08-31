@@ -125,8 +125,8 @@ struct ContentView: View {
         UndoToastView {
           undoDelete()
         }
-        .padding(.bottom, 160)
-        .transition(.move(edge: .bottom).combined(with: .opacity))
+        .padding(.bottom, 120)
+        .transition(.move(edge: .bottom).combined(with: .blurReplace))
       }
     }
     .onAppear { onAppear() }
