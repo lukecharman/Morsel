@@ -54,8 +54,7 @@ struct EmptyStateView: View {
       }
       .padding()
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .opacity(shouldBlurBackground ? 0.06 : 1)
-      .scaleEffect(shouldBlurBackground ? CGSize(width: 0.97, height: 0.97) : CGSize(width: 1.0, height: 1.0), anchor: .top)
+      .blur(radius: shouldBlurBackground ? 6 : 0)
       .onAppear {
         Analytics.track(ScreenViewEmptyState())
       }

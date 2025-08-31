@@ -42,8 +42,7 @@ struct FilledEntriesView: View {
         }
         // Animate structural changes like insertions
         .animation(.spring(response: 0.45, dampingFraction: 0.85), value: entries.map(\.id))
-        .opacity(shouldBlurBackground ? 0.06 : 1)
-        .scaleEffect(shouldBlurBackground ? CGSize(width: 0.97, height: 0.97) : CGSize(width: 1.0, height: 1.0), anchor: .top)
+        .blur(radius: shouldBlurBackground ? 6 : 0)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
