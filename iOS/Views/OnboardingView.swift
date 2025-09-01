@@ -49,7 +49,7 @@ struct OnboardingView: View {
             .font(MorselFont.body)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 32)
-            .padding(.vertical, 56)
+            .padding(.bottom, 72)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         // Anchor text above page dots and controls

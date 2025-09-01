@@ -326,9 +326,9 @@ public struct MorselView: View {
     guard isOnboardingVisible else { return 1 }
 
     // Define target scales for integer pages
-    let page0: CGFloat = 1.0
-    let page1: CGFloat = 1.6 // slightly larger in the middle page
-    let page2: CGFloat = 1.3 // same as page 0, per request
+    let page0: CGFloat = 2.0
+    let page1: CGFloat = 1.6
+    let page2: CGFloat = 2.0
 
     // Interpolate between nearest pages for smooth dragging
     let p = max(0.0, min(2.0, onboardingPage))
@@ -386,11 +386,11 @@ public struct MorselView: View {
       let pageIndex = Int(round(onboardingPage))
       switch pageIndex {
       case 0:
-        return CGSize(width: 0, height: -400)
+        return CGSize(width: 0, height: -420)
       case 1:
         return CGSize(width: 0, height: -380)
       case 2:
-        return CGSize(width: 0, height: -320)
+        return CGSize(width: 0, height: -420)
       default:
         return CGSize(width: 0, height: -320)
       }

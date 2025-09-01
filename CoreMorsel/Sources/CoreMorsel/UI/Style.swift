@@ -3,10 +3,10 @@ import SwiftUI
 public struct MorselFont {
   public static let title = Font.custom("Quicksand-Bold", size: 31, relativeTo: .title)
   public static let heading = Font.custom("Quicksand-SemiBold", size: 19, relativeTo: .headline)
-  public static let body = Font.custom("Quicksand-Regular", size: 15, relativeTo: .body)
-  public static let subheadline = Font.custom("Quicksand-Regular", size: 13, relativeTo: .subheadline)
-  public static let caption = Font.custom("Quicksand-Regular", size: 12, relativeTo: .caption)
-  public static let small = Font.custom("Quicksand-Regular", size: 12, relativeTo: .footnote)
+  public static let body = Font.custom("Quicksand-Regular", size: 17, relativeTo: .body)
+  public static let subheadline = Font.custom("Quicksand-Regular", size: 14, relativeTo: .subheadline)
+  public static let caption = Font.custom("Quicksand-Regular", size: 13, relativeTo: .caption)
+  public static let small = Font.custom("Quicksand-Regular", size: 13, relativeTo: .footnote)
 
   public static let widgetTitle = Font.custom("Quicksand-Bold", size: 16, relativeTo: .title)
   public static let widgetBody = Font.custom("Quicksand-Regular", size: 13, relativeTo: .body)
