@@ -110,6 +110,7 @@ struct OnboardingView: View {
               withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
                 if currentPage == pages.count - 1 {
                   onClose()
+                  Haptics.trigger(.success)
                 } else {
                   currentPage = min(currentPage + 1, pages.count - 1)
                   page = Double(currentPage)
@@ -163,6 +164,9 @@ struct OnboardingView: View {
         didSpeakGreeting = true
       }
       page = Double(currentPage)
+    }
+    .onChange(of: displayedIndex) { _, newValue in
+      Haptics.trigger(.light)
     }
     .onChange(of: currentPage) { _, newValue in
       // Speak a friendly bubble line on each page change when present

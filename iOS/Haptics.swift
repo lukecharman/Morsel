@@ -21,6 +21,7 @@ struct Haptics {
   private let notification = UINotificationFeedbackGenerator()
 
   static func trigger(_ type: HapticType) {
+    print("⚡️ HAPTIC: \(type)")
     switch type {
     case .light:
       Self.shared.impactLight.impactOccurred()
