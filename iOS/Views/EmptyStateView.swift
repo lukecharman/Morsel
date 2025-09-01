@@ -7,6 +7,7 @@ struct EmptyStateView: View {
   @EnvironmentObject var appSettings: AppSettings
 
   let shouldBlurBackground: Bool
+  let shouldHideBackground: Bool
   let isFirstLaunch: Bool
   let onTap: () -> Void
 
@@ -52,17 +53,14 @@ struct EmptyStateView: View {
           .fontWeight(.medium)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
       }
+      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.95 : 1)
+      .opacity(shouldHideBackground ? 0.05 : 1)
       .padding()
-      .scaleEffect(shouldBlurBackground ? 0.98 : 1)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .blur(radius: shouldBlurBackground ? 6 : 0)
-      .onAppear {
-        Analytics.track(ScreenViewEmptyState())
-      }
-      if shouldBlurBackground {
-        Rectangle().fill(Material.ultraThinMaterial).ignoresSafeArea()
-        Color(.systemBackground).opacity(0.65).ignoresSafeArea()
-      }
+    }
+    .ignoresSafeArea(.keyboard)
+    .onAppear {
+      Analytics.track(ScreenViewEmptyState())
     }
     .simultaneousGesture(
       TapGesture()

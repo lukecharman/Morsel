@@ -5,6 +5,7 @@ import SwiftUI
 struct FilledEntriesView: View {
   let entries: [FoodEntry]
   let shouldBlurBackground: Bool
+  let shouldHideBackground: Bool
 
   @Environment(\.colorScheme) private var colorScheme
 
@@ -53,14 +54,13 @@ struct FilledEntriesView: View {
           Spacer().frame(height: 24)
         }
       }
+      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.95 : 1)
+      .opacity(shouldHideBackground ? 0.05 : 1)
       .scrollDisabled(isDraggingHorizontally)
       .scrollIndicators(.hidden)
       .mask { mask }
-      if shouldBlurBackground {
-        Rectangle().fill(Material.ultraThinMaterial).ignoresSafeArea()
-        Color(.systemBackground).opacity(0.65).ignoresSafeArea()
-      }
     }
+    .ignoresSafeArea(.keyboard)
     .scrollDisabled(shouldBlurBackground)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .onAppear {

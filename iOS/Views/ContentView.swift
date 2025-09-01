@@ -158,7 +158,7 @@ struct ContentView: View {
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
-    .statusBarHidden(shouldBlurBackground)
+    .statusBarHidden(shouldBlurBackground || shouldHideBackground)
   }
 }
 
@@ -224,7 +224,11 @@ private extension ContentView {
   }
 
   var emptyStateView: some View {
-    EmptyStateView(shouldBlurBackground: shouldBlurBackground, isFirstLaunch: !hasEverAddedEntry) {
+    EmptyStateView(
+      shouldBlurBackground: shouldBlurBackground,
+      shouldHideBackground: shouldHideBackground,
+      isFirstLaunch: !hasEverAddedEntry
+    ) {
       if shouldBlurBackground {
         shouldOpenMouth = false
         shouldCloseMouth = true
@@ -238,6 +242,7 @@ private extension ContentView {
     FilledEntriesView(
       entries: entries,
       shouldBlurBackground: shouldBlurBackground,
+      shouldHideBackground: shouldHideBackground,
       scrollOffset: $scrollOffset,
       isDraggingHorizontally: $isDraggingHorizontally,
       isChoosingDestination: $isChoosingDestination,
@@ -264,7 +269,11 @@ private extension ContentView {
   }
 
   var shouldBlurBackground: Bool {
-    isKeyboardVisible || isChoosingDestination || showStats || showExtras || showOnboarding
+    showStats || showExtras
+  }
+
+  var shouldHideBackground: Bool {
+    isKeyboardVisible || isChoosingDestination || showOnboarding
   }
 }
 
