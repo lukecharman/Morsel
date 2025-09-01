@@ -15,7 +15,7 @@ struct EmptyStateView: View {
     ZStack(alignment: .bottom) {
       BackgroundGradientView()
       VStack(spacing: 24) {
-        Image(systemName: isFirstLaunch ? "sparkles" : "fork.knife.circle")
+        Image(systemName: isFirstLaunch ? "sparkles" : "fork.knife")
           .resizable()
           .scaledToFit()
           .frame(width: 80, height: 80)
