@@ -21,7 +21,7 @@ struct CardView: View {
       Button {
         onTap?()
         if description != nil {
-          withAnimation {
+          withAnimation(.easeInOut) {
             isExpanded.toggle()
           }
         }
@@ -52,11 +52,25 @@ struct CardView: View {
       // Keep the row visually plain (no default button styling)
       .buttonStyle(.plain)
 
-      if isExpanded, let description = description {
-        Text(description)
-          .font(MorselFont.body)
-          .foregroundColor(.secondary)
-          .transition(.opacity.combined(with: .move(edge: .top)))
+      if let description = description, isExpanded {
+        // Only insert this view when expanded, so collapsed height is correct.
+        VStack(alignment: .leading, spacing: 0) {
+          Text(description)
+            .font(MorselFont.body)
+            .foregroundColor(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .transition(
+              .asymmetric(
+                insertion: .opacity
+                  .combined(with: .move(edge: .top))
+                  .combined(with: .scale(scale: 1.0, anchor: .top)),
+                removal: .opacity
+                  .combined(with: .move(edge: .top))
+                  .combined(with: .scale(scale: 0.001, anchor: .top))
+              )
+            )
+        }
+        .animation(.easeInOut, value: isExpanded)
       }
     }
     .padding()
