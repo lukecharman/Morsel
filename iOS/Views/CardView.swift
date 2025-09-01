@@ -40,10 +40,8 @@ struct CardView: View {
 
           Spacer()
 
-          if description != nil {
-            Image(systemName: "chevron.down")
-              .rotationEffect(.degrees(isExpanded ? 180 : 0))
-              .animation(.easeInOut(duration: 0.2), value: isExpanded)
+          if description == nil {
+            Image(systemName: "chevron.right")
               .padding(.trailing, 8)
               .tint(appSettings.morselColor)
           }
@@ -66,10 +64,14 @@ struct CardView: View {
   }
 
   var shape: some Shape {
-    if isFirst { UnevenRoundedRectangle(cornerRadii: topRect) }
+    if isFirst && isLast { UnevenRoundedRectangle(cornerRadii: singleRect) }
+    else if isFirst { UnevenRoundedRectangle(cornerRadii: topRect) }
     else if isLast { UnevenRoundedRectangle(cornerRadii: bottomRect) }
     else { UnevenRoundedRectangle(cornerRadii: midRect) }
   }
+
+  var singleRect: RectangleCornerRadii =
+  RectangleCornerRadii(topLeading: 16, bottomLeading: 16, bottomTrailing: 16, topTrailing: 16)
 
   var topRect: RectangleCornerRadii =
     RectangleCornerRadii(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16)

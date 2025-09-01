@@ -15,14 +15,17 @@ struct StatsView: View {
           icon: "fork.knife",
           description: nil,
           isFirst: true,
+          isLast: true
         ) {
           onRequestDigest()
         }
+        Spacer().frame(height: 16)
         CardView(
           title: "Total Meals",
           value: "\(statsModel.totalEntries)",
           icon: "fork.knife",
-          description: "The total number of meals you've logged."
+          description: "The total number of meals you've logged.",
+          isFirst: true
         )
         CardView(
           title: "Cravings Crushed",
