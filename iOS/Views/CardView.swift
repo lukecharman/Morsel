@@ -18,39 +18,29 @@ struct CardView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Button {
-        onTap?()
-        if description != nil {
-          withAnimation(.easeInOut) {
-            isExpanded.toggle()
-          }
+      // Header row (no longer a Button; we handle taps on the container)
+      HStack(spacing: 16) {
+        Image(systemName: icon)
+          .resizable()
+          .scaledToFit()
+          .frame(width: 24, height: 24)
+          .foregroundStyle(tintColor)
+          .padding(8)
+
+        Text(value + " " + title)
+          .font(MorselFont.heading)
+          .lineLimit(1)
+
+        Spacer()
+
+        if description == nil {
+          Image(systemName: "chevron.right")
+            .padding(.trailing, 8)
+            .tint(appSettings.morselColor)
         }
-      } label: {
-        HStack(spacing: 16) {
-          Image(systemName: icon)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 24, height: 24)
-            .foregroundStyle(tintColor)
-            .padding(8)
-
-          Text(value + " " + title)
-            .font(MorselFont.heading)
-            .lineLimit(1)
-
-          Spacer()
-
-          if description == nil {
-            Image(systemName: "chevron.right")
-              .padding(.trailing, 8)
-              .tint(appSettings.morselColor)
-          }
-        }
-        // Ensure the entire horizontal area is tappable, not just subviews
-        .contentShape(Rectangle())
       }
-      // Keep the row visually plain (no default button styling)
-      .buttonStyle(.plain)
+      // Ensure the entire horizontal header area is tappable
+      .contentShape(Rectangle())
 
       if let description = description, isExpanded {
         // Only insert this view when expanded, so collapsed height is correct.
@@ -75,6 +65,21 @@ struct CardView: View {
     }
     .padding()
     .glass(.regular, in: shape)
+    // Make the entire card tappable, including description and padding
+    .contentShape(Rectangle())
+    .highPriorityGesture(
+      TapGesture()
+        .onEnded {
+          onTap?()
+          if description != nil {
+            withAnimation(.easeInOut) {
+              isExpanded.toggle()
+            }
+          }
+        }
+    )
+    // Accessibility: announce as a button for full-card tap behavior
+    .accessibilityAddTraits(.isButton)
   }
 
   var shape: some Shape {
