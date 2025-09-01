@@ -11,6 +11,12 @@ struct EmptyStateView: View {
   let isFirstLaunch: Bool
   let onTap: () -> Void
 
+  // Animation state for the arrow
+  @State private var startArrowAnimation = false
+  @State private var arrowOffset: CGFloat = 0
+  @State private var hasScheduledArrowTimer = false
+  @State private var isAnimatingArrow = false
+
   var body: some View {
     ZStack(alignment: .bottom) {
       BackgroundGradientView()
@@ -52,6 +58,29 @@ struct EmptyStateView: View {
           .font(MorselFont.title)
           .fontWeight(.medium)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+          .offset(y: arrowOffset)
+          .onChange(of: startArrowAnimation) { _, newValue in
+            guard newValue, !isAnimatingArrow else { return }
+            isAnimatingArrow = true
+            // Run a controlled loop with a small pause between cycles
+            Task { @MainActor in
+              while startArrowAnimation {
+                withAnimation(.easeInOut(duration: 0.9)) {
+                  arrowOffset = 8 // move down gently
+                }
+                try? await Task.sleep(nanoseconds: 900_000_000) // match animation duration
+
+                withAnimation(.easeInOut(duration: 0.9)) {
+                  arrowOffset = 0 // return to original
+                }
+                try? await Task.sleep(nanoseconds: 900_000_000) // match animation duration
+
+                // Little gap between each oscillation
+                try? await Task.sleep(nanoseconds: 2_000_000_000) // 0.35s pause
+              }
+              isAnimatingArrow = false
+            }
+          }
       }
       .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.98 : 1)
       .opacity(shouldHideBackground ? 0.05 : 1)
@@ -61,6 +90,21 @@ struct EmptyStateView: View {
     .ignoresSafeArea(.keyboard)
     .onAppear {
       Analytics.track(ScreenViewEmptyState())
+
+      // Schedule the arrow animation to start after 3 seconds, once.
+      if !hasScheduledArrowTimer {
+        hasScheduledArrowTimer = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+          startArrowAnimation = true
+        }
+      }
+    }
+    .onDisappear {
+      // Reset state so it can start again on next appearance
+      startArrowAnimation = false
+      arrowOffset = 0
+      hasScheduledArrowTimer = false
+      isAnimatingArrow = false
     }
     .simultaneousGesture(
       TapGesture()
@@ -80,4 +124,3 @@ struct EmptyStateView: View {
     )
   }
 }
-
