@@ -705,7 +705,6 @@ public struct MorselView: View {
       isOpen = true
       shouldOpen = false
       isFocused = true
-      anchor = nil
     }
   }
 

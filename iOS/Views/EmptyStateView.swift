@@ -53,7 +53,7 @@ struct EmptyStateView: View {
           .fontWeight(.medium)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
       }
-      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.95 : 1)
+      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.98 : 1)
       .opacity(shouldHideBackground ? 0.05 : 1)
       .padding()
       .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -54,7 +54,7 @@ struct FilledEntriesView: View {
           Spacer().frame(height: 24)
         }
       }
-      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.95 : 1)
+      .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.98 : 1)
       .opacity(shouldHideBackground ? 0.05 : 1)
       .scrollDisabled(isDraggingHorizontally)
       .scrollIndicators(.hidden)
