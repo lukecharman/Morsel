@@ -18,6 +18,7 @@ struct FilledEntriesView: View {
   let onScroll: (CGPoint) -> Void
   let onDelete: (FoodEntry) -> Void
   let onToggleDestination: (FoodEntry) -> Void
+  let onRename: (FoodEntry, String) -> Void
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -34,7 +35,8 @@ struct FilledEntriesView: View {
               MealRowView(
                 entry: entry,
                 onDelete: { onDelete(entry) },
-                onToggle: { onToggleDestination(entry) }
+                onToggle: { onToggleDestination(entry) },
+                onRename: { newName in onRename(entry, newName) }
               )
               .frame(minHeight: 44)
               .transition(.move(edge: .leading).combined(with: .opacity))
@@ -42,7 +44,6 @@ struct FilledEntriesView: View {
             }
           }
         }
-        // Animate structural changes like insertions
         .animation(.spring(response: 0.45, dampingFraction: 0.85), value: entries.map(\.id))
         .scaleEffect(shouldBlurBackground ? 0.98 : 1)
         .scrollDismissesKeyboard(.immediately)
@@ -118,4 +119,3 @@ struct FilledEntriesView: View {
     }
   }
 }
-

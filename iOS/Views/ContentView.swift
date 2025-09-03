@@ -199,13 +199,10 @@ private extension ContentView {
     if isChoosingDestination {
       return -(destinationPickerHeight / 2 + 40)
     } else if isKeyboardVisible {
-      // Calculate the center of the space above the keyboard
       let screenHeight = geometry.size.height
       let availableSpaceAboveKeyboard = screenHeight - keyboardHeight
       let centerOfAvailableSpace = availableSpaceAboveKeyboard / 2
       let currentDefaultPosition = screenHeight / 2
-      
-      // Move the morsel to be centered in the available space above keyboard
       return centerOfAvailableSpace - currentDefaultPosition
     } else {
       return 0
@@ -255,7 +252,8 @@ private extension ContentView {
       },
       onScroll: handleScroll,
       onDelete: delete,
-      onToggleDestination: toggleDestination
+      onToggleDestination: toggleDestination,
+      onRename: rename
     )
   }
 
@@ -290,12 +288,9 @@ private extension ContentView {
     if !hasSeenOnboarding {
       showOnboarding = true
     }
-    
-    // Set hasEverAddedEntry to true if there are already entries (e.g., from CloudKit sync)
     if !entries.isEmpty && !hasEverAddedEntry {
       hasEverAddedEntry = true
     }
-    
     NotificationCenter.default.addObserver(
       forName: NSPersistentCloudKitContainer.eventChangedNotification,
       object: nil,
@@ -314,7 +309,6 @@ private extension ContentView {
     } else {
       dayString = date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
     }
-
     return "\(dayString) (\(entryCount))"
   }
 
@@ -330,12 +324,10 @@ private extension ContentView {
 
   func updateWidget(newCount: Int) {
     widgetReloadWorkItem?.cancel()
-
     let workItem = DispatchWorkItem {
       WidgetCenter.shared.reloadAllTimelines()
     }
     widgetReloadWorkItem = workItem
-
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
   }
 
@@ -349,7 +341,6 @@ private extension ContentView {
 
     withAnimation {
       modelContext.delete(entry)
-
       try? modelContext.save()
 
       if entry.isForMorsel {
@@ -380,16 +371,13 @@ private extension ContentView {
   @MainActor
   func undoDelete() {
     guard let entry = recentlyDeleted else { return }
-
     withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
       modelContext.insert(entry)
       try? modelContext.save()
     }
-
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       WidgetCenter.shared.reloadAllTimelines()
     }
-
     recentlyDeleted = nil
     undoWorkItem?.cancel()
     withAnimation {
@@ -406,7 +394,6 @@ private extension ContentView {
         try await Adder.add(name: trimmed, isForMorsel: isForMorsel, context: .phoneApp)
       }
     }
-
     hasEverAddedEntry = true
     WidgetCenter.shared.reloadAllTimelines()
   }
@@ -431,7 +418,6 @@ private extension ContentView {
     else {
       return nil
     }
-
     return frame.height
   }
 
@@ -524,10 +510,20 @@ private extension ContentView {
     }
     WidgetCenter.shared.reloadAllTimelines()
   }
+
+  @MainActor
+  func rename(entry: FoodEntry, newName: String) {
+    let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty, entry.name != trimmed else { return }
+    entry.name = trimmed
+    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+      try? modelContext.save()
+    }
+    WidgetCenter.shared.reloadAllTimelines()
+  }
 }
 
 #Preview {
   ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), deepLinkDigestOffset: .constant(nil))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
-
