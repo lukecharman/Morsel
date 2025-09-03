@@ -30,14 +30,10 @@ struct FilledEntriesView: View {
               .contentTransition(.numericText())
 
             ForEach(group.entries) { entry in
-              DeletableRowView(isDraggingHorizontally: $isDraggingHorizontally) {
-                onDelete(entry)
-              } content: {
-                MealRowView(entry: entry)
-                  .frame(minHeight: 44)
-                  .transition(.move(edge: .leading).combined(with: .opacity))
-              }
-              .contentShape(Rectangle())
+              MealRowView(entry: entry, onDelete: { onDelete(entry) })
+                .frame(minHeight: 44)
+                .transition(.move(edge: .leading).combined(with: .opacity))
+                .contentShape(Rectangle())
             }
           }
         }
@@ -117,3 +113,4 @@ struct FilledEntriesView: View {
     }
   }
 }
+

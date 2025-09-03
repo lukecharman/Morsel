@@ -4,6 +4,7 @@ import SwiftData
 
 struct MealRowView: View {
   var entry: FoodEntry
+  var onDelete: (() -> Void)? = nil
 
   @EnvironmentObject private var appSettings: AppSettings
 
@@ -39,12 +40,22 @@ struct MealRowView: View {
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
     .contentShape(Rectangle())
+    .contextMenu {
+      Button(role: .destructive) {
+        onDelete?()
+      } label: {
+        Label("Delete", systemImage: "trash")
+      }
+    }
   }
 }
 
 #Preview {
-  MealRowView(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now))
+  MealRowView(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now)) {
+    // delete action
+  }
     .padding()
     .environmentObject(AppSettings.shared)
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
+
