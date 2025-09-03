@@ -1,6 +1,9 @@
 import CoreMorsel
 import SwiftUI
 import SwiftData
+#if os(watchOS)
+import WatchKit
+#endif
 
 struct MealRowView: View {
   var entry: FoodEntry
@@ -75,7 +78,6 @@ struct MealRowView: View {
           showingRename = false
         }
       )
-      // Keep the sheet compact; the system will lift it above the keyboard
       .presentationDetents([.fraction(0.22)])
       .presentationDragIndicator(.hidden)
       .interactiveDismissDisabled(false)
@@ -92,6 +94,13 @@ private struct RenameSheet: View {
   @State private var text: String = ""
   @FocusState private var focused: Bool
 
+  // Shake animation state
+  @State private var shakeOffset: CGFloat = 0
+
+  private var isInvalid: Bool {
+    text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       Text(title)
@@ -103,6 +112,7 @@ private struct RenameSheet: View {
         .focused($focused)
         .submitLabel(.done)
         .onSubmit(saveIfValid)
+        .offset(x: shakeOffset)
 
       HStack(spacing: 16) {
         Button {
@@ -131,12 +141,13 @@ private struct RenameSheet: View {
             .fill(Color.clear)
             .glass(.clear, in: Capsule(style: .continuous))
         )
+        .opacity(isInvalid ? 0.5 : 1)
+        .disabled(isInvalid)
         .accessibilityLabel("Save")
       }
       .padding(.top, 4)
     }
     .padding(16)
-    // Auto-focus the text field immediately, ensuring keyboard appears right away
     .onAppear {
       text = initialText
       focused = true
@@ -145,8 +156,37 @@ private struct RenameSheet: View {
 
   private func saveIfValid() {
     let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else { return }
+    guard !trimmed.isEmpty else {
+      playErrorHaptic()
+      jiggle()
+      focused = true
+      return
+    }
     onSave(trimmed)
+  }
+
+  private func jiggle() {
+    // Quick left-right shake
+    let amplitude: CGFloat = 10
+    withAnimation(.easeInOut(duration: 0.06)) { shakeOffset = -amplitude }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+      withAnimation(.easeInOut(duration: 0.06)) { shakeOffset = amplitude }
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+      withAnimation(.easeInOut(duration: 0.06)) { shakeOffset = -amplitude }
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+      withAnimation(.easeInOut(duration: 0.06)) { shakeOffset = 0 }
+    }
+  }
+
+  private func playErrorHaptic() {
+    #if os(watchOS)
+    WKInterfaceDevice.current().play(.failure)
+    #else
+    let generator = UINotificationFeedbackGenerator()
+    generator.notificationOccurred(.error)
+    #endif
   }
 }
 
