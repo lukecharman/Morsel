@@ -909,7 +909,7 @@ public struct SpeechBubble: View {
         VStack(spacing: 0) {
           Circle()
             .frame(width: 24, height: 24)
-            .glass(in: Circle())
+            .glass(.clear, in: Circle())
             .opacity(showSmallBubble ? 1 : 0)
             .scaleEffect(showSmallBubble ? 1 : 0.8)
             .offset(x: tailOnLeft ? -40 : 40, y: -4)
