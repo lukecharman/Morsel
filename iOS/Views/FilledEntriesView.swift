@@ -45,7 +45,6 @@ struct FilledEntriesView: View {
           }
         }
         .animation(.spring(response: 0.45, dampingFraction: 0.85), value: entries.map(\.id))
-        .scaleEffect(shouldBlurBackground ? 0.98 : 1)
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
@@ -57,13 +56,14 @@ struct FilledEntriesView: View {
         }
       }
       .scaleEffect(shouldBlurBackground || shouldHideBackground ? 0.98 : 1)
-      .opacity(shouldHideBackground ? 0.05 : 1)
+      .opacity(shouldBlurBackground ? 0.9 : (shouldHideBackground ? 0.05 : 1))
+      .blur(radius: shouldBlurBackground ? 2 : 0)
       .scrollDisabled(isDraggingHorizontally)
       .scrollIndicators(.hidden)
       .mask { mask }
     }
     .ignoresSafeArea(.keyboard)
-    .scrollDisabled(shouldBlurBackground)
+    .scrollDisabled(shouldBlurBackground || shouldHideBackground)
     .animation(.easeInOut(duration: 0.25), value: isChoosingDestination)
     .onAppear {
       Analytics.track(ScreenViewFilledEntries(count: entries.count))
