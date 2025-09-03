@@ -4,6 +4,8 @@ import SwiftData
 
 struct ExtrasView: View {
   @Environment(\.modelContext) private var modelContext
+  @EnvironmentObject var appSettings: AppSettings
+  @Environment(\.colorScheme) private var systemColorScheme
 
   @State private var showClearAlert = false
   @State private var showClearFailedAlert = false
@@ -63,19 +65,14 @@ struct ExtrasView: View {
 #if DEBUG
         Spacer()
           .frame(height: 16)
+        // Single debug card: mark as both first and last so corners are rounded properly
         CardView(
           title: "",
           value: "Debug",
           icon: "ladybug.fill",
           isFirst: true,
-          onTap: { showDebugMenu = true }
-        )
-        CardView(
-          title: "",
-          value: "Crash",
-          icon: "exclamationmark.triangle.fill",
           isLast: true,
-          onTap: { let _ = ["A"][3] }
+          onTap: { showDebugMenu = true }
         )
 #endif
       }
