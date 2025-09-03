@@ -254,7 +254,8 @@ private extension ContentView {
         }
       },
       onScroll: handleScroll,
-      onDelete: delete
+      onDelete: delete,
+      onToggleDestination: toggleDestination
     )
   }
 
@@ -514,9 +515,19 @@ private extension ContentView {
 
     try? modelContext.save()
   }
+
+  @MainActor
+  func toggleDestination(for entry: FoodEntry) {
+    entry.isForMorsel.toggle()
+    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+      try? modelContext.save()
+    }
+    WidgetCenter.shared.reloadAllTimelines()
+  }
 }
 
 #Preview {
   ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), deepLinkDigestOffset: .constant(nil))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
+

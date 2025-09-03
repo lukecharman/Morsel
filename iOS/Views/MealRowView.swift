@@ -5,6 +5,7 @@ import SwiftData
 struct MealRowView: View {
   var entry: FoodEntry
   var onDelete: (() -> Void)? = nil
+  var onToggle: (() -> Void)? = nil
 
   @EnvironmentObject private var appSettings: AppSettings
 
@@ -41,6 +42,13 @@ struct MealRowView: View {
     .padding(.vertical, 8)
     .contentShape(Rectangle())
     .contextMenu {
+      Button {
+        onToggle?()
+      } label: {
+        let label = entry.isForMorsel ? "Change to \"For Me\"" : "Change to \"For Morsel\""
+        Label(label, systemImage: "arrow.left.arrow.right")
+      }
+
       Button(role: .destructive) {
         onDelete?()
       } label: {
@@ -53,6 +61,8 @@ struct MealRowView: View {
 #Preview {
   MealRowView(entry: FoodEntry(name: "Pasta Bolognese", timestamp: .now)) {
     // delete action
+  } onToggle: {
+    // toggle action
   }
     .padding()
     .environmentObject(AppSettings.shared)

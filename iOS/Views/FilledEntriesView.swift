@@ -17,6 +17,7 @@ struct FilledEntriesView: View {
   let onTap: () -> Void
   let onScroll: (CGPoint) -> Void
   let onDelete: (FoodEntry) -> Void
+  let onToggleDestination: (FoodEntry) -> Void
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -30,10 +31,14 @@ struct FilledEntriesView: View {
               .contentTransition(.numericText())
 
             ForEach(group.entries) { entry in
-              MealRowView(entry: entry, onDelete: { onDelete(entry) })
-                .frame(minHeight: 44)
-                .transition(.move(edge: .leading).combined(with: .opacity))
-                .contentShape(Rectangle())
+              MealRowView(
+                entry: entry,
+                onDelete: { onDelete(entry) },
+                onToggle: { onToggleDestination(entry) }
+              )
+              .frame(minHeight: 44)
+              .transition(.move(edge: .leading).combined(with: .opacity))
+              .contentShape(Rectangle())
             }
           }
         }
