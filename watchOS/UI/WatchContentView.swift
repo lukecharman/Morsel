@@ -40,6 +40,7 @@ struct WatchContentView: View {
           isChoosingDestination: .constant(false),
           destinationProximity: .constant(0),
           isLookingUp: .constant(false),
+          isShowingDigest: .constant(false),
           morselColor: appSettings.morselColor,
           supportsOpen: false,
           onAdd: { _ in }
@@ -139,6 +140,7 @@ struct WatchContentView: View {
         isChoosingDestination: .constant(false),
         destinationProximity: .constant(0),
         isLookingUp: .constant(false),
+        isShowingDigest: .constant(false),
         morselColor: appSettings.morselColor,
         supportsOpen: false,
         onAdd: { _ in }

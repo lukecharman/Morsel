@@ -194,6 +194,7 @@ private extension ContentView {
         onboardingPage: $onboardingPage,
         speaker: morselSpeaker,
         anchor: $morselAnchor,
+        isShowingDigest: Binding(get: { isDigestVisible }, set: { _ in }),
         morselColor: appSettings.morselColor,
         onTap: {
           if showStats { withAnimation { showStats = false } }

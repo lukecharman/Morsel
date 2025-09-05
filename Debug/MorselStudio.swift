@@ -32,6 +32,7 @@ struct MorselStudio: View {
           isLookingUp: $isLookingUp,
           speaker: speaker,
           anchor: $anchor,
+          isShowingDigest: .constant(false),
           morselColor: morselColor,
           onAdd: { item in
             print(item)

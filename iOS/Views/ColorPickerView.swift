@@ -52,6 +52,7 @@ struct ColorPickerView: View {
             isChoosingDestination: .constant(true),
             destinationProximity: .constant(0.5),
             isLookingUp: .constant(false),
+            isShowingDigest: .constant(false),
             morselColor: previewColor ?? appSettings.morselColor,
             onAdd: { _ in },
           )

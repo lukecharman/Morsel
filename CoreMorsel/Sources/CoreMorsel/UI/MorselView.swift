@@ -147,6 +147,9 @@ public struct MorselView: View {
 
   @Binding var anchor: MorselAnchor?
 
+  // Whether a Digest overlay is visible (disables long press and tap-to-open)
+  @Binding var isShowingDigest: Bool
+
   var morselColor: Color
   var supportsOpen: Bool = true
 
@@ -166,6 +169,7 @@ public struct MorselView: View {
     onboardingPage: Binding<Double> = .constant(0),
     speaker: MorselSpeaker = .init(),
     anchor: Binding<MorselAnchor?> = .constant(nil),
+    isShowingDigest: Binding<Bool> = .constant(false),
     morselColor: Color,
     supportsOpen: Bool = true,
     onTap: (() -> Void)? = nil,
@@ -182,6 +186,7 @@ public struct MorselView: View {
     _onboardingPage = onboardingPage
     self.speaker = speaker
     _anchor = anchor
+    _isShowingDigest = isShowingDigest
     self.morselColor = morselColor
     self.supportsOpen = supportsOpen
     self.onTap = onTap
@@ -456,7 +461,8 @@ public struct MorselView: View {
               withAnimation {
                 isBeingTouched = false
               }
-              if !isChoosingDestination {
+              // Block tap-to-toggle open/close while digest is showing
+              if !isChoosingDestination && !isShowingDigest {
                 onTap?()
                 if isOpen {
                   close()
@@ -475,7 +481,7 @@ public struct MorselView: View {
       .simultaneousGesture(
         LongPressGesture(minimumDuration: 0.6)
           .onEnded { _ in
-            guard !isOnboardingVisible && !isChoosingDestination else { return }
+            guard !isOnboardingVisible && !isChoosingDestination && !isShowingDigest else { return }
             didTriggerLongPress = true
             playSpeechBubbleAnimation = true
             startTalking(totalDuration: 2.6)
@@ -1029,6 +1035,7 @@ public struct SpeechBubble: View {
       isChoosingDestination: .constant(false),
       destinationProximity: .constant(0),
       isLookingUp: .constant(false),
+      isShowingDigest: .constant(false),
       morselColor: .blue,
       supportsOpen: true
     ) { _ in }
