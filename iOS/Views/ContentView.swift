@@ -7,8 +7,6 @@ import WatchConnectivity
 import WidgetKit
 
 struct ContentView: View {
-  let shouldGenerateFakeData = false
-
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject var appSettings: AppSettings
   @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
@@ -282,9 +280,6 @@ private extension ContentView {
   }
 
   func onAppear() {
-    if shouldGenerateFakeData {
-      generateFakeEntries()
-    }
     if !hasSeenOnboarding {
       showOnboarding = true
     }
@@ -471,37 +466,6 @@ private extension ContentView {
 }
 
 private extension ContentView {
-  func generateFakeEntries() {
-    let calendar = Calendar.current
-    let mealNames = [
-      "Crisps", "Banana", "Pizza", "Toast", "Yoghurt", "Protein Bar", "Chocolate",
-      "Smoothie", "Biscuits", "Apple", "Ice Cream", "Salad", "Burger", "Chips", "Granola", "Cake"
-    ]
-
-    for dayOffset in 0..<30 {
-      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
-      let mealsToday = Int.random(in: 3...10)
-
-      for _ in 0..<mealsToday {
-        let hour = Int.random(in: 6...22)
-        let minute = Int.random(in: 0..<60)
-        var components = calendar.dateComponents([.year, .month, .day], from: date)
-        components.hour = hour
-        components.minute = minute
-        guard let mealDate = calendar.date(from: components) else { continue }
-
-        let entry = FoodEntry(
-          name: mealNames.randomElement()!,
-          timestamp: mealDate,
-          isForMorsel: Bool.random()
-        )
-        modelContext.insert(entry)
-      }
-    }
-
-    try? modelContext.save()
-  }
-
   @MainActor
   func toggleDestination(for entry: FoodEntry) {
     entry.isForMorsel.toggle()
@@ -527,3 +491,4 @@ private extension ContentView {
   ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), deepLinkDigestOffset: .constant(nil))
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
+
