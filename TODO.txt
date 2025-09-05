@@ -1,9 +1,9 @@
 1.0
 ---
-Digest Bug
+Digest
+ * Have Morsel appear in front of it like everywhere else. Not a sheet, a bottom like Onboarding.
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
- * This needs to be 100% rock solid.
- * Then, make the unlock itself beautiful. Animation, haptic – moment of truth.
+ * Make the unlock itself beautiful. Animation, haptic – moment of truth.
 
 Speech Bubble
  * Clean up the speech bubble's visual appearance.
@@ -14,17 +14,17 @@ Speech Bubble
  * Host a JSON file somewhere to remotely update these small phrases.
 
 Side Panels
- * Rethink the UI of the side panels, make it glassier, better with the bigger rounded corners etc. Can specify these.
- * Decide if the stats is useful enough, add more, clean them up, remove glass, etc.
+ * Decide if the data points are useful enough, add more, clean them up.
+ * Charts API for some super-simple graphs of progress?
 
 Personality
  * Finalise Morsel himself – add more expressions and make him feel more alive.
 
-Onboarding
- * Make a beautiful, impression-leaving onboarding.
+Onboarding/
+ * Clean up the copy and make it visually nicer. Use Morsel more.
 
 Watch & Widgets
- * Check this is all super smooth and working. Test what you can.
+ * Check this is all super smooth and working. No friction. Test what you can.
 
 App Store Stuff
  * Finalise all app icons – we have a set Morsel now so we can do this whenever.
