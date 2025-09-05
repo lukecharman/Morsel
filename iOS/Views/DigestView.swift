@@ -14,6 +14,7 @@ struct DigestView: View {
 
   let meals: [Meal]
   var initialOffset: Int? = nil
+  var onClose: (() -> Void)? = nil
 
   @State private var currentPageIndex: Int = 0
   @Namespace private var animation
@@ -180,7 +181,11 @@ struct DigestView: View {
     }
     .overlay(alignment: .topTrailing) {
       ToggleButton(isActive: true, systemImage: "xmark") {
-        dismiss()
+        if let onClose {
+          onClose()
+        } else {
+          dismiss()
+        }
       }
       .padding()
     }
@@ -705,3 +710,4 @@ enum DigestEncouragementState {
     }
   }
 }
+

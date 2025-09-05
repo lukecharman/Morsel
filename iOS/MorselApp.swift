@@ -5,6 +5,11 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 
+enum DigestPresentation: Equatable {
+  case hidden
+  case visible(initialOffset: Int?)
+}
+
 @main
 struct MorselApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -13,8 +18,7 @@ struct MorselApp: App {
   @Environment(\.scenePhase) private var scenePhase
 
   @State private var shouldOpenMouth = false
-  @State private var shouldShowDigest = false
-  @State private var digestOffset: Int? = nil
+  @State private var digestPresentation: DigestPresentation = .hidden
 
   let notificationsManager = NotificationsManager()
 
@@ -22,7 +26,10 @@ struct MorselApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView(shouldOpenMouth: $shouldOpenMouth, shouldShowDigest: $shouldShowDigest, deepLinkDigestOffset: $digestOffset)
+      ContentView(
+        shouldOpenMouth: $shouldOpenMouth,
+        digestPresentation: $digestPresentation
+      )
         .environmentObject(appSettings)
         .modelContainer(.morsel)
         .preferredColorScheme(appSettings.appTheme.colorScheme)
@@ -48,14 +55,15 @@ struct MorselApp: App {
     case "add":
       shouldOpenMouth = true
     case "digest":
+      let offset: Int?
       if let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
          let offStr = items.first(where: { $0.name == "offset" })?.value,
          let off = Int(offStr) {
-        digestOffset = off
+        offset = off
       } else {
-        digestOffset = nil
+        offset = nil
       }
-      shouldShowDigest = true
+      digestPresentation = .visible(initialOffset: offset)
     default:
       shouldOpenMouth = false
     }

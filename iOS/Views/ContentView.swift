@@ -24,7 +24,6 @@ struct ContentView: View {
   @State private var isChoosingDestination = false
   @State private var showStats = false
   @State private var showExtras = false
-  @State private var showDigest = false
   @State private var showOnboarding = false
   @State private var onboardingPage: Double = 0
   @State private var shouldCloseMouth: Bool = false
@@ -38,8 +37,7 @@ struct ContentView: View {
   private let notificationsManager = NotificationsManager()
 
   @Binding var shouldOpenMouth: Bool
-  @Binding var shouldShowDigest: Bool
-  @Binding var deepLinkDigestOffset: Int?
+  @Binding var digestPresentation: DigestPresentation
 
   var body: some View {
     ZStack {
@@ -84,7 +82,11 @@ struct ContentView: View {
     .overlay {
       sidePanelView(alignment: .leading, isVisible: showStats) {
         StatsView(statsModel: StatsModel(modelContainer: .morsel)) {
-          showDigest = true
+          // Internal request to show digest with no initial offset
+          withAnimation {
+            showStats = false
+            digestPresentation = .visible(initialOffset: nil)
+          }
         }
       }
     }
@@ -116,6 +118,22 @@ struct ContentView: View {
         })
       }
     }
+    .overlay {
+      // Single digest overlay driven by unified state
+      bottomPanelView(isVisible: isDigestVisible) {
+        DigestView(
+          meals: entries.map {
+            Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
+          },
+          initialOffset: currentDigestOffset,
+          onClose: {
+            withAnimation {
+              digestPresentation = .hidden
+            }
+          }
+        )
+      }
+    }
     .overlay(alignment: .top) { bottomBar }
     .overlay(alignment: .bottom) { morsel }
     .overlay(alignment: .bottom) {
@@ -142,17 +160,6 @@ struct ContentView: View {
         isKeyboardVisible = false
       }
     }
-    .sheet(isPresented: $showDigest) {
-      DigestView(meals: entries.map {
-        Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
-      })
-    }
-    .sheet(isPresented: $shouldShowDigest) {
-      DigestView(
-        meals: entries.map { Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving) },
-        initialOffset: deepLinkDigestOffset
-      )
-    }
     .onReceive(NotificationPublishers.cloudKitDataChanged) { _ in }
     .onReceive(NotificationPublishers.appDidBecomeActive) { _ in }
     .onChange(of: entries.count) { _, new in updateWidget(newCount: new) }
@@ -163,6 +170,16 @@ struct ContentView: View {
 private extension ContentView {
   var isLookingUp: Bool {
     showStats || showExtras
+  }
+
+  var isDigestVisible: Bool {
+    if case .visible = digestPresentation { return true }
+    return false
+  }
+
+  var currentDigestOffset: Int? {
+    if case let .visible(initialOffset) = digestPresentation { return initialOffset }
+    return nil
   }
 
   var morsel: some View {
@@ -209,7 +226,7 @@ private extension ContentView {
 
   @ViewBuilder
   var bottomBar: some View {
-    if !isKeyboardVisible && !isChoosingDestination && !showOnboarding {
+    if !isKeyboardVisible && !isChoosingDestination && !showOnboarding && !isDigestVisible {
       BottomBarView(
         showStats: $showStats,
         showExtras: $showExtras,
@@ -270,7 +287,7 @@ private extension ContentView {
   }
 
   var shouldHideBackground: Bool {
-    isKeyboardVisible || isChoosingDestination || showOnboarding
+    isKeyboardVisible || isChoosingDestination || showOnboarding || isDigestVisible
   }
 }
 
@@ -488,7 +505,9 @@ private extension ContentView {
 }
 
 #Preview {
-  ContentView(shouldOpenMouth: .constant(false), shouldShowDigest: .constant(false), deepLinkDigestOffset: .constant(nil))
+  ContentView(
+    shouldOpenMouth: .constant(false),
+    digestPresentation: .constant(.hidden)
+  )
     .modelContainer(for: FoodEntry.self, inMemory: true)
 }
-
