@@ -211,6 +211,7 @@ private extension ContentView {
   }
 
   func offsetY(for geometry: GeometryProxy) -> CGFloat {
+    // Base offsets for destination picker and keyboard
     if isChoosingDestination {
       return -(destinationPickerHeight / 2 + 40)
     } else if isKeyboardVisible {
@@ -220,7 +221,8 @@ private extension ContentView {
       let currentDefaultPosition = screenHeight / 2
       return centerOfAvailableSpace - currentDefaultPosition
     } else {
-      return 0
+      // When digest is visible, lift Morsel up by 80pt
+      return isDigestVisible ? -80 : 0
     }
   }
 
