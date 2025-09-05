@@ -127,18 +127,19 @@ struct DigestView: View {
       }
 
       HStack {
-        Button(action: {
-          withAnimation {
-            currentPageIndex += 1
+        GlassIconButton(
+          systemName: "chevron.left",
+          action: {
+            withAnimation {
+              currentPageIndex += 1
+            }
           }
-        }) {
-          Image(systemName: "chevron.left")
-            .foregroundColor(.white)
-            .padding(8)
-        }
+        )
+        .environmentObject(appSettings)
         .opacity(currentPageIndex < availableOffsets.count - 1 ? 1 : 0)
         .disabled(currentPageIndex >= availableOffsets.count - 1)
         .animation(.easeOut(duration: 0.2), value: currentPageIndex)
+        .accessibilityLabel("Previous period")
 
         Spacer()
 
@@ -163,18 +164,19 @@ struct DigestView: View {
 
         Spacer()
 
-        Button(action: {
-          withAnimation {
-            currentPageIndex -= 1
+        GlassIconButton(
+          systemName: "chevron.right",
+          action: {
+            withAnimation {
+              currentPageIndex -= 1
+            }
           }
-        }) {
-          Image(systemName: "chevron.right")
-            .foregroundColor(.white)
-            .padding(8)
-        }
+        )
+        .environmentObject(appSettings)
         .opacity(currentPageIndex > 0 ? 1 : 0)
         .disabled(currentPageIndex == 0)
         .animation(.easeOut(duration: 0.2), value: currentPageIndex)
+        .accessibilityLabel("Next period")
       }
       .padding(.horizontal)
       .padding(.bottom, 32)
@@ -189,6 +191,25 @@ struct DigestView: View {
       }
       .padding()
     }
+  }
+}
+
+private struct GlassIconButton: View {
+  @EnvironmentObject var appSettings: AppSettings
+  let systemName: String
+  let action: () -> Void
+
+  var body: some View {
+    Button(action: action) {
+      Image(systemName: systemName)
+        .font(.title2)
+        .padding(12)
+        .frame(width: 44, height: 44)
+        .clipShape(Circle())
+        .tint(Color(appSettings.morselColor))
+        .glass(.regular, in: Circle())
+    }
+    .buttonStyle(.plain)
   }
 }
 
@@ -710,4 +731,3 @@ enum DigestEncouragementState {
     }
   }
 }
-
