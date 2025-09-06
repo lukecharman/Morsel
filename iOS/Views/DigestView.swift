@@ -132,13 +132,13 @@ struct DigestView: View {
           }
         }
 
-        // Bottom controls — identical layout to OnboardingView
+        // Bottom controls — identical layout to OnboardingView, now with three buttons: < X >
         VStack {
           Spacer()
           HStack(spacing: 24) {
+            // Previous (higher offset)
             Button(action: {
               withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
-                // Previous period (higher offset)
                 currentPageIndex = min(currentPageIndex + 1, availableOffsets.count - 1)
               }
             }) {
@@ -151,9 +151,25 @@ struct DigestView: View {
             .disabled(currentPageIndex >= availableOffsets.count - 1)
             .accessibilityLabel("Previous period")
 
+            // Close (center)
+            Button(action: {
+              Haptics.trigger(.selection)
+              if let onClose {
+                onClose()
+              } else {
+                dismiss()
+              }
+            }) {
+              Image(systemName: "xmark")
+                .font(.title3)
+                .foregroundStyle(appSettings.morselColor)
+                .frame(width: 44, height: 44)
+            }
+            .accessibilityLabel("Close digest")
+
+            // Next (lower offset)
             Button(action: {
               withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
-                // Next period (lower offset)
                 currentPageIndex = max(currentPageIndex - 1, 0)
               }
             }) {
@@ -177,16 +193,6 @@ struct DigestView: View {
         }
       }
       .ignoresSafeArea(.all)
-    }
-    .overlay(alignment: .topTrailing) {
-      ToggleButton(isActive: true, systemImage: "xmark") {
-        if let onClose {
-          onClose()
-        } else {
-          dismiss()
-        }
-      }
-      .padding()
     }
   }
 
