@@ -249,7 +249,7 @@ private struct DigestStatRow: View {
       VStack(alignment: .leading) {
         Text(label)
           .font(MorselFont.body)
-          .foregroundColor(.secondary)
+          .foregroundColor(.primary.opacity(0.9))
         Text(value)
           .font(MorselFont.heading)
       }
