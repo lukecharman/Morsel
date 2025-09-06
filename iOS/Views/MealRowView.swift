@@ -124,7 +124,7 @@ private struct RenameSheet: View {
         .background(
           Capsule(style: .continuous)
             .fill(Color.clear)
-            .glass(.clear, in: Capsule(style: .continuous))
+            .glassEffect(.clear, in: Capsule(style: .continuous))
         )
         .accessibilityLabel("Cancel")
 
@@ -139,7 +139,7 @@ private struct RenameSheet: View {
         .background(
           Capsule(style: .continuous)
             .fill(Color.clear)
-            .glass(.clear, in: Capsule(style: .continuous))
+            .glassEffect(.clear, in: Capsule(style: .continuous))
         )
         .opacity(isInvalid ? 0.5 : 1)
         .disabled(isInvalid)

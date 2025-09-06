@@ -130,7 +130,7 @@ struct OnboardingView: View {
           .background(
             Capsule(style: .continuous)
               .fill(Color.clear)
-              .glass(.clear, in: Capsule(style: .continuous))
+              .glassEffect(.clear, in: Capsule(style: .continuous))
           )
           .padding(.bottom, geo.safeAreaInsets.bottom + 24)
         }

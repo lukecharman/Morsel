@@ -63,7 +63,7 @@ struct DestinationPickerView: View {
 
               // The draggable plate
               Circle()
-                .glass(in: Circle())
+                .glassEffect(in: Circle())
                 .frame(width: 64, height: 64)
                 .overlay(
                   Image(systemName: "fork.knife")

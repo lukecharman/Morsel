@@ -64,7 +64,7 @@ struct CardView: View {
       }
     }
     .padding()
-    .glass(.regular, in: shape)
+    .glassEffect(.regular, in: shape)
     // Make the entire card tappable, including description and padding
     .contentShape(Rectangle())
     .highPriorityGesture(

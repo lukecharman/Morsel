@@ -42,144 +42,141 @@ struct DigestView: View {
   }
 
   var body: some View {
-    VStack(spacing: 16) {
-
-      TabView(selection: $currentPageIndex) {
-        ForEach(availableOffsets, id: \.self) { offset in
-          let digest = digest(forOffset: offset)
-          let availabilityState = digestAvailabilityState(digest)
-          let digestKey = digestUnlockKey(for: digest)
-
-          ZStack {
-            ScrollView {
-              VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("Weekly Digest")
-                    .padding(.top, 16)
-                    .font(MorselFont.title)
-
-                  Text(formattedRange(for: digest))
-                    .font(MorselFont.body)
-                    .foregroundStyle(.secondary)
-                }
-
-                VStack(alignment: .leading, spacing: 12) {
-                  DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
-                  DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
-                  DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
-                  DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
-                  DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("How you did")
-                    .font(MorselFont.heading)
-                  Text(encouragement(for: digest))
-                    .font(MorselFont.body)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                  Text("Morsel's Tip")
-                    .font(MorselFont.heading)
-                  Text(digest.tip.rawValue)
-                    .font(MorselFont.body)
-                }
-              }
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .padding()
-              .blur(radius: availabilityState == .locked ? 8 : (animatingBlurRadius[digestKey] ?? (availabilityState == .unlockable ? 8 : 0)))
-              .allowsHitTesting(availabilityState != .locked)
-              .accessibilityHidden(availabilityState == .locked)
-            }
-            .disabled(availabilityState == .locked)
-            .onAppear {
-              // Check if this digest should animate and hasn't been animated yet
+    GeometryReader { geo in
+      ZStack {
+        // Main content
+        VStack(spacing: 0) {
+          TabView(selection: $currentPageIndex) {
+            ForEach(availableOffsets, id: \.self) { offset in
+              let digest = digest(forOffset: offset)
+              let availabilityState = digestAvailabilityState(digest)
               let digestKey = digestUnlockKey(for: digest)
-              let shouldAnimate = availabilityState == .unlockable && !hasTriggeredAnimation.contains(digestKey)
-              
-              if shouldAnimate {
-                hasTriggeredAnimation.insert(digestKey)
-                triggerUnblurAnimation(for: digest)
-              }
-            }
 
-            if availabilityState == .locked {
-              VStack(spacing: 12) {
-                Text("This week isn't finished yet!")
-                  .font(MorselFont.heading)
-                Text(unlockMessage(for: digest))
-                  .font(MorselFont.body)
-                  .multilineTextAlignment(.center)
+              ZStack {
+                ScrollView {
+                  VStack(alignment: .leading, spacing: 24) {
+                    Spacer().frame(height: 44)
+                    VStack(alignment: .leading, spacing: 8) {
+                      Text("Weekly Digest")
+                        .padding(.top, 16)
+                        .font(MorselFont.title)
+
+                      Text(formattedRange(for: digest))
+                        .font(MorselFont.body)
+                        .foregroundStyle(.secondary)
+                    }
+
+                    VStack(alignment: .leading, spacing: 12) {
+                      DigestStatRow(icon: "fork.knife", label: "Meals logged", value: "\(digest.mealsLogged)")
+                      DigestStatRow(icon: "flame", label: "Cravings resisted", value: "\(digest.cravingsResisted)")
+                      DigestStatRow(icon: "face.dashed", label: "Cravings given in to", value: "\(digest.cravingsGivenIn)")
+                      DigestStatRow(icon: "flame.fill", label: "Streak", value: "\(digest.streakLength) weeks")
+                      DigestStatRow(icon: "cup.and.saucer.fill", label: "Most common craving", value: digest.mostCommonCraving)
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                      Text("How you did")
+                        .font(MorselFont.heading)
+                      Text(encouragement(for: digest))
+                        .font(MorselFont.body)
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                      Text("Morsel's Tip")
+                        .font(MorselFont.heading)
+                      Text(digest.tip.rawValue)
+                        .font(MorselFont.body)
+                    }
+                  }
+                  .frame(maxWidth: .infinity, alignment: .leading)
+                  .padding()
+                  .blur(radius: availabilityState == .locked ? 8 : (animatingBlurRadius[digestKey] ?? (availabilityState == .unlockable ? 8 : 0)))
+                  .allowsHitTesting(availabilityState != .locked)
+                  .accessibilityHidden(availabilityState == .locked)
+                }
+                .disabled(availabilityState == .locked)
+                .ignoresSafeArea() // extend to full height
+                .mask { mask }     // apply the same fade gradient blur mask as FilledEntriesView
+                .onAppear {
+                  // Check if this digest should animate and hasn't been animated yet
+                  let digestKey = digestUnlockKey(for: digest)
+                  let shouldAnimate = availabilityState == .unlockable && !hasTriggeredAnimation.contains(digestKey)
+                  
+                  if shouldAnimate {
+                    hasTriggeredAnimation.insert(digestKey)
+                    triggerUnblurAnimation(for: digest)
+                  }
+                }
+
+                if availabilityState == .locked {
+                  VStack(spacing: 12) {
+                    Text("This week isn't finished yet!")
+                      .font(MorselFont.heading)
+                    Text(unlockMessage(for: digest))
+                      .font(MorselFont.body)
+                      .multilineTextAlignment(.center)
+                  }
+                  .padding()
+                  .frame(maxWidth: .infinity)
+                  .background(.ultraThinMaterial)
+                  .cornerRadius(12)
+                  .padding()
+                }
               }
-              .padding()
-              .frame(maxWidth: .infinity)
-              .background(.ultraThinMaterial)
-              .cornerRadius(12)
-              .padding()
+              .tag(offset)
             }
           }
-          .tag(offset)
+          .tabViewStyle(.page(indexDisplayMode: .never))
+          .onAppear {
+            currentPageIndex = initialOffset ?? 0
+          }
+        }
+
+        // Bottom controls — identical layout to OnboardingView
+        VStack {
+          Spacer()
+          HStack(spacing: 24) {
+            Button(action: {
+              withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
+                // Previous period (higher offset)
+                currentPageIndex = min(currentPageIndex + 1, availableOffsets.count - 1)
+              }
+            }) {
+              Image(systemName: "chevron.left")
+                .font(.title3)
+                .foregroundStyle(appSettings.morselColor)
+                .frame(width: 44, height: 44)
+            }
+            .opacity(currentPageIndex < availableOffsets.count - 1 ? 1 : 0.4)
+            .disabled(currentPageIndex >= availableOffsets.count - 1)
+            .accessibilityLabel("Previous period")
+
+            Button(action: {
+              withAnimation(.interactiveSpring(response: 0.85, dampingFraction: 0.68)) {
+                // Next period (lower offset)
+                currentPageIndex = max(currentPageIndex - 1, 0)
+              }
+            }) {
+              Image(systemName: "chevron.right")
+                .font(.title3)
+                .foregroundStyle(appSettings.morselColor)
+                .frame(width: 44, height: 44)
+            }
+            .opacity(currentPageIndex > 0 ? 1 : 0.4)
+            .disabled(currentPageIndex == 0)
+            .accessibilityLabel("Next period")
+          }
+          .padding(.horizontal, 16)
+          .padding(.vertical, 8)
+          .background(
+            Capsule(style: .continuous)
+              .fill(Color.clear)
+              .glassEffect(.clear, in: Capsule(style: .continuous))
+          )
+          .padding(.bottom, geo.safeAreaInsets.bottom - 10)
         }
       }
-      .tabViewStyle(.page(indexDisplayMode: .never))
-      .onAppear {
-        currentPageIndex = initialOffset ?? 0
-      }
-
-      HStack {
-        GlassIconButton(
-          systemName: "chevron.left",
-          action: {
-            withAnimation {
-              currentPageIndex += 1
-            }
-          }
-        )
-        .environmentObject(appSettings)
-        .opacity(currentPageIndex < availableOffsets.count - 1 ? 1 : 0)
-        .disabled(currentPageIndex >= availableOffsets.count - 1)
-        .animation(.easeOut(duration: 0.2), value: currentPageIndex)
-        .accessibilityLabel("Previous period")
-
-        Spacer()
-
-        if currentPageIndex >= 0 && currentPageIndex < availableOffsets.count {
-          let tag = availableOffsets.reversed()[currentPageIndex]
-          let currentDigest = digest(forOffset: tag)
-          ZStack {
-            HStack {
-              Text(formattedRange(for: currentDigest))
-                .font(MorselFont.body)
-                .foregroundColor(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-                .id(tag)
-                .matchedGeometryEffect(id: "weekLabel", in: animation)
-            }
-          }
-          .animation(.easeInOut(duration: 0.3), value: tag)
-        }
-
-        Spacer()
-
-        GlassIconButton(
-          systemName: "chevron.right",
-          action: {
-            withAnimation {
-              currentPageIndex -= 1
-            }
-          }
-        )
-        .environmentObject(appSettings)
-        .opacity(currentPageIndex > 0 ? 1 : 0)
-        .disabled(currentPageIndex == 0)
-        .animation(.easeOut(duration: 0.2), value: currentPageIndex)
-        .accessibilityLabel("Next period")
-      }
-      .padding(.horizontal)
-      .padding(.bottom, 32)
+      .ignoresSafeArea(.all)
     }
     .overlay(alignment: .topTrailing) {
       ToggleButton(isActive: true, systemImage: "xmark") {
@@ -191,6 +188,22 @@ struct DigestView: View {
       }
       .padding()
     }
+  }
+
+  // Same fade gradient blur mask used in FilledEntriesView
+  private var mask: some View {
+    LinearGradient(
+      gradient: Gradient(stops: [
+        .init(color: .clear, location: 0.0),
+        .init(color: .black, location: 0.03),
+        .init(color: .black, location: 0.92),
+        .init(color: .clear, location: 0.95),
+        .init(color: .clear, location: 1.0)
+      ]),
+      startPoint: .top,
+      endPoint: .bottom
+    )
+    .blur(radius: 22)
   }
 }
 
@@ -207,7 +220,7 @@ private struct GlassIconButton: View {
         .frame(width: 44, height: 44)
         .clipShape(Circle())
         .tint(Color(appSettings.morselColor))
-        .glass(.regular, in: Circle())
+        .glassEffect(.regular, in: Circle())
     }
     .buttonStyle(.plain)
   }
