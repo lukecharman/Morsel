@@ -9,7 +9,7 @@ struct DigestView: View {
 
   @StateObject private var viewModel: DigestViewModel
 
-  init(meals: [Meal], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
+  init(meals: [FoodEntry], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
     self.onClose = onClose
     _viewModel = StateObject(wrappedValue: DigestViewModel(meals: meals, initialOffset: initialOffset))
   }

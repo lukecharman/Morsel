@@ -1,3 +1,4 @@
+import CoreMorsel
 import Foundation
 import SwiftUI
 
@@ -6,7 +7,7 @@ enum DigestMood { case noMeals, strong, tough, balanced }
 
 final class DigestViewModel: ObservableObject {
   // Inputs
-  let meals: [Meal]
+  let meals: [FoodEntry]
   let initialOffset: Int?
 
   // UI state
@@ -17,7 +18,7 @@ final class DigestViewModel: ObservableObject {
   private var unblurAnimationInProgress: Set<String> = []
   private var hasTriggeredAnimation: Set<String> = []
 
-  init(meals: [Meal], initialOffset: Int? = nil) {
+  init(meals: [FoodEntry], initialOffset: Int? = nil) {
     self.meals = meals
     self.initialOffset = initialOffset
   }
@@ -26,7 +27,7 @@ final class DigestViewModel: ObservableObject {
 
   var availableOffsets: [Int] {
     let calendar = Calendar.current
-    guard let earliest = meals.map(\.date).min() else { return [1, 0] } // Always include last week
+    guard let earliest = meals.map(\.timestamp).min() else { return [1, 0] } // Always include last week
     let startOfThisWeek = calendar.startOfWeek(for: Date())
     let startOfEarliestWeek = calendar.startOfWeek(for: earliest)
     let rawWeeks = calendar.dateComponents([.weekOfYear], from: startOfEarliestWeek, to: startOfThisWeek).weekOfYear ?? 0

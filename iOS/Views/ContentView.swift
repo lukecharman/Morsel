@@ -122,9 +122,7 @@ struct ContentView: View {
       // Single digest overlay driven by unified state
       bottomPanelView(isVisible: isDigestVisible) {
         DigestView(
-          meals: entries.map {
-            Meal(date: $0.timestamp, name: $0.name, type: $0.isForMorsel ? .resisted : .craving)
-          },
+          meals: entries,
           initialOffset: currentDigestOffset,
           onClose: {
             withAnimation {

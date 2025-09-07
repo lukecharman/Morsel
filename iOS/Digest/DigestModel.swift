@@ -1,3 +1,4 @@
+import CoreMorsel
 import Foundation
 
 enum DigestAvailabilityState {
@@ -22,35 +23,35 @@ struct DigestModel {
   let streakLength: Int
   let tip: MorselTip
 
-  init(forWeekContaining date: Date, allMeals: [Meal]) {
+  init(forWeekContaining date: Date, allMeals: [FoodEntry]) {
     let calendar = Calendar.current
     let weekStart = calendar.startOfWeek(for: date)
     let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
 
     // Compute inclusiveWeekEnd after weekStart/weekEnd are set
     let inclusiveWeekEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: weekStart)!
-    let thisWeeksMeals = allMeals.filter { $0.date >= weekStart && $0.date <= inclusiveWeekEnd }
+    let thisWeeksMeals = allMeals.filter { $0.timestamp >= weekStart && $0.timestamp <= inclusiveWeekEnd }
 
     self.weekStart = weekStart
     self.weekEnd = weekEnd
     self.mealsLogged = thisWeeksMeals.count
-    self.cravingsResisted = thisWeeksMeals.filter { $0.type == .resisted }.count
-    self.cravingsGivenIn = thisWeeksMeals.filter { $0.type == .craving }.count
+    self.cravingsResisted = thisWeeksMeals.filter { $0.isForMorsel }.count
+    self.cravingsGivenIn = thisWeeksMeals.filter { !$0.isForMorsel }.count
 
-    let cravings = thisWeeksMeals.filter { $0.type == .craving || $0.type == .resisted }
+    let cravings = thisWeeksMeals // both “for me” and “for Morsel” are considered cravings context here
     let cravingNames = cravings.map { $0.name }
     let counted = Dictionary(grouping: cravingNames, by: { $0 }).mapValues { $0.count }
     self.mostCommonCraving = counted.sorted { $0.value > $1.value }.first?.key ?? "N/A"
 
     // Streak = consecutive non-empty weeks ending with this one
-    func consecutiveNonEmptyWeeks(endingAt weekStart: Date, allMeals: [Meal], calendar: Calendar) -> Int {
+    func consecutiveNonEmptyWeeks(endingAt weekStart: Date, allMeals: [FoodEntry], calendar: Calendar) -> Int {
       let maxWeeksBack = 52
       var streak = 0
       for i in 0..<maxWeeksBack {
         guard let checkDate = calendar.date(byAdding: .weekOfYear, value: -i, to: weekStart) else { break }
         let checkStart = calendar.startOfWeek(for: checkDate)
         let checkEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: checkStart)!
-        let mealsInWeek = allMeals.filter { $0.date >= checkStart && $0.date <= checkEnd }
+        let mealsInWeek = allMeals.filter { $0.timestamp >= checkStart && $0.timestamp <= checkEnd }
         if mealsInWeek.isEmpty {
           break
         } else {
@@ -67,35 +68,35 @@ struct DigestModel {
     self.tip = MorselTip.allCases.randomElement(using: &generator)!
   }
 
-  init(forDayContaining date: Date, allMeals: [Meal]) {
+  init(forDayContaining date: Date, allMeals: [FoodEntry]) {
     let calendar = Calendar.current
     let dayStart = calendar.startOfDay(for: date)
     let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
 
     // Compute inclusiveDayEnd after dayStart/dayEnd are set
     let inclusiveDayEnd = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: dayStart)!
-    let thisDaysMeals = allMeals.filter { $0.date >= dayStart && $0.date <= inclusiveDayEnd }
+    let thisDaysMeals = allMeals.filter { $0.timestamp >= dayStart && $0.timestamp <= inclusiveDayEnd }
 
     self.weekStart = dayStart  // Use weekStart as the period start for consistency
     self.weekEnd = dayEnd      // Use weekEnd as the period end for consistency
     self.mealsLogged = thisDaysMeals.count
-    self.cravingsResisted = thisDaysMeals.filter { $0.type == .resisted }.count
-    self.cravingsGivenIn = thisDaysMeals.filter { $0.type == .craving }.count
+    self.cravingsResisted = thisDaysMeals.filter { $0.isForMorsel }.count
+    self.cravingsGivenIn = thisDaysMeals.filter { !$0.isForMorsel }.count
 
-    let cravings = thisDaysMeals.filter { $0.type == .craving || $0.type == .resisted }
+    let cravings = thisDaysMeals
     let cravingNames = cravings.map { $0.name }
     let counted = Dictionary(grouping: cravingNames, by: { $0 }).mapValues { $0.count }
     self.mostCommonCraving = counted.sorted { $0.value > $1.value }.first?.key ?? "N/A"
 
     // Streak = consecutive non-empty days ending with this one
-    func consecutiveNonEmptyDays(endingAt dayStart: Date, allMeals: [Meal], calendar: Calendar) -> Int {
+    func consecutiveNonEmptyDays(endingAt dayStart: Date, allMeals: [FoodEntry], calendar: Calendar) -> Int {
       let maxDaysBack = 365
       var streak = 0
       for i in 0..<maxDaysBack {
         guard let checkDate = calendar.date(byAdding: .day, value: -i, to: dayStart) else { break }
         let checkStart = calendar.startOfDay(for: checkDate)
         let checkEnd = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: checkStart)!
-        let mealsInDay = allMeals.filter { $0.date >= checkStart && $0.date <= checkEnd }
+        let mealsInDay = allMeals.filter { $0.timestamp >= checkStart && $0.timestamp <= checkEnd }
         if mealsInDay.isEmpty {
           break
         } else {
