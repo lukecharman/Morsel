@@ -2,13 +2,13 @@ import CoreMorsel
 import Foundation
 
 enum DigestAvailabilityState {
-  case locked      // Current period, before unlock time (weekly: Friday 9 AM, daily: 9 AM each day)
-  case unlockable  // Current period, after unlock time, not yet unlocked (ready to animate)
-  case unlocked    // Has been unlocked (first viewed after unlock time) or past period
+  case locked
+  case unlockable
+  case unlocked
 }
 
 struct DigestConfiguration {
-  static let unlockWeekday = 2 // 1 = Sunday
+  static let unlockWeekday = 2 // Monday
   static let unlockHour = 12
   static let unlockMinute = 15
 }
@@ -111,28 +111,5 @@ struct DigestModel {
     let seed = calendar.component(.day, from: dayStart) + calendar.component(.month, from: dayStart) * 100 + calendar.component(.year, from: dayStart) * 10000
     var generator = SeededGenerator(seed: seed)
     self.tip = MorselTip.allCases.randomElement(using: &generator)!
-  }
-}
-
-extension Calendar {
-  func startOfWeek(for date: Date) -> Date {
-    // Force ISO-8601 (Monday-start) weeks but keep the current timezone
-    var cal = Calendar(identifier: .iso8601)
-    cal.timeZone = self.timeZone
-    let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-    return cal.date(from: comps)!
-  }
-}
-
-struct SeededGenerator: RandomNumberGenerator {
-  init(seed: Int) {
-    self.state = UInt64(seed)
-  }
-
-  private var state: UInt64
-
-  mutating func next() -> UInt64 {
-    state = state &* 6364136223846793005 &+ 1
-    return state
   }
 }

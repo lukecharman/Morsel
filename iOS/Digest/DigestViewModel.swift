@@ -2,7 +2,7 @@ import CoreMorsel
 import Foundation
 import SwiftUI
 
-enum Season { case winter, spring, summer, autumn }
+enum DigestSeason { case winter, spring, summer, autumn }
 enum DigestMood { case noMeals, strong, tough, balanced }
 
 final class DigestViewModel: ObservableObject {
@@ -113,7 +113,7 @@ final class DigestViewModel: ObservableObject {
 
   // MARK: - Titles / Text
 
-  func season(for date: Date) -> Season {
+  func season(for date: Date) -> DigestSeason {
     let m = Calendar.current.component(.month, from: date)
     switch m {
     case 12, 1, 2: return .winter

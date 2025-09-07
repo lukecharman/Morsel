@@ -1,7 +1,7 @@
 import Foundation
 
 enum DigestTitleGenerator {
-  static let titles: [DigestMood: [Season: [String]]] = [
+  static let titles: [DigestMood: [DigestSeason: [String]]] = [
     .noMeals: [
       .winter: [
         "Quiet Winter Week",
@@ -257,7 +257,7 @@ enum DigestTitleGenerator {
   ]
 
   // Season-only fallbacks
-  static let seasonOnly: [Season: [String]] = [
+  static let seasonOnly: [DigestSeason: [String]] = [
     .winter: [
       "Winter Notes",
       "Snowy Summary",
@@ -369,7 +369,7 @@ enum DigestTitleGenerator {
     meals: Int,
     resisted: Int,
     gaveIn: Int,
-    season: Season,
+    season: DigestSeason,
     mood: DigestMood
   ) -> [String] {
     var list: [String] = []
