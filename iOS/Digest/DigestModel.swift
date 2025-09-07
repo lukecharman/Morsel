@@ -1,0 +1,125 @@
+import Foundation
+
+struct DigestModel {
+  let weekStart: Date
+  let weekEnd: Date
+  let mealsLogged: Int
+  let cravingsResisted: Int
+  let cravingsGivenIn: Int
+  let mostCommonCraving: String
+  let streakLength: Int
+  let tip: MorselTip
+
+  init(forWeekContaining date: Date, allMeals: [Meal]) {
+    let calendar = Calendar.current
+    let weekStart = calendar.startOfWeek(for: date)
+    let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
+
+    // Compute inclusiveWeekEnd after weekStart/weekEnd are set
+    let inclusiveWeekEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: weekStart)!
+    let thisWeeksMeals = allMeals.filter { $0.date >= weekStart && $0.date <= inclusiveWeekEnd }
+
+    self.weekStart = weekStart
+    self.weekEnd = weekEnd
+    self.mealsLogged = thisWeeksMeals.count
+    self.cravingsResisted = thisWeeksMeals.filter { $0.type == .resisted }.count
+    self.cravingsGivenIn = thisWeeksMeals.filter { $0.type == .craving }.count
+
+    let cravings = thisWeeksMeals.filter { $0.type == .craving || $0.type == .resisted }
+    let cravingNames = cravings.map { $0.name }
+    let counted = Dictionary(grouping: cravingNames, by: { $0 }).mapValues { $0.count }
+    self.mostCommonCraving = counted.sorted { $0.value > $1.value }.first?.key ?? "N/A"
+
+    // Streak = consecutive non-empty weeks ending with this one
+    func consecutiveNonEmptyWeeks(endingAt weekStart: Date, allMeals: [Meal], calendar: Calendar) -> Int {
+      let maxWeeksBack = 52
+      var streak = 0
+      for i in 0..<maxWeeksBack {
+        guard let checkDate = calendar.date(byAdding: .weekOfYear, value: -i, to: weekStart) else { break }
+        let checkStart = calendar.startOfWeek(for: checkDate)
+        let checkEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: checkStart)!
+        let mealsInWeek = allMeals.filter { $0.date >= checkStart && $0.date <= checkEnd }
+        if mealsInWeek.isEmpty {
+          break
+        } else {
+          streak += 1
+        }
+      }
+      return streak
+    }
+    self.streakLength = consecutiveNonEmptyWeeks(endingAt: weekStart, allMeals: allMeals, calendar: calendar)
+
+    // Deterministic tip per week
+    let seed = calendar.component(.weekOfYear, from: weekStart) + calendar.component(.year, from: weekStart) * 100
+    var generator = SeededGenerator(seed: seed)
+    self.tip = MorselTip.allCases.randomElement(using: &generator)!
+  }
+
+  init(forDayContaining date: Date, allMeals: [Meal]) {
+    let calendar = Calendar.current
+    let dayStart = calendar.startOfDay(for: date)
+    let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
+
+    // Compute inclusiveDayEnd after dayStart/dayEnd are set
+    let inclusiveDayEnd = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: dayStart)!
+    let thisDaysMeals = allMeals.filter { $0.date >= dayStart && $0.date <= inclusiveDayEnd }
+
+    self.weekStart = dayStart  // Use weekStart as the period start for consistency
+    self.weekEnd = dayEnd      // Use weekEnd as the period end for consistency
+    self.mealsLogged = thisDaysMeals.count
+    self.cravingsResisted = thisDaysMeals.filter { $0.type == .resisted }.count
+    self.cravingsGivenIn = thisDaysMeals.filter { $0.type == .craving }.count
+
+    let cravings = thisDaysMeals.filter { $0.type == .craving || $0.type == .resisted }
+    let cravingNames = cravings.map { $0.name }
+    let counted = Dictionary(grouping: cravingNames, by: { $0 }).mapValues { $0.count }
+    self.mostCommonCraving = counted.sorted { $0.value > $1.value }.first?.key ?? "N/A"
+
+    // Streak = consecutive non-empty days ending with this one
+    func consecutiveNonEmptyDays(endingAt dayStart: Date, allMeals: [Meal], calendar: Calendar) -> Int {
+      let maxDaysBack = 365
+      var streak = 0
+      for i in 0..<maxDaysBack {
+        guard let checkDate = calendar.date(byAdding: .day, value: -i, to: dayStart) else { break }
+        let checkStart = calendar.startOfDay(for: checkDate)
+        let checkEnd = calendar.date(byAdding: DateComponents(day: 1, second: -1), to: checkStart)!
+        let mealsInDay = allMeals.filter { $0.date >= checkStart && $0.date <= checkEnd }
+        if mealsInDay.isEmpty {
+          break
+        } else {
+          streak += 1
+        }
+      }
+      return streak
+    }
+    self.streakLength = consecutiveNonEmptyDays(endingAt: dayStart, allMeals: allMeals, calendar: calendar)
+
+    // Deterministic tip per day
+    let seed = calendar.component(.day, from: dayStart) + calendar.component(.month, from: dayStart) * 100 + calendar.component(.year, from: dayStart) * 10000
+    var generator = SeededGenerator(seed: seed)
+    self.tip = MorselTip.allCases.randomElement(using: &generator)!
+  }
+}
+
+extension Calendar {
+  func startOfWeek(for date: Date) -> Date {
+    // Force ISO-8601 (Monday-start) weeks but keep the current timezone
+    var cal = Calendar(identifier: .iso8601)
+    cal.timeZone = self.timeZone
+    let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+    return cal.date(from: comps)!
+  }
+}
+
+struct SeededGenerator: RandomNumberGenerator {
+  init(seed: Int) {
+    self.state = UInt64(seed)
+  }
+
+  private var state: UInt64
+
+  mutating func next() -> UInt64 {
+    state = state &* 6364136223846793005 &+ 1
+    return state
+  }
+}
