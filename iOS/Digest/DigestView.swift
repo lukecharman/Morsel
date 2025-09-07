@@ -5,16 +5,11 @@ struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
   @Environment(\.dismiss) private var dismiss
 
-  let meals: [Meal]
-
-  var initialOffset: Int? = nil
   var onClose: (() -> Void)? = nil
 
   @StateObject private var viewModel: DigestViewModel
 
   init(meals: [Meal], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
-    self.meals = meals
-    self.initialOffset = initialOffset
     self.onClose = onClose
   
     _viewModel = StateObject(wrappedValue: DigestViewModel(meals: meals, initialOffset: initialOffset))
