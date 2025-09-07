@@ -414,7 +414,6 @@ struct DigestView: View {
       // Mark as unlocked AFTER animation completes
       self.markDigestAsUnlocked(digest)
 
-
       // Also mark the week's nudge as sent and clean up delivered notifications
       // TODO: Put htis in NotificationsManager and remove the dependency on UN here.
       self.markWeeklyNudgeAsSent(for: digest)
