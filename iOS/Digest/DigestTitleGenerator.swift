@@ -1,7 +1,7 @@
 import Foundation
 
 enum DigestTitleGenerator {
-  static let titles: [DigestView.DigestMood: [DigestView.Season: [String]]] = [
+  static let titles: [DigestMood: [Season: [String]]] = [
     .noMeals: [
       .winter: [
         "Quiet Winter Week",
@@ -205,7 +205,7 @@ enum DigestTitleGenerator {
   ]
 
   // Mood-only fallbacks
-  static let moodOnly: [DigestView.DigestMood: [String]] = [
+  static let moodOnly: [DigestMood: [String]] = [
     .noMeals: [
       "Quiet Week",
       "A Pause in the Log",
@@ -257,7 +257,7 @@ enum DigestTitleGenerator {
   ]
 
   // Season-only fallbacks
-  static let seasonOnly: [DigestView.Season: [String]] = [
+  static let seasonOnly: [Season: [String]] = [
     .winter: [
       "Winter Notes",
       "Snowy Summary",
@@ -369,8 +369,8 @@ enum DigestTitleGenerator {
     meals: Int,
     resisted: Int,
     gaveIn: Int,
-    season: DigestView.Season,
-    mood: DigestView.DigestMood
+    season: Season,
+    mood: DigestMood
   ) -> [String] {
     var list: [String] = []
     if streak >= 2 {
