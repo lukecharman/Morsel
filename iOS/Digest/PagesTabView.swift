@@ -29,6 +29,9 @@ struct PagesTabView: View {
       }
     }
     .tabViewStyle(.page(indexDisplayMode: .never))
+    .onAppear {
+      viewModel.currentPageIndex = viewModel.initialOffset ?? 0
+    }
   }
 
   // Reuse the same mask shape as parent
