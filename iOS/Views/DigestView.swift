@@ -32,7 +32,7 @@ private extension DigestView {
   }
 
   var bottomControlsView: some View {
-    BottomControlsView(
+    DigestBottomControlsView(
       currentPageIndex: $viewModel.currentPageIndex,
       pageCount: viewModel.availableOffsets.count,
       morselColor: appSettings.morselColor,

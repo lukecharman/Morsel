@@ -121,11 +121,7 @@ private struct RenameSheet: View {
           Image(systemName: "xmark")
         }
         .frame(width: 44, height: 44)
-        .background(
-          Capsule(style: .continuous)
-            .fill(Color.clear)
-            .glassEffect(.clear, in: Capsule(style: .continuous))
-        )
+        .glassCapsuleBackground()
         .accessibilityLabel("Cancel")
 
         Spacer(minLength: 0)
@@ -136,11 +132,7 @@ private struct RenameSheet: View {
           Image(systemName: "checkmark")
         }
         .frame(width: 44, height: 44)
-        .background(
-          Capsule(style: .continuous)
-            .fill(Color.clear)
-            .glassEffect(.clear, in: Capsule(style: .continuous))
-        )
+        .glassCapsuleBackground()
         .opacity(isInvalid ? 0.5 : 1)
         .disabled(isInvalid)
         .accessibilityLabel("Save")

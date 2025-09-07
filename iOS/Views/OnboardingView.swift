@@ -127,11 +127,7 @@ struct OnboardingView: View {
           }
           .padding(.horizontal, 16)
           .padding(.vertical, 8)
-          .background(
-            Capsule(style: .continuous)
-              .fill(Color.clear)
-              .glassEffect(.clear, in: Capsule(style: .continuous))
-          )
+          .glassCapsuleBackground()
           .padding(.bottom, geo.safeAreaInsets.bottom + 24)
         }
         .frame(width: geo.size.width, height: geo.size.height)
@@ -165,7 +161,7 @@ struct OnboardingView: View {
       }
       page = Double(currentPage)
     }
-    .onChange(of: displayedIndex) { _, newValue in
+    .onChange(of: displayedIndex) { _, _ in
       Haptics.trigger(.light)
     }
     .onChange(of: currentPage) { _, newValue in
