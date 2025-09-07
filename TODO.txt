@@ -1,7 +1,7 @@
 1.0
 ---
 Digest
- * Have Morsel appear in front of it like everywhere else. Not a sheet, a bottom like Onboarding.
+ * Fix the bug where the current entry is NOT locked. Clear up all this logic, it's a vibe-mess.
  * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
  * Make the unlock itself beautiful. Animation, haptic – moment of truth.
 
@@ -20,7 +20,7 @@ Side Panels
 Personality
  * Finalise Morsel himself – add more expressions and make him feel more alive.
 
-Onboarding/
+Onboarding
  * Clean up the copy and make it visually nicer. Use Morsel more.
 
 Watch & Widgets
