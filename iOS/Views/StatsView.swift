@@ -61,18 +61,7 @@ struct StatsView: View {
       }
       .padding(.horizontal, 16)
     }
-    .mask(
-      LinearGradient(
-        gradient: Gradient(stops: [
-          .init(color: .clear, location: 0),
-          .init(color: .black, location: 0.01),
-          .init(color: .black, location: 0.925),
-          .init(color: .clear, location: 0.955),
-        ]),
-        startPoint: .top,
-        endPoint: .bottom
-      )
-    )
+    .mask(EdgeFadeMask())
     .onAppear {
       Analytics.track(ScreenViewStats())
     }
