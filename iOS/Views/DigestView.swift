@@ -4,10 +4,9 @@ import SwiftUI
 struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
   @Environment(\.dismiss) private var dismiss
+  @StateObject private var viewModel: DigestViewModel
 
   var onClose: (() -> Void)? = nil
-
-  @StateObject private var viewModel: DigestViewModel
 
   init(meals: [FoodEntry], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
     self.onClose = onClose
@@ -17,33 +16,23 @@ struct DigestView: View {
   var body: some View {
     GeometryReader { geo in
       ZStack {
-        pagesTabView
-        bottomControlsView
+        PagesTabView(viewModel: viewModel)
+        DigestBottomControlsView(
+          currentPageIndex: $viewModel.currentPageIndex,
+          pageCount: viewModel.availableOffsets.count,
+          morselColor: appSettings.morselColor,
+          onClose: {
+            Haptics.trigger(.selection)
+            if let onClose {
+              onClose()
+            } else {
+              dismiss()
+            }
+          }
+        )
       }
       .padding(.bottom, geo.safeAreaInsets.bottom - 10)
       .ignoresSafeArea(.all)
     }
-  }
-}
-
-private extension DigestView {
-  var pagesTabView: some View {
-    PagesTabView(viewModel: viewModel)
-  }
-
-  var bottomControlsView: some View {
-    DigestBottomControlsView(
-      currentPageIndex: $viewModel.currentPageIndex,
-      pageCount: viewModel.availableOffsets.count,
-      morselColor: appSettings.morselColor,
-      onClose: {
-        Haptics.trigger(.selection)
-        if let onClose {
-          onClose()
-        } else {
-          dismiss()
-        }
-      }
-    )
   }
 }
