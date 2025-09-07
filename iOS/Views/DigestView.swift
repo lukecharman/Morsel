@@ -85,8 +85,26 @@ struct DigestView: View {
                     VStack(alignment: .leading, spacing: 8) {
                       Text("Morsel's Tip")
                         .font(MorselFont.heading)
-                      Text(digest.tip.rawValue)
-                        .font(MorselFont.body)
+
+                      HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        Text(digest.tip.rawValue)
+                          .font(MorselFont.body)
+
+                        Spacer(minLength: 8)
+
+                        Button(action: {
+                          // Share functionality to be implemented later
+                          Haptics.trigger(.selection)
+                        }) {
+                          Image(systemName: "square.and.arrow.up")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(appSettings.morselColor)
+                            .frame(width: 32, height: 32)
+                            .contentShape(Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Share tip")
+                      }
                     }
                   }
                   .frame(maxWidth: .infinity, alignment: .leading)
@@ -540,7 +558,8 @@ private extension DigestView {
 
     // Deterministic selection
     let index = Int(rng.next() % UInt64(pool.count))
-    return pool[index]
+
+    return "“" + pool[index] + "”"
   }
 
   func encouragement(for digest: DigestModel) -> String {
