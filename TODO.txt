@@ -27,6 +27,7 @@ Watch & Widgets
  * Check this is all super smooth and working. No friction. Test what you can.
 
 App Store Stuff
+ * Ensure we have all the analytics events we're gonna need.
  * Finalise all app icons – we have a set Morsel now so we can do this whenever.
  * Profile for optimisations to memory and framerate, etc.
  * Get it on TestFlight, write a blurb, do screenshots, etc.
