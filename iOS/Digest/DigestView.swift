@@ -1,6 +1,5 @@
 import CoreMorsel
 import SwiftUI
-import UserNotifications
 
 struct DigestView: View {
   @EnvironmentObject var appSettings: AppSettings
