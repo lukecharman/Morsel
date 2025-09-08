@@ -15,6 +15,7 @@ struct GlassIconButton: View {
         .frame(width: 44, height: 44)
         .clipShape(Circle())
         .tint(Color(appSettings.morselColor))
+        .foregroundStyle(appSettings.morselColor)
         .glassEffect(.regular, in: Circle())
     }
     .buttonStyle(.plain)

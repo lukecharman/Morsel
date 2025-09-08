@@ -16,23 +16,36 @@ struct DigestView: View {
   var body: some View {
     GeometryReader { geo in
       ZStack {
-        PagesTabView(viewModel: viewModel)
-        DigestBottomControlsView(
-          currentPageIndex: $viewModel.currentPageIndex,
-          pageCount: viewModel.availableOffsets.count,
-          morselColor: appSettings.morselColor,
-          onClose: {
-            Haptics.trigger(.selection)
-            if let onClose {
-              onClose()
-            } else {
-              dismiss()
+        if viewModel.meals.isEmpty {
+          DigestEmptyStateView()
+          VStack {
+            Spacer()
+            GlassIconButton(systemName: "xmark") {
+              onClose?()
             }
+            .environmentObject(appSettings)
           }
-        )
+          .padding(.bottom, 16)
+        } else {
+          PagesTabView(viewModel: viewModel)
+          DigestBottomControlsView(
+            currentPageIndex: $viewModel.currentPageIndex,
+            pageCount: viewModel.availableOffsets.count,
+            morselColor: appSettings.morselColor,
+            onClose: {
+              Haptics.trigger(.selection)
+              if let onClose {
+                onClose()
+              } else {
+                dismiss()
+              }
+            }
+          )
+        }
       }
       .padding(.bottom, geo.safeAreaInsets.bottom - 10)
       .ignoresSafeArea(.all)
     }
   }
 }
+
