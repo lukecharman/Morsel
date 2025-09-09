@@ -14,7 +14,6 @@ Speech Bubble
 
 Side Panels
  * Decide if the data points are useful enough, add more, clean them up.
- * Charts API for some super-simple graphs of progress?
 
 Personality
  * Finalise Morsel himself – add more expressions and make him feel more alive.
@@ -42,6 +41,10 @@ Post 1.0
  * Add some reminder notifications, NOT NAGS. Maybe with a reminder time? User can select up to 3 times per day?
  * Togglable widget background showing red to green for food for you versus Morsel that day?
  * Daily goal streaks?
+
+
+
+
 
 Future Ideas
 ------------
