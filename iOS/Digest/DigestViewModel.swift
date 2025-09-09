@@ -97,7 +97,7 @@ final class DigestViewModel: ObservableObject {
     guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
       return .unlocked
     }
-    let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
+    let unlockTime = calculateUnlockTime(for: digest.weekEnd, calendar: calendar)
     if now < unlockTime {
       return .locked
     } else {
