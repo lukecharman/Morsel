@@ -171,14 +171,14 @@
 		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Managers/PhoneSessionManager.swift,
+				Utilities/PhoneSessionManager.swift,
 				Widgets/Assets.xcassets,
 				Widgets/FoodEntrySnapshot.swift,
 				Widgets/FoodEntryTimeline.swift,
 				Widgets/FoodEntryWidget.swift,
 				Widgets/FoodEntryWidgetBundle.swift,
 				Widgets/FoodEntryWidgetView.swift,
-				Widgets/Morsels/StaticMorsel.swift,
+				Widgets/StaticMorsel.swift,
 			);
 			target = A3CD694B2DBF752B00AB946D /* Widgets (iOS) */;
 		};
@@ -220,7 +220,7 @@
 				Widgets/FoodEntryWidgetBundle.swift,
 				Widgets/FoodEntryWidgetView.swift,
 				Widgets/Info.plist,
-				Widgets/Morsels/StaticMorsel.swift,
+				Widgets/StaticMorsel.swift,
 			);
 			target = A3CD69032DBF745E00AB946D /* Morsel (iOS) */;
 		};
@@ -264,11 +264,6 @@
 				A38415162DD097FF00980E9E /* Exceptions for "watchOS" folder in "Widgets (watchOS)" target */,
 			);
 			path = watchOS;
-			sourceTree = "<group>";
-		};
-		A3ABD73B2DFD635900910A48 /* Debug */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Debug;
 			sourceTree = "<group>";
 		};
 		A3CD69062DBF745E00AB946D /* iOS */ = {
@@ -368,7 +363,6 @@
 				A35D3CD72DBFB0B100C4C166 /* watchOS */,
 				A329C3322E3F5820001D158E /* watchOSTests */,
 				A329C34E2E3F587E001D158E /* watchOSUITests */,
-				A3ABD73B2DFD635900910A48 /* Debug */,
 				A359895B2E40ECED007679F3 /* Fonts */,
 				A3CD694D2DBF752B00AB946D /* Frameworks */,
 				A36333E82DC94B7500DD9ADA /* TODO.txt */,
@@ -564,7 +558,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				A359895B2E40ECED007679F3 /* Fonts */,
-				A3ABD73B2DFD635900910A48 /* Debug */,
 				A3CD69062DBF745E00AB946D /* iOS */,
 			);
 			name = "Morsel (iOS)";
