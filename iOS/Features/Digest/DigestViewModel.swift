@@ -25,7 +25,7 @@ final class DigestViewModel: ObservableObject {
 
   // MARK: - Paging / Data
 
-  var availableOffseasts: [Int] {
+  var availableOffsets: [Int] {
     let calendarProvider = CalendarProvider()
     let calendar = Calendar.current
 
