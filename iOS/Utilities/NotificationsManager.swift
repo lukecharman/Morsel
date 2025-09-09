@@ -58,6 +58,10 @@ struct NotificationsManager {
     let request = UNNotificationRequest(identifier: debugDigestReminderId, content: content, trigger: trigger)
     UNUserNotificationCenter.current().add(request)
   }
+
+  func rescheduleDigestNotifications() {
+    scheduleDigestNotifications()
+  }
 }
 
 private extension NotificationsManager {

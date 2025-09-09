@@ -8,9 +8,44 @@ enum DigestAvailabilityState {
 }
 
 struct DigestConfiguration {
-  static let unlockWeekday = 2 // Monday
-  static let unlockHour = 12
-  static let unlockMinute = 15
+  private enum Keys {
+    static let unlockWeekday = "debug_digest_unlock_weekday"
+    static let unlockHour = "debug_digest_unlock_hour"
+    static let unlockMinute = "debug_digest_unlock_minute"
+    static let weekStartWeekday = "debug_digest_week_start_weekday"
+    static let weekStartHour = "debug_digest_week_start_hour"
+    static let weekStartMinute = "debug_digest_week_start_minute"
+  }
+
+  private static let defaults = UserDefaults.standard
+
+  static var unlockWeekday: Int { value(for: Keys.unlockWeekday, default: 2) }
+  static var unlockHour: Int { value(for: Keys.unlockHour, default: 12) }
+  static var unlockMinute: Int { value(for: Keys.unlockMinute, default: 15) }
+  static var weekStartWeekday: Int { value(for: Keys.weekStartWeekday, default: 2) }
+  static var weekStartHour: Int { value(for: Keys.weekStartHour, default: 0) }
+  static var weekStartMinute: Int { value(for: Keys.weekStartMinute, default: 0) }
+
+  static func clearOverrides() {
+    [Keys.unlockWeekday, Keys.unlockHour, Keys.unlockMinute, Keys.weekStartWeekday,
+     Keys.weekStartHour, Keys.weekStartMinute].forEach { defaults.removeObject(forKey: $0) }
+  }
+
+  static func setWeekStart(weekday: Int, hour: Int, minute: Int) {
+    defaults.set(weekday, forKey: Keys.weekStartWeekday)
+    defaults.set(hour, forKey: Keys.weekStartHour)
+    defaults.set(minute, forKey: Keys.weekStartMinute)
+  }
+
+  static func setUnlock(weekday: Int, hour: Int, minute: Int) {
+    defaults.set(weekday, forKey: Keys.unlockWeekday)
+    defaults.set(hour, forKey: Keys.unlockHour)
+    defaults.set(minute, forKey: Keys.unlockMinute)
+  }
+
+  private static func value(for key: String, default defaultValue: Int) -> Int {
+    defaults.object(forKey: key) == nil ? defaultValue : defaults.integer(forKey: key)
+  }
 }
 
 struct DigestModel {

@@ -6,6 +6,7 @@ import WidgetKit
 
 struct DebugMenuView: View {
   @State private var showStudio = false
+  @State private var showScheduleOverride = false
   private let notificationsManager = NotificationsManager()
   @Environment(\.modelContext) private var modelContext
 
@@ -19,6 +20,21 @@ struct DebugMenuView: View {
             icon: "timer",
             isFirst: true,
             onTap: { notificationsManager.scheduleDebugDigest() }
+          )
+          CardView(
+            title: "",
+            value: "Digest Schedule Override",
+            icon: "calendar.badge.clock",
+            onTap: { showScheduleOverride = true }
+          )
+          CardView(
+            title: "",
+            value: "Clear Digest Override",
+            icon: "arrow.clockwise",
+            onTap: {
+              DigestConfiguration.clearOverrides()
+              notificationsManager.rescheduleDigestNotifications()
+            }
           )
           CardView(
             title: "",
@@ -44,6 +60,9 @@ struct DebugMenuView: View {
         .padding(.top, 16)
       }
       .sheet(isPresented: $showStudio) { MorselStudio() }
+      .sheet(isPresented: $showScheduleOverride) {
+        NavigationStack { DigestScheduleOverrideView() }
+      }
     }
   }
 }
