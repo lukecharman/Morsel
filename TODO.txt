@@ -1,8 +1,7 @@
 1.0
 ---
 Digest
- * Fix the bug where the current entry is NOT locked. Clear up all this logic, it's a vibe-mess.
- * Fix the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
+ * Test the fix for the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
  * Make the unlock itself beautiful. Animation, haptic – moment of truth.
 
 Speech Bubble
