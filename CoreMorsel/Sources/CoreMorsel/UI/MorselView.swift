@@ -159,6 +159,9 @@ public struct MorselView: View {
   var debugBindings: MorselDebugBindings? = nil
   var debugControlMode: MorselDebugControlMode = .automatic
 
+  @State private var keyboardHeight: CGFloat = 0
+  @State private var isKeyboardVisible: Bool = false
+
   public init(
     shouldOpen: Binding<Bool>,
     shouldClose: Binding<Bool>,
@@ -233,15 +236,45 @@ public struct MorselView: View {
 
   public var body: some View {
     GeometryReader { _ in
-      content
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignmentForAnchor)
-        .padding(paddingForAnchor)
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: anchor)
+      ZStack {
+        content
+        if isKeyboardVisible && !isOnboardingVisible {
+          Color.clear
+            .contentShape(Rectangle())
+            .gesture(keyboardDismissDragGesture)
+            .onTapGesture { dismissKeyboard() }
+            .ignoresSafeArea(.keyboard, edges: .all)
+            .accessibilityHidden(true)
+        }
+      }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignmentForAnchor)
+      .padding(paddingForAnchor)
+      .animation(.spring(response: 0.4, dampingFraction: 0.8), value: anchor)
     }
     .ignoresSafeArea(edges: ignoredSafeAreaEdges)
     .onAppear {
       startBlinking()
       startIdleWiggle()
+#if os(iOS)
+      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+          keyboardHeight = frame.height
+          isKeyboardVisible = true
+        } else {
+          isKeyboardVisible = true
+        }
+      }
+      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+        isKeyboardVisible = false
+        keyboardHeight = 0
+      }
+#endif
+    }
+    .onDisappear {
+#if os(iOS)
+      NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+      NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+#endif
     }
     .onChange(of: isOnboardingVisible) { _, newValue in
       if newValue {
@@ -301,6 +334,24 @@ public struct MorselView: View {
         break
       }
     }
+  }
+
+  // MARK: - Keyboard Dismiss Helpers
+  private func dismissKeyboard() {
+#if os(iOS)
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    close()
+#endif
+  }
+
+  private var keyboardDismissDragGesture: some Gesture {
+    DragGesture(minimumDistance: 10, coordinateSpace: .local)
+      .onEnded { value in
+        // Consider a downward swipe (positive y translation) as dismiss
+        if value.translation.height > 20 {
+          dismissKeyboard()
+        }
+      }
   }
 
   private var content: some View {
@@ -1047,3 +1098,4 @@ public struct SpeechBubble: View {
   .frame(maxWidth: .infinity)
   .background(.black)
 }
+
