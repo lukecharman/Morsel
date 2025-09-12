@@ -24,10 +24,9 @@ struct DigestModel {
   let tip: MorselTip
 
   init(weekStart: Date, weekEnd: Date, meals: [FoodEntry], streakLength: Int) {
-    let calendar = Calendar.current
     let (mealsLogged, cravingsResisted, cravingsGivenIn) = Self.computeCravingCounts(from: meals)
     let mostCommonCraving = Self.mostCommonCraving(from: meals)
-    let tip = Self.generateTip(for: weekStart, using: calendar)
+    let tip = Self.generateTip(for: weekStart)
 
     self.weekStart = weekStart
     self.weekEnd = weekEnd
@@ -54,10 +53,13 @@ private extension DigestModel {
     return counts.sorted { $0.value > $1.value }.first?.key ?? "N/A"
   }
 
-  static func generateTip(for weekStart: Date, using calendar: Calendar) -> MorselTip {
-    // Deterministic tip per week
-    let seed = calendar.component(.weekOfYear, from: weekStart) + calendar.component(.year, from: weekStart) * 100
+  static func generateTip(for weekStart: Date) -> MorselTip {
+    let secondsPerWeek: TimeInterval = 7 * 24 * 60 * 60
+    let weekIndex = Int(weekStart.timeIntervalSince1970 / secondsPerWeek)
+    let seed = weekIndex
+
     var generator = SeededGenerator(seed: seed)
+
     return MorselTip.allCases.randomElement(using: &generator)!
   }
 }
