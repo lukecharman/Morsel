@@ -23,21 +23,9 @@ struct EmptyStateView: View {
           .opacity(0.4)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
-        (
-          Text(isFirstLaunch ? "Welcome to " : "Still waiting on your ")
-            .font(MorselFont.title)
-            .fontWeight(.medium)
-          +
-          Text(isFirstLaunch ? "Morsel" : "first bite")
-            .font(MorselFont.title)
-            .fontWeight(.bold)
-          +
-          Text("...")
-            .font(MorselFont.title)
-            .fontWeight(.medium)
-        )
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-        .multilineTextAlignment(.center)
+        Text(welcomeText)
+          .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+          .multilineTextAlignment(.center)
 
         Text(isFirstLaunch
           ? "Track what you eat and what you resist.\nGive Morsel a tap to begin."
@@ -78,6 +66,19 @@ struct EmptyStateView: View {
           }
         }
     )
+  }
+
+  var welcomeText: AttributedString {
+    var prefix = AttributedString(isFirstLaunch ? "Welcome to " : "Still waiting on your ")
+    prefix.font = MorselFont.title.weight(.medium)
+
+    var highlight = AttributedString(isFirstLaunch ? "Morsel" : "first bite")
+    highlight.font = MorselFont.title.weight(.bold)
+
+    var dots = AttributedString("...")
+    dots.font = MorselFont.title.weight(.medium)
+
+    return prefix + highlight + dots
   }
 }
 
