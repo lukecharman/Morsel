@@ -171,7 +171,6 @@
 		A384150C2DD097F700980E9E /* Exceptions for "iOS" folder in "Widgets (iOS)" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Utilities/PhoneSessionManager.swift,
 				Widgets/Assets.xcassets,
 				Widgets/FoodEntrySnapshot.swift,
 				Widgets/FoodEntryTimeline.swift,
