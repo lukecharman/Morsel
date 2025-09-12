@@ -1,7 +1,7 @@
 import Foundation
 
 protocol CalendarProviderInterface {
-  func startOfWeek(for date: Date) -> Date
+  func startOfDigestWeek(for date: Date) -> Date
 }
 
 struct CalendarProvider: CalendarProviderInterface {
@@ -11,7 +11,7 @@ struct CalendarProvider: CalendarProviderInterface {
     self.calendar = calendar
   }
 
-  func startOfWeek(for date: Date) -> Date {
+  func startOfDigestWeek(for date: Date) -> Date {
     var calendar = Calendar(identifier: .iso8601)
     calendar.firstWeekday = DigestConfiguration.unlockWeekday
 

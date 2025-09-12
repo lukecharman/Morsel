@@ -6,7 +6,7 @@ import Testing
 struct CalendarProviderTests {
   @Test func startOfWeek_forMondayMidnight() async throws {
     guard let date = makeDate(2025, 8, 4, 0, 0, 0) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 8)
     #expect(cal.component(.day, from: result) == 4)
@@ -15,7 +15,7 @@ struct CalendarProviderTests {
 
   @Test func startOfWeek_forSunday2359() async throws {
     guard let date = makeDate(2025, 8, 3, 23, 59, 59) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 7)
     #expect(cal.component(.day, from: result) == 28)
@@ -24,7 +24,7 @@ struct CalendarProviderTests {
 
   @Test func startOfWeek_forMondayNoon_returnsSameMondayMidnight() async throws {
     guard let date = makeDate(2025, 8, 4, 12, 0, 0) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 8)
     #expect(cal.component(.day, from: result) == 4)
@@ -34,8 +34,8 @@ struct CalendarProviderTests {
   @Test func startOfWeek_forMidweekSamples() async throws {
     guard let tue = makeDate(2025, 8, 5, 9, 30, 0),
           let thu = makeDate(2025, 8, 7, 18, 45, 10) else { Issue.record("Date could not be built."); return }
-    let r1 = CalendarProvider().startOfWeek(for: tue)
-    let r2 = CalendarProvider().startOfWeek(for: thu)
+    let r1 = CalendarProvider().startOfDigestWeek(for: tue)
+    let r2 = CalendarProvider().startOfDigestWeek(for: thu)
     #expect(r1 == r2)
     #expect(cal.component(.day, from: r1) == 4)
     #expect(cal.component(.month, from: r1) == 8)
@@ -45,8 +45,8 @@ struct CalendarProviderTests {
 
   @Test func startOfWeek_isIdempotent() async throws {
     guard let date = makeDate(2025, 8, 8, 20, 14, 0) else { Issue.record("Date could not be built."); return }
-    let r1 = CalendarProvider().startOfWeek(for: date)
-    let r2 = CalendarProvider().startOfWeek(for: r1)
+    let r1 = CalendarProvider().startOfDigestWeek(for: date)
+    let r2 = CalendarProvider().startOfDigestWeek(for: r1)
     #expect(r1 == r2)
     assertIsMondayMidnight(r1)
   }
@@ -60,7 +60,7 @@ struct CalendarProviderTests {
           let saturday = makeDate(2025, 8, 9, 10),
           let sunday = makeDate(2025, 8, 10, 10) else { Issue.record("Date(s) could not be built."); return }
     let provider = CalendarProvider()
-    let results = [monday, tuesday, wednesday, thursday, friday, saturday, sunday].map { provider.startOfWeek(for: $0) }
+    let results = [monday, tuesday, wednesday, thursday, friday, saturday, sunday].map { provider.startOfDigestWeek(for: $0) }
     for r in results { assertIsMondayMidnight(r) }
     #expect(Set(results).count == 1)
     #expect(cal.component(.day, from: results[0]) == 4)
@@ -69,7 +69,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_onNewYearsDayThatBelongsToPreviousYearsWeek() async throws {
     // 2021-01-01 (Fri) -> Monday 2020-12-28
     guard let date = makeDate(2021, 1, 1, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2020)
     #expect(cal.component(.month, from: result) == 12)
     #expect(cal.component(.day, from: result) == 28)
@@ -79,7 +79,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_jan1_2015_isoWeek1Edge() async throws {
     // 2015-01-01 (Thu) -> Monday 2014-12-29
     guard let date = makeDate(2015, 1, 1, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2014)
     #expect(cal.component(.month, from: result) == 12)
     #expect(cal.component(.day, from: result) == 29)
@@ -89,7 +89,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_newYearThatStartsOnMonday() async throws {
     // 2018-01-01 (Mon) -> Monday 2018-01-01
     guard let date = makeDate(2018, 1, 1, 9) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2018)
     #expect(cal.component(.month, from: result) == 1)
     #expect(cal.component(.day, from: result) == 1)
@@ -99,7 +99,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_newYearSundayMapsToPreviousMonday() async throws {
     // 2017-01-01 (Sun) -> Monday 2016-12-26
     guard let date = makeDate(2017, 1, 1, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2016)
     #expect(cal.component(.month, from: result) == 12)
     #expect(cal.component(.day, from: result) == 26)
@@ -109,7 +109,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_endOfYearWeek53() async throws {
     // 2020-12-31 (Thu) is in ISO week 53 -> Monday 2020-12-28
     guard let date = makeDate(2020, 12, 31, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2020)
     #expect(cal.component(.month, from: result) == 12)
     #expect(cal.component(.day, from: result) == 28)
@@ -119,7 +119,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_onLeapDay() async throws {
     // 2024-02-29 (Thu) -> Monday 2024-02-26
     guard let date = makeDate(2024, 2, 29, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2024)
     #expect(cal.component(.month, from: result) == 2)
     #expect(cal.component(.day, from: result) == 26)
@@ -129,7 +129,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_nonLeapLateFeb() async throws {
     // 2019-02-28 (Thu) -> Monday 2019-02-25
     guard let date = makeDate(2019, 2, 28, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2019)
     #expect(cal.component(.month, from: result) == 2)
     #expect(cal.component(.day, from: result) == 25)
@@ -139,7 +139,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_weekContainingSpringForward() async throws {
     // UK DST starts on Sun 2025-03-30; pick noon to avoid nonexistent hour
     guard let date = makeDate(2025, 3, 30, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 3)
     #expect(cal.component(.day, from: result) == 24)
@@ -149,7 +149,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_weekContainingFallBack() async throws {
     // UK DST ends on Sun 2025-10-26; pick noon to avoid ambiguous hour
     guard let date = makeDate(2025, 10, 26, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 10)
     #expect(cal.component(.day, from: result) == 20)
@@ -159,7 +159,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_acrossMonthBoundary_backIntoPreviousMonth() async throws {
     // Sat 2025-08-09 -> Monday 2025-08-04
     guard let date = makeDate(2025, 8, 9, 23, 59, 59) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 8)
     #expect(cal.component(.day, from: result) == 4)
@@ -169,7 +169,7 @@ struct CalendarProviderTests {
   @Test func startOfWeek_acrossMonthBoundary_intoPreviousMonth() async throws {
     // Sun 2025-03-02 -> Monday 2025-02-24
     guard let date = makeDate(2025, 3, 2, 12) else { Issue.record("Date could not be built."); return }
-    let result = CalendarProvider().startOfWeek(for: date)
+    let result = CalendarProvider().startOfDigestWeek(for: date)
     #expect(cal.component(.year, from: result) == 2025)
     #expect(cal.component(.month, from: result) == 2)
     #expect(cal.component(.day, from: result) == 24)
@@ -185,7 +185,7 @@ struct CalendarProviderTests {
 
     guard let date = makeDate(2025, 8, 6, 15) else { Issue.record("Date could not be built."); return }
     let provider = CalendarProvider(calendar: custom)
-    let result = provider.startOfWeek(for: date)
+    let result = provider.startOfDigestWeek(for: date)
 
     // Still expect ISO Monday start (2025-08-04 00:00 Europe/London)
     #expect(cal.component(.year, from: result) == 2025)
@@ -203,7 +203,7 @@ struct CalendarProviderTests {
           Issue.record("Failed to construct date for \(year)-\(month)")
           continue
         }
-        let start = provider.startOfWeek(for: d)
+        let start = provider.startOfDigestWeek(for: d)
         // Must be a Monday at midnight
         assertIsMondayMidnight(start)
         // And must be within the same ISO week (inclusive through Sunday 23:59:59)

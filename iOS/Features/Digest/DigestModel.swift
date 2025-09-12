@@ -56,8 +56,7 @@ private extension DigestModel {
   /// Weekday uses the same numbering as Calendar (1=Sunday, 2=Monday, ...).
   static func mostRecentAnchor(onOrBefore date: Date, using calendar: Calendar) -> Date {
     // Build a date on the target weekday in the same week as `date` at the unlock time
-    var cal = calendar
-    var components = cal.dateComponents([.yearForWeekOfYear, .weekOfYear, .timeZone], from: date)
+    var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear, .timeZone], from: date)
     components.weekday = DigestConfiguration.unlockWeekday
     components.hour = DigestConfiguration.unlockHour
     components.minute = DigestConfiguration.unlockMinute
@@ -65,7 +64,7 @@ private extension DigestModel {
 
     // Use ISO-8601 week semantics for (yearForWeekOfYear/weekOfYear) mapping, but preserve the passed calendar's timezone
     var iso = Calendar(identifier: .iso8601)
-    iso.timeZone = cal.timeZone
+    iso.timeZone = calendar.timeZone
 
     // Construct the candidate anchor this week using ISO week/year to avoid locale-dependent firstWeekday
     var weekly = DateComponents()
@@ -82,7 +81,7 @@ private extension DigestModel {
       return candidateThisWeek
     } else {
       // Go back 7 days to get the previous week's anchor
-      return cal.date(byAdding: .day, value: -7, to: candidateThisWeek)!
+      return calendar.date(byAdding: .day, value: -7, to: candidateThisWeek)!
     }
   }
 

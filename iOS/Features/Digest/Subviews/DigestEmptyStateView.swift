@@ -16,21 +16,9 @@ struct DigestEmptyStateView: View {
           .opacity(0.4)
           .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
-        (
-          Text("Your weekly digest")
-            .font(MorselFont.title)
-            .fontWeight(.bold)
-          +
-          Text(" is waiting")
-            .font(MorselFont.title)
-            .fontWeight(.medium)
-          +
-          Text("...")
-            .font(MorselFont.title)
-            .fontWeight(.medium)
-        )
-        .multilineTextAlignment(.center)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+        Text(digestText)
+          .multilineTextAlignment(.center)
+          .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
 
         Text("Log a few bites and victories.\nCome back here to see how your week is shaping up.")
           .font(MorselFont.body)
@@ -45,6 +33,19 @@ struct DigestEmptyStateView: View {
     .onAppear {
       //Analytics.track(ScreenViewEmptyState(name: "DigestEmpty"))
     }
+  }
+
+  var digestText: AttributedString {
+    var leading = AttributedString("Your weekly digest")
+    leading.font = MorselFont.title.weight(.bold)
+
+    var middle = AttributedString(" is waiting")
+    middle.font = MorselFont.title.weight(.medium)
+
+    var dots = AttributedString("...")
+    dots.font = MorselFont.title.weight(.medium)
+
+    return leading + middle + dots
   }
 }
 

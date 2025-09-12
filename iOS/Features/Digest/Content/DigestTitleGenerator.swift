@@ -408,6 +408,7 @@ enum DigestTitleGenerator {
         "\(mostCommonCraving) on the Brain"
       ])
     }
+
     // Add a couple of seasonal/mood blends
     switch (season, mood) {
     case (.summer, .strong):

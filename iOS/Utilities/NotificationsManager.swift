@@ -36,11 +36,10 @@ struct NotificationsManager {
   func scheduleDebugDigest() {
     notificationCenter.removePendingNotificationRequests(withIdentifiers: [debugDigestReminderId])
 
-    let calendar = Calendar.current
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
 
-    let weekStart = calendarProvider.startOfWeek(for: Date())
+    let weekStart = calendarProvider.startOfDigestWeek(for: Date())
     let key = "digest_unlocked_\(formatter.string(from: weekStart))"
     UserDefaults.standard.removeObject(forKey: key)
 
@@ -94,7 +93,7 @@ private extension NotificationsManager {
   func catchUpIfNeeded() {
     let calendar = Calendar.current
     let now = Date()
-    let weekStart = calendarProvider.startOfWeek(for: now)
+    let weekStart = calendarProvider.startOfDigestWeek(for: now)
     let unlockTime = calculateUnlockTime(for: weekStart, calendar: calendar)
 
     if now >= unlockTime && !hasSentWeeklyNudge(for: weekStart) {
@@ -112,7 +111,7 @@ private extension NotificationsManager {
     content.threadIdentifier = NotificationsManager.digestThreadIdentifier
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-    let request = UNNotificationRequest(identifier: "weeklyDigestCatchUp_\(weekKey(for: calendarProvider.startOfWeek(for: Date())))", content: content, trigger: trigger)
+    let request = UNNotificationRequest(identifier: "weeklyDigestCatchUp_\(weekKey(for: calendarProvider.startOfDigestWeek(for: Date())))", content: content, trigger: trigger)
     notificationCenter.add(request)
   }
 

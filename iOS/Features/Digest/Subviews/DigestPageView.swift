@@ -19,18 +19,14 @@ struct DigestPageView: View {
       ScrollView {
         VStack(alignment: .leading, spacing: 24) {
           Spacer().frame(height: 44)
-
           DigestHeaderView(title: title, dateRange: formattedRange)
-
           DigestStatsView(digest: digest)
-
           VStack(alignment: .leading, spacing: 8) {
             Text("How you did")
               .font(MorselFont.heading)
             Text(encouragementText)
               .font(MorselFont.body)
           }
-
           DigestTipView(tipText: digest.tip.rawValue, accent: appSettings.morselColor)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -58,16 +54,31 @@ struct DigestPageView: View {
   }
 
   private var encouragementText: String {
-    // The caller already supplies the formatted text via ViewModel, but this view is given only the
-    // display text; if needed we could pass it in. For now, we keep it simple and compute here is not available.
-    // We received the final formatted encouragement through the parent; using that directly.
-    // In this refactor, encouragement is passed in via the parent as part of body content.
-    // To preserve behavior, we keep what parent supplies. Here, just return it.
-    // However, in current wiring, we passed only tip/date/title; encouragement comes from parent closure.
-    // For clarity and minimal change, we’ll compute it here is not available. Parent already computed and passed
-    // formattedRange; we can also compute encouragement externally. To avoid dependency, we keep the layout text injected.
-    // This placeholder will be replaced by injected text; keeping property for completeness.
-    ""
+    // Simple heuristic until we wire real copy from the ViewModel.
+    // Derives a friendly message from digest stats.
+    let meals = digest.mealsLogged
+    let resisted = digest.cravingsResisted
+    let gaveIn = digest.cravingsGivenIn
+
+    var parts: [String] = []
+
+    if meals > 0 {
+      parts.append("You logged \(meals) \(meals == 1 ? "meal" : "meals").")
+    }
+
+    if resisted > 0 {
+      parts.append("You resisted \(resisted) \(resisted == 1 ? "craving" : "cravings"). Nice work!")
+    }
+
+    if gaveIn > 0 {
+      parts.append("You gave in \(gaveIn) \(gaveIn == 1 ? "time" : "times"), and that's okay. Progress isn't linear.")
+    }
+
+    if parts.isEmpty {
+      return "No activity recorded yet. Come back after logging some meals to see your weekly insights."
+    } else {
+      return parts.joined(separator: " ")
+    }
   }
 
   private var contentBlur: CGFloat {

@@ -34,8 +34,8 @@ final class DigestViewModel: ObservableObject {
       return [1, 0]
     }
 
-    let startOfCurrentWeek = calendarProvider.startOfWeek(for: Date())
-    let startOfEarliestMealWeek = calendarProvider.startOfWeek(for: earliestMealDate)
+    let startOfCurrentWeek = calendarProvider.startOfDigestWeek(for: Date())
+    let startOfEarliestMealWeek = calendarProvider.startOfDigestWeek(for: earliestMealDate)
 
     // Build contiguous week starts from earliest meal week to current week (inclusive)
     var weekStarts: [Date] = []
