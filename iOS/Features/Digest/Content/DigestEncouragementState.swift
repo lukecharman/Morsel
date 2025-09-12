@@ -111,14 +111,14 @@ enum DigestEncouragementState {
         "Still here. Still logging. Still progressing.",
         "That’s how a healthy baseline is built.",
         "Morsel noticed your effort. Every bit of it.",
-        "One foot in front of the other."
-        ,"You’re walking the middle path."
-        ,"No extremes. Just engagement.",
+        "One foot in front of the other.",
+        "You’re walking the middle path.",
+        "No extremes. Just engagement.",
         "A quietly excellent week.",
         "Measured choices. Measured results.",
         "A little of this, a little of that – well tracked.",
-        "Keep that rhythm."
-        ,"Nothing flashy. Just functional.",
+        "Keep that rhythm.",
+        "Nothing flashy. Just functional.",
         "That’s the kind of week that adds up."
       ]
     }
