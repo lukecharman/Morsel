@@ -13,7 +13,7 @@ struct CalendarProvider: CalendarProviderInterface {
 
   func startOfWeek(for date: Date) -> Date {
     var calendar = Calendar(identifier: .iso8601)
-    calendar.firstWeekday = 2 // 2 = Monday
+    calendar.firstWeekday = DigestConfiguration.unlockWeekday
 
     let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
     return calendar.date(from: components)!

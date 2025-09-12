@@ -40,7 +40,7 @@ struct NotificationsManager {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
 
-    let weekStart = calendar.startOfWeek(for: Date())
+    let weekStart = calendarProvider.startOfWeek(for: Date())
     let key = "digest_unlocked_\(formatter.string(from: weekStart))"
     UserDefaults.standard.removeObject(forKey: key)
 

@@ -45,10 +45,45 @@ struct DigestModel {
 
 private extension DigestModel {
   static func computeWeekBounds(for date: Date, using calendar: Calendar) -> (weekStart: Date, weekEnd: Date, inclusiveWeekEnd: Date) {
-    let weekStart = calendar.startOfWeek(for: date)
+    // Compute week bounds anchored to the configured unlock weekday/time
+    let weekStart = mostRecentAnchor(onOrBefore: date, using: calendar)
     let weekEnd = calendar.date(byAdding: .day, value: 7, to: weekStart)!
     let inclusiveWeekEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: weekStart)!
     return (weekStart, weekEnd, inclusiveWeekEnd)
+  }
+
+  /// Returns the most recent anchor instant at or before the given date, based on DigestConfiguration.unlockWeekday/unlockHour/unlockMinute.
+  /// Weekday uses the same numbering as Calendar (1=Sunday, 2=Monday, ...).
+  static func mostRecentAnchor(onOrBefore date: Date, using calendar: Calendar) -> Date {
+    // Build a date on the target weekday in the same week as `date` at the unlock time
+    var cal = calendar
+    var components = cal.dateComponents([.yearForWeekOfYear, .weekOfYear, .timeZone], from: date)
+    components.weekday = DigestConfiguration.unlockWeekday
+    components.hour = DigestConfiguration.unlockHour
+    components.minute = DigestConfiguration.unlockMinute
+    components.second = 0
+
+    // Use ISO-8601 week semantics for (yearForWeekOfYear/weekOfYear) mapping, but preserve the passed calendar's timezone
+    var iso = Calendar(identifier: .iso8601)
+    iso.timeZone = cal.timeZone
+
+    // Construct the candidate anchor this week using ISO week/year to avoid locale-dependent firstWeekday
+    var weekly = DateComponents()
+    weekly.yearForWeekOfYear = components.yearForWeekOfYear
+    weekly.weekOfYear = components.weekOfYear
+    weekly.weekday = components.weekday
+    weekly.hour = components.hour
+    weekly.minute = components.minute
+    weekly.second = components.second
+
+    let candidateThisWeek = iso.date(from: weekly)!
+
+    if candidateThisWeek <= date {
+      return candidateThisWeek
+    } else {
+      // Go back 7 days to get the previous week's anchor
+      return cal.date(byAdding: .day, value: -7, to: candidateThisWeek)!
+    }
   }
 
   static func filterMeals(in range: ClosedRange<Date>, from allMeals: [FoodEntry]) -> [FoodEntry] {
@@ -80,7 +115,9 @@ private extension DigestModel {
     var streak = 0
     for i in 0..<maxWeeksBack {
       guard let checkDate = calendar.date(byAdding: .weekOfYear, value: -i, to: weekStart) else { break }
-      let checkStart = calendar.startOfWeek(for: checkDate)
+      // Determine the anchor-based week start for this iteration
+      let anchorDate = checkDate
+      let checkStart = mostRecentAnchor(onOrBefore: anchorDate, using: calendar)
       let checkEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: checkStart)!
       let mealsInWeek = allMeals.filter { $0.timestamp >= checkStart && $0.timestamp <= checkEnd }
       if mealsInWeek.isEmpty {
