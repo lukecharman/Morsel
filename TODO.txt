@@ -1,6 +1,7 @@
 1.0
 ---
 Digest
+ * Ensure that the ViewModel is bulletproof and the weekly logic is all from one source of truth, etc.
  * Test the fix for the bug where the unlock of the weekly digest isn't immediate as soon as you tap the notification.
  * Make the unlock itself beautiful. Animation, haptic – moment of truth.
 
