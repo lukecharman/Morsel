@@ -1,5 +1,11 @@
 import Foundation
 
+public struct DigestConfiguration {
+  public static let unlockWeekday = 2 // 2 = Monday
+  public static let unlockHour = 12
+  public static let unlockMinute = 15
+}
+
 public protocol CalendarProviderInterface {
   var timeZone: TimeZone { get }
   var locale: Locale { get }
@@ -20,7 +26,7 @@ public struct CalendarProvider: CalendarProviderInterface {
   private var calendar: Calendar
 
   public init(
-    unlockWeekday: Int = 2, // TODO:
+    unlockWeekday: Int = DigestConfiguration.unlockWeekday,
     identifier: Calendar.Identifier = .iso8601,
     timeZone: TimeZone = .current,
     locale: Locale = .current

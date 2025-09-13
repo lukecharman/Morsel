@@ -10,12 +10,6 @@ enum DigestAvailabilityState {
   case unlocked
 }
 
-struct DigestConfiguration {
-  static let unlockWeekday = 2 // 2 = Monday
-  static let unlockHour = 12
-  static let unlockMinute = 15
-}
-
 struct DigestModel {
   let weekStart: Date
   let weekEnd: Date
