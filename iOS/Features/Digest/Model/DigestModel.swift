@@ -25,8 +25,15 @@ struct DigestModel {
   let mostCommonCraving: String
   let streakLength: Int
   let tip: MorselTip
+  let calendarProvider: CalendarProviderInterface
 
-  init(weekStart: Date, weekEnd: Date, meals: [FoodEntry], streakLength: Int) {
+  init(
+    weekStart: Date,
+    weekEnd: Date,
+    meals: [FoodEntry],
+    streakLength: Int,
+    calendarProvider: CalendarProviderInterface = CalendarProvider()
+  ) {
     let (mealsLogged, cravingsResisted, cravingsGivenIn) = Self.computeCravingCounts(from: meals)
     let mostCommonCraving = Self.mostCommonCraving(from: meals)
     let tip = Self.generateTip(for: weekStart)
@@ -39,10 +46,11 @@ struct DigestModel {
     self.mostCommonCraving = mostCommonCraving
     self.streakLength = streakLength
     self.tip = tip
+    self.calendarProvider = calendarProvider
   }
 
   var season: DigestSeason {
-    let m = Calendar.current.component(.month, from: weekStart)
+    let m = calendarProvider.component(.month, from: weekStart)
     switch m {
     case 12, 1, 2: return .winter
     case 3, 4, 5: return .spring
@@ -75,15 +83,13 @@ struct DigestModel {
   var formattedRange: String {
     let formatter = DateFormatter()
     formatter.dateFormat = "EEE d MMM"
-    let calendar = Calendar.current
-    let displayEnd = calendar.date(byAdding: .day, value: -1, to: weekEnd) ?? weekEnd
+    let displayEnd = calendarProvider.date(byAdding: .day, value: -1, to: weekEnd) ?? weekEnd
     return "\(formatter.string(from: weekStart)) – \(formatter.string(from: displayEnd))"
   }
 
   var title: String {
-    let cal = Calendar.current
-    let week = cal.component(.weekOfYear, from: weekStart)
-    let year = cal.component(.yearForWeekOfYear, from: weekStart)
+    let week = calendarProvider.component(.weekOfYear, from: weekStart)
+    let year = calendarProvider.component(.yearForWeekOfYear, from: weekStart)
     let seed = week + year * 1000 + streakLength * 100_000
     var rng = SeededGenerator(seed: seed)
 

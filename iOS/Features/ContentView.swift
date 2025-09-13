@@ -316,11 +316,9 @@ private extension ContentView {
 
   func dateString(for date: Date, entryCount: Int) -> String {
     let dayString: String
-    let today = Date()
-    let yesterday = calendarProvider.calendar.date(byAdding: .day, value: -1, to: today)!
-    if calendarProvider.isDate(date, inSameDayAs: today) {
+    if calendarProvider.isDate(date, inSameDayAs: Date()) {
       dayString = "Today"
-    } else if calendarProvider.isDate(date, inSameDayAs: yesterday) {
+    } else if let yesterday = calendarProvider.date(byAdding: .day, value: -1, to: Date()), calendarProvider.isDate(date, inSameDayAs: yesterday) {
       dayString = "Yesterday"
     } else {
       dayString = date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
@@ -329,11 +327,9 @@ private extension ContentView {
   }
 
   func colourForEntry(date: Date) -> Color {
-    let today = Date()
-    let yesterday = calendarProvider.calendar.date(byAdding: .day, value: -1, to: today)!
-    if calendarProvider.isDate(date, inSameDayAs: today) {
+    if calendarProvider.isDate(date, inSameDayAs: Date()) {
       return .primary
-    } else if calendarProvider.isDate(date, inSameDayAs: yesterday) {
+    } else if let yesterday = calendarProvider.date(byAdding: .day, value: -1, to: Date()), calendarProvider.isDate(date, inSameDayAs: yesterday) {
       return .secondary
     } else {
       return .gray
