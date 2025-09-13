@@ -66,19 +66,19 @@ final class DigestViewModel: ObservableObject {
   // MARK: - Availability / Unlock
 
   func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
-    return unlockHandler.digestAvailabilityState(digest)
+    unlockHandler.digestAvailabilityState(digest)
   }
 
   func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
-    return unlockHandler.calculateUnlockTime(for: periodStart, calendar: calendar)
+    unlockHandler.calculateUnlockTime(for: periodStart, calendar: calendar)
   }
 
   func unlockMessage(for digest: DigestModel) -> String {
-    return unlockHandler.unlockMessage(for: digest)
+    unlockHandler.unlockMessage(for: digest)
   }
 
   func digestUnlockKey(for digest: DigestModel) -> String {
-    return unlockHandler.digestUnlockKey(for: digest)
+    unlockHandler.digestUnlockKey(for: digest)
   }
 
   func markDigestAsUnlocked(_ digest: DigestModel) {
@@ -86,7 +86,7 @@ final class DigestViewModel: ObservableObject {
   }
 
   func nudgeSentKey(for digest: DigestModel) -> String {
-    return unlockHandler.nudgeSentKey(for: digest)
+    unlockHandler.nudgeSentKey(for: digest)
   }
 
   func markWeeklyNudgeAsSent(for digest: DigestModel) {
