@@ -11,7 +11,7 @@ enum DigestAvailabilityState {
 }
 
 struct DigestConfiguration {
-  static let unlockWeekday = 2 // Monday
+  static let unlockWeekday = 2 // 2 = Monday
   static let unlockHour = 12
   static let unlockMinute = 15
 }
@@ -74,7 +74,7 @@ struct DigestModel {
 
   var formattedRange: String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "d MMM"
+    formatter.dateFormat = "EEE d MMM"
     let calendar = Calendar.current
     let displayEnd = calendar.date(byAdding: .day, value: -1, to: weekEnd) ?? weekEnd
     return "\(formatter.string(from: weekStart)) – \(formatter.string(from: displayEnd))"
