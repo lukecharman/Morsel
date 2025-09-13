@@ -8,21 +8,18 @@ struct PagesTabView: View {
   var body: some View {
     TabView(selection: $viewModel.currentPageIndex) {
       ForEach(viewModel.availableOffsets, id: \.self) { offset in
-        let digest = viewModel.digest(forOffset: offset)
-        let availabilityState = viewModel.digestAvailabilityState(digest)
-        let digestKey = viewModel.digestUnlockKey(for: digest)
-        let title = viewModel.titleForDigest(digest)
+        let digest = viewModel.digest(at: offset)
 
         DigestPageView(
-          digest: digest,
-          title: title,
-          availabilityState: availabilityState,
-          blurRadius: viewModel.animatingBlurRadius[digestKey],
-          shouldAnimateUnblur: viewModel.shouldAnimateUnblur(for: digest, availabilityState: availabilityState),
+          digest: viewModel.digest(at: offset),
+          title: digest.title,
+          availabilityState: viewModel.digestAvailabilityState(digest),
+          blurRadius: viewModel.animatingBlurRadius[viewModel.digestUnlockKey(for: digest)],
+          shouldAnimateUnblur: viewModel.shouldAnimateUnblur(for: digest, availabilityState: viewModel.digestAvailabilityState(digest)),
           onWillAnimate: { viewModel.markWillAnimate(for: digest) },
           onTriggerUnblur: { viewModel.triggerUnblurAnimation(for: digest) },
           unlockMessage: viewModel.unlockMessage(for: digest),
-          formattedRange: viewModel.formattedRange(for: digest)
+          formattedRange: digest.formattedRange
         )
         .mask(EdgeFadeMask())
         .tag(offset)

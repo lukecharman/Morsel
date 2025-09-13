@@ -8,7 +8,7 @@ struct DigestModelBuilder {
     self.meals = meals
   }
 
-  func digest(forOffset offset: Int) -> DigestModel {
+  func digest(at offset: Int) -> DigestModel {
     let calendar = Calendar.current
     let baseDate = calendar.date(byAdding: .weekOfYear, value: -offset, to: Date())!
     let bounds = weekBounds(for: baseDate)

@@ -1,6 +1,9 @@
 import CoreMorsel
 import Foundation
 
+enum DigestSeason { case winter, spring, summer, autumn }
+enum DigestMood { case noMeals, strong, tough, balanced }
+
 enum DigestAvailabilityState {
   case locked
   case unlockable
@@ -36,6 +39,77 @@ struct DigestModel {
     self.mostCommonCraving = mostCommonCraving
     self.streakLength = streakLength
     self.tip = tip
+  }
+
+  var season: DigestSeason {
+    let m = Calendar.current.component(.month, from: weekStart)
+    switch m {
+    case 12, 1, 2: return .winter
+    case 3, 4, 5: return .spring
+    case 6, 7, 8: return .summer
+    default: return .autumn
+    }
+  }
+
+  var mood: DigestMood {
+    if mealsLogged == 0 { return .noMeals }
+    if cravingsResisted > cravingsGivenIn { return .strong }
+    if cravingsGivenIn > cravingsResisted { return .tough }
+    return .balanced
+  }
+
+  var encouragement: String {
+    let state: DigestEncouragementState
+    if mealsLogged == 0 {
+      state = .noMeals
+    } else if cravingsResisted > cravingsGivenIn {
+      state = .moreResisted
+    } else if cravingsGivenIn > cravingsResisted {
+      state = .moreGivenIn
+    } else {
+      state = .balanced
+    }
+    return state.messages.randomElement() ?? ""
+  }
+
+  var formattedRange: String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMM"
+    let calendar = Calendar.current
+    let displayEnd = calendar.date(byAdding: .day, value: -1, to: weekEnd) ?? weekEnd
+    return "\(formatter.string(from: weekStart)) – \(formatter.string(from: displayEnd))"
+  }
+
+  var title: String {
+    let cal = Calendar.current
+    let week = cal.component(.weekOfYear, from: weekStart)
+    let year = cal.component(.yearForWeekOfYear, from: weekStart)
+    let seed = week + year * 1000 + streakLength * 100_000
+    var rng = SeededGenerator(seed: seed)
+
+    let s = season
+    let m = mood
+
+    var pool: [String] = []
+    pool.append(contentsOf: DigestTitleGenerator.titles[m]?[s] ?? [])
+    pool.append(contentsOf: DigestTitleGenerator.moodOnly[m] ?? [])
+    pool.append(contentsOf: DigestTitleGenerator.seasonOnly[s] ?? [])
+    pool.append(contentsOf: DigestTitleGenerator.generic)
+
+    let dynamicCandidates = DigestTitleGenerator.dynamicTitles(
+      mostCommonCraving: mostCommonCraving,
+      streak: streakLength,
+      meals: mealsLogged,
+      resisted: cravingsResisted,
+      gaveIn: cravingsGivenIn,
+      season: s,
+      mood: m
+    )
+    pool.append(contentsOf: dynamicCandidates)
+
+    if pool.isEmpty { return "Weekly Digest" }
+    let index = Int(rng.next() % UInt64(pool.count))
+    return "“" + pool[index] + "”"
   }
 }
 
