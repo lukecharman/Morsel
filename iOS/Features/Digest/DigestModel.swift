@@ -23,6 +23,14 @@ struct DigestModel {
   let streakLength: Int
   let tip: MorselTip
 
+  var formattedRange: String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMM"
+    let calendar = Calendar.current
+    let displayEnd = calendar.date(byAdding: .day, value: -1, to: weekEnd) ?? weekEnd
+    return "\(formatter.string(from: weekStart)) – \(formatter.string(from: displayEnd))"
+  }
+
   init(weekStart: Date, weekEnd: Date, meals: [FoodEntry], streakLength: Int) {
     let (mealsLogged, cravingsResisted, cravingsGivenIn) = Self.computeCravingCounts(from: meals)
     let mostCommonCraving = Self.mostCommonCraving(from: meals)
