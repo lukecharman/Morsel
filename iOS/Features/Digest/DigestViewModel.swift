@@ -10,6 +10,10 @@ final class DigestViewModel: ObservableObject {
   let meals: [FoodEntry]
   let initialOffset: Int?
 
+  private let weekBuilder: DigestWeekBuilder
+  private let modelBuilder: DigestModelBuilder
+  private let unlockHandler: DigestUnlockHandler
+
   // UI state
   @Published var currentPageIndex: Int = 0
   @Published var animatingBlurRadius: [String: Double] = [:]
@@ -18,180 +22,58 @@ final class DigestViewModel: ObservableObject {
   private var unblurAnimationInProgress: Set<String> = []
   private var hasTriggeredAnimation: Set<String> = []
 
-  init(meals: [FoodEntry], initialOffset: Int? = nil) {
+  init(
+    meals: [FoodEntry],
+    initialOffset: Int? = nil,
+    weekBuilder: DigestWeekBuilder,
+    modelBuilder: DigestModelBuilder,
+    unlockHandler: DigestUnlockHandler
+  ) {
     self.meals = meals
     self.initialOffset = initialOffset
+    self.weekBuilder = weekBuilder
+    self.modelBuilder = modelBuilder
+    self.unlockHandler = unlockHandler
   }
 
   // MARK: - Paging / Data
 
   var availableOffsets: [Int] {
-    let calendarProvider = CalendarProvider()
-    let calendar = Calendar.current
-
-    // If no meals, preserve legacy behavior: include last week and this week.
-    guard let earliestMealDate = meals.map(\.timestamp).min() else {
-      return [1, 0]
-    }
-
-    let startOfCurrentWeek = calendarProvider.startOfDigestWeek(for: Date())
-    let startOfEarliestMealWeek = calendarProvider.startOfDigestWeek(for: earliestMealDate)
-
-    // Build contiguous week starts from earliest meal week to current week (inclusive)
-    var weekStarts: [Date] = []
-    var cursor = startOfEarliestMealWeek
-    while cursor <= startOfCurrentWeek {
-      weekStarts.append(cursor)
-      // Safe add 1 week
-      guard let next = calendar.date(byAdding: .weekOfYear, value: 1, to: cursor) else { break }
-      cursor = next
-    }
-
-    // Determine which weeks are non-empty
-    // For efficiency, compute each week’s inclusive end (start + 7d - 1s)
-    let weekRanges: [(start: Date, endInclusive: Date)] = weekStarts.map { ws in
-      let end = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: ws)!
-      return (start: ws, endInclusive: end)
-    }
-
-    func hasMeals(in range: (start: Date, endInclusive: Date)) -> Bool {
-      // Fast path: if no meals at all, already handled above.
-      // Basic filter; meals array is expected to be modest in size for client-side filtering.
-      meals.contains { $0.timestamp >= range.start && $0.timestamp <= range.endInclusive }
-    }
-
-    // Find index of first non-empty week
-    let firstNonEmptyIndex = weekRanges.firstIndex(where: { hasMeals(in: $0) })
-
-    // If somehow no non-empty weeks are found (shouldn't happen because earliest was from a meal),
-    // fall back to returning just [0] (current week). But to be safe, keep legacy [1, 0].
-    guard let nonEmptyIdx = firstNonEmptyIndex else {
-      return [1, 0]
-    }
-
-    // Trim leading empties, but keep exactly one empty week before the first non-empty if any existed.
-    let firstIndexToKeep: Int = max(0, nonEmptyIdx - 1)
-    let trimmedWeekStarts = Array(weekStarts[firstIndexToKeep...])
-
-    // Map week starts to offsets relative to current week (0 = current)
-    // offset = number of weeks between weekStart and currentWeekStart
-    let offsets: [Int] = trimmedWeekStarts.compactMap { ws in
-      let comps = calendar.dateComponents([.weekOfYear], from: ws, to: startOfCurrentWeek)
-      return comps.weekOfYear
-    }
-
-    // We built offsets oldest->newest; return in descending order (like previous code): [max ... 0]
-    return offsets.sorted(by: >)
+    weekBuilder.availableOffsets(for: meals)
   }
 
   func digest(forOffset offset: Int) -> DigestModel {
-    let calendar = Calendar.current
-    let baseDate = calendar.date(byAdding: .weekOfYear, value: -offset, to: Date())!
-    let bounds = weekBounds(for: baseDate)
-
-    let mealsForWeek = meals.filter { $0.timestamp >= bounds.start && $0.timestamp <= bounds.inclusiveEnd }
-    let streak = consecutiveNonEmptyWeeks(endingAt: bounds.start)
-
-    return DigestModel(weekStart: bounds.start, weekEnd: bounds.end, meals: mealsForWeek, streakLength: streak)
-  }
-
-  private func weekBounds(for date: Date) -> (start: Date, end: Date, inclusiveEnd: Date) {
-    let calendar = Calendar.current
-    let provider = CalendarProvider()
-    let start = provider.startOfDigestWeek(for: date)
-    let end = calendar.date(byAdding: .day, value: 7, to: start)!
-    let inclusiveEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: start)!
-    return (start, end, inclusiveEnd)
-  }
-
-  private func consecutiveNonEmptyWeeks(endingAt weekStart: Date) -> Int {
-    let calendar = Calendar.current
-    let provider = CalendarProvider()
-    let maxWeeksBack = 52
-    var streak = 0
-    for i in 0..<maxWeeksBack {
-      guard let checkDate = calendar.date(byAdding: .weekOfYear, value: -i, to: weekStart) else { break }
-      let checkStart = provider.startOfDigestWeek(for: checkDate)
-      let checkEnd = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: checkStart)!
-      let mealsInWeek = meals.filter { $0.timestamp >= checkStart && $0.timestamp <= checkEnd }
-      if mealsInWeek.isEmpty {
-        break
-      } else {
-        streak += 1
-      }
-    }
-    return streak
+    modelBuilder.digest(forOffset: offset)
   }
 
   // MARK: - Availability / Unlock
 
   func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
-    let calendar = Calendar.current
-    let now = Date()
-    guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
-      return .unlocked
-    }
-    let unlockTime = calculateUnlockTime(for: digest.weekEnd, calendar: calendar)
-    if now < unlockTime {
-      return .locked
-    } else {
-      let key = digestUnlockKey(for: digest)
-      let hasBeenUnlocked = UserDefaults.standard.bool(forKey: key)
-      return hasBeenUnlocked ? .unlocked : .unlockable
-    }
+    return unlockHandler.digestAvailabilityState(digest)
   }
 
   func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
-    if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
-       let debugTime = NotificationsManager.debugUnlockTime {
-      return debugTime
-    }
-
-    let weekday = calendar.component(.weekday, from: periodStart)
-    let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
-
-    guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: periodStart) else {
-      return periodStart
-    }
-
-    var components = calendar.dateComponents([.year, .month, .day], from: targetDay)
-    components.hour = DigestConfiguration.unlockHour
-    components.minute = DigestConfiguration.unlockMinute
-    components.second = 0
-
-    return calendar.date(from: components) ?? targetDay
+    return unlockHandler.calculateUnlockTime(for: periodStart, calendar: calendar)
   }
 
   func unlockMessage(for digest: DigestModel) -> String {
-    let calendar = Calendar.current
-    let unlock = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
-    let dayFormatter = DateFormatter()
-    dayFormatter.dateFormat = "EEEE"
-    let timeFormatter = DateFormatter()
-    timeFormatter.dateFormat = "HH:mm"
-    return "Check back on \(dayFormatter.string(from: unlock)) at \(timeFormatter.string(from: unlock)) to see your full digest."
+    return unlockHandler.unlockMessage(for: digest)
   }
 
   func digestUnlockKey(for digest: DigestModel) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd"
-    return "digest_unlocked_\(formatter.string(from: digest.weekStart))"
+    return unlockHandler.digestUnlockKey(for: digest)
   }
 
-  private func markDigestAsUnlocked(_ digest: DigestModel) {
-    let digestKey = digestUnlockKey(for: digest)
-    UserDefaults.standard.set(true, forKey: digestKey)
+  func markDigestAsUnlocked(_ digest: DigestModel) {
+    unlockHandler.markDigestAsUnlocked(digest)
   }
 
-  private func nudgeSentKey(for digest: DigestModel) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd"
-    return "digest_nudge_sent_\(formatter.string(from: digest.weekStart))"
+  func nudgeSentKey(for digest: DigestModel) -> String {
+    return unlockHandler.nudgeSentKey(for: digest)
   }
 
-  private func markWeeklyNudgeAsSent(for digest: DigestModel) {
-    let key = nudgeSentKey(for: digest)
-    UserDefaults.standard.set(true, forKey: key)
+  func markWeeklyNudgeAsSent(for digest: DigestModel) {
+    unlockHandler.markWeeklyNudgeAsSent(for: digest)
   }
 
   // MARK: - Titles / Text
@@ -298,15 +180,7 @@ final class DigestViewModel: ObservableObject {
       self.markDigestAsUnlocked(digest)
       self.markWeeklyNudgeAsSent(for: digest)
 
-      let center = UNUserNotificationCenter.current()
-      center.getDeliveredNotifications { notes in
-        let ids = notes
-          .filter { $0.request.content.threadIdentifier == "digest_final" }
-          .map { $0.request.identifier }
-        if !ids.isEmpty {
-          center.removeDeliveredNotifications(withIdentifiers: ids)
-        }
-      }
+      self.unlockHandler.clearDeliveredFinalDigestNotifications()
     }
   }
 }
