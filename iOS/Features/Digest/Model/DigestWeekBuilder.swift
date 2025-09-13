@@ -2,11 +2,9 @@ import Foundation
 import CoreMorsel
 
 struct DigestWeekBuilder {
-  private let calendar: Calendar
-  private let calendarProvider: CalendarProvider
+  private let calendarProvider: CalendarProviderInterface
 
-  init(calendar: Calendar = .current, calendarProvider: CalendarProvider = CalendarProvider()) {
-    self.calendar = calendar
+  init(calendarProvider: CalendarProviderInterface = CalendarProvider()) {
     self.calendarProvider = calendarProvider
   }
 
@@ -25,14 +23,14 @@ struct DigestWeekBuilder {
     while cursor <= startOfCurrentWeek {
       weekStarts.append(cursor)
       // Safe add 1 week
-      guard let next = calendar.date(byAdding: .weekOfYear, value: 1, to: cursor) else { break }
+      guard let next = calendarProvider.date(byAdding: .weekOfYear, value: 1, to: cursor) else { break }
       cursor = next
     }
 
     // Determine which weeks are non-empty
     // For efficiency, compute each week’s inclusive end (start + 7d - 1s)
     let weekRanges: [(start: Date, endInclusive: Date)] = weekStarts.map { ws in
-      let end = calendar.date(byAdding: DateComponents(day: 7, second: -1), to: ws)!
+      let end = calendarProvider.date(byAdding: DateComponents(day: 7, second: -1), to: ws)!
       return (start: ws, endInclusive: end)
     }
 
@@ -58,7 +56,7 @@ struct DigestWeekBuilder {
     // Map week starts to offsets relative to current week (0 = current)
     // offset = number of weeks between weekStart and currentWeekStart
     let offsets: [Int] = trimmedWeekStarts.compactMap { ws in
-      let comps = calendar.dateComponents([.weekOfYear], from: ws, to: startOfCurrentWeek)
+      let comps = calendarProvider.dateComponents([.weekOfYear], from: ws, to: startOfCurrentWeek)
       return comps.weekOfYear
     }
 

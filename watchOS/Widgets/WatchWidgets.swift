@@ -17,8 +17,8 @@ struct QuickLogWithCountProvider: TimelineProvider {
     var mealCount = 0
 
     let context = ModelContext(container)
-    let calendar = Calendar.current
-    let startOfToday = calendar.startOfDay(for: Date())
+    let calendarProvider = CalendarProvider()
+    let startOfToday = calendarProvider.startOfDay(for: Date())
     let descriptor = FetchDescriptor<FoodEntry>(
       predicate: #Predicate { $0.timestamp >= startOfToday }
     )
@@ -144,4 +144,3 @@ struct WatchWidgetBundle: WidgetBundle {
   QuickLogWithCountEntry(date: Date().addingTimeInterval(200), mealCount: 1)
   QuickLogWithCountEntry(date: Date().addingTimeInterval(400), mealCount: 2)
 })
-

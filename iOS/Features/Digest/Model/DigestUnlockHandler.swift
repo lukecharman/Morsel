@@ -2,15 +2,21 @@ import Foundation
 import UserNotifications
 
 final class DigestUnlockHandler {
+  private let calendarProvider: CalendarProviderInterface
+
+  init(calendarProvider: CalendarProviderInterface = CalendarProvider()) {
+    self.calendarProvider = calendarProvider
+  }
+
   // MARK: - Availability / Unlock
 
   func digestAvailabilityState(_ digest: DigestModel) -> DigestAvailabilityState {
-    let calendar = Calendar.current
+    let cal = calendarProvider
     let now = Date()
-    guard calendar.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
+    guard cal.isDate(now, equalTo: digest.weekStart, toGranularity: .weekOfYear) else {
       return .unlocked
     }
-    let unlockTime = calculateUnlockTime(for: digest.weekEnd, calendar: calendar)
+    let unlockTime = calculateUnlockTime(for: digest.weekEnd, calendar: cal)
     if now < unlockTime {
       return .locked
     } else {
@@ -20,7 +26,7 @@ final class DigestUnlockHandler {
     }
   }
 
-  func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
+  func calculateUnlockTime(for periodStart: Date, calendar: CalendarProviderInterface) -> Date {
     if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
        let debugTime = NotificationsManager.debugUnlockTime {
       return debugTime
@@ -42,8 +48,7 @@ final class DigestUnlockHandler {
   }
 
   func unlockMessage(for digest: DigestModel) -> String {
-    let calendar = Calendar.current
-    let unlock = calculateUnlockTime(for: digest.weekStart, calendar: calendar)
+    let unlock = calculateUnlockTime(for: digest.weekStart, calendar: calendarProvider)
     let dayFormatter = DateFormatter()
     dayFormatter.dateFormat = "EEEE"
     let timeFormatter = DateFormatter()

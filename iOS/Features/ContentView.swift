@@ -35,6 +35,7 @@ struct ContentView: View {
   @StateObject private var morselSpeaker = MorselSpeaker()
   @State private var morselAnchor: MorselAnchor? = .init(edge: .bottom, padding: 6)
   private let notificationsManager = NotificationsManager()
+  private let calendarProvider = CalendarProvider()
 
   @Binding var shouldOpenMouth: Bool
   @Binding var digestPresentation: DigestPresentation
@@ -275,7 +276,7 @@ private extension ContentView {
 
   var groupedEntries: [(date: Date, entries: [FoodEntry])] {
     Dictionary(grouping: entries) { entry in
-      Calendar.current.startOfDay(for: entry.timestamp)
+      calendarProvider.startOfDay(for: entry.timestamp)
     }
     .map { (key, value) in
       (date: key, entries: value)
@@ -315,9 +316,11 @@ private extension ContentView {
 
   func dateString(for date: Date, entryCount: Int) -> String {
     let dayString: String
-    if Calendar.current.isDateInToday(date) {
+    let today = Date()
+    let yesterday = calendarProvider.calendar.date(byAdding: .day, value: -1, to: today)!
+    if calendarProvider.isDate(date, inSameDayAs: today) {
       dayString = "Today"
-    } else if Calendar.current.isDateInYesterday(date) {
+    } else if calendarProvider.isDate(date, inSameDayAs: yesterday) {
       dayString = "Yesterday"
     } else {
       dayString = date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
@@ -326,9 +329,11 @@ private extension ContentView {
   }
 
   func colourForEntry(date: Date) -> Color {
-    if Calendar.current.isDateInToday(date) {
+    let today = Date()
+    let yesterday = calendarProvider.calendar.date(byAdding: .day, value: -1, to: today)!
+    if calendarProvider.isDate(date, inSameDayAs: today) {
       return .primary
-    } else if Calendar.current.isDateInYesterday(date) {
+    } else if calendarProvider.isDate(date, inSameDayAs: yesterday) {
       return .secondary
     } else {
       return .gray

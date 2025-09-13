@@ -91,10 +91,9 @@ private extension NotificationsManager {
 // MARK: - Catch-up logic
 private extension NotificationsManager {
   func catchUpIfNeeded() {
-    let calendar = Calendar.current
     let now = Date()
     let weekStart = calendarProvider.startOfDigestWeek(for: now)
-    let unlockTime = calculateUnlockTime(for: weekStart, calendar: calendar)
+    let unlockTime = calculateUnlockTime(for: weekStart, calendar: calendarProvider)
 
     if now >= unlockTime && !hasSentWeeklyNudge(for: weekStart) {
       sendImmediateWeeklyNudge()
@@ -129,7 +128,7 @@ private extension NotificationsManager {
     return fmt.string(from: date)
   }
 
-  func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
+  func calculateUnlockTime(for periodStart: Date, calendar: CalendarProviderInterface) -> Date {
     // Respect debug override only for current week
     if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
        let debug = NotificationsManager.debugUnlockTime {

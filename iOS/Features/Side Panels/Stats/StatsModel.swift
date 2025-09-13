@@ -5,6 +5,12 @@ import SwiftData
 @MainActor
 struct StatsModel {
   let modelContainer: ModelContainer
+  let calendarProvider: CalendarProviderInterface
+
+  init(modelContainer: ModelContainer, calendarProvider: CalendarProviderInterface = CalendarProvider()) {
+    self.modelContainer = modelContainer
+    self.calendarProvider = calendarProvider
+  }
 
   var totalEntries: Int {
     let descriptor = FetchDescriptor<FoodEntry>()
@@ -35,11 +41,9 @@ struct StatsModel {
     let descriptor = FetchDescriptor<FoodEntry>()
     guard let entries = try? modelContainer.mainContext.fetch(descriptor), !entries.isEmpty else { return 0 }
 
-    let calendar = Calendar.current
-
-    /// 1. Group entries by day
+    /// 1. Group entries by day using a consistent calendar
     let grouped = Dictionary(grouping: entries) {
-      calendar.startOfDay(for: $0.timestamp)
+      calendarProvider.startOfDay(for: $0.timestamp)
     }
 
     /// 2. Calculate daily percentages
@@ -57,16 +61,14 @@ struct StatsModel {
 
 private extension StatsModel {
   func streaks(from sortedUniqueDays: [Date]) -> (longest: Int, current: Int) {
-    let calendar = Calendar.current
-
     guard var previousDay = sortedUniqueDays.first else { return (0, 0) }
 
     /// Calculate longest streak across all days
     var longest = 1
     var running = 1
     for day in sortedUniqueDays.dropFirst() {
-      let expected = calendar.date(byAdding: .day, value: -1, to: previousDay)!
-      if calendar.isDate(day, inSameDayAs: expected) {
+      let expected = calendarProvider.date(byAdding: .day, value: -1, to: previousDay)!
+      if calendarProvider.isDate(day, inSameDayAs: expected) {
         running += 1
       } else {
         longest = max(longest, running)
@@ -78,12 +80,12 @@ private extension StatsModel {
 
     /// Calculate current streak starting from today if present
     var current = 0
-    if calendar.isDate(sortedUniqueDays.first!, inSameDayAs: Date()) {
+    if let first = sortedUniqueDays.first, calendarProvider.isDate(first, inSameDayAs: Date()) {
       current = 1
-      previousDay = sortedUniqueDays.first!
+      previousDay = first
       for day in sortedUniqueDays.dropFirst() {
-        let expected = calendar.date(byAdding: .day, value: -1, to: previousDay)!
-        if calendar.isDate(day, inSameDayAs: expected) {
+        let expected = calendarProvider.date(byAdding: .day, value: -1, to: previousDay)!
+        if calendarProvider.isDate(day, inSameDayAs: expected) {
           current += 1
           previousDay = day
         } else {
@@ -103,8 +105,7 @@ private extension StatsModel {
       return []
     }
 
-    let calendar = Calendar.current
-    let days = entries.map { calendar.startOfDay(for: $0.timestamp) }
+    let days = entries.map { calendarProvider.startOfDay(for: $0.timestamp) }
 
     return Array(Set(days)).sorted(by: >)
   }

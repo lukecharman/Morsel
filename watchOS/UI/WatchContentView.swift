@@ -18,9 +18,9 @@ struct WatchContentView: View {
   @State private var saving = false
 
   static var todayPredicate: Predicate<FoodEntry> {
-    let calendar = Calendar.current
-    let startOfToday = calendar.startOfDay(for: Date())
-    let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: startOfToday)!
+    let cal = CalendarProvider()
+    let startOfToday = cal.startOfDay(for: Date())
+    let startOfTomorrow = cal.date(byAdding: .day, value: 1, to: startOfToday)!
 
     return #Predicate<FoodEntry> { entry in
       entry.timestamp >= startOfToday && entry.timestamp < startOfTomorrow
