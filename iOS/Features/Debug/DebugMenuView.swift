@@ -6,6 +6,7 @@ import WidgetKit
 
 struct DebugMenuView: View {
   @State private var showStudio = false
+  @State private var alert: DebugAlert?
   private let notificationsManager = NotificationsManager()
   @Environment(\.modelContext) private var modelContext
 
@@ -18,7 +19,10 @@ struct DebugMenuView: View {
             value: "Schedule Digest",
             icon: "timer",
             isFirst: true,
-            onTap: { notificationsManager.scheduleDebugDigest() }
+            onTap: {
+              notificationsManager.scheduleDebugDigest()
+              alert = .digestScheduled
+            }
           )
           CardView(
             title: "",
@@ -30,7 +34,10 @@ struct DebugMenuView: View {
             title: "",
             value: "Populate",
             icon: "shippingbox.fill",
-            onTap: { populateData() }
+            onTap: {
+              populateData()
+              alert = .dataPopulated
+            }
           )
           CardView(
             title: "",
@@ -44,11 +51,29 @@ struct DebugMenuView: View {
         .padding(.top, 16)
       }
       .sheet(isPresented: $showStudio) { MorselStudio() }
+      .alert(item: $alert) { alert in
+        Alert(title: Text(alert.message))
+      }
     }
   }
 }
 
 private extension DebugMenuView {
+  enum DebugAlert: Identifiable {
+    case digestScheduled
+    case dataPopulated
+
+    var id: Int { hashValue }
+
+    var message: String {
+      switch self {
+      case .digestScheduled:
+        return "Digest scheduled"
+      case .dataPopulated:
+        return "Sample data populated"
+      }
+    }
+  }
   func populateData() {
     // 1) Clear all current entries
     _ = modelContext.deleteAll(FoodEntry.self)
