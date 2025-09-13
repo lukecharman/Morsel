@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DigestConfiguration {
+public struct MorselCalendarConfiguration {
   public static let unlockWeekday = 2 // 2 = Monday
   public static let unlockHour = 12
   public static let unlockMinute = 15
@@ -26,7 +26,7 @@ public struct CalendarProvider: CalendarProviderInterface {
   private var calendar: Calendar
 
   public init(
-    unlockWeekday: Int = DigestConfiguration.unlockWeekday,
+    unlockWeekday: Int = MorselCalendarConfiguration.unlockWeekday,
     identifier: Calendar.Identifier = .iso8601,
     timeZone: TimeZone = .current,
     locale: Locale = .current

@@ -77,9 +77,9 @@ private extension NotificationsManager {
     content.threadIdentifier = NotificationsManager.digestThreadIdentifier
 
     var dateComponents = DateComponents()
-    dateComponents.weekday = DigestConfiguration.unlockWeekday
-    dateComponents.hour = DigestConfiguration.unlockHour
-    dateComponents.minute = DigestConfiguration.unlockMinute
+    dateComponents.weekday = MorselCalendarConfiguration.unlockWeekday
+    dateComponents.hour = MorselCalendarConfiguration.unlockHour
+    dateComponents.minute = MorselCalendarConfiguration.unlockMinute
     dateComponents.second = 0
 
     let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -137,11 +137,11 @@ private extension NotificationsManager {
     }
 
     let weekday = calendar.component(.weekday, from: periodStart)
-    let daysToAdd = (DigestConfiguration.unlockWeekday - weekday + 7) % 7
+    let daysToAdd = (MorselCalendarConfiguration.unlockWeekday - weekday + 7) % 7
     guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: periodStart) else { return periodStart }
     var components = calendar.dateComponents([.year, .month, .day], from: targetDay)
-    components.hour = DigestConfiguration.unlockHour
-    components.minute = DigestConfiguration.unlockMinute
+    components.hour = MorselCalendarConfiguration.unlockHour
+    components.minute = MorselCalendarConfiguration.unlockMinute
     components.second = 0
     return calendar.date(from: components) ?? targetDay
   }
