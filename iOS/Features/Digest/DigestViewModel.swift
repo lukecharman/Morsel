@@ -35,6 +35,23 @@ final class DigestViewModel: ObservableObject {
     self.modelBuilder = modelBuilder
     self.unlockHandler = unlockHandler
   }
+  
+  convenience init(
+    meals: [FoodEntry],
+    initialOffset: Int? = nil
+  ) {
+    let weekBuilder = DigestWeekBuilder()
+    let modelBuilder = DigestModelBuilder(meals: meals)
+    let unlockHandler = DigestUnlockHandler()
+
+    self.init(
+      meals: meals,
+      initialOffset: initialOffset,
+      weekBuilder: weekBuilder,
+      modelBuilder: modelBuilder,
+      unlockHandler: unlockHandler
+    )
+  }
 
   // MARK: - Paging / Data
 

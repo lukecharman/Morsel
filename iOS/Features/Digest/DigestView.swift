@@ -10,16 +10,7 @@ struct DigestView: View {
 
   init(meals: [FoodEntry], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
     self.onClose = onClose
-
-    let vm = DigestViewModel(
-      meals: meals,
-      initialOffset: initialOffset,
-      weekBuilder: DigestWeekBuilder(),
-      modelBuilder: DigestModelBuilder(meals: meals),
-      unlockHandler: DigestUnlockHandler()
-    )
-
-    _viewModel = StateObject(wrappedValue: vm)
+    _viewModel = StateObject(wrappedValue: DigestViewModel(meals: meals, initialOffset: initialOffset))
   }
 
   var body: some View {
