@@ -66,7 +66,7 @@ final class DigestViewModel: ObservableObject {
     unlockHandler.digestAvailabilityState(digest)
   }
 
-  func calculateUnlockTime(for periodStart: Date, calendar: Calendar) -> Date {
+  func calculateUnlockTime(for periodStart: Date, calendar: CalendarProviderInterface) -> Date {
     unlockHandler.calculateUnlockTime(for: periodStart, calendar: calendar)
   }
 
@@ -123,4 +123,3 @@ final class DigestViewModel: ObservableObject {
     }
   }
 }
-

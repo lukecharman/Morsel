@@ -20,6 +20,8 @@ struct FilledEntriesView: View {
   let onToggleDestination: (FoodEntry) -> Void
   let onRename: (FoodEntry, String) -> Void
 
+  private let calendarProvider = CalendarProvider()
+
   var body: some View {
     ZStack(alignment: .bottom) {
       BackgroundGradientView()
@@ -88,16 +90,16 @@ struct FilledEntriesView: View {
 
   private var groupedEntries: [(date: Date, entries: [FoodEntry])] {
     Dictionary(grouping: entries) { entry in
-      Calendar.current.startOfDay(for: entry.timestamp)
+      calendarProvider.startOfDay(for: entry.timestamp)
     }
     .map { (key, value) in (date: key, entries: value) }
     .sorted { $0.date > $1.date }
   }
 
   private func dateString(for date: Date, entryCount: Int) -> String {
-    if Calendar.current.isDateInToday(date) {
+    if calendarProvider.isDate(date, inSameDayAs: Date()) {
       return "Today (\(entryCount))"
-    } else if Calendar.current.isDateInYesterday(date) {
+    } else if let yesterday = calendarProvider.date(byAdding: .day, value: -1, to: Date()), calendarProvider.isDate(date, inSameDayAs: yesterday) {
       return "Yesterday (\(entryCount))"
     } else {
       let formatted = date.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))

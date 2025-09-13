@@ -26,9 +26,10 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       let entries = await fetchTodayFoodEntries()
       let timelineEntry = FoodEntryTimelineEntry(date: Date(), foodEntries: entries, morselColor: loadMorselColor())
 
+      let cal = CalendarProvider()
       let nextRefresh: Date = entries.isEmpty
-      ? Calendar.current.date(byAdding: .minute, value: 60, to: Date())!
-      : Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+      ? cal.date(byAdding: .minute, value: 60, to: Date())!
+      : cal.date(byAdding: .minute, value: 15, to: Date())!
 
       completion(Timeline(entries: [timelineEntry], policy: .after(nextRefresh)))
     }
@@ -40,8 +41,8 @@ struct FoodTimelineProvider: @preconcurrency TimelineProvider {
       let container: ModelContainer = .morsel
       let context = container.mainContext
 
-      let calendar = Calendar.current
-      let startOfDay = calendar.startOfDay(for: Date())
+      let cal = CalendarProvider()
+      let startOfDay = cal.startOfDay(for: Date())
       let predicate = #Predicate<FoodEntry> { entry in
         entry.timestamp >= startOfDay
       }

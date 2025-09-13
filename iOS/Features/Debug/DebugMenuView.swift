@@ -54,7 +54,7 @@ private extension DebugMenuView {
     _ = modelContext.deleteAll(FoodEntry.self)
 
     // 2) Generate realistic data across ~90 days
-    let calendar = Calendar.current
+    let cal = CalendarProvider()
     let daysBack = 90
     let meRatio: Double = 0.7 // 70% Me, 30% Morsel
     let minPerDay = 1
@@ -87,20 +87,20 @@ private extension DebugMenuView {
 
     var allEntries: [FoodEntry] = []
     for dayOffset in 0..<daysBack {
-      guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
+      guard let date = cal.date(byAdding: .day, value: -dayOffset, to: Date()) else { continue }
 
       // Bias weekdays vs weekends a bit: weekends slightly fewer logs
-      let weekday = calendar.component(.weekday, from: date) // 1..7
+      let weekday = cal.component(.weekday, from: date) // 1..7
       let baseCount = Int.random(in: minPerDay...maxPerDay)
       let isWeekend = (weekday == 1 || weekday == 7)
       let todaysCount = max(minPerDay, baseCount - (isWeekend ? 1 : 0))
 
       for _ in 0..<todaysCount {
         // Random time between 07:00 and 22:30
-        var comps = calendar.dateComponents([.year, .month, .day], from: date)
+        var comps = cal.dateComponents([.year, .month, .day], from: date)
         comps.hour = Int.random(in: 7...22)
         comps.minute = Int.random(in: 0...59)
-        guard let timestamp = calendar.date(from: comps) else { continue }
+        guard let timestamp = cal.date(from: comps) else { continue }
 
         // Realistic name from pool
         let name = items.randomElement() ?? "Snack"
