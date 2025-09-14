@@ -6,12 +6,16 @@ import WidgetKit
 
 struct DebugMenuView: View {
   @State private var showStudio = false
+  @State private var showPopulateConfirmation = false
   private let notificationsManager = NotificationsManager()
   @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     NavigationStack {
       ScrollView {
+        Text("Debug Menu")
+          .font(MorselFont.title)
+          .padding(.top, 32)
         VStack(spacing: 0) {
           CardView(
             title: "",
@@ -30,7 +34,7 @@ struct DebugMenuView: View {
             title: "",
             value: "Populate",
             icon: "shippingbox.fill",
-            onTap: { populateData() }
+            onTap: { populateData(); showPopulateConfirmation = true }
           )
           CardView(
             title: "",
@@ -44,6 +48,11 @@ struct DebugMenuView: View {
         .padding(.top, 16)
       }
       .sheet(isPresented: $showStudio) { MorselStudio() }
+      .alert("Populated", isPresented: $showPopulateConfirmation) {
+        Button("OK", role: .cancel) { showPopulateConfirmation = false }
+      } message: {
+        Text("Existing entries have been removed, and sample data has been populated.")
+      }
     }
   }
 }
@@ -55,10 +64,10 @@ private extension DebugMenuView {
 
     // 2) Generate realistic data across ~90 days
     let cal = CalendarProvider()
-    let daysBack = 90
-    let meRatio: Double = 0.7 // 70% Me, 30% Morsel
-    let minPerDay = 1
-    let maxPerDay = 6
+    let daysBack = Int.random(in: 70...120)
+    let meRatio: Double = .random(in: 0.3...0.7)
+    let minPerDay: Int = .random(in: 1...2)
+    let maxPerDay: Int = .random(in: 4...8)
 
     // A diverse pool of items (meals, snacks, drinks)
     let items: [String] = [
@@ -134,3 +143,4 @@ private extension DebugMenuView {
   }
 }
 #endif
+
