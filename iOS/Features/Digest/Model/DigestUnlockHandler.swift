@@ -25,7 +25,7 @@ final class DigestUnlockHandler {
       return .unlocked
     }
     let cal = calendarProvider
-    let unlockTime = calculateUnlockTime(for: digest.weekStart, calendar: cal)
+    let unlockTime = calculateUnlockTime(for: digest.weekEnd, calendar: cal)
     if now < unlockTime {
       return .locked
     } else {
