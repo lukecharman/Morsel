@@ -63,6 +63,7 @@ struct ExtrasView: View {
           onTap: { onShowWelcome() }
         )
 #if DEBUG
+#if os(iOS)
         Spacer()
           .frame(height: 16)
         // Single debug card: mark as both first and last so corners are rounded properly
@@ -74,6 +75,7 @@ struct ExtrasView: View {
           isLast: true,
           onTap: { showDebugMenu = true }
         )
+#endif
 #endif
       }
       .safeAreaInset(edge: .top) {
@@ -122,7 +124,9 @@ struct ExtrasView: View {
         }
     }
 #if DEBUG
+#if os(iOS)
     .sheet(isPresented: $showDebugMenu) { DebugMenuView() }
+#endif
 #endif
     .onAppear {
       Analytics.track(ScreenViewExtras())

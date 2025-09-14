@@ -1,9 +1,36 @@
 import Foundation
 
 public struct MorselCalendarConfiguration {
-  public static let unlockWeekday = 2 // 2 = Monday
-  public static let unlockHour = 12
-  public static let unlockMinute = 15
+  private static let defaults = UserDefaults.standard
+  private static let weekdayKey = "MorselCalendar.unlockWeekday"
+  private static let hourKey = "MorselCalendar.unlockHour"
+  private static let minuteKey = "MorselCalendar.unlockMinute"
+
+  // Defaults: Monday at 12:15
+  public static let defaultWeekday = 2
+  public static let defaultHour = 12
+  public static let defaultMinute = 15
+
+  public static var unlockWeekday: Int {
+    get { defaults.object(forKey: weekdayKey) as? Int ?? defaultWeekday }
+    set { defaults.set(newValue, forKey: weekdayKey) }
+  }
+
+  public static var unlockHour: Int {
+    get { defaults.object(forKey: hourKey) as? Int ?? defaultHour }
+    set { defaults.set(newValue, forKey: hourKey) }
+  }
+
+  public static var unlockMinute: Int {
+    get { defaults.object(forKey: minuteKey) as? Int ?? defaultMinute }
+    set { defaults.set(newValue, forKey: minuteKey) }
+  }
+
+  public static func reset() {
+    unlockWeekday = defaultWeekday
+    unlockHour = defaultHour
+    unlockMinute = defaultMinute
+  }
 }
 
 public protocol CalendarProviderInterface {

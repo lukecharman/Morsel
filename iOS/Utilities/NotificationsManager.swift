@@ -4,14 +4,11 @@ import NotificationCenter
 import UserNotifications
 
 struct NotificationsManager {
-  /// Debug unlock time for digest testing
-  static var debugUnlockTime: Date?
   static let digestThreadIdentifier = "digest_final"
 
   private let notificationCenter: UNUserNotificationCenter
   private let calendarProvider: CalendarProviderInterface
   private let digestReminderId = "weeklyDigestReminder"
-  private let debugDigestReminderId = "debugDigestReminder"
 
   init(
     notificationCenter: UNUserNotificationCenter = .current(),
@@ -33,38 +30,12 @@ struct NotificationsManager {
   func runCatchUpCheck() {
     catchUpIfNeeded()
   }
-
-  func scheduleDebugDigest() {
-    notificationCenter.removePendingNotificationRequests(withIdentifiers: [debugDigestReminderId])
-
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd"
-
-    let weekStart = calendarProvider.startOfDigestWeek(for: Date())
-    let key = "digest_unlocked_\(formatter.string(from: weekStart))"
-    UserDefaults.standard.removeObject(forKey: key)
-
-    let fireDate = Date().addingTimeInterval(30)
-    NotificationsManager.debugUnlockTime = fireDate
-
-    let content = UNMutableNotificationContent()
-    content.title = "Morsel's got your weekly digest!"
-    content.body = "Wanna see how you did this week? Morsel's been watching (politely)."
-    content.userInfo = ["deepLink": "morsel://digest?offset=1"]
-    content.sound = .default
-    content.threadIdentifier = NotificationsManager.digestThreadIdentifier
-
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
-    let request = UNNotificationRequest(identifier: debugDigestReminderId, content: content, trigger: trigger)
-    UNUserNotificationCenter.current().add(request)
-  }
 }
 
 private extension NotificationsManager {
-
   func scheduleDigestNotifications() {
     // Kill legacy identifiers if any linger
-    notificationCenter.removePendingNotificationRequests(withIdentifiers: [digestReminderId, debugDigestReminderId])
+    notificationCenter.removePendingNotificationRequests(withIdentifiers: [digestReminderId])
     scheduleWeeklyDigestNotification()
   }
 
@@ -130,12 +101,6 @@ private extension NotificationsManager {
   }
 
   func calculateUnlockTime(for periodStart: Date, calendar: CalendarProviderInterface) -> Date {
-    // Respect debug override only for current week
-    if calendar.isDate(Date(), equalTo: periodStart, toGranularity: .weekOfYear),
-       let debug = NotificationsManager.debugUnlockTime {
-      return debug
-    }
-
     let weekday = calendar.component(.weekday, from: periodStart)
     let daysToAdd = (MorselCalendarConfiguration.unlockWeekday - weekday + 7) % 7
     guard let targetDay = calendar.date(byAdding: .day, value: daysToAdd, to: periodStart) else { return periodStart }

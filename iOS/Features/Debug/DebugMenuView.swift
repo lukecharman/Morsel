@@ -1,4 +1,5 @@
 #if DEBUG
+#if os(iOS)
 import SwiftUI
 import CoreMorsel
 import SwiftData
@@ -7,7 +8,8 @@ import WidgetKit
 struct DebugMenuView: View {
   @State private var showStudio = false
   @State private var showPopulateConfirmation = false
-  private let notificationsManager = NotificationsManager()
+  @State private var showDigestTiming = false
+
   @Environment(\.modelContext) private var modelContext
 
   var body: some View {
@@ -19,10 +21,9 @@ struct DebugMenuView: View {
         VStack(spacing: 0) {
           CardView(
             title: "",
-            value: "Schedule Digest",
-            icon: "timer",
-            isFirst: true,
-            onTap: { notificationsManager.scheduleDebugDigest() }
+            value: "Digest Timing",
+            icon: "calendar.badge.clock",
+            onTap: { showDigestTiming = true }
           )
           CardView(
             title: "",
@@ -48,6 +49,7 @@ struct DebugMenuView: View {
         .padding(.top, 16)
       }
       .sheet(isPresented: $showStudio) { MorselStudio() }
+      .sheet(isPresented: $showDigestTiming) { DigestTimingSheet() }
       .alert("Populated", isPresented: $showPopulateConfirmation) {
         Button("OK", role: .cancel) { showPopulateConfirmation = false }
       } message: {
@@ -143,4 +145,4 @@ private extension DebugMenuView {
   }
 }
 #endif
-
+#endif
