@@ -49,7 +49,7 @@ struct DigestUnlockHandlerTests {
     defer { NotificationsManager.debugUnlockTime = nil }
     handler.markDigestAsUnlocked(digest)
     let state = handler.digestAvailabilityState(digest)
-    UserDefaults.standard.removeObject(forKey: handler.digestUnlockKey(for: digest))
+    UserDefaults.standard.set(true, forKey: handler.digestUnlockKey(for: digest))
     #expect(state == .unlocked)
   }
 

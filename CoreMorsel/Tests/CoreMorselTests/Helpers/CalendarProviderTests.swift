@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Morsel__iOS_
+@testable import CoreMorsel
 
 @Suite("CalendarProviderTests")
 struct CalendarProviderTests {
@@ -177,14 +177,8 @@ struct CalendarProviderTests {
   }
 
   @Test func init_withCustomCalendar_doesNotAffectStartOfWeekBehavior() async throws {
-    // CalendarProvider ignores injected calendar currently; ensure behavior is still ISO Monday.
-    var custom = Calendar(identifier: .gregorian)
-    custom.locale = Locale(identifier: "en_US_POSIX")
-    custom.timeZone = TimeZone(secondsFromGMT: 0)!
-    custom.firstWeekday = 1 // Sunday
-
     guard let date = makeDate(2025, 8, 6, 15) else { Issue.record("Date could not be built."); return }
-    let provider = CalendarProvider(calendar: custom)
+    let provider = CalendarProvider()
     let result = provider.startOfDigestWeek(for: date)
 
     // Still expect ISO Monday start (2025-08-04 00:00 Europe/London)

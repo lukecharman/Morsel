@@ -1,4 +1,5 @@
 import CoreMorsel
+import Foundation
 import Testing
 
 @testable import Morsel__iOS_

@@ -1,4 +1,5 @@
 import CoreMorsel
+import Foundation
 import Testing
 
 @testable import Morsel__iOS_
@@ -87,8 +88,8 @@ struct DigestModelBuilderTests {
 
     let meals = [
       FoodEntry(name: "start", timestamp: startMeal),
-      FoodEntry(name: "end", timestamp: endMeal!),
-      FoodEntry(name: "after", timestamp: afterWeek!),
+      FoodEntry(name: "end", timestamp: endMeal),
+      FoodEntry(name: "after", timestamp: afterWeek),
     ]
 
     let builder = DigestModelBuilder(meals: meals, calendarProvider: provider)
