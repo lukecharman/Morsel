@@ -83,10 +83,9 @@ struct ContentView: View {
     .overlay {
       sidePanelView(alignment: .leading, isVisible: showStats) {
         StatsView(statsModel: StatsModel(modelContainer: .morsel)) {
-          // Internal request to show digest with no initial offset
           withAnimation {
             showStats = false
-            digestPresentation = .visible(initialOffset: nil)
+            digestPresentation = .visible
           }
         }
       }
@@ -124,7 +123,6 @@ struct ContentView: View {
       bottomPanelView(isVisible: isDigestVisible) {
         DigestView(
           meals: entries,
-          initialOffset: currentDigestOffset,
           onClose: {
             withAnimation {
               digestPresentation = .hidden
@@ -172,13 +170,7 @@ private extension ContentView {
   }
 
   var isDigestVisible: Bool {
-    if case .visible = digestPresentation { return true }
-    return false
-  }
-
-  var currentDigestOffset: Int? {
-    if case let .visible(initialOffset) = digestPresentation { return initialOffset }
-    return nil
+    digestPresentation == .visible
   }
 
   var morsel: some View {

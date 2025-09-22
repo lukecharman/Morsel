@@ -25,9 +25,6 @@ struct PagesTabView: View {
         .tag(offset)
       }
     }
-    .tabViewStyle(.page(indexDisplayMode: .never))
-    .onAppear {
-      viewModel.currentPageIndex = viewModel.initialOffset ?? 0
-    }
+    .tabViewStyle(.page(indexDisplayMode: .never))    
   }
 }

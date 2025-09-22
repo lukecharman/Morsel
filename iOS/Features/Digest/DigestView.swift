@@ -8,9 +8,9 @@ struct DigestView: View {
 
   var onClose: (() -> Void)? = nil
 
-  init(meals: [FoodEntry], initialOffset: Int? = nil, onClose: (() -> Void)? = nil) {
+  init(meals: [FoodEntry], onClose: (() -> Void)? = nil) {
     self.onClose = onClose
-    _viewModel = StateObject(wrappedValue: DigestViewModel(meals: meals, initialOffset: initialOffset))
+    _viewModel = StateObject(wrappedValue: DigestViewModel(meals: meals))
   }
 
   var body: some View {

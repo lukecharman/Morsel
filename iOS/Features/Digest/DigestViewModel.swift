@@ -5,7 +5,6 @@ import SwiftUI
 final class DigestViewModel: ObservableObject {
   // Inputs
   let meals: [FoodEntry]
-  let initialOffset: Int?
 
   private let weekBuilder: DigestWeekBuilder
   private let modelBuilder: DigestModelBuilder
@@ -21,29 +20,23 @@ final class DigestViewModel: ObservableObject {
 
   init(
     meals: [FoodEntry],
-    initialOffset: Int? = nil,
     weekBuilder: DigestWeekBuilder,
     modelBuilder: DigestModelBuilder,
     unlockHandler: DigestUnlockHandler
   ) {
     self.meals = meals
-    self.initialOffset = initialOffset
     self.weekBuilder = weekBuilder
     self.modelBuilder = modelBuilder
     self.unlockHandler = unlockHandler
   }
   
-  convenience init(
-    meals: [FoodEntry],
-    initialOffset: Int? = nil
-  ) {
+  convenience init(meals: [FoodEntry]) {
     let weekBuilder = DigestWeekBuilder()
     let modelBuilder = DigestModelBuilder(meals: meals)
     let unlockHandler = DigestUnlockHandler()
 
     self.init(
       meals: meals,
-      initialOffset: initialOffset,
       weekBuilder: weekBuilder,
       modelBuilder: modelBuilder,
       unlockHandler: unlockHandler

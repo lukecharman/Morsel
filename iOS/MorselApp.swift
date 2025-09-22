@@ -7,7 +7,7 @@ import UserNotifications
 
 enum DigestPresentation: Equatable {
   case hidden
-  case visible(initialOffset: Int?)
+  case visible
 }
 
 @main
@@ -55,15 +55,7 @@ struct MorselApp: App {
     case "add":
       shouldOpenMouth = true
     case "digest":
-      let offset: Int?
-      if let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
-         let offStr = items.first(where: { $0.name == "offset" })?.value,
-         let off = Int(offStr) {
-        offset = off
-      } else {
-        offset = nil
-      }
-      digestPresentation = .visible(initialOffset: offset)
+      digestPresentation = .visible
     default:
       shouldOpenMouth = false
     }
@@ -79,12 +71,12 @@ struct MorselApp: App {
       options.tracesSampleRate = 1.0
 
       options.configureProfiling = {
-        $0.sessionSampleRate = 1.0 // We recommend adjusting this value in production.
+        $0.sessionSampleRate = 1.0
         $0.lifecycle = .trace
       }
 
-      options.attachScreenshot = true // This adds a screenshot to the error events
-      options.attachViewHierarchy = true // This adds the view hierarchy to the error events
+      options.attachScreenshot = true
+      options.attachViewHierarchy = true
     }
   }
 }
