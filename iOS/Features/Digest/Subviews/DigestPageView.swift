@@ -31,8 +31,18 @@ struct DigestPageView: View {
   }
 
   private var encouragementText: String {
-    // Simple heuristic until we wire real copy from the ViewModel.
-    // Derives a friendly message from digest stats.
+    // If viewing the current in-progress week, show motivational, forward-looking copy.
+    let isCurrentWeek: Bool = {
+      let provider = digest.calendarProvider
+      let currentStart = provider.startOfDigestWeek(for: Date())
+      return provider.isDate(digest.weekStart, inSameDayAs: currentStart)
+    }()
+
+    if isCurrentWeek {
+      return DigestInProgressCopy.message(for: digest.weekStart)
+    }
+
+    // Otherwise, keep the retrospective heuristic for past weeks.
     let meals = digest.mealsLogged
     let resisted = digest.cravingsResisted
     let gaveIn = digest.cravingsGivenIn
