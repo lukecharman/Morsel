@@ -13,7 +13,7 @@ struct DigestPageView: View {
       ScrollView {
         VStack(alignment: .leading, spacing: 24) {
           Spacer().frame(height: 44)
-          DigestHeaderView(title: title, dateRange: formattedRange)
+          DigestHeaderView(title: displayTitle, dateRange: formattedRange)
           DigestStatsView(digest: digest)
           VStack(alignment: .leading, spacing: 8) {
             Text("How you did")
@@ -30,14 +30,21 @@ struct DigestPageView: View {
     }
   }
 
+  private var isCurrentWeek: Bool {
+    let provider = digest.calendarProvider
+    let currentStart = provider.startOfDigestWeek(for: Date())
+    return provider.isDate(digest.weekStart, inSameDayAs: currentStart)
+  }
+
+  private var displayTitle: String {
+    if isCurrentWeek {
+      return DigestInProgressTitles.title(for: digest.weekStart)
+    }
+    return title
+  }
+
   private var encouragementText: String {
     // If viewing the current in-progress week, show motivational, forward-looking copy.
-    let isCurrentWeek: Bool = {
-      let provider = digest.calendarProvider
-      let currentStart = provider.startOfDigestWeek(for: Date())
-      return provider.isDate(digest.weekStart, inSameDayAs: currentStart)
-    }()
-
     if isCurrentWeek {
       return DigestInProgressCopy.message(for: digest.weekStart)
     }
