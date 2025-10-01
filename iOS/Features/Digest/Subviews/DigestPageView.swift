@@ -16,7 +16,7 @@ struct DigestPageView: View {
           DigestHeaderView(title: displayTitle, dateRange: formattedRange)
           DigestStatsView(digest: digest)
           VStack(alignment: .leading, spacing: 8) {
-            Text("How you did")
+            Text(isCurrentWeek ? "How you're doing" : "How you did")
               .font(MorselFont.heading)
             Text(encouragementText)
               .font(MorselFont.body)
@@ -75,3 +75,4 @@ struct DigestPageView: View {
     }
   }
 }
+
