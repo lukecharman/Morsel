@@ -15,8 +15,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>NSUserNotificationsUsageDescription</key>
-	<string>Morsel will send you a weekly reminder when your Digest is available. It'll help keep you on track – would you like that?</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Quicksand-Bold.ttf</string>
@@ -26,8 +24,6 @@
 		<string>Quicksand-SemiBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
+	<array/>
 </dict>
 </plist>

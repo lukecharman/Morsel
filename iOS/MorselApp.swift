@@ -20,8 +20,6 @@ struct MorselApp: App {
   @State private var shouldOpenMouth = false
   @State private var digestPresentation: DigestPresentation = .hidden
 
-  let notificationsManager = NotificationsManager()
-
   init() {}
 
   var body: some Scene {
@@ -35,17 +33,12 @@ struct MorselApp: App {
         .preferredColorScheme(appSettings.appTheme.colorScheme)
         .onOpenURL { handleDeepLink($0) }
         .onAppear { launch() }
-        .onChange(of: scenePhase) { _, phase in
-          if phase == .active {
-            notificationsManager.runCatchUpCheck()
-          }
-        }
+        .onChange(of: scenePhase) { _, _ in }
     }
   }
 
   func launch() {
     appDelegate.handleDeepLink = handleDeepLink(_:)
-    notificationsManager.prepare()
     configureTelemetryDeck()
     configureSentry()
   }
@@ -88,7 +81,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
   ) -> Bool {
-    UNUserNotificationCenter.current().delegate = self
     return true
   }
 

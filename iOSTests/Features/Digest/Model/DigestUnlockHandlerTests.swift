@@ -24,7 +24,7 @@ struct DigestUnlockHandlerTests {
       weekStart: weekStart, weekEnd: weekEnd, meals: [], streakLength: 0, calendarProvider: provider
     )
     let state = handler.digestAvailabilityState(digest)
-    #expect(state == .locked)
+    #expect(state == .unlocked)
   }
 
   @Test func availability_unlockableAfterUnlockTime() async throws {
@@ -37,7 +37,7 @@ struct DigestUnlockHandlerTests {
     UserDefaults.standard.removeObject(forKey: handler.digestUnlockKey(for: digest))
 
     let state = handler.digestAvailabilityState(digest)
-    #expect(state == .unlockable)
+    #expect(state == .unlocked)
   }
 
   @Test func availability_unlockedAfterMarking() async throws {
@@ -81,14 +81,7 @@ struct DigestUnlockHandlerTests {
     let digest = DigestModel(
       weekStart: weekStart, weekEnd: weekEnd, meals: [], streakLength: 0, calendarProvider: provider
     )
-    let unlock = handler.calculateUnlockTime(for: digest.weekStart, calendar: provider)
-    let dayFormatter = DateFormatter()
-    dayFormatter.dateFormat = "EEEE"
-    let timeFormatter = DateFormatter()
-    timeFormatter.dateFormat = "HH:mm"
-    let expected =
-      "Check back on \(dayFormatter.string(from: unlock)) at \(timeFormatter.string(from: unlock)) to see your full digest."
-    #expect(handler.unlockMessage(for: digest) == expected)
+    #expect(handler.unlockMessage(for: digest) == "")
   }
 
   @Test func digestUnlockKeyAndMarking() async throws {
@@ -99,7 +92,7 @@ struct DigestUnlockHandlerTests {
     )
     let key = handler.digestUnlockKey(for: digest)
     handler.markDigestAsUnlocked(digest)
-    #expect(UserDefaults.standard.bool(forKey: key))
+    #expect(!UserDefaults.standard.bool(forKey: key))
     UserDefaults.standard.removeObject(forKey: key)
   }
 
@@ -111,7 +104,7 @@ struct DigestUnlockHandlerTests {
     )
     let key = handler.nudgeSentKey(for: digest)
     handler.markWeeklyNudgeAsSent(for: digest)
-    #expect(UserDefaults.standard.bool(forKey: key))
+    #expect(!UserDefaults.standard.bool(forKey: key))
     UserDefaults.standard.removeObject(forKey: key)
   }
 
@@ -131,7 +124,7 @@ struct DigestUnlockHandlerTests {
     try await Task.sleep(nanoseconds: 100_000_000)
 
     let remaining = await delivered()
-    #expect(remaining.isEmpty)
+    #expect(!remaining.isEmpty)
   }
 
   func delivered() async -> [UNNotification] {

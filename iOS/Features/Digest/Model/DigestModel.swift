@@ -4,12 +4,6 @@ import Foundation
 enum DigestSeason { case winter, spring, summer, autumn }
 enum DigestMood { case noMeals, strong, tough, balanced }
 
-enum DigestAvailabilityState {
-  case locked
-  case unlockable
-  case unlocked
-}
-
 struct DigestModel {
   let weekStart: Date
   let weekEnd: Date

@@ -8,7 +8,6 @@ import WidgetKit
 struct DebugMenuView: View {
   @State private var showStudio = false
   @State private var showPopulateConfirmation = false
-  @State private var showDigestTiming = false
 
   @Environment(\.modelContext) private var modelContext
 
@@ -19,12 +18,6 @@ struct DebugMenuView: View {
           .font(MorselFont.title)
           .padding(.top, 32)
         VStack(spacing: 0) {
-          CardView(
-            title: "",
-            value: "Digest Timing",
-            icon: "calendar.badge.clock",
-            onTap: { showDigestTiming = true }
-          )
           CardView(
             title: "",
             value: "Morsel Studio",
@@ -49,7 +42,6 @@ struct DebugMenuView: View {
         .padding(.top, 16)
       }
       .sheet(isPresented: $showStudio) { MorselStudio() }
-      .sheet(isPresented: $showDigestTiming) { DigestTimingSheet() }
       .alert("Populated", isPresented: $showPopulateConfirmation) {
         Button("OK", role: .cancel) { showPopulateConfirmation = false }
       } message: {

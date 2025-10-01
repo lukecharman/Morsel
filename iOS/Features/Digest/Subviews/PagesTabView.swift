@@ -13,12 +13,6 @@ struct PagesTabView: View {
         DigestPageView(
           digest: viewModel.digest(at: offset),
           title: digest.title,
-          availabilityState: viewModel.digestAvailabilityState(digest),
-          blurRadius: viewModel.animatingBlurRadius[viewModel.digestUnlockKey(for: digest)],
-          shouldAnimateUnblur: viewModel.shouldAnimateUnblur(for: digest, availabilityState: viewModel.digestAvailabilityState(digest)),
-          onWillAnimate: { viewModel.markWillAnimate(for: digest) },
-          onTriggerUnblur: { viewModel.triggerUnblurAnimation(for: digest) },
-          unlockMessage: viewModel.unlockMessage(for: digest),
           formattedRange: digest.formattedRange
         )
         .mask(EdgeFadeMask())

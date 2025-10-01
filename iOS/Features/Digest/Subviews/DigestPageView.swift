@@ -6,12 +6,6 @@ struct DigestPageView: View {
 
   let digest: DigestModel
   let title: String
-  let availabilityState: DigestAvailabilityState
-  let blurRadius: Double?
-  let shouldAnimateUnblur: Bool
-  let onWillAnimate: () -> Void
-  let onTriggerUnblur: () -> Void
-  let unlockMessage: String
   let formattedRange: String
 
   var body: some View {
@@ -31,25 +25,8 @@ struct DigestPageView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .blur(radius: contentBlur)
-        .allowsHitTesting(availabilityState != .locked)
-        .accessibilityHidden(availabilityState == .locked)
       }
-      .disabled(availabilityState == .locked)
       .ignoresSafeArea()
-      .onAppear {
-        if shouldAnimateUnblur {
-          onWillAnimate()
-          onTriggerUnblur()
-        }
-      }
-
-      if availabilityState == .locked {
-        LockedOverlayView(
-          title: "This week isn't finished yet!",
-          message: unlockMessage
-        )
-      }
     }
   }
 
@@ -78,17 +55,6 @@ struct DigestPageView: View {
       return "No activity recorded yet. Come back after logging some meals to see your weekly insights."
     } else {
       return parts.joined(separator: " ")
-    }
-  }
-
-  private var contentBlur: CGFloat {
-    switch availabilityState {
-    case .locked:
-      return 8
-    case .unlockable:
-      return CGFloat(blurRadius ?? 8)
-    case .unlocked:
-      return CGFloat(blurRadius ?? 0)
     }
   }
 }
